@@ -3,6 +3,9 @@ from dotenv import load_dotenv
 import os
 import pymysql
 from flask_mail import Mail, Message
+
+application = Flask(__name__)
+
 # initializes email configuration variables
 application.config["MAIL_SERVER"] = ""
 application.config["MAIL_PORT"] = 465
@@ -16,7 +19,6 @@ mail = Mail(application)
 
 load_dotenv()
 
-application = Flask(__name__)
 DB_HOST = os.environ.get("DB_HOST")
 DB_PORT = int(os.environ.get("DB_PORT"))
 DB_USER = os.environ.get("DB_USER")
