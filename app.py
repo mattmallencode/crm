@@ -1,8 +1,7 @@
 from flask import Flask, render_template, request
+from dotenv import load_dotenv
+import os
 from flask_mail import Mail, Message
-
-application = Flask(__name__)
-
 # initializes email configuration variables
 application.config["MAIL_SERVER"] = ""
 application.config["MAIL_PORT"] = 465
@@ -10,8 +9,17 @@ application.config["MAIL_USERNAME"] = ""
 application.config["MAIL_PASSWORD"] = ""
 application.config["MAIL_USE_TLS"] = False
 application.config["MAIL_USE_SSL"] = True
+
 # creates Mail instance for managing emails
 mail = Mail(application)
+
+load_dotenv()
+
+application = Flask(__name__)
+DB_HOST = os.environ.get("DB_HOST")
+DB_PORT = os.environ.get("DB_PORT")
+DB_USER = os.environ.get("DB_USER")
+DB_PASSWORD = os.environ.get("DB_PASSWORD")
 
 @application.route("/", methods=["GET", "POST"])
 def index():
@@ -35,6 +43,22 @@ def invite():
         mail.send(msg)
         response = "Member has been invited"
     return render_template("invite.html", response = response)
+
+def home():
+    if request.method == "POST":
+        print(request.form["name"])
+        print(request.form["email"])
+        return 
+
+    return render_template("home.html")
+    
+@ application.route("/login", methods=["GET", "POST"])
+def login():
+    return render_template("login.html")
+
+@ application.route("/signup", methods=["GET", "POST"])
+def signup():
+    return render_template("signup.html")
 
 if __name__ == "__main__":
     application.debug = True
