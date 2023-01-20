@@ -9,10 +9,10 @@ from forms import SignUpForm
 application = Flask(__name__)
 
 # initializes email configuration variables
-application.config["MAIL_SERVER"] = ""
+application.config["MAIL_SERVER"] = "smtp.gmail.com"
 application.config["MAIL_PORT"] = 465
-application.config["MAIL_USERNAME"] = ""
-application.config["MAIL_PASSWORD"] = ""
+application.config["MAIL_USERNAME"] = os.environ.get("MAIL_USERNAME")
+application.config["MAIL_PASSWORD"] = os.environ.get("MAIL_PASSWORD")
 application.config["MAIL_USE_TLS"] = False
 application.config["MAIL_USE_SSL"] = True
 
@@ -27,6 +27,7 @@ DB_USER = os.environ.get("DB_USER")
 DB_PASSWORD = os.environ.get("DB_PASSWORD")
 
 DB_DB = os.environ.get("DB_DB")
+
 
 application.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_DB}"
 db = sa(application)
@@ -45,7 +46,7 @@ def invite():
         link = user_id + team_id
 
         # creates email message
-        msg = Message("Sherpa Invitation", sender = "our_email@gmail.com", recipients = ["customers@gmail.com"])
+        msg = Message("Sherpa Invitation", sender = "Sherpacrm90@gmail.com", recipients = ["Sherpacrm90@gmail.com"])
         msg.html = "You have been invited to join an organisation. Click <a href = ""> here</a> to join"
 
         # connects to mail SMTP server and sends message
