@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from dotenv import load_dotenv
 import os
 from flask_sqlalchemy import SQLAlchemy as sa
@@ -95,18 +95,33 @@ def login():
     """
     return render_template("login.html")
 
-@application.route("/signup", methods=["POST"])
+@application.route("/signup", methods=["GET", "POST"])
 def signup():
     """
     Route for registering an account.
     """
+    # Initialize the form
     form = SignUpForm()
+    # If the user submitted the form and it passed validation.
     if form.validate_on_submit():
-        email = form.email
-        password = form.password
-        # Check that user hasn't already registered
-
-    return render_template("signup.html",form=form)
+        email = form.email.data
+        # Check that the user isn't already registered.
+        if Users.query.filter_by(email=email).first() is None:
+            password = form.password.data
+            user = Users()
+            user.email = email
+            # Generate a hash for the user's password and insert credential's into the DB.
+            user.password_hash = generate_password_hash(password)
+            user.team_id = None
+            user.admin_status = None
+            user.owner_status = None
+            db.session.add(user)
+            db.session.commit()
+            return redirect(url_for("login"))
+        # If the email's already registered, inform the user.
+        else:
+            form.email.errors.append("That email is already registered!")
+    return render_template("signup.html", form=form)
 
 if __name__ == "__main__":
     application.debug = True
