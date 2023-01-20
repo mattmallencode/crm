@@ -1,10 +1,10 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, EmailField
-from wtforms.validators import InputRequired, EqualTo
+from wtforms.validators import InputRequired, EqualTo, Email
 
 class SignUpForm(FlaskForm):
     email = EmailField("Email:", validators=[
-                          InputRequired()], render_kw={"placeholder": "EMAIL"})
+                          InputRequired(), Email()], render_kw={"placeholder": "EMAIL"})
     password = PasswordField("Password:", validators=[InputRequired()], render_kw={
                              "placeholder": "PASSWORD"})
     password2 = PasswordField("Confirm password:", validators=[InputRequired(), EqualTo("password")], render_kw={

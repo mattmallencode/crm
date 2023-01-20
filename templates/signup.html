@@ -1,5 +1,5 @@
 <body>
-    <form novalidate>
+    <form method="POST", novalidate>
         {{ form.hidden_tag() }}
         {% for error in form.email.errors %}
                 <div>{{ error }}</div>
