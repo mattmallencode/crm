@@ -4,6 +4,7 @@ import os
 from data_models.users import Users
 from flask_sqlalchemy import SQLAlchemy as sa
 from flask_mail import Mail, Message
+from forms import SignUpForm
 
 application = Flask(__name__)
 
@@ -67,7 +68,8 @@ def login():
 
 @ application.route("/signup", methods=["GET", "POST"])
 def signup():
-    return render_template("signup.html")
+    form = SignUpForm()
+    return render_template("signup.html",form=form)
 
 if __name__ == "__main__":
     application.debug = True
