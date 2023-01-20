@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from dotenv import load_dotenv
 import os
 from flask_sqlalchemy import SQLAlchemy as sa
@@ -44,6 +44,10 @@ class Users(db.Model):
     owner_status = db.Column(db.Boolean)
     admin_status = db.Column(db.Boolean)
 
+class Invites(db.Model):
+    invite_id = db.Column(db.String, primary_key=True)
+    team_id = db.Column(db.String)
+
 @application.route("/", methods=["GET", "POST"])
 def index():
     """
@@ -58,14 +62,17 @@ def invite():
     """
     response = ""
     if request.method == "POST":
-        # variables below will be retrieved from db
-        user_id = request.form["address"]
-        team_id = "21"
-        link = user_id + team_id
+        # inserts inputted email address into Invites table along with team id
+        invite = Invites()
+        team_id = "xxxxxxxx"
+        invite.team_id = team_id
+        invite.invite_id = request.form["address"] + team_id,
+        db.session.add(invite)
+        db.session.commit()
 
         # creates email message
-        msg = Message("Sherpa Invitation", sender = "Sherpacrm90@gmail.com", recipients = ["Sherpacrm90@gmail.com"])
-        msg.html = "You have been invited to join an organisation. Click <a href = ""> here</a> to join"
+        msg = Message("Sherpa Invitation", sender = ("Sherpa CRM", "Sherpacrm90@gmail.com"), recipients = [request.form["address"]])
+        msg.html = "You have been invited to join a Sherpa organisation. Click <a href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'> here</a> to join"
 
         # connects to mail SMTP server and sends message
         mail.connect()
@@ -88,18 +95,33 @@ def login():
     """
     return render_template("login.html")
 
-@application.route("/signup", methods=["POST"])
+@application.route("/signup", methods=["GET", "POST"])
 def signup():
     """
     Route for registering an account.
     """
+    # Initialize the form
     form = SignUpForm()
+    # If the user submitted the form and it passed validation.
     if form.validate_on_submit():
-        email = form.email
-        password = form.password
-        # Check that user hasn't already registered
-
-    return render_template("signup.html",form=form)
+        email = form.email.data
+        # Check that the user isn't already registered.
+        if Users.query.filter_by(email=email).first() is None:
+            password = form.password.data
+            user = Users()
+            user.email = email
+            # Generate a hash for the user's password and insert credential's into the DB.
+            user.password_hash = generate_password_hash(password)
+            user.team_id = None
+            user.admin_status = None
+            user.owner_status = None
+            db.session.add(user)
+            db.session.commit()
+            return redirect(url_for("login"))
+        # If the email's already registered, inform the user.
+        else:
+            form.email.errors.append("That email is already registered!")
+    return render_template("signup.html", form=form)
 
 if __name__ == "__main__":
     application.debug = True
