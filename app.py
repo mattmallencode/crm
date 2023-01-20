@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request
 from dotenv import load_dotenv
 import os
-from data_models.users import Users
 from flask_sqlalchemy import SQLAlchemy as sa
 from flask_mail import Mail, Message
 from forms import SignUpForm
@@ -28,9 +27,17 @@ DB_PASSWORD = os.environ.get("DB_PASSWORD")
 
 DB_DB = os.environ.get("DB_DB")
 
-
 application.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_DB}"
 db = sa(application)
+
+
+
+class Users(db.Model):
+    email = db.Column(db.String, primary_key=True)
+    password_hash = db.Column(db.String)
+    team_id = db.Column(db.Integer)
+    owner_status = db.Column(db.Boolean)
+    admin_status = db.Column(db.Boolean)
 
 @application.route("/", methods=["GET", "POST"])
 def index():
