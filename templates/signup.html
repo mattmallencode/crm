@@ -1,5 +1,8 @@
-<body>
-    <form method="POST", novalidate>
+{% extends "base.html" %}
+
+{% block main_content %}
+    <body>
+        <form method="POST", novalidate>
         {{ form.hidden_tag() }}
         {% for error in form.email.errors %}
                 <div>{{ error }}</div>
@@ -21,4 +24,5 @@
         {{ form.submit(id="register") }}
         <br>
       </form>
-</body>
+    </body>
+{% endblock %}
