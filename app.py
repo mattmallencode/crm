@@ -6,6 +6,7 @@ from flask_mail import Mail, Message
 from forms import SignUpForm
 
 application = Flask(__name__)
+application.config["SECRET_KEY"] = "placeholder"
 
 # initializes email configuration variables
 application.config["MAIL_SERVER"] = "smtp.gmail.com"
