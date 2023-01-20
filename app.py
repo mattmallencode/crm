@@ -7,10 +7,10 @@ from flask_mail import Mail, Message
 application = Flask(__name__)
 
 # initializes email configuration variables
-application.config["MAIL_SERVER"] = ""
+application.config["MAIL_SERVER"] = "smtp.gmail.com"
 application.config["MAIL_PORT"] = 465
-application.config["MAIL_USERNAME"] = ""
-application.config["MAIL_PASSWORD"] = ""
+application.config["MAIL_USERNAME"] = os.environ.get("MAIL_USERNAME")
+application.config["MAIL_PASSWORD"] = os.environ.get("MAIL_PASSWORD")
 application.config["MAIL_USE_TLS"] = False
 application.config["MAIL_USE_SSL"] = True
 
@@ -26,13 +26,14 @@ DB_PASSWORD = os.environ.get("DB_PASSWORD")
 
 DB_DB = os.environ.get("DB_DB")
 
+"""
 DB_CONNECTION = pymysql.connect(
     host=DB_HOST,
     port=DB_PORT,
     user=DB_USER,
     password=DB_PASSWORD,
     db=DB_DB
-)
+) """
 
 @application.route("/", methods=["GET", "POST"])
 def index():
@@ -48,7 +49,7 @@ def invite():
         link = user_id + team_id
 
         # creates email message
-        msg = Message("Sherpa Invitation", sender = "our_email@gmail.com", recipients = ["customers@gmail.com"])
+        msg = Message("Sherpa Invitation", sender = "Sherpacrm90@gmail.com", recipients = ["Sherpacrm90@gmail.com"])
         msg.html = "You have been invited to join an organisation. Click <a href = ""> here</a> to join"
 
         # connects to mail SMTP server and sends message
