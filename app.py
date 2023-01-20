@@ -1,45 +1,61 @@
 from flask import Flask, render_template, request
 from dotenv import load_dotenv
 import os
-import pymysql
+from flask_sqlalchemy import SQLAlchemy as sa
 from flask_mail import Mail, Message
+from forms import SignUpForm
+from werkzeug.security import generate_password_hash, check_password_hash
 
+# Initialize the flask application
 application = Flask(__name__)
+# Secret key for preventing CSRF attacks. 
+application.config["SECRET_KEY"] = "placeholder"
 
 # initializes email configuration variables
-application.config["MAIL_SERVER"] = ""
+application.config["MAIL_SERVER"] = "smtp.gmail.com"
 application.config["MAIL_PORT"] = 465
-application.config["MAIL_USERNAME"] = ""
-application.config["MAIL_PASSWORD"] = ""
+application.config["MAIL_USERNAME"] = os.environ.get("MAIL_USERNAME")
+application.config["MAIL_PASSWORD"] = os.environ.get("MAIL_PASSWORD")
 application.config["MAIL_USE_TLS"] = False
 application.config["MAIL_USE_SSL"] = True
 
 # creates Mail instance for managing emails
 mail = Mail(application)
 
+# Load environment variables from .env file.
 load_dotenv()
 
+# Initialize MySQL credentials from the environment variables we just loaded.
 DB_HOST = os.environ.get("DB_HOST")
 DB_PORT = int(os.environ.get("DB_PORT"))
 DB_USER = os.environ.get("DB_USER")
 DB_PASSWORD = os.environ.get("DB_PASSWORD")
+DB_DB = os.environ.get("DB_DB") # database to use.
+# Set up SQLAlchemy with the above credentials.
+application.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_DB}"
+# Set up an SQLAlchemy session for our application.
+db = sa(application)
 
-DB_DB = os.environ.get("DB_DB")
-
-DB_CONNECTION = pymysql.connect(
-    host=DB_HOST,
-    port=DB_PORT,
-    user=DB_USER,
-    password=DB_PASSWORD,
-    db=DB_DB
-)
+# Users data model i.e. a representation of the users table in the database.
+class Users(db.Model):
+    email = db.Column(db.String, primary_key=True)
+    password_hash = db.Column(db.String)
+    team_id = db.Column(db.Integer)
+    owner_status = db.Column(db.Boolean)
+    admin_status = db.Column(db.Boolean)
 
 @application.route("/", methods=["GET", "POST"])
 def index():
+    """
+    Index route for the application.
+    """
     return render_template("index.html")
 
 @application.route("/invite", methods = ["GET", "POST"])
 def invite():
+    """
+    Route for sending an email invitation to a user for your team.
+    """
     response = ""
     if request.method == "POST":
         # variables below will be retrieved from db
@@ -48,7 +64,7 @@ def invite():
         link = user_id + team_id
 
         # creates email message
-        msg = Message("Sherpa Invitation", sender = "our_email@gmail.com", recipients = ["customers@gmail.com"])
+        msg = Message("Sherpa Invitation", sender = "Sherpacrm90@gmail.com", recipients = ["Sherpacrm90@gmail.com"])
         msg.html = "You have been invited to join an organisation. Click <a href = ""> here</a> to join"
 
         # connects to mail SMTP server and sends message
@@ -65,13 +81,25 @@ def home():
 
     return render_template("home.html")
     
-@ application.route("/login", methods=["GET", "POST"])
+@application.route("/login", methods=["GET", "POST"])
 def login():
+    """
+    Route for authenticating a user.    
+    """
     return render_template("login.html")
 
-@ application.route("/signup", methods=["GET", "POST"])
+@application.route("/signup", methods=["POST"])
 def signup():
-    return render_template("signup.html")
+    """
+    Route for registering an account.
+    """
+    form = SignUpForm()
+    if form.validate_on_submit():
+        email = form.email
+        password = form.password
+        # Check that user hasn't already registered
+
+    return render_template("signup.html",form=form)
 
 if __name__ == "__main__":
     application.debug = True

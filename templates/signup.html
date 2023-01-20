@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html lang="en-US">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>Sherpa Sign up</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
-</head>
+{% extends "base.html" %}
+
+{% block main_content %}
     <body>
         <img src="sherpa_logo.PNG" height="50px" width="50px" alt="Sherpa's logo">
         <h1>Sign up</h1>
@@ -17,6 +12,30 @@
             <input type="text" name="" placeholder="Re-enter Password">
             <input type="Submit" name="" placeholder="Sign Up">
         </form>
+        
+         <form novalidate>
+        {{ form.hidden_tag() }}
+        {% for error in form.email.errors %}
+                <div>{{ error }}</div>
+        {% endfor %}
+        {{ form.email.label }}
+        {{ form.email() }}
+        <br>
+        {% for error in form.password.errors %}
+                <div>{{ error }}</div>
+        {% endfor %}
+        {{ form.password.label }}
+        {{ form.password() }}
+        <br>
+        {% for error in form.password2.errors %}
+               <div>{{ error }}</div>            {% endfor %}
+        {{ form.password2.label }}
+        {{ form.password2() }}
+        <br>
+        {{ form.submit(id="register") }}
+        <br>
+      </form>
     </body>
 
-</html>
+{% endblock %}
+
