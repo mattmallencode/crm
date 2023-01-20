@@ -1,7 +1,8 @@
 from flask import Flask, render_template, request
 from dotenv import load_dotenv
 import os
-import pymysql
+from data_models.users import Users
+from flask_sqlalchemy import SQLAlchemy as sa
 from flask_mail import Mail, Message
 
 application = Flask(__name__)
@@ -26,13 +27,8 @@ DB_PASSWORD = os.environ.get("DB_PASSWORD")
 
 DB_DB = os.environ.get("DB_DB")
 
-DB_CONNECTION = pymysql.connect(
-    host=DB_HOST,
-    port=DB_PORT,
-    user=DB_USER,
-    password=DB_PASSWORD,
-    db=DB_DB
-)
+application.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_DB}"
+db = sa(application)
 
 @application.route("/", methods=["GET", "POST"])
 def index():
