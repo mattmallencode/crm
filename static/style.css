@@ -1,0 +1,60 @@
+*{
+    font-family: sans-serif;
+}
+body{
+    background-color: white;
+    background-image: url("../static/login_bg.jpg"); /*https://www.vecteezy.com/vector-art/2742352-group-of-men-and-women-happy-with-business-up-on-a-mountain-with-sunset-background, https://gratisography.com/?s=mountains */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+.box{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 90%;
+}
+
+.container{
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    padding: 0 15px 0 15px;
+}
+
+h1{
+    color: white;
+    font-size: 500%;
+    display: flex;
+    justify-content: center;
+    padding: 10px 0 10px 0;
+}
+p{
+    color: white;
+}
+input{
+    display: flex;
+    flex-direction: column;
+    height: 20px;
+    width: 90%;
+    border: none;
+    outline: none;
+    border-radius: 30px;
+    color: white;
+    padding: 0 23px 0 45px;
+    background: rgb(15, 8, 8, 0.5);
+    
+}
+
+i{
+    position: relative;
+    top: -18px;
+    left: 17px;
+    color: white;
+}
+
+button{
+    padding: 0 50% 0 50%;
+    border-radius: 30px;
+    border: none;
+}
