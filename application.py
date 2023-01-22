@@ -3,10 +3,10 @@ from dotenv import load_dotenv
 import os
 from flask_sqlalchemy import SQLAlchemy as sa
 from flask_mail import Mail, Message
-
 from forms import SignUpForm, LoginForm, CreateTeamForm
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
+from secrets import token_urlsafe
 
 # Initialize the flask application
 application = Flask(__name__)
@@ -60,6 +60,11 @@ class Invites(db.Model):
     invite_id = db.Column(db.String, primary_key=True)
     team_id = db.Column(db.String)
 
+
+    def __init__(self, invite_id = None, team_id = None):
+        self.invite_id = invite_id
+        self.team_id = team_id
+
 @application.before_request
 def load_logged_in_user():
     g.email = session.get("email", None)
@@ -82,36 +87,68 @@ def invite():
     if request.method == "POST":
         # inserts inputted email address into Invites table along with team id
         invite = Invites()
-        team_id = "xxxxxxxx"
-        invite.team_id = team_id
-        invite.invite_id = request.form["address"] + team_id,
-        db.session.add(invite)
-        db.session.commit()
+        email = request.form["address"]
+        
+        # user_id of user inviting a member
+        user_id = g.email
+        # checks if user sending invite is a member of an organization
+        user = Users.query.filter(Users.email == user_id).first()
+        team_id = user.team_id
+        if user.team_id == None:
+            response = "You are not a member of an organization"
+        else:
+            #checks if user sending invite is an admin
+            if user.admin_status == False:
+                response = "You must be an admin to invite members to your organization"
+            else:
+                user_to_be_invited = Users.query.filter(Users.email==email).first()
+                if user_to_be_invited.team_id == team_id:
+                    response = "This user is already a member of your team"
+                else:
+                    # collects form data and inserts into invite table
+                    sec = token_urlsafe(16)
+                    host = "http://127.0.0.1:5000"
+                    url = f"{host}/login/{email}_{team_id}_{sec}"
+                    invite.team_id = team_id
+                    invite.invite_id = f"{email}_{team_id}_{sec}"
 
-        # creates email message
-        msg = Message("Sherpa Invitation", sender = ("Sherpa CRM", "Sherpacrm90@gmail.com"), recipients = [request.form["address"]])
-        msg.html = "You have been invited to join a Sherpa organisation. Click <a href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'> here</a> to join"
+                    db.session.add(invite)
+                    db.session.commit()
 
-        # connects to mail SMTP server and sends message
-        mail.connect()
-        mail.send(msg)
-        response = "Member has been invited"
+                    # creates email message
+                    msg = Message("Sherpa Invitation", sender = ("Sherpa CRM", "Sherpacrm90@gmail.com"), recipients = [request.form["address"]])
+                    msg.html = f"You have been invited to join a Sherpa organisation. Click <a href = '{url}'> here</a> to join"
+
+                    # connects to mail SMTP server and sends message
+                    mail.connect()
+                    mail.send(msg)
+                    response = "Member has been invited"
+                    
+                db.session.add(invite)
+                db.session.commit()
+
+                # creates email message
+                msg = Message("Sherpa Invitation", sender = ("Sherpa CRM", "Sherpacrm90@gmail.com"), recipients = [request.form["address"]])
+                msg.html = f"You have been invited to join a Sherpa organisation. Click <a href = {url}>here</a> to join."
+                # connects to mail SMTP server and sends message
+                mail.connect()
+                mail.send(msg)
+                response = "Member has been invited"
+                
     return render_template("invite.html", response = response)
 
 @application.route("/", methods=["GET", "POST"])
 @login_required
 def home():
-    # If email = None. Not logged in. Therefore redirect to login.html
-    if g.email != None:
-        # Query the db for the team_id using the cokies email.
-        user_details = sa.select(Users).where(Users.email == g.email)
+    # Query the db for the team_id using the cokies email.
+    user_details = Users.query.filter_by(email=g.email).first()
 
-        return render_template("home.html", user_details=user_details)
-    else:
-        return render_template("login.html")
-    
-@application.route("/login", methods=["GET", "POST"])
-def login():
+        
+    return render_template("home.html", user_details=user_details)
+
+@application.route("/login", defaults={"invite_id": None}, methods=["GET", "POST"])
+@application.route("/login/<invite_id>", methods=["GET", "POST"])
+def login(invite_id):
     """
     Route for authenticating a user.    
     """
@@ -133,6 +170,17 @@ def login():
             next_page = request.args.get("next")
             if not next_page:
                 next_page = url_for("home")
+            if invite_id != None:
+                user = Users.query.filter_by(email=email).first()
+                invitation = Invites.query.filter_by(invite_id=invite_id).first()
+                invitation_email = invitation.invite_id.split("_")[0]
+                print(invitation_email)
+                if  invitation != None and user.team_id == None and user.email == invitation_email:
+                    user.team_id = invitation.team_id
+                    user.admin_status = True
+                    user.owner_status = True
+                    db.session.delete(invitation)
+                    db.session.commit()
             return redirect(next_page)
         else:
             form.email.errors.append("Incorrect email / password!")
