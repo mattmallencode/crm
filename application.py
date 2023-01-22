@@ -93,13 +93,13 @@ def invite():
     if request.method == "POST":
         # inserts inputted email address into Invites table along with team id
         invite = Invites()
-        team_id = "xxxxxxxx"
         email = request.form["address"]
         
         # user_id of user inviting a member
         user_id = g.email
         # checks if user sending invite is a member of an organization
         user = Users.query.filter(Users.email == user_id).first()
+        team_id = user.team_id
         if user.team_id == None:
             response = "You are not a member of an organization"
         else:
@@ -109,18 +109,17 @@ def invite():
             else:
                 # collects form data and inserts into invite table
                 sec = token_urlsafe(16)
-                host = "127.0.0.1:5000"
-                url = f"{host}/login/{email},{team_id},{sec}"
+                host = "http://127.0.0.1:5000"
+                url = f"{host}/login/{email}_{team_id}_{sec}"
                 invite.team_id = team_id
-                invite.invite_id = url
+                invite.invite_id = f"{email}_{team_id}_{sec}"
                     
                 db.session.add(invite)
                 db.session.commit()
 
                 # creates email message
                 msg = Message("Sherpa Invitation", sender = ("Sherpa CRM", "Sherpacrm90@gmail.com"), recipients = [request.form["address"]])
-                msg.html = f"You have been invited to join a Sherpa organisation. Click <a href = '/login/{url}'> here</a> to join"
-
+                msg.html = f"You have been invited to join a Sherpa organisation. Click <a href = {url}>here</a> to join."
                 # connects to mail SMTP server and sends message
                 mail.connect()
                 mail.send(msg)
@@ -139,6 +138,9 @@ def home():
         return render_template("home.html", user_details=user_details)
 
     return render_template("home.html")
+
+
+    120355103@umail.ucc.ie_1000_ng2dGuaop-iXrogEe
 
 @application.route("/login", defaults={"invite_id": None}, methods=["GET", "POST"])
 @application.route("/login/<invite_id>", methods=["GET", "POST"])
