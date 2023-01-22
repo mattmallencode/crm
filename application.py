@@ -59,16 +59,10 @@ class Invites(db.Model):
     invite_id = db.Column(db.String, primary_key=True)
     team_id = db.Column(db.String)
 
+
     def __init__(self, invite_id = None, team_id = None):
         self.invite_id = invite_id
         self.team_id = team_id
-
-@application.route("/", methods=["GET", "POST"])
-def index():
-    """
-    Index route for the application.
-    """
-    return render_template("index.html")
 
 @application.before_request
 def load_logged_in_user():
@@ -92,19 +86,27 @@ def invite():
     if request.method == "POST":
         # inserts inputted email address into Invites table along with team id
         invite = Invites()
-        team_id = "xxxxxxxx"
         email = request.form["address"]
         
         # user_id of user inviting a member
         user_id = g.email
         # checks if user sending invite is a member of an organization
         user = Users.query.filter(Users.email == user_id).first()
+        team_id = user.team_id
         if user.team_id == None:
             response = "You are not a member of an organization"
         else:
             #checks if user sending invite is an admin
             if user.admin_status == False:
                 response = "You must be an admin to invite members to your organization"
+            else:
+                # collects form data and inserts into invite table
+                sec = token_urlsafe(16)
+                host = "http://127.0.0.1:5000"
+                url = f"{host}/login/{email}_{team_id}_{sec}"
+                invite.team_id = team_id
+                invite.invite_id = f"{email}_{team_id}_{sec}"
+
 
                 user_to_be_invited = Users.query.filter(Users.email==email).first()
                 if user_to_be_invited.team_id == team_id:
@@ -116,7 +118,7 @@ def invite():
                     url = f"{host}/login/{email},{team_id},{sec}"
                     invite.team_id = team_id
                     invite.invite_id = url
-                        
+
                     db.session.add(invite)
                     db.session.commit()
 
@@ -129,17 +131,27 @@ def invite():
                     mail.send(msg)
                     response = "Member has been invited"
                     
+                db.session.add(invite)
+                db.session.commit()
+
+                # creates email message
+                msg = Message("Sherpa Invitation", sender = ("Sherpa CRM", "Sherpacrm90@gmail.com"), recipients = [request.form["address"]])
+                msg.html = f"You have been invited to join a Sherpa organisation. Click <a href = {url}>here</a> to join."
+                # connects to mail SMTP server and sends message
+                mail.connect()
+                mail.send(msg)
+                response = "Member has been invited"
+                
     return render_template("invite.html", response = response)
 
 @application.route("/", methods=["GET", "POST"])
 @login_required
 def home():
-    if request.method == "POST":
-        print(request.form["name"])
-        print(request.form["email"])
-        return 
+    # Query the db for the team_id using the cokies email.
+    user_details = Users.query.filter_by(email=g.email).first()
 
-    return render_template("home.html")
+        
+    return render_template("home.html", user_details=user_details)
 
 @application.route("/login", defaults={"invite_id": None}, methods=["GET", "POST"])
 @application.route("/login/<invite_id>", methods=["GET", "POST"])
@@ -162,8 +174,12 @@ def login(invite_id):
             if invite_id != None:
                 user = Users.query.filter_by(email=email).first()
                 invitation = Invites.query.filter_by(invite_id=invite_id).first()
-                if  invitation != None and user.team_id == None:
+                invitation_email = invitation.invite_id.split("_")[0]
+                print(invitation_email)
+                if  invitation != None and user.team_id == None and user.email == invitation_email:
                     user.team_id = invitation.team_id
+                    user.admin_status = True
+                    user.owner_status = True
                     db.session.delete(invitation)
                     db.session.commit()
             return redirect(next_page)
@@ -195,7 +211,7 @@ def signup():
             user.owner_status = None            
             db.session.add(user)
             db.session.commit()
-            return redirect(url_for("login/"))
+            return redirect(url_for("login"))
         # If the email's already registered, inform the user.
         else:
             form.email.errors.append("That email is already registered!")
@@ -217,14 +233,16 @@ def createTeamForm():
             # Generate a hash for the user's password and insert credential's into the DB.
             user.password_hash = generate_password_hash(password)
             user.team_id = None
-            user.owner_status = True
+
             user.admin_status = True
+            user.owner_status = True
+
             db.session.add(user)
             db.session.commit()
-            return redirect(url_for("login"))
+            return redirect(url_for("home"))
         # If the team id is already registered, inform the user.
         else:
-            form.team_id.errors.append("This tema id is already registered!")
+            form.team_id.errors.append("This team id is already registered!")
         return render_template("create_team.html", form=form)
     return render_template("create_team.html", form=form)
 
