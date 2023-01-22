@@ -1,9 +1,11 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session, g
 from dotenv import load_dotenv
 import os
 from flask_sqlalchemy import SQLAlchemy as sa
 from flask_mail import Mail, Message
+
 from forms import SignUpForm, LoginForm, CreateTeamForm
+from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 
 # Initialize the flask application
@@ -50,6 +52,17 @@ class Invites(db.Model):
     invite_id = db.Column(db.String, primary_key=True)
     team_id = db.Column(db.String)
 
+@application.before_request
+def load_logged_in_user():
+    g.email = session.get("email", None)
+
+def login_required(view):
+    @wraps(view)
+    def wrapped_view(**kwargs):
+        if g.email is None:
+            return redirect(url_for("login", next=request.url))
+        return view(**kwargs)
+    return wrapped_view
 
 @application.route("/", methods=["GET", "POST"])
 def index():
@@ -59,6 +72,7 @@ def index():
     return render_template("index.html")
 
 @application.route("/invite", methods = ["GET", "POST"])
+@login_required
 def invite():
     """
     Route for sending an email invitation to a user for your team.
@@ -83,6 +97,7 @@ def invite():
         response = "Member has been invited"
     return render_template("invite.html", response = response)
 
+@application.route("/home", methods=["GET", "POST"])
 def home():
     if request.method == "POST":
         print(request.form["name"])
@@ -98,13 +113,22 @@ def login():
     """
     #Initialize the form 
     form = LoginForm()
+    email = form.email.data
     # If the user submitted the form and it passed validation 
     if form.validate_on_submit():
+        user = Users.query.filter_by(email=email).first()
+        if user is not None and check_password_hash(user.password_hash, form.password.data):
+            session.clear()
+            session["email"] = email
+            next_page = request.args.get("next")
+            if not next_page:
+                next_page = url_for("home")
+            return redirect(next_page)
+        else:
+            form.email.errors.append("Incorrect email / password!")
         # Login and validate the user
         # User needs to be an instance of your user class
-        #login_user(user) 
-
-        return render_template("login.html")
+    return render_template("login.html", form=form)
 
 @application.route("/signup", methods=["GET", "POST"])
 def signup():
@@ -125,7 +149,7 @@ def signup():
             user.password_hash = generate_password_hash(password)
             user.team_id = None
             user.admin_status = None
-            user.owner_status = None
+            user.owner_status = None            
             db.session.add(user)
             db.session.commit()
             return redirect(url_for("login"))
