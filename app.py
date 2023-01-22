@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 from flask_sqlalchemy import SQLAlchemy as sa
 from flask_mail import Mail, Message
-from forms import SignUpForm
+from forms import SignUpForm, LoginForm
 from werkzeug.security import generate_password_hash, check_password_hash
 
 # Initialize the flask application
@@ -93,7 +93,15 @@ def login():
     """
     Route for authenticating a user.    
     """
-    return render_template("login.html")
+    #Initialize the form 
+    form = LoginForm()
+    # If the user submitted the form and it passed validation 
+    if form.validate_on_submit():
+        # Login and validate the user
+        # User needs to be an instance of your user class
+        #login_user(user) 
+
+        return render_template("login.html")
 
 @application.route("/signup", methods=["GET", "POST"])
 def signup():
@@ -122,6 +130,8 @@ def signup():
         else:
             form.email.errors.append("That email is already registered!")
     return render_template("signup.html", form=form)
+
+    
 
 if __name__ == "__main__":
     application.debug = True
