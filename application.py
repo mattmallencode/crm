@@ -96,8 +96,8 @@ def invite():
         team_id = "xxxxxxxx"
         email = request.form["address"]
         
-        # user_id should be a session cookie
-        user_id = "ad@gmail.com"
+        # user_id of user inviting a member
+        user_id = g.email
         # checks if user sending invite is a member of an organization
         user = Users.query.filter(Users.email == user_id).first()
         if user.team_id == None:
@@ -107,28 +107,24 @@ def invite():
             if user.admin_status == False:
                 response = "You must be an admin to invite members to your organization"
             else:
-                # checks if user being invited is part of an organization 
-                user_to_be_invited = Users.query.filter(Users.email == email).first()
-                if user_to_be_invited.team_id != None:
-                    response = "Member is already part of an organization"
-                else:
-                    # collects form data and inserts into invite table
-                    sec = token_urlsafe(16)
-                    url = f"{email},{team_id},{sec}"
-                    invite.team_id = team_id
-                    invite.invite_id = url
+                # collects form data and inserts into invite table
+                sec = token_urlsafe(16)
+                host = "127.0.0.1:5000"
+                url = f"{host}/login/{email},{team_id},{sec}"
+                invite.team_id = team_id
+                invite.invite_id = url
                     
-                    db.session.add(invite)
-                    db.session.commit()
+                db.session.add(invite)
+                db.session.commit()
 
-                    # creates email message
-                    msg = Message("Sherpa Invitation", sender = ("Sherpa CRM", "Sherpacrm90@gmail.com"), recipients = [request.form["address"]])
-                    msg.html = f"You have been invited to join a Sherpa organisation. Click <a href = '/login/{url}'> here</a> to join"
+                # creates email message
+                msg = Message("Sherpa Invitation", sender = ("Sherpa CRM", "Sherpacrm90@gmail.com"), recipients = [request.form["address"]])
+                msg.html = f"You have been invited to join a Sherpa organisation. Click <a href = '/login/{url}'> here</a> to join"
 
-                    # connects to mail SMTP server and sends message
-                    mail.connect()
-                    mail.send(msg)
-                    response = "Member has been invited"
+                # connects to mail SMTP server and sends message
+                mail.connect()
+                mail.send(msg)
+                response = "Member has been invited"
                 
     return render_template("invite.html", response = response)
 
