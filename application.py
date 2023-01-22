@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 from flask_sqlalchemy import SQLAlchemy as sa
 from flask_mail import Mail, Message
-from forms import SignUpForm, LoginForm
+from forms import SignUpForm, LoginForm, CreateTeamForm
 from werkzeug.security import generate_password_hash, check_password_hash
 
 # Initialize the flask application
@@ -134,7 +134,31 @@ def signup():
             form.email.errors.append("That email is already registered!")
     return render_template("signup.html", form=form)
 
-    
+@application.route("/createTeam", methods=["GET", "POST"])
+def createTeamForm():
+    """
+    Route for registering an team.
+    """
+    form = CreateTeamForm()
+    if form.validate_on_submit():
+        if Users.query.filter_by(team_id=team_id).first() is None:
+            password = form.password.data
+            team_id = form.team_id.data
+            user = Users()
+            user.team_id = team_id
+
+            # Generate a hash for the user's password and insert credential's into the DB.
+            user.password_hash = generate_password_hash(password)
+            user.team_id = None
+            user.admin_status = None
+            user.owner_status = None
+            db.session.add(user)
+            db.session.commit()
+            return redirect(url_for("login"))
+        # If the team id is already registered, inform the user.
+        else:
+            form.team_id.errors.append("This tema id is already registered!")
+        return render_template("/createTeam", form=form)
 
 if __name__ == "__main__":
     application.debug = True
