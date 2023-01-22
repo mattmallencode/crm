@@ -64,13 +64,6 @@ class Invites(db.Model):
         self.invite_id = invite_id
         self.team_id = team_id
 
-@application.route("/", methods=["GET", "POST"])
-def index():
-    """
-    Index route for the application.
-    """
-    return render_template("index.html")
-
 @application.before_request
 def load_logged_in_user():
     g.email = session.get("email", None)
@@ -130,6 +123,7 @@ def invite():
 @application.route("/", methods=["GET", "POST"])
 @login_required
 def home():
+    print("hello")
     if request.method == "POST":
         # Query the db for the team_id using the cokies email.
         user_details = sa.select(Users).where(Users.email == g.email)
@@ -138,9 +132,6 @@ def home():
         return render_template("home.html", user_details=user_details)
 
     return render_template("home.html")
-
-
-    120355103@umail.ucc.ie_1000_ng2dGuaop-iXrogEe
 
 @application.route("/login", defaults={"invite_id": None}, methods=["GET", "POST"])
 @application.route("/login/<invite_id>", methods=["GET", "POST"])
