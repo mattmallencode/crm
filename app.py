@@ -101,10 +101,11 @@ def invite():
 @login_required
 def home():
     if request.method == "POST":
-        print(request.form["name"])
-        print(request.form["email"])
+        # Query the db for the team_id using the cokies email.
+        user_details = sa.select(Users).where(Users.email == g.email)
+
         
-        return 
+        return render_template("home.html", user_details=user_details)
 
     return render_template("home.html")
     
