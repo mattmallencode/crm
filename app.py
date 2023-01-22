@@ -103,6 +103,7 @@ def home():
     if request.method == "POST":
         print(request.form["name"])
         print(request.form["email"])
+        
         return 
 
     return render_template("home.html")
@@ -184,7 +185,7 @@ def createTeamForm():
             return redirect(url_for("home"))
         # If the team id is already registered, inform the user.
         else:
-            form.team_id.errors.append("This tema id is already registered!")
+            form.team_id.errors.append("This team id is already registered!")
         return render_template("create_team.html", form=form)
     return render_template("create_team.html", form=form)
 
