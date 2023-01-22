@@ -2,9 +2,11 @@ from flask import Flask, render_template, request, redirect, url_for
 from dotenv import load_dotenv
 import os
 from flask_sqlalchemy import SQLAlchemy as sa
+from sqlalchemy.sql.expression import false
 from flask_mail import Mail, Message
 from forms import SignUpForm
 from werkzeug.security import generate_password_hash, check_password_hash
+from secrets import token_urlsafe
 
 # Initialize the flask application
 application = Flask(__name__)
@@ -48,6 +50,10 @@ class Invites(db.Model):
     invite_id = db.Column(db.String, primary_key=True)
     team_id = db.Column(db.String)
 
+    def __init__(self, invite_id = None, team_id = None):
+        self.invite_id = invite_id
+        self.team_id = team_id
+
 @application.route("/", methods=["GET", "POST"])
 def index():
     """
@@ -65,19 +71,42 @@ def invite():
         # inserts inputted email address into Invites table along with team id
         invite = Invites()
         team_id = "xxxxxxxx"
-        invite.team_id = team_id
-        invite.invite_id = request.form["address"] + team_id,
-        db.session.add(invite)
-        db.session.commit()
+        email = request.form["address"]
+        
+        # user_id should be a session cookie
+        user_id = "ad@gmail.com"
+        # checks if user sending invite is a member of an organization
+        user = Users.query.filter(Users.email == user_id).first()
+        if user.team_id == None:
+            response = "You are not a member of an organization"
+        else:
+            #checks if user sending invite is an admin
+            if user.admin_status == False:
+                response = "You must be an admin to invite members to your organization"
+            else:
+                # checks if user being invited is part of an organization 
+                user_to_be_invited = Users.query.filter(Users.email == email).first()
+                if user_to_be_invited.team_id != None:
+                    response = "Member is already part of an organization"
+                else:
+                    # collects form data and inserts into invite table
+                    sec = token_urlsafe(16)
+                    url = f"{email},{team_id},{sec}"
+                    invite.team_id = team_id
+                    invite.invite_id = url
+                    
+                    db.session.add(invite)
+                    db.session.commit()
 
-        # creates email message
-        msg = Message("Sherpa Invitation", sender = ("Sherpa CRM", "Sherpacrm90@gmail.com"), recipients = [request.form["address"]])
-        msg.html = "You have been invited to join a Sherpa organisation. Click <a href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'> here</a> to join"
+                    # creates email message
+                    msg = Message("Sherpa Invitation", sender = ("Sherpa CRM", "Sherpacrm90@gmail.com"), recipients = [request.form["address"]])
+                    msg.html = f"You have been invited to join a Sherpa organisation. Click <a href = '/login/{url}'> here</a> to join"
 
-        # connects to mail SMTP server and sends message
-        mail.connect()
-        mail.send(msg)
-        response = "Member has been invited"
+                    # connects to mail SMTP server and sends message
+                    mail.connect()
+                    mail.send(msg)
+                    response = "Member has been invited"
+                
     return render_template("invite.html", response = response)
 
 def home():
