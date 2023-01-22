@@ -100,14 +100,14 @@ def invite():
 @application.route("/", methods=["GET", "POST"])
 @login_required
 def home():
-    if request.method == "POST":
+    # If email = None. Not logged in. Therefore redirect to login.html
+    if g.email != None:
         # Query the db for the team_id using the cokies email.
         user_details = sa.select(Users).where(Users.email == g.email)
 
-        
         return render_template("home.html", user_details=user_details)
-
-    return render_template("home.html")
+    else:
+        return render_template("login.html")
     
 @application.route("/login", methods=["GET", "POST"])
 def login():
