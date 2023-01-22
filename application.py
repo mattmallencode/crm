@@ -123,15 +123,11 @@ def invite():
 @application.route("/", methods=["GET", "POST"])
 @login_required
 def home():
-    print("hello")
-    if request.method == "POST":
-        # Query the db for the team_id using the cokies email.
-        user_details = sa.select(Users).where(Users.email == g.email)
+    # Query the db for the team_id using the cokies email.
+    user_details = Users.query.filter_by(email=g.email).first()
 
         
-        return render_template("home.html", user_details=user_details)
-
-    return render_template("home.html")
+    return render_template("home.html", user_details=user_details)
 
 @application.route("/login", defaults={"invite_id": None}, methods=["GET", "POST"])
 @application.route("/login/<invite_id>", methods=["GET", "POST"])
@@ -154,8 +150,12 @@ def login(invite_id):
             if invite_id != None:
                 user = Users.query.filter_by(email=email).first()
                 invitation = Invites.query.filter_by(invite_id=invite_id).first()
-                if  invitation != None and user.team_id == None:
+                invitation_email = invitation.invite_id.split("_")[0]
+                print(invitation_email)
+                if  invitation != None and user.team_id == None and user.email == invitation_email:
                     user.team_id = invitation.team_id
+                    user.admin_status = False
+                    user.owner_status = False
                     db.session.delete(invitation)
                     db.session.commit()
             return redirect(next_page)
@@ -187,7 +187,7 @@ def signup():
             user.owner_status = None            
             db.session.add(user)
             db.session.commit()
-            return redirect(url_for("login/"))
+            return redirect(url_for("login"))
         # If the email's already registered, inform the user.
         else:
             form.email.errors.append("That email is already registered!")
