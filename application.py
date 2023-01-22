@@ -47,6 +47,13 @@ class Users(db.Model):
     owner_status = db.Column(db.Boolean)
     admin_status = db.Column(db.Boolean)
 
+    def __init__(self, email=None, password_hash=None, team_id=None, owner_status=None, admin_status=None):
+        self.email = email
+        self.password_hash = password_hash
+        self.team_id = team_id
+        self.owner_status = owner_status
+        self.admin_status = admin_status
+
 
 class Invites(db.Model):
     invite_id = db.Column(db.String, primary_key=True)
@@ -63,13 +70,6 @@ def login_required(view):
             return redirect(url_for("login", next=request.url))
         return view(**kwargs)
     return wrapped_view
-
-@application.route("/", methods=["GET", "POST"])
-def index():
-    """
-    Index route for the application.
-    """
-    return render_template("index.html")
 
 @application.route("/invite", methods = ["GET", "POST"])
 @login_required
@@ -97,7 +97,8 @@ def invite():
         response = "Member has been invited"
     return render_template("invite.html", response = response)
 
-@application.route("/home", methods=["GET", "POST"])
+@application.route("/", methods=["GET", "POST"])
+@login_required
 def home():
     if request.method == "POST":
         print(request.form["name"])
@@ -158,7 +159,8 @@ def signup():
             form.email.errors.append("That email is already registered!")
     return render_template("signup.html", form=form)
 
-@application.route("/createTeam", methods=["GET", "POST"])
+@application.route("/create_team", methods=["GET", "POST"])
+@login_required
 def createTeamForm():
     """
     Route for registering an team.
@@ -170,19 +172,21 @@ def createTeamForm():
             team_id = form.team_id.data
             user = Users()
             user.team_id = team_id
-
             # Generate a hash for the user's password and insert credential's into the DB.
             user.password_hash = generate_password_hash(password)
             user.team_id = None
+
             user.admin_status = True
             user.owner_status = True
+
             db.session.add(user)
             db.session.commit()
             return redirect(url_for("home"))
         # If the team id is already registered, inform the user.
         else:
             form.team_id.errors.append("This tema id is already registered!")
-        return render_template("/createTeam", form=form)
+        return render_template("create_team.html", form=form)
+    return render_template("create_team.html", form=form)
 
 if __name__ == "__main__":
     application.debug = True
