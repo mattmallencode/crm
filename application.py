@@ -46,6 +46,16 @@ class Users(db.Model):
     owner_status = db.Column(db.Boolean)
     admin_status = db.Column(db.Boolean)
 
+'''Login form setup'''
+# Creates a login_manager that lets your code and login manager work together 
+login_manager = LoginManager()
+# Application already exists but we can configure it to work with the login manager using the below line.
+login_manager.init_app(application)
+# Used to reload the user object from the user ID stored in the session. 
+@login_manager.user_loader
+def load_user(user_id):
+    return Users.get(user_id)
+
 class Invites(db.Model):
     invite_id = db.Column(db.String, primary_key=True)
     team_id = db.Column(db.String)
