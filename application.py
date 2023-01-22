@@ -137,9 +137,10 @@ def home():
         return 
 
     return render_template("home.html")
-    
+
+@application.route("/login", defaults={"invite_id": None}, methods=["GET", "POST"])
 @application.route("/login/<invite_id>", methods=["GET", "POST"])
-def login(invite_id=None):
+def login(invite_id):
     """
     Route for authenticating a user.    
     """
@@ -191,7 +192,7 @@ def signup():
             user.owner_status = None            
             db.session.add(user)
             db.session.commit()
-            return redirect(url_for("login"))
+            return redirect(url_for("login/"))
         # If the email's already registered, inform the user.
         else:
             form.email.errors.append("That email is already registered!")
