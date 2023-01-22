@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy as sa
 from flask_mail import Mail, Message
 from forms import SignUpForm, LoginForm
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import LoginManager
 
 # Initialize the flask application
 application = Flask(__name__)
@@ -21,6 +22,7 @@ application.config["MAIL_USE_SSL"] = True
 
 # creates Mail instance for managing emails
 mail = Mail(application)
+
 
 # Load environment variables from .env file.
 load_dotenv()
@@ -47,6 +49,16 @@ class Users(db.Model):
 class Invites(db.Model):
     invite_id = db.Column(db.String, primary_key=True)
     team_id = db.Column(db.String)
+
+'''Login form setup'''
+# Creates a login_manager that lets your code and login manager work together 
+login_manager = LoginManager()
+# Application already exists but we can configure it to work with the login manager using the below line.
+login_manager.init_app(application)
+# Used to reload the user object from the user ID stored in the session. 
+@login_manager.user_loader
+def load_user(user_id):
+    return Users.get(user_id)
 
 @application.route("/", methods=["GET", "POST"])
 def index():
