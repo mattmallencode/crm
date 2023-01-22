@@ -5,7 +5,6 @@ from flask_sqlalchemy import SQLAlchemy as sa
 from flask_mail import Mail, Message
 from forms import SignUpForm, LoginForm
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import LoginManager
 
 # Initialize the flask application
 application = Flask(__name__)
