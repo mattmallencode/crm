@@ -2,15 +2,13 @@
 
 {% block main_content %}
     <body>
-        <div class="box">
-        <div class="container">
         <form method="POST", novalidate>
         {{ form.hidden_tag() }}
-        {% for error in form.email.errors %}
+        {% for error in form.team_id.errors %}
                 <div>{{ error }}</div>
         {% endfor %}
-        {{ form.email.label }}
-        {{ form.email() }}
+        {{ form.team_id.label }}
+        {{ form.team_id() }}
         <br>
         {% for error in form.password.errors %}
                 <div>{{ error }}</div>
@@ -26,7 +24,5 @@
         {{ form.submit(id="register") }}
         <br>
       </form>
-</div>
-</div>
     </body>
 {% endblock %}
