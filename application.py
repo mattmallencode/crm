@@ -131,7 +131,11 @@ def invite():
 @login_required
 def home():
     if request.method == "POST":
-        return 
+        # Query the db for the team_id using the cokies email.
+        user_details = sa.select(Users).where(Users.email == g.email)
+
+        
+        return render_template("home.html", user_details=user_details)
 
     return render_template("home.html")
 
@@ -214,14 +218,16 @@ def createTeamForm():
             # Generate a hash for the user's password and insert credential's into the DB.
             user.password_hash = generate_password_hash(password)
             user.team_id = None
-            user.owner_status = None
-            user.admin_status = None
+
+            user.admin_status = True
+            user.owner_status = True
+
             db.session.add(user)
             db.session.commit()
-            return redirect(url_for("login"))
+            return redirect(url_for("home"))
         # If the team id is already registered, inform the user.
         else:
-            form.team_id.errors.append("This tema id is already registered!")
+            form.team_id.errors.append("This team id is already registered!")
         return render_template("create_team.html", form=form)
     return render_template("create_team.html", form=form)
 
