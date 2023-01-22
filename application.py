@@ -100,24 +100,16 @@ def invite():
             if user.admin_status == False:
                 response = "You must be an admin to invite members to your organization"
             else:
-                # collects form data and inserts into invite table
-                sec = token_urlsafe(16)
-                host = "http://127.0.0.1:5000"
-                url = f"{host}/login/{email}_{team_id}_{sec}"
-                invite.team_id = team_id
-                invite.invite_id = f"{email}_{team_id}_{sec}"
-
-
                 user_to_be_invited = Users.query.filter(Users.email==email).first()
                 if user_to_be_invited.team_id == team_id:
                     response = "This user is already a member of your team"
                 else:
                     # collects form data and inserts into invite table
                     sec = token_urlsafe(16)
-                    host = "127.0.0.1:5000"
-                    url = f"{host}/login/{email},{team_id},{sec}"
+                    host = "http://127.0.0.1:5000"
+                    url = f"{host}/login/{email}_{team_id}_{sec}"
                     invite.team_id = team_id
-                    invite.invite_id = url
+                    invite.invite_id = f"{email}_{team_id}_{sec}"
 
                     db.session.add(invite)
                     db.session.commit()
