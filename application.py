@@ -107,8 +107,8 @@ def home():
 
     return render_template("home.html")
     
-@application.route("/login", methods=["GET", "POST"])
-def login():
+@application.route("/login/<invite_id>", methods=["GET", "POST"])
+def login(invite_id=None):
     """
     Route for authenticating a user.    
     """
@@ -124,6 +124,13 @@ def login():
             next_page = request.args.get("next")
             if not next_page:
                 next_page = url_for("home")
+            if invite_id != None:
+                user = Users.query.filter_by(email=email).first()
+                invitation = Invites.query.filter_by(invite_id=invite_id).first()
+                if  invitation != None and user.team_id == None:
+                    user.team_id = invitation.team_id
+                    db.session.delete(invitation)
+                    db.session.commit()
             return redirect(next_page)
         else:
             form.email.errors.append("Incorrect email / password!")
