@@ -28,6 +28,7 @@ mail = Mail(application)
 # Load environment variables from .env file.
 load_dotenv()
 
+
 # Initialize MySQL credentials from the environment variables we just loaded.
 DB_HOST = os.environ.get("DB_HOST")
 DB_PORT = int(os.environ.get("DB_PORT"))
@@ -114,13 +115,19 @@ def login():
     """
     Route for authenticating a user.    
     """
+    # The login page fails when logging in without signing up
     #Initialize the form 
     form = LoginForm()
     email = form.email.data
+
     # If the user submitted the form and it passed validation 
     if form.validate_on_submit():
         user = Users.query.filter_by(email=email).first()
-        if user is not None and check_password_hash(user.password_hash, form.password.data):
+        # If the user does not exist take them to signup page
+        if user is None:
+            return render_template("/signup", methods=["GET", "POST"])
+
+        elif user is not None and check_password_hash(user.password_hash, form.password.data):
             session.clear()
             session["email"] = email
             next_page = request.args.get("next")
