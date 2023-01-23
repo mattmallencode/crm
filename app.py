@@ -111,14 +111,14 @@ def invite():
                     url = f"{host}/login/{email}_{team_id}_{sec}"
                     invite.team_id = team_id
                     invite.invite_id = f"{email}_{team_id}_{sec}"
-
+                    
                     db.session.add(invite)
                     db.session.commit()
-
                     # creates email message
-                    msg = Message("Sherpa Invitation", sender = ("Sherpa CRM", "Sherpacrm90@gmail.com"), recipients = [request.form["address"]])
-                    msg.html = f"You have been invited to join a Sherpa organisation. Click <a href = '{url}'> here</a> to join"
 
+                    msg = Message("Sherpa Invitation", sender = ("Sherpa CRM", "Sherpacrm90@gmail.com"), recipients = [form.email.data])
+                    print("hello")
+                    msg.html = f"You have been invited to join a Sherpa organisation. Click <a href = '{url}'> here</a> to join"#
                     # connects to mail SMTP server and sends message
                     mail.connect()
                     mail.send(msg)
