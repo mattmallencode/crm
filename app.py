@@ -155,8 +155,7 @@ def login(invite_id):
         # If the user does not exist take them to signup page
         if user is None:
             form.email.errors.append("Incorrect email / password!")
-            return render_template("/login", methods=["GET", "POST"])
-
+            return redirect("login.html")
 
         elif user is not None and check_password_hash(user.password_hash, form.password.data):
             session.clear()
