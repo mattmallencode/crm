@@ -28,5 +28,7 @@ class CreateTeamForm(FlaskForm):
         validators=[InputRequired(), EqualTo("password"),Length(max=100)], render_kw={"placeholder": "CONFIRM PASSWORD"})
     submit = SubmitField("REGISTER")
 
-    
+class InviteForm(FlaskForm):
+    email = StringField("Email:", validators=[InputRequired()])
+    submit = SubmitField("Invite")
 
