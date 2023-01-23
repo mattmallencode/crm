@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 from flask_sqlalchemy import SQLAlchemy as sa
 from flask_mail import Mail, Message
-from forms import SignUpForm, LoginForm, CreateTeamForm
+from forms import SignUpForm, LoginForm, CreateTeamForm, InviteForm
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 from secrets import token_urlsafe
@@ -59,7 +59,6 @@ class Invites(db.Model):
     invite_id = db.Column(db.String, primary_key=True)
     team_id = db.Column(db.String)
 
-
     def __init__(self, invite_id = None, team_id = None):
         self.invite_id = invite_id
         self.team_id = team_id
@@ -82,11 +81,12 @@ def invite():
     """
     Route for sending an email invitation to a user for your team.
     """
+    form = InviteForm()
     response = ""
-    if request.method == "POST":
+    if form.validate_on_submit():
         # inserts inputted email address into Invites table along with team id
         invite = Invites()
-        email = request.form["address"]
+        email = form.email.data
         
         # user_id of user inviting a member
         user_id = g.email
@@ -94,15 +94,15 @@ def invite():
         user = Users.query.filter(Users.email == user_id).first()
         team_id = user.team_id
         if user.team_id == None:
-            response = "You are not a member of an organization"
+            form.email.errors.append("You are not a member of an organization")
         else:
             #checks if user sending invite is an admin
             if user.admin_status == False:
-                response = "You must be an admin to invite members to your organization"
+                form.email.errors.append("You must be an admin to invite members to your organization")
             else:
                 user_to_be_invited = Users.query.filter(Users.email==email).first()
                 if user_to_be_invited.team_id == team_id:
-                    response = "This user is already a member of your team"
+                    form.email.errors.append("This user is already a member of your team")
                 else:
                     # collects form data and inserts into invite table
                     sec = token_urlsafe(16)
@@ -123,18 +123,10 @@ def invite():
                     mail.send(msg)
                     response = "Member has been invited"
                     
-                db.session.add(invite)
-                db.session.commit()
-
-                # creates email message
-                msg = Message("Sherpa Invitation", sender = ("Sherpa CRM", "Sherpacrm90@gmail.com"), recipients = [request.form["address"]])
-                msg.html = f"You have been invited to join a Sherpa organisation. Click <a href = {url}>here</a> to join."
-                # connects to mail SMTP server and sends message
-                mail.connect()
-                mail.send(msg)
-                response = "Member has been invited"
-                
-    return render_template("invite.html", response = response)
+                    db.session.add(invite)
+                    db.session.commit()
+  
+    return render_template("invite.html", form = form, response = response)
 
 @application.route("/", methods=["GET", "POST"])
 @login_required
