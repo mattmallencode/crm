@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, EmailField
+from wtforms import StringField, PasswordField, SubmitField, EmailField, SelectField
 from wtforms.validators import InputRequired, EqualTo, Email, Length
 
 class SignUpForm(FlaskForm):
@@ -29,6 +29,16 @@ class CreateTeamForm(FlaskForm):
     submit = SubmitField("REGISTER")
 
 class InviteForm(FlaskForm):
-    email = StringField("Email:", validators=[InputRequired()])
+    email = EmailField("Email:", validators=[InputRequired(), Email()])
     submit = SubmitField("Invite")
+
+class addContactForm(FlaskForm):
+    name = StringField("Name", validators=[InputRequired()])
+    email = EmailField("Email", validators=[InputRequired(), Email()])
+    phone_number = StringField("Phone Number")
+    contact_owner = StringField("Contact Owner")
+    company = StringField("Company")
+    status = SelectField("Status", choices = [("new", "New"), ("open", "Open"), ("progress", "In Progress"), ("deal", "Open Deal"), ("unqualified", "Unqualified"), ("attempt", "Attempted To Contact"), ("connected", "Connected"), ("timing", "Bad Timing")])
+    submit = SubmitField("Add Contact")
+
 
