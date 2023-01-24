@@ -261,15 +261,18 @@ def createTeamForm():
 
 
 @application.route("/contacts", methods =["GET", "POST"])
+@login_required
 def contacts():
     return render_template("contacts.html")
 
 @application.route("/add_contact", methods = ["GET", "POST"])
+@login_required
 def add_contact():
     form = addContactForm()
     if form.validate_on_submit():
-        if Contacts.query.filter_by(email=form.email.data) is None:
-            user = Users.query.filter_by(email=g.email).first()
+        user = Users.query.filter_by(email=g.email).first()
+        #  checks if contact being added belongs to user's organization already
+        if Contacts.query.filter_by(email=form.email.data, team_id=user.team_id).first() is None:
             team_id = user.team_id
 
             contact = Contacts()
@@ -280,13 +283,13 @@ def add_contact():
             contact.phone_number = form.phone_number.data
             contact.contact_owner = form.contact_owner.data
             contact.company = form.company.data
-            contact.status = form.status.data
+            contact.status = dict(form.status.choices).get(form.status.data)
 
-            db.session.add(user)
+            db.session.add(contact)
             db.session.commit()
             return redirect(url_for("contacts"))
         else:
-            form.errors.append("This person is already in your contacts")
+            form.name.errors.append("This person is already in your contacts")
     return render_template("add_contact.html", form = form)
 
 if __name__ == "__main__":
