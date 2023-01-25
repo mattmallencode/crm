@@ -20,13 +20,8 @@ class LoginForm(FlaskForm):
     submit = SubmitField("LOGIN")
 
 class CreateTeamForm(FlaskForm):
-    team_id = StringField("Team id:", 
-        validators=[InputRequired(), Email(), Length(min=10, max=100)], render_kw={"placeholder": "EMAIL"})
-    password = PasswordField("Password:", 
-        validators=[InputRequired(),Length(max=100)], render_kw={"placeholder": "PASSWORD"})
-    password2 = PasswordField("Confirm password:", 
-        validators=[InputRequired(), EqualTo("password"),Length(max=100)], render_kw={"placeholder": "CONFIRM PASSWORD"})
-    submit = SubmitField("REGISTER")
+    name = StringField("Team Name:", validators=[InputRequired()])
+    submit = SubmitField("Create Team")
 
 class InviteForm(FlaskForm):
     email = EmailField("Email:", validators=[InputRequired(), Email()])
