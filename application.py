@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 from flask_sqlalchemy import SQLAlchemy as sa
 from flask_mail import Mail, Message
-from forms import SignUpForm, LoginForm, CreateTeamForm, InviteForm
+from forms import SignUpForm, LoginForm, CreateTeamForm, InviteForm, addContactForm
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 from secrets import token_urlsafe
@@ -74,6 +74,27 @@ class Invites(db.Model):
     def __init__(self, invite_id = None, team_id = None):
         self.invite_id = invite_id
         self.team_id = team_id
+
+class Contacts(db.Model):
+    contact_id = db.Column(db.String, primary_key=True)
+    team_id = db.Column(db.Integer)
+    name = db.Column(db.String)
+    email = db.Column(db.String)
+    phone_number = db.Column(db.Integer)
+    contact_owner = db.Column(db.String)
+    company = db.Column(db.String)
+    status = db.Column(db.String)
+
+    def __init__(self, contact_id = None, team_id = None, name = None, email = None, phone_number = None, contact_owner = None, company = None, status = None):
+        self.contact_id = contact_id
+        self.team_id = team_id
+        self.name = name
+        self.email = email
+        self.phone_number = phone_number
+        self.contact_owner = contact_owner
+        self.company = company
+        self.status = status
+
 
 @application.before_request
 def load_logged_in_user():
@@ -166,7 +187,7 @@ def login(invite_id):
         # If the user does not exist take them to signup page
         if user is None:
             form.email.errors.append("Incorrect email / password!")
-            return redirect("login.html")
+            return redirect(url_for("login"))
 
         elif user is not None and check_password_hash(user.password_hash, form.password.data):
             session.clear()
@@ -215,7 +236,7 @@ def signup():
             db.session.add(user)
             db.session.commit()
             return redirect(url_for("login"))
-        # If the email's already registered, inform the user.
+            # If the email's already registered, inform the user.
         else:
             form.email.errors.append("That email is already registered!")
     return render_template("signup.html", form=form)
@@ -248,6 +269,43 @@ def createTeamForm():
             form.team_id.errors.append("This team id is already registered!")
         return render_template("create_team.html", form=form)
     return render_template("create_team.html", form=form)
+
+
+@application.route("/contacts", methods =["GET", "POST"])
+@login_required
+def contacts():
+    # gets all contacts of user that is logged in and passes it to html template
+    user = Users.query.filter_by(email=g.email).first()
+    contacts = Contacts.query.filter_by(team_id=user.team_id)
+    return render_template("contacts.html", contacts = contacts)
+
+@application.route("/add_contact", methods = ["GET", "POST"])
+@login_required
+# allows a user to add contacts to their contact list
+def add_contact():
+    form = addContactForm()
+    if form.validate_on_submit():
+        user = Users.query.filter_by(email=g.email).first()
+        #  checks if contact being added belongs to user's organization already
+        if Contacts.query.filter_by(email=form.email.data, team_id=user.team_id).first() is None:
+            team_id = user.team_id
+
+            contact = Contacts()
+            contact.contact_id = f"{form.email.data}_{team_id}"
+            contact.team_id = team_id
+            contact.name = form.name.data
+            contact.email = form.email.data
+            contact.phone_number = form.phone_number.data
+            contact.contact_owner = form.contact_owner.data
+            contact.company = form.company.data
+            contact.status = dict(form.status.choices).get(form.status.data)
+
+            db.session.add(contact)
+            db.session.commit()
+            return redirect(url_for("contacts"))
+        else:
+            form.name.errors.append("This person is already in your contacts")
+    return render_template("add_contact.html", form = form)
 
 if __name__ == "__main__":
     application.debug = True

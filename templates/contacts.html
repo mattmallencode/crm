@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+<body>
+    <h1>Contacts</h1>
+    
+    <section>
+        <h2>Add a Contact</h2>
+        <p><a href = "add_contact">Add A Contact</a></p>
+    </section>
+
+    <section>
+        <h2>My Contacts</h2>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>email</th>
+                <th>Phone Number</th>
+                <th>Contact Owner</th>
+                <th>Company</th>
+                <th>Status</th>
+            </tr>
+
+            {% for contact in contacts %}
+                <tr>
+                    <td>{{contact.name}}</td>
+                    <td>{{contact.email}}</td>
+                    <td>{{contact.phone_number}}</td>
+                    <td>{{contact.contact_owner}}</td>
+                    <td>{{contact.company}}</td>
+                    <td>{{contact.status}}</td>
+                </tr>
+
+            {% endfor %}
+        </table>
+    </section>
+    
+</body>
+{% endblock %}
