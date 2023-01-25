@@ -263,10 +263,14 @@ def createTeamForm():
 @application.route("/contacts", methods =["GET", "POST"])
 @login_required
 def contacts():
-    return render_template("contacts.html")
+    # gets all contacts of user that is logged in and passes it to html template
+    user = Users.query.filter_by(email=g.email).first()
+    contacts = Contacts.query.filter_by(team_id=user.team_id)
+    return render_template("contacts.html", contacts = contacts)
 
 @application.route("/add_contact", methods = ["GET", "POST"])
 @login_required
+# allows a user to add contacts to their contact list
 def add_contact():
     form = addContactForm()
     if form.validate_on_submit():
