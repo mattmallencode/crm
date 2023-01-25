@@ -1,18 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<title>Home page</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body {
-  font-family: Arial, Helvetica, sans-serif;
-}
-</style>
-</head>
-<body>
-
+{% extends "base.html" %}
+{% block main_content %}
+<body>  
+  <nav>
+    <ul>
+      <li><a href="{{ url_for('home') }}">Home</a></li>
+      <li><a href="{{ url_for('invite') }}">Invite</a></li>
+      <li><a href="{{ url_for('contacts') }}">Contacts</a></li>
+      <li><a href="{{ url_for('createTeamForm') }}">Create Team</a></li>
+    </ul>
+  </nav>
 <h1>Organisation</h1>
 {{ user_details["team_id"] }}
 </body>
-</html>
+{% endblock %}

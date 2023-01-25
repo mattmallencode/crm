@@ -2,6 +2,14 @@
 
 {% block main_content %}
 <body>
+    <nav>
+        <ul>
+          <li><a href="{{ url_for('home') }}">Home</a></li>
+          <li><a href="{{ url_for('invite') }}">Invite</a></li>
+          <li><a href="{{ url_for('contacts') }}">Contacts</a></li>
+          <li><a href="{{ url_for('createTeamForm') }}">Create Team</a></li>
+        </ul>
+      </nav>
     <h1>Contacts</h1>
 
     <p><a href = "add_contact">Add A Contact</a></p>

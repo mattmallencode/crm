@@ -2,6 +2,14 @@
 
 {% block main_content %}
     <body>
+        <nav>
+                <ul>
+                  <li><a href="{{ url_for('home') }}">Home</a></li>
+                  <li><a href="{{ url_for('invite') }}">Invite</a></li>
+                  <li><a href="{{ url_for('contacts') }}">Contacts</a></li>
+                  <li><a href="{{ url_for('createTeamForm') }}">Create Team</a></li>
+                </ul>
+        </nav>
         <form method="POST", novalidate>
         {{ form.hidden_tag() }}
         {% for error in form.team_id.errors %}
