@@ -41,4 +41,7 @@ class addContactForm(FlaskForm):
     status = SelectField("Status", choices = [("new", "New"), ("open", "Open"), ("progress", "In Progress"), ("deal", "Open Deal"), ("unqualified", "Unqualified"), ("attempt", "Attempted To Contact"), ("connected", "Connected"), ("timing", "Bad Timing")])
     submit = SubmitField("Add Contact")
 
+class removeContactForm(FlaskForm):
+    email = EmailField("Email", validators=[InputRequired(), Email()])
+    submit = SubmitField("Remove Contact")
 

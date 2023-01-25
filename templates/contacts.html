@@ -19,6 +19,7 @@
                 <th>Contact Owner</th>
                 <th>Company</th>
                 <th>Status</th>
+                <th>Remove Contact</th>
             </tr>
 
             {% for contact in contacts %}
@@ -29,6 +30,7 @@
                     <td>{{contact.contact_owner}}</td>
                     <td>{{contact.company}}</td>
                     <td>{{contact.status}}</td>
+                    <td><a href = "{{url_for('remove_contact',contact_id=contact.contact_id)}}">Remove</a></td>
                 </tr>
 
             {% endfor %}
