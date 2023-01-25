@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 from flask_sqlalchemy import SQLAlchemy as sa
 from flask_mail import Mail, Message
-from forms import SignUpForm, LoginForm, CreateTeamForm, InviteForm, addContactForm
+from forms import SignUpForm, LoginForm, CreateTeamForm, InviteForm, addContactForm, removeContactForm
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 from secrets import token_urlsafe
@@ -295,6 +295,18 @@ def add_contact():
         else:
             form.name.errors.append("This person is already in your contacts")
     return render_template("add_contact.html", form = form)
+
+
+@application.route("/remove_contact/<contact_id>", methods = ["GET", "POST"])
+@login_required
+def remove_contact(contact_id):
+    # retrieves contact specified in parameter and removes from Contacts database
+    contact = Contacts.query.filter_by(contact_id = contact_id).first()
+    if contact is not None:
+        db.session.delete(contact)
+        db.session.commit()
+    return redirect(url_for("contacts"))
+
 
 if __name__ == "__main__":
     application.debug = True
