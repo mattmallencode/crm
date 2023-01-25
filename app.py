@@ -1,10 +1,12 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for, session, g
 from dotenv import load_dotenv
 import os
 from flask_sqlalchemy import SQLAlchemy as sa
 from flask_mail import Mail, Message
-from forms import SignUpForm
+from forms import SignUpForm, LoginForm, CreateTeamForm, InviteForm, addContactForm
+from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
+from secrets import token_urlsafe
 
 # Initialize the flask application
 application = Flask(__name__)
@@ -22,8 +24,10 @@ application.config["MAIL_USE_SSL"] = True
 # creates Mail instance for managing emails
 mail = Mail(application)
 
+
 # Load environment variables from .env file.
 load_dotenv()
+
 
 # Initialize MySQL credentials from the environment variables we just loaded.
 DB_HOST = os.environ.get("DB_HOST")
@@ -44,62 +48,249 @@ class Users(db.Model):
     owner_status = db.Column(db.Boolean)
     admin_status = db.Column(db.Boolean)
 
-@application.route("/", methods=["GET", "POST"])
-def index():
-    """
-    Index route for the application.
-    """
-    return render_template("index.html")
+    def __init__(self, email=None, password_hash=None, team_id=None, owner_status=None, admin_status=None):
+        self.email = email
+        self.password_hash = password_hash
+        self.team_id = team_id
+        self.owner_status = owner_status
+        self.admin_status = admin_status
+
+
+class Invites(db.Model):
+    invite_id = db.Column(db.String, primary_key=True)
+    team_id = db.Column(db.String)
+
+    def __init__(self, invite_id = None, team_id = None):
+        self.invite_id = invite_id
+        self.team_id = team_id
+
+class Contacts(db.Model):
+    contact_id = db.Column(db.String, primary_key=True)
+    team_id = db.Column(db.Integer)
+    name = db.Column(db.String)
+    email = db.Column(db.String)
+    phone_number = db.Column(db.Integer)
+    contact_owner = db.Column(db.String)
+    company = db.Column(db.String)
+    status = db.Column(db.String)
+
+    def __init__(self, contact_id = None, team_id = None, name = None, email = None, phone_number = None, contact_owner = None, company = None, status = None):
+        self.contact_id = contact_id
+        self.team_id = team_id
+        self.name = name
+        self.email = email
+        self.phone_number = phone_number
+        self.contact_owner = contact_owner
+        self.company = company
+        self.status = status
+
+
+@application.before_request
+def load_logged_in_user():
+    g.email = session.get("email", None)
+
+def login_required(view):
+    @wraps(view)
+    def wrapped_view(**kwargs):
+        if g.email is None:
+            return redirect(url_for("login", next=request.url))
+        return view(**kwargs)
+    return wrapped_view
 
 @application.route("/invite", methods = ["GET", "POST"])
+@login_required
 def invite():
     """
     Route for sending an email invitation to a user for your team.
     """
+    form = InviteForm()
     response = ""
-    if request.method == "POST":
-        # variables below will be retrieved from db
-        user_id = request.form["address"]
-        team_id = "21"
-        link = user_id + team_id
+    if form.validate_on_submit():
+        # inserts inputted email address into Invites table along with team id
+        invite = Invites()
+        email = form.email.data
+        
+        # user_id of user inviting a member
+        user_id = g.email
+        # checks if user sending invite is a member of an organization
+        user = Users.query.filter(Users.email == user_id).first()
+        team_id = user.team_id
+        if user.team_id == None:
+            form.email.errors.append("You are not a member of an organization")
+        else:
+            #checks if user sending invite is an admin
+            if user.admin_status == False:
+                form.email.errors.append("You must be an admin to invite members to your organization")
+            else:
+                user_to_be_invited = Users.query.filter(Users.email==email).first()
+                if user_to_be_invited.team_id == team_id:
+                    form.email.errors.append("This user is already a member of your team")
+                else:
+                    # collects form data and inserts into invite table
+                    sec = token_urlsafe(16)
+                    host = "http://127.0.0.1:5000"
+                    url = f"{host}/login/{email}_{team_id}_{sec}"
+                    invite.team_id = team_id
+                    invite.invite_id = f"{email}_{team_id}_{sec}"
 
-        # creates email message
-        msg = Message("Sherpa Invitation", sender = "Sherpacrm90@gmail.com", recipients = ["Sherpacrm90@gmail.com"])
-        msg.html = "You have been invited to join an organisation. Click <a href = ""> here</a> to join"
+                    db.session.add(invite)
+                    db.session.commit()
 
-        # connects to mail SMTP server and sends message
-        mail.connect()
-        mail.send(msg)
-        response = "Member has been invited"
-    return render_template("invite.html", response = response)
+                    # creates email message
+                    msg = Message("Sherpa Invitation", sender = ("Sherpa CRM", "Sherpacrm90@gmail.com"), recipients = [request.form["address"]])
+                    msg.html = f"You have been invited to join a Sherpa organisation. Click <a href = '{url}'> here</a> to join"
 
+                    # connects to mail SMTP server and sends message
+                    mail.connect()
+                    mail.send(msg)
+                    response = "Member has been invited"
+                    
+                    db.session.add(invite)
+                    db.session.commit()
+  
+    return render_template("invite.html", form = form, response = response)
+
+@application.route("/", methods=["GET", "POST"])
+@login_required
 def home():
-    if request.method == "POST":
-        print(request.form["name"])
-        print(request.form["email"])
-        return 
+    # Query the db for the team_id using the cokies email.
+    user_details = Users.query.filter_by(email=g.email).first()
 
-    return render_template("home.html")
-    
-@application.route("/login", methods=["GET", "POST"])
-def login():
+        
+    return render_template("home.html", user_details=user_details)
+
+@application.route("/login", defaults={"invite_id": None}, methods=["GET", "POST"])
+@application.route("/login/<invite_id>", methods=["GET", "POST"])
+def login(invite_id):
     """
     Route for authenticating a user.    
     """
-    return render_template("login.html")
+    # The login page fails when logging in without signing up
+    #Initialize the form 
+    form = LoginForm()
+    email = form.email.data
 
-@application.route("/signup", methods=["POST"])
+    # If the user submitted the form and it passed validation 
+    if form.validate_on_submit():
+        user = Users.query.filter_by(email=email).first()
+        # If the user does not exist take them to signup page
+        if user is None:
+            form.email.errors.append("Incorrect email / password!")
+            return redirect(url_for("login"))
+
+        elif user is not None and check_password_hash(user.password_hash, form.password.data):
+            session.clear()
+            session["email"] = email
+            next_page = request.args.get("next")
+            if not next_page:
+                next_page = url_for("home")
+            if invite_id != None:
+                user = Users.query.filter_by(email=email).first()
+                invitation = Invites.query.filter_by(invite_id=invite_id).first()
+                invitation_email = invitation.invite_id.split("_")[0]
+                print(invitation_email)
+                if  invitation != None and user.team_id == None and user.email == invitation_email:
+                    user.team_id = invitation.team_id
+                    user.admin_status = True
+                    user.owner_status = True
+                    db.session.delete(invitation)
+                    db.session.commit()
+            return redirect(next_page)
+        else:
+            form.email.errors.append("Incorrect email / password!")
+        # Login and validate the user
+        # User needs to be an instance of your user class
+    return render_template("login.html", form=form)
+
+@application.route("/signup", methods=["GET", "POST"])
 def signup():
     """
     Route for registering an account.
     """
+    # Initialize the form
     form = SignUpForm()
+    # If the user submitted the form and it passed validation.
     if form.validate_on_submit():
-        email = form.email
-        password = form.password
-        # Check that user hasn't already registered
+        email = form.email.data
+        # Check that the user isn't already registered.
+        if Users.query.filter_by(email=email).first() is None:
+            password = form.password.data
+            user = Users()
+            user.email = email
+            # Generate a hash for the user's password and insert credential's into the DB.
+            user.password_hash = generate_password_hash(password)
+            user.team_id = None
+            user.admin_status = None
+            user.owner_status = None            
+            db.session.add(user)
+            db.session.commit()
+            return redirect(url_for("login"))
+            # If the email's already registered, inform the user.
+        else:
+            form.email.errors.append("That email is already registered!")
+    return render_template("signup.html", form=form)
 
-    return render_template("signup.html",form=form)
+@application.route("/create_team", methods=["GET", "POST"])
+@login_required
+def createTeamForm():
+    """
+    Route for registering an team.
+    """
+    form = CreateTeamForm()
+    if form.validate_on_submit():
+        if Users.query.filter_by(team_id=team_id).first() is None:
+            password = form.password.data
+            team_id = form.team_id.data
+            user = Users()
+            user.team_id = team_id
+            # Generate a hash for the user's password and insert credential's into the DB.
+            user.password_hash = generate_password_hash(password)
+            user.team_id = None
+
+            user.admin_status = True
+            user.owner_status = True
+
+            db.session.add(user)
+            db.session.commit()
+            return redirect(url_for("home"))
+        # If the team id is already registered, inform the user.
+        else:
+            form.team_id.errors.append("This team id is already registered!")
+        return render_template("create_team.html", form=form)
+    return render_template("create_team.html", form=form)
+
+
+@application.route("/contacts", methods =["GET", "POST"])
+@login_required
+def contacts():
+    return render_template("contacts.html")
+
+@application.route("/add_contact", methods = ["GET", "POST"])
+@login_required
+def add_contact():
+    form = addContactForm()
+    if form.validate_on_submit():
+        user = Users.query.filter_by(email=g.email).first()
+        #  checks if contact being added belongs to user's organization already
+        if Contacts.query.filter_by(email=form.email.data, team_id=user.team_id).first() is None:
+            team_id = user.team_id
+
+            contact = Contacts()
+            contact.contact_id = f"{form.email.data}_{team_id}"
+            contact.team_id = team_id
+            contact.name = form.name.data
+            contact.email = form.email.data
+            contact.phone_number = form.phone_number.data
+            contact.contact_owner = form.contact_owner.data
+            contact.company = form.company.data
+            contact.status = dict(form.status.choices).get(form.status.data)
+
+            db.session.add(contact)
+            db.session.commit()
+            return redirect(url_for("contacts"))
+        else:
+            form.name.errors.append("This person is already in your contacts")
+    return render_template("add_contact.html", form = form)
 
 if __name__ == "__main__":
     application.debug = True
