@@ -6,10 +6,10 @@
               <li><a href="{{ url_for('home') }}">Home</a></li>
               <li><a href="{{ url_for('invite') }}">Invite</a></li>
               <li><a href="{{ url_for('contacts') }}">Contacts</a></li>
-              <li><a href="{{ url_for('createTeamForm') }}">Create Team</a></li>
+              <li><a href="{{ url_for('createTeam') }}">Create Team</a></li>
             </ul>
         </nav>
-        <div class="invite_form">
+        <div class="invite-form">
             <form action = "" method = "POST">
                 <p>Invite a member to join your organisation</p>
                 {{ form.hidden_tag() }}
