@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 from flask_sqlalchemy import SQLAlchemy as sa
 from flask_mail import Mail, Message
-from forms import SignUpForm, LoginForm, CreateTeamForm, InviteForm, addContactForm
+from forms import SignUpForm, LoginForm, CreateTeamForm, InviteForm, ContactForm
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 from secrets import token_urlsafe
@@ -275,16 +275,17 @@ def createTeam():
 @application.route("/contacts", methods =["GET", "POST"])
 @login_required
 def contacts():
+    form = ContactForm()
     # gets all contacts of user that is logged in and passes it to html template
     user = Users.query.filter_by(email=g.email).first()
     contacts = Contacts.query.filter_by(team_id=user.team_id)
-    return render_template("contacts.html", contacts = contacts)
+    return render_template("contacts.html", form = form, contacts = contacts)
 
 @application.route("/add_contact", methods = ["GET", "POST"])
 @login_required
 # allows a user to add contacts to their contact list
 def add_contact():
-    form = addContactForm()
+    form = ContactForm()
     if form.validate_on_submit():
         user = Users.query.filter_by(email=g.email).first()
         #  checks if contact being added belongs to user's organization already
@@ -319,6 +320,22 @@ def remove_contact(contact_id):
         db.session.commit()
     return redirect(url_for("contacts"))
 
+@application.route("/edit_contact/<contact_id>", methods=["GET", "POST"])
+@login_required
+def edit_contact(contact_id):
+    form = ContactForm()
+    
+    contact = Contacts.query.filter_by(contact_id = contact_id).first()
+    contact.name = form.name.data
+    contact.email = form.email.data
+    contact.phone_number = form.phone_number.data
+    contact.contact_owner = form.contact_owner.data
+    contact.company = form.company.data
+    contact.status = dict(form.status.choices).get(form.status.data)
+    db.session.flush()
+    db.session.commit()
+
+    return redirect(url_for('contacts'))
 
 if __name__ == "__main__":
     application.debug = True
