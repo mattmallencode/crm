@@ -9,7 +9,17 @@
       <li><a href="{{ url_for('createTeamForm') }}">Create Team</a></li>
     </ul>
   </nav>
-<h1>Organisation</h1>
-{{ user_details["team_id"] }}
+<body>
+  {% if user_details.team_id %}
+    <section>
+      <h1>Organisation</h1>
+      {{ user_details["team_id"] }}
+    </section>
+  {% else %}
+    <section>
+      <p>You are not a member of an organisation. Either accept an invite or create your own to be a member of an organisation</p>
+      <a href="create_team">Create A Team</a>
+    </section>
+  {% endif %}
 </body>
 {% endblock %}
