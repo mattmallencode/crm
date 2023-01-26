@@ -22,6 +22,10 @@ application.config["MAIL_PASSWORD"] = os.environ.get("MAIL_PASSWORD")
 application.config["MAIL_USE_TLS"] = False
 application.config["MAIL_USE_SSL"] = True
 
+
+# Load environment variables from .env file.
+load_dotenv()
+
 # Initialize MySQL credentials from the environment variables we just loaded.
 DB_HOST = os.environ.get("DB_HOST")
 DB_PORT = int(os.environ.get("DB_PORT"))
@@ -36,20 +40,7 @@ db = sa(application)
 mail = Mail(application)
 
 
-# Load environment variables from .env file.
-load_dotenv()
 
-
-# Initialize MySQL credentials from the environment variables we just loaded.
-DB_HOST = os.environ.get("DB_HOST")
-DB_PORT = int(os.environ.get("DB_PORT"))
-DB_USER = os.environ.get("DB_USER")
-DB_PASSWORD = os.environ.get("DB_PASSWORD")
-DB_DB = os.environ.get("DB_DB") # database to use.
-# Set up SQLAlchemy with the above credentials.
-application.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_DB}"
-# Set up an SQLAlchemy session for our application.
-db = sa(application)
 
 # Users data model i.e. a representation of the users table in the database.
 class Users(db.Model):
