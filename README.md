@@ -1,5 +1,6 @@
 ﻿# Sherpa: A Free and Open-Source CRM
 ![Sherpa logo: a picture of a Yak beneath a mountain range with the text "Sherpa".`enter code here](https://raw.githubusercontent.com/mattmallencode/crm/main/static/sherpa_logo.png)
+<br>  
 Oliver Linger, 120444372
 Matt Mallen, 120355103
 Eimantas Pusinskas, 120312336
