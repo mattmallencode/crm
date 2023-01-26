@@ -1,12 +1,9 @@
 ﻿# Sherpa: A Free and Open-Source CRM
 ![Sherpa logo: a picture of a Yak beneath a mountain range with the text "Sherpa".`enter code here](https://raw.githubusercontent.com/mattmallencode/crm/main/static/sherpa_logo.png)
 <br>  
-Oliver Linger, 120444372
-<br>  
-Matt Mallen, 120355103
-<br>  
-Eimantas Pusinskas, 120312336
-<br>  
+Oliver Linger, 120444372<br>  
+Matt Mallen, 120355103<br>  
+Eimantas Pusinskas, 120312336<br>  
 Aria Shahi, 119522223
 ## Table of Contents
  - [Table of Contents](#specification) 
@@ -48,27 +45,27 @@ As a business owner / manager I want to invite other users to join my Sherpa tea
 As a business employee I want to accept an invitation to join my employer's Sherpa team to get access to their CRM resources.
 ### Requirements
 #### User Registration
-*Requirement ID: 1*
+*Requirement ID: 1*<br>  
 *Satisfies User Story: 1, 2*
 
 A user must be able to register an account with Sherpa's database by providing a valid email and password combination. This will then enable them to authenticate themselves.
 ####  User Authentication
-*Requirement ID: 2*
+*Requirement ID: 2*<br>  
 *Satisfies User Story: 1, 2*
 
 Before accessing Sherpa services, a user must prove who they are. They can do this by providing the email and password they previously used to register. This will then be compared to Sherpa's database, if they provide matching credentials they will be considered authenticated for all subsequent requests for their session.
 #### Team Creation
-*Requirement ID: 3*
+*Requirement ID: 3*<br>  
 *Satisfies User Story: 1, 2*
 
 In order to do anything meaningful with Sherpa (beyond creating an account and proving their identity) a user must be a member of a team. In order for there to be teams to join, users must be able to create them. If a user is not already a member of a team they can register one with Sherpa's database by providing the name of their organisation. 
 ####  Team Invitation Generation and Delivery
-*Requirement ID: 4*
+*Requirement ID: 4*<br>  
 *Satisfies User Story: 1, 2*
 
 An owner or administrator of a team must be able to invite another user to join their team. This can be achieved by providing the email of the person they wish to invite and Sherpa will send them an invitation link on their behalf via email.
 ####  Team Invitation Acceptance
-*Requirement ID: 5*
+*Requirement ID: 5*<br>  
 *Satisfies User Story: 2*
 
 A user must be able to accept an invitation to a team. They can achieve this by clicking the invitation link they received in their email and then logging in. A user may only accept the invitation if they're not already a member of a team and log in using the same email the invitation was sent to.
