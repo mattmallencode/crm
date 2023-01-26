@@ -80,9 +80,9 @@ The following table describes the data model used for "user" entities i.e. user 
 |:--:|:--:|:--:|:--:|:--:|
 | Primary Key, String |String  |Integer|Boolean|Boolean
 
-Users use a unique email along with a password to authenticate themselves. The team_id is the team whose CRM resources the user has access to (if any), and the two boolean values indicates whether they're an owner and/or admin 
+Users use a unique email along with a password to authenticate themselves. The team_id is the team whose CRM resources the user has access to (if any), and the two boolean values indicate whether they're an owner and/or admin.
 #### Teams
-The following table describes the data model used for "team" entities i.e. groups of users with access to the same CRM resources
+The following table describes the data model used for "team" entities i.e. groups of users with access to the same CRM resources.
 
 *Table:  2*
 | team_id | name |
@@ -119,6 +119,7 @@ The following details our team's technology stack and gives context to the imple
 ### App Structure
 
  - Sherpa is a Flask application and is made up of various "endpoints" / routes that users can send  requests to. 
+ - All Sherpa endpoints (except /login and /signup) are protected by an "@login_required" wrapper. This is just a Python decorator that calls a function to reject the user's request if they haven't been authenticated. They're redirected to the login page and once they're authenticated they're redirected back to the protected endpoint.
  - Database and SMTP access is facilitated by environment variables specified in a .env file. 
  - All database interactions occur through the use of SQLAlchemy data "models". These are outlined in the Design chapter and are essentially Pythonic descriptions of MySQL tables.
 
