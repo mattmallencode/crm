@@ -69,7 +69,7 @@ class Users(db.Model):
 
 class Invites(db.Model):
     invite_id = db.Column(db.String, primary_key=True)
-    team_id = db.Column(db.String)
+    team_id = db.Column(db.Integer)
 
     def __init__(self, invite_id = None, team_id = None):
         self.invite_id = invite_id
@@ -94,6 +94,14 @@ class Contacts(db.Model):
         self.contact_owner = contact_owner
         self.company = company
         self.status = status
+
+class Teams(db.Model):
+    team_id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+
+    def __init__ (self, team_id = None, name = None):
+        self.team_id = team_id
+        self.name = name
 
 
 @application.before_request
@@ -243,31 +251,35 @@ def signup():
 
 @application.route("/create_team", methods=["GET", "POST"])
 @login_required
-def createTeamForm():
+def createTeam():
     """
     Route for registering an team.
     """
     form = CreateTeamForm()
     if form.validate_on_submit():
-        if Users.query.filter_by(team_id=team_id).first() is None:
-            password = form.password.data
-            team_id = form.team_id.data
-            user = Users()
-            user.team_id = team_id
-            # Generate a hash for the user's password and insert credential's into the DB.
-            user.password_hash = generate_password_hash(password)
-            user.team_id = None
+        # checks if user is already a member of a team
+        user = Users.query.filter_by(email=g.email).first()
+        if user.team_id is None:
+            team = Teams()
+            team.name = form.name.data
 
+            # team inserted into database and assigned unique id
+            db.session.add(team)
+            db.session.flush()
+            # team object is refreshed with team id now accessible
+            db.session.refresh(team)
+           
+            # updates users admin and owner status in Users table
             user.admin_status = True
             user.owner_status = True
+            user.team_id = team.team_id
 
-            db.session.add(user)
+            # commits changes to database
             db.session.commit()
+
             return redirect(url_for("home"))
-        # If the team id is already registered, inform the user.
         else:
-            form.team_id.errors.append("This team id is already registered!")
-        return render_template("create_team.html", form=form)
+            form.name.errors.append("You are already a member of a team")
     return render_template("create_team.html", form=form)
 
 
@@ -306,6 +318,18 @@ def add_contact():
         else:
             form.name.errors.append("This person is already in your contacts")
     return render_template("add_contact.html", form = form)
+
+
+@application.route("/remove_contact/<contact_id>", methods = ["GET", "POST"])
+@login_required
+def remove_contact(contact_id):
+    # retrieves contact specified in parameter and removes from Contacts database
+    contact = Contacts.query.filter_by(contact_id = contact_id).first()
+    if contact is not None:
+        db.session.delete(contact)
+        db.session.commit()
+    return redirect(url_for("contacts"))
+
 
 if __name__ == "__main__":
     application.debug = True
