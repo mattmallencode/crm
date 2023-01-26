@@ -82,6 +82,7 @@ The following table describes the data model used for "user" entities i.e. user 
 | email | password_hash |team_id|owner_status|admin_status
 |:--:|:--:|:--:|:--:|:--:|
 | Primary Key, String |String  |Integer|Boolean|Boolean
+
 Users use a unique email along with a password to authenticate themselves. The team_id is the team whose CRM resources the user has access to (if any), and the two boolean values indicates whether they're an owner and/or admin 
 #### Teams
 The following table describes the data model used for "team" entities i.e. groups of users with access to the same CRM resources
@@ -90,6 +91,8 @@ The following table describes the data model used for "team" entities i.e. group
 | team_id | name |
 |:--:|:--:|
 | Primary Key, Integer, Auto Increment |String|
+
+The team_id is unique to each team and auto increments from 0. The name is the the name decided by the team owner upon creation.
 #### Invites
 The following table describes the data model used for "invite" entities i.e. invitations to users to join a given team.
 
@@ -97,9 +100,8 @@ The following table describes the data model used for "invite" entities i.e. inv
 | invite_id | team_id |
 |:--:|:--:|
 | Primary Key, String |Integer|
-The invite_id consists of the email being invited, the team_id the invitation is for along with some strong pseudo random numbers for security. The team_id is the id of the team the user is being invited to.
 
-The team_id is unique to each team and auto increments from 0. The name is the the name decided by the team owner upon creation.
+The invite_id consists of the email being invited, the team_id the invitation is for along with some strong pseudo random numbers for security. The team_id is the id of the team the user is being invited to.
 ## Implementation
 ### Underlying Technologies
 The following details our team's technology stack and gives context to the implementation chapter i.e. please assume that all implementation details rely on the use of the relevant technologies listed here.
