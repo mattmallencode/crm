@@ -2,7 +2,15 @@
 
 {% block main_content %}
     <body>
-        <form action = " " method="POST">
+        <nav>
+                <ul>
+                  <li><a href="{{ url_for('home') }}">Home</a></li>
+                  <li><a href="{{ url_for('invite') }}">Invite</a></li>
+                  <li><a href="{{ url_for('contacts') }}">Contacts</a></li>
+                  <li><a href="{{ url_for('createTeamForm') }}">Create Team</a></li>
+                </ul>
+        </nav>
+        <form action = " " method="POST" novalidate>
         {{ form.hidden_tag() }}
         {% for error in form.name.errors %}
                 <div>{{ error }}</div>
