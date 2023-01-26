@@ -2,8 +2,11 @@
 ![Sherpa logo: a picture of a Yak beneath a mountain range with the text "Sherpa".`enter code here](https://raw.githubusercontent.com/mattmallencode/crm/main/static/sherpa_logo.png)
 <br>  
 Oliver Linger, 120444372
+<br>  
 Matt Mallen, 120355103
+<br>  
 Eimantas Pusinskas, 120312336
+<br>  
 Aria Shahi, 119522223
 ## Table of Contents
  - [Table of Contents](#specification) 
