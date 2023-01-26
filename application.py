@@ -8,6 +8,8 @@ from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 from secrets import token_urlsafe
 
+# Load environment variables from .env file.
+load_dotenv()
 
 # Initialize the flask application
 application = Flask(__name__)
@@ -36,8 +38,6 @@ db = sa(application)
 mail = Mail(application)
 
 
-# Load environment variables from .env file.
-load_dotenv()
 
 
 # Initialize MySQL credentials from the environment variables we just loaded.
