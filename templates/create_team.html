@@ -10,16 +10,16 @@
                   <li><a href="{{ url_for('createTeamForm') }}">Create Team</a></li>
                 </ul>
         </nav>
-        <form action = " " method="POST" novalidate>
-        {{ form.hidden_tag() }}
-        {% for error in form.name.errors %}
-                <div>{{ error }}</div>
-        {% endfor %}
-        {{ form.name.label }}
-        {{ form.name() }}
-        <br>
-        {{ form.submit(id="create_team") }}
-        <br>
+        <form action ="" method="POST", novalidate>
+                {{ form.hidden_tag() }}
+                {% for error in form.name.errors %}
+                        <div>{{ error }}</div>
+                {% endfor %}
+                {{form.name.label}}
+                {{form.name()}}
+                <br>
+                {{ form.submit(id="create_team") }}
+                <br>
       </form>
     </body>
 {% endblock %}
