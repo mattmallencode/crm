@@ -37,20 +37,6 @@ db = sa(application)
 # creates Mail instance for managing emails
 mail = Mail(application)
 
-
-
-
-# Initialize MySQL credentials from the environment variables we just loaded.
-DB_HOST = os.environ.get("DB_HOST")
-DB_PORT = int(os.environ.get("DB_PORT"))
-DB_USER = os.environ.get("DB_USER")
-DB_PASSWORD = os.environ.get("DB_PASSWORD")
-DB_DB = os.environ.get("DB_DB") # database to use.
-# Set up SQLAlchemy with the above credentials.
-application.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_DB}"
-# Set up an SQLAlchemy session for our application.
-db = sa(application)
-
 # Users data model i.e. a representation of the users table in the database.
 class Users(db.Model):
     email = db.Column(db.String, primary_key=True)
@@ -142,8 +128,9 @@ def invite():
                 form.email.errors.append("You must be an admin to invite members to your organization")
             else:
                 user_to_be_invited = Users.query.filter(Users.email==email).first()
-                if user_to_be_invited.team_id == team_id:
-                    form.email.errors.append("This user is already a member of your team")
+                if user_to_be_invited != None:
+                    if user_to_be_invited.team_id == team_id:
+                        form.email.errors.append("This user is already a member of your team")
                 else:
                     # collects form data and inserts into invite table
                     sec = token_urlsafe(16)
@@ -157,7 +144,6 @@ def invite():
                     # creates email message
 
                     msg = Message("Sherpa Invitation", sender = ("Sherpa CRM", "Sherpacrm90@gmail.com"), recipients = [form.email.data])
-                    print("hello")
                     msg.html = f"You have been invited to join a Sherpa organisation. Click <a href = '{url}'> here</a> to join"#
                     # connects to mail SMTP server and sends message
                     mail.connect()
@@ -210,8 +196,8 @@ def login(invite_id):
                 print(invitation_email)
                 if  invitation != None and user.team_id == None and user.email == invitation_email:
                     user.team_id = invitation.team_id
-                    user.admin_status = True
-                    user.owner_status = True
+                    user.admin_status = False
+                    user.owner_status = False
                     db.session.delete(invitation)
                     db.session.commit()
             return redirect(next_page)

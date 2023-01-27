@@ -94,6 +94,33 @@ ul {
     background-color: #111;
   }
   
+  .invite-form{
+    color: white;
+    top: 50%;
+    margin: 5%;
+    display: inline-block;
+  }
+
+  .invite-form input {
+    margin: 5%;
+  }
+
+#contacts-list {
+    margin-top: 19%;
+    margin-right: 18%;
+}
+
+#add-contact {
+    margin-top: 10%;
+}
+
+#create-team-form {
+    margin-top: 5%;
+}
+
+#invite-response {
+    margin-top: 10%;
+}
   .invite_form{
     background-color: rgb(15, 8, 8, 0.5);
     color: white;

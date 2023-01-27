@@ -6,9 +6,10 @@
               <li><a href="{{ url_for('home') }}">Home</a></li>
               <li><a href="{{ url_for('invite') }}">Invite</a></li>
               <li><a href="{{ url_for('contacts') }}">Contacts</a></li>
-              <li><a href="{{ url_for('createTeamForm') }}">Create Team</a></li>
+              <li><a href="{{ url_for('createTeam') }}">Create Team</a></li>
             </ul>
         </nav>
+        <div class="invite-form">
         <h1>
             Invite members
         </h1>
@@ -26,7 +27,7 @@
                 <div class="send_invite_form_email">{{ form.submit(id="invite") }}</div>
             </form>
         </div>
-        <p>{{response}}</p>
+        <p id="invite-response">{{response}}</p>
     </body>
 </html>
 {% endblock %}

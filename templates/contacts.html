@@ -7,17 +7,17 @@
           <li><a href="{{ url_for('home') }}">Home</a></li>
           <li><a href="{{ url_for('invite') }}">Invite</a></li>
           <li><a href="{{ url_for('contacts') }}">Contacts</a></li>
-          <li><a href="{{ url_for('createTeamForm') }}">Create Team</a></li>
+          <li><a href="{{ url_for('createTeam') }}">Create Team</a></li>
         </ul>
-      </nav>
+    </nav>
     <h1>Contacts</h1>
     
-    <section>
+    <section id="add-contact">
         <h2>Add a Contact</h2>
         <p><a href = "add_contact">Add A Contact</a></p>
     </section>
 
-    <section>
+    <section id="contacts-list">
         <h2>My Contacts</h2>
         <table>
             <tr>
@@ -30,7 +30,6 @@
                 <th>Edit Contact</th>
                 <th>Remove Contact</th>
             </tr>
-
             {% for contact in contacts %}
                 <tr>
                     <form action = "{{url_for('edit_contact', contact_id=contact.contact_id)}}" method = "POST">
@@ -61,7 +60,6 @@
                     
                     <td><a href = "{{url_for('remove_contact',contact_id=contact.contact_id)}}">Remove</a></td>
                 </tr>
-
             {% endfor %}
         </table>
     </section>
