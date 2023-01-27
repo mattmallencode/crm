@@ -41,8 +41,6 @@ db = sa(application)
 # creates Mail instance for managing emails
 mail = Mail(application)
 
-
-
 # Users data model i.e. a representation of the users table in the database.
 class Users(db.Model):
     email = db.Column(db.String, primary_key=True)
@@ -134,8 +132,9 @@ def invite():
                 form.email.errors.append("You must be an admin to invite members to your organization")
             else:
                 user_to_be_invited = Users.query.filter(Users.email==email).first()
-                if user_to_be_invited.team_id == team_id:
-                    form.email.errors.append("This user is already a member of your team")
+                if user_to_be_invited != None:
+                    if user_to_be_invited.team_id == team_id:
+                        form.email.errors.append("This user is already a member of your team")
                 else:
                     # collects form data and inserts into invite table
                     sec = token_urlsafe(16)
@@ -149,7 +148,6 @@ def invite():
                     # creates email message
 
                     msg = Message("Sherpa Invitation", sender = ("Sherpa CRM", "Sherpacrm90@gmail.com"), recipients = [form.email.data])
-                    print("hello")
                     msg.html = f"You have been invited to join a Sherpa organisation. Click <a href = '{url}'> here</a> to join"#
                     # connects to mail SMTP server and sends message
                     mail.connect()
@@ -202,8 +200,8 @@ def login(invite_id):
                 print(invitation_email)
                 if  invitation != None and user.team_id == None and user.email == invitation_email:
                     user.team_id = invitation.team_id
-                    user.admin_status = True
-                    user.owner_status = True
+                    user.admin_status = False
+                    user.owner_status = False
                     db.session.delete(invitation)
                     db.session.commit()
             return redirect(next_page)

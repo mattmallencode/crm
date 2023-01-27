@@ -1,0 +1,353 @@
+663cbb16 application.py (Matt Mallen       2023-01-22 15:30:45 +0000   1) from flask import Flask, render_template, request, redirect, url_for, session, g
+fe75c69f app.py         (Matt Mallen       2023-01-19 14:17:21 +0000   2) from dotenv import load_dotenv
+fe75c69f app.py         (Matt Mallen       2023-01-19 14:17:21 +0000   3) import os
+837f0b36 app.py         (Matt Mallen       2023-01-20 10:43:18 +0000   4) from flask_sqlalchemy import SQLAlchemy as sa
+943b8177 app.py         (EimantasPusinskas 2023-01-19 15:19:20 +0000   5) from flask_mail import Mail, Message
+37ab2f2c app.py         (EimantasPusinskas 2023-01-26 15:09:45 +0000   6) from forms import SignUpForm, LoginForm, CreateTeamForm, InviteForm, ContactForm
+663cbb16 application.py (Matt Mallen       2023-01-22 15:30:45 +0000   7) from functools import wraps
+41ef3834 app.py         (Matt Mallen       2023-01-20 11:39:43 +0000   8) from werkzeug.security import generate_password_hash, check_password_hash
+8c316c13 app.py         (EimantasPusinskas 2023-01-22 16:33:51 +0000   9) from secrets import token_urlsafe
+bbc35d9a app.py         (Matt Mallen       2023-01-19 15:50:04 +0000  10) 
+1bd0c637 application.py (EimantasPusinskas 2023-01-26 15:18:15 +0000  11) # Load environment variables from .env file.
+1bd0c637 application.py (EimantasPusinskas 2023-01-26 15:18:15 +0000  12) load_dotenv()
+80dd5acd application.py (OliverLinger      2023-01-25 13:56:29 +0000  13) 
+41ef3834 app.py         (Matt Mallen       2023-01-20 11:39:43 +0000  14) # Initialize the flask application
+bbc35d9a app.py         (Matt Mallen       2023-01-19 15:50:04 +0000  15) application = Flask(__name__)
+41ef3834 app.py         (Matt Mallen       2023-01-20 11:39:43 +0000  16) # Secret key for preventing CSRF attacks. 
+46367780 app.py         (Matt Mallen       2023-01-20 11:25:29 +0000  17) application.config["SECRET_KEY"] = "placeholder"
+bbc35d9a app.py         (Matt Mallen       2023-01-19 15:50:04 +0000  18) 
+943b8177 app.py         (EimantasPusinskas 2023-01-19 15:19:20 +0000  19) # initializes email configuration variables
+62770316 app.py         (EimantasPusinskas 2023-01-20 10:51:16 +0000  20) application.config["MAIL_SERVER"] = "smtp.gmail.com"
+943b8177 app.py         (EimantasPusinskas 2023-01-19 15:19:20 +0000  21) application.config["MAIL_PORT"] = 465
+62770316 app.py         (EimantasPusinskas 2023-01-20 10:51:16 +0000  22) application.config["MAIL_USERNAME"] = os.environ.get("MAIL_USERNAME")
+62770316 app.py         (EimantasPusinskas 2023-01-20 10:51:16 +0000  23) application.config["MAIL_PASSWORD"] = os.environ.get("MAIL_PASSWORD")
+943b8177 app.py         (EimantasPusinskas 2023-01-19 15:19:20 +0000  24) application.config["MAIL_USE_TLS"] = False
+943b8177 app.py         (EimantasPusinskas 2023-01-19 15:19:20 +0000  25) application.config["MAIL_USE_SSL"] = True
+4fd55d70 app.py         (mattmallencode    2023-01-19 15:30:25 +0000  26) 
+80dd5acd application.py (OliverLinger      2023-01-25 13:56:29 +0000  27) # Initialize MySQL credentials from the environment variables we just loaded.
+80dd5acd application.py (OliverLinger      2023-01-25 13:56:29 +0000  28) DB_HOST = os.environ.get("DB_HOST")
+80dd5acd application.py (OliverLinger      2023-01-25 13:56:29 +0000  29) DB_PORT = int(os.environ.get("DB_PORT"))
+80dd5acd application.py (OliverLinger      2023-01-25 13:56:29 +0000  30) DB_USER = os.environ.get("DB_USER")
+80dd5acd application.py (OliverLinger      2023-01-25 13:56:29 +0000  31) DB_PASSWORD = os.environ.get("DB_PASSWORD")
+80dd5acd application.py (OliverLinger      2023-01-25 13:56:29 +0000  32) DB_DB = os.environ.get("DB_DB") # database to use.
+80dd5acd application.py (OliverLinger      2023-01-25 13:56:29 +0000  33) # Set up SQLAlchemy with the above credentials.
+80dd5acd application.py (OliverLinger      2023-01-25 13:56:29 +0000  34) application.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_DB}"
+80dd5acd application.py (OliverLinger      2023-01-25 13:56:29 +0000  35) # Set up an SQLAlchemy session for our application.
+80dd5acd application.py (OliverLinger      2023-01-25 13:56:29 +0000  36) db = sa(application)
+943b8177 app.py         (EimantasPusinskas 2023-01-19 15:19:20 +0000  37) # creates Mail instance for managing emails
+943b8177 app.py         (EimantasPusinskas 2023-01-19 15:19:20 +0000  38) mail = Mail(application)
+fe75c69f app.py         (Matt Mallen       2023-01-19 14:17:21 +0000  39) 
+ab2e9df9 application.py (OliverLinger      2023-01-22 13:08:07 +0000  40) 
+c6d01129 app.py         (Matt Mallen       2023-01-18 14:16:21 +0000  41) 
+0d1c18ed application.py (OliverLinger      2023-01-22 20:56:22 +0000  42) 
+41ef3834 app.py         (Matt Mallen       2023-01-20 11:39:43 +0000  43) # Initialize MySQL credentials from the environment variables we just loaded.
+fe75c69f app.py         (Matt Mallen       2023-01-19 14:17:21 +0000  44) DB_HOST = os.environ.get("DB_HOST")
+d08e5333 app.py         (Matt Mallen       2023-01-19 15:45:53 +0000  45) DB_PORT = int(os.environ.get("DB_PORT"))
+fe75c69f app.py         (Matt Mallen       2023-01-19 14:17:21 +0000  46) DB_USER = os.environ.get("DB_USER")
+fe75c69f app.py         (Matt Mallen       2023-01-19 14:17:21 +0000  47) DB_PASSWORD = os.environ.get("DB_PASSWORD")
+41ef3834 app.py         (Matt Mallen       2023-01-20 11:39:43 +0000  48) DB_DB = os.environ.get("DB_DB") # database to use.
+41ef3834 app.py         (Matt Mallen       2023-01-20 11:39:43 +0000  49) # Set up SQLAlchemy with the above credentials.
+837f0b36 app.py         (Matt Mallen       2023-01-20 10:43:18 +0000  50) application.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_DB}"
+41ef3834 app.py         (Matt Mallen       2023-01-20 11:39:43 +0000  51) # Set up an SQLAlchemy session for our application.
+837f0b36 app.py         (Matt Mallen       2023-01-20 10:43:18 +0000  52) db = sa(application)
+d08e5333 app.py         (Matt Mallen       2023-01-19 15:45:53 +0000  53) 
+41ef3834 app.py         (Matt Mallen       2023-01-20 11:39:43 +0000  54) # Users data model i.e. a representation of the users table in the database.
+b3079111 app.py         (Matt Mallen       2023-01-20 11:03:36 +0000  55) class Users(db.Model):
+b3079111 app.py         (Matt Mallen       2023-01-20 11:03:36 +0000  56)     email = db.Column(db.String, primary_key=True)
+b3079111 app.py         (Matt Mallen       2023-01-20 11:03:36 +0000  57)     password_hash = db.Column(db.String)
+b3079111 app.py         (Matt Mallen       2023-01-20 11:03:36 +0000  58)     team_id = db.Column(db.Integer)
+b3079111 app.py         (Matt Mallen       2023-01-20 11:03:36 +0000  59)     owner_status = db.Column(db.Boolean)
+b3079111 app.py         (Matt Mallen       2023-01-20 11:03:36 +0000  60)     admin_status = db.Column(db.Boolean)
+b3079111 app.py         (Matt Mallen       2023-01-20 11:03:36 +0000  61) 
+463fb29a application.py (Matt Mallen       2023-01-22 15:55:29 +0000  62)     def __init__(self, email=None, password_hash=None, team_id=None, owner_status=None, admin_status=None):
+463fb29a application.py (Matt Mallen       2023-01-22 15:55:29 +0000  63)         self.email = email
+463fb29a application.py (Matt Mallen       2023-01-22 15:55:29 +0000  64)         self.password_hash = password_hash
+463fb29a application.py (Matt Mallen       2023-01-22 15:55:29 +0000  65)         self.team_id = team_id
+463fb29a application.py (Matt Mallen       2023-01-22 15:55:29 +0000  66)         self.owner_status = owner_status
+463fb29a application.py (Matt Mallen       2023-01-22 15:55:29 +0000  67)         self.admin_status = admin_status
+463fb29a application.py (Matt Mallen       2023-01-22 15:55:29 +0000  68) 
+4331e102 application.py (OliverLinger      2023-01-22 13:10:41 +0000  69) 
+a15518b0 app.py         (EimantasPusinskas 2023-01-20 13:36:19 +0000  70) class Invites(db.Model):
+a15518b0 app.py         (EimantasPusinskas 2023-01-20 13:36:19 +0000  71)     invite_id = db.Column(db.String, primary_key=True)
+99d5cb76 app.py         (EimantasPusinskas 2023-01-25 16:00:13 +0000  72)     team_id = db.Column(db.Integer)
+a15518b0 app.py         (EimantasPusinskas 2023-01-20 13:36:19 +0000  73) 
+8c316c13 app.py         (EimantasPusinskas 2023-01-22 16:33:51 +0000  74)     def __init__(self, invite_id = None, team_id = None):
+8c316c13 app.py         (EimantasPusinskas 2023-01-22 16:33:51 +0000  75)         self.invite_id = invite_id
+8c316c13 app.py         (EimantasPusinskas 2023-01-22 16:33:51 +0000  76)         self.team_id = team_id
+8c316c13 app.py         (EimantasPusinskas 2023-01-22 16:33:51 +0000  77) 
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000  78) class Contacts(db.Model):
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000  79)     contact_id = db.Column(db.String, primary_key=True)
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000  80)     team_id = db.Column(db.Integer)
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000  81)     name = db.Column(db.String)
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000  82)     email = db.Column(db.String)
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000  83)     phone_number = db.Column(db.Integer)
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000  84)     contact_owner = db.Column(db.String)
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000  85)     company = db.Column(db.String)
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000  86)     status = db.Column(db.String)
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000  87) 
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000  88)     def __init__(self, contact_id = None, team_id = None, name = None, email = None, phone_number = None, contact_owner = None, company = None, status = None):
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000  89)         self.contact_id = contact_id
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000  90)         self.team_id = team_id
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000  91)         self.name = name
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000  92)         self.email = email
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000  93)         self.phone_number = phone_number
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000  94)         self.contact_owner = contact_owner
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000  95)         self.company = company
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000  96)         self.status = status
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000  97) 
+99d5cb76 app.py         (EimantasPusinskas 2023-01-25 16:00:13 +0000  98) class Teams(db.Model):
+99d5cb76 app.py         (EimantasPusinskas 2023-01-25 16:00:13 +0000  99)     team_id = db.Column(db.Integer, primary_key=True)
+99d5cb76 app.py         (EimantasPusinskas 2023-01-25 16:00:13 +0000 100)     name = db.Column(db.String)
+99d5cb76 app.py         (EimantasPusinskas 2023-01-25 16:00:13 +0000 101) 
+99d5cb76 app.py         (EimantasPusinskas 2023-01-25 16:00:13 +0000 102)     def __init__ (self, team_id = None, name = None):
+99d5cb76 app.py         (EimantasPusinskas 2023-01-25 16:00:13 +0000 103)         self.team_id = team_id
+99d5cb76 app.py         (EimantasPusinskas 2023-01-25 16:00:13 +0000 104)         self.name = name
+99d5cb76 app.py         (EimantasPusinskas 2023-01-25 16:00:13 +0000 105) 
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000 106) 
+663cbb16 application.py (Matt Mallen       2023-01-22 15:30:45 +0000 107) @application.before_request
+663cbb16 application.py (Matt Mallen       2023-01-22 15:30:45 +0000 108) def load_logged_in_user():
+663cbb16 application.py (Matt Mallen       2023-01-22 15:30:45 +0000 109)     g.email = session.get("email", None)
+663cbb16 application.py (Matt Mallen       2023-01-22 15:30:45 +0000 110) 
+663cbb16 application.py (Matt Mallen       2023-01-22 15:30:45 +0000 111) def login_required(view):
+663cbb16 application.py (Matt Mallen       2023-01-22 15:30:45 +0000 112)     @wraps(view)
+663cbb16 application.py (Matt Mallen       2023-01-22 15:30:45 +0000 113)     def wrapped_view(**kwargs):
+663cbb16 application.py (Matt Mallen       2023-01-22 15:30:45 +0000 114)         if g.email is None:
+663cbb16 application.py (Matt Mallen       2023-01-22 15:30:45 +0000 115)             return redirect(url_for("login", next=request.url))
+663cbb16 application.py (Matt Mallen       2023-01-22 15:30:45 +0000 116)         return view(**kwargs)
+663cbb16 application.py (Matt Mallen       2023-01-22 15:30:45 +0000 117)     return wrapped_view
+ab2e9df9 application.py (OliverLinger      2023-01-22 13:08:07 +0000 118) 
+943b8177 app.py         (EimantasPusinskas 2023-01-19 15:19:20 +0000 119) @application.route("/invite", methods = ["GET", "POST"])
+663cbb16 application.py (Matt Mallen       2023-01-22 15:30:45 +0000 120) @login_required
+943b8177 app.py         (EimantasPusinskas 2023-01-19 15:19:20 +0000 121) def invite():
+41ef3834 app.py         (Matt Mallen       2023-01-20 11:39:43 +0000 122)     """
+41ef3834 app.py         (Matt Mallen       2023-01-20 11:39:43 +0000 123)     Route for sending an email invitation to a user for your team.
+41ef3834 app.py         (Matt Mallen       2023-01-20 11:39:43 +0000 124)     """
+69a33218 application.py (EimantasPusinskas 2023-01-23 14:42:02 +0000 125)     form = InviteForm()
+943b8177 app.py         (EimantasPusinskas 2023-01-19 15:19:20 +0000 126)     response = ""
+69a33218 application.py (EimantasPusinskas 2023-01-23 14:42:02 +0000 127)     if form.validate_on_submit():
+a15518b0 app.py         (EimantasPusinskas 2023-01-20 13:36:19 +0000 128)         # inserts inputted email address into Invites table along with team id
+a15518b0 app.py         (EimantasPusinskas 2023-01-20 13:36:19 +0000 129)         invite = Invites()
+69a33218 application.py (EimantasPusinskas 2023-01-23 14:42:02 +0000 130)         email = form.email.data
+8c316c13 app.py         (EimantasPusinskas 2023-01-22 16:33:51 +0000 131)         
+e825b59f application.py (EimantasPusinskas 2023-01-22 16:50:49 +0000 132)         # user_id of user inviting a member
+e825b59f application.py (EimantasPusinskas 2023-01-22 16:50:49 +0000 133)         user_id = g.email
+8c316c13 app.py         (EimantasPusinskas 2023-01-22 16:33:51 +0000 134)         # checks if user sending invite is a member of an organization
+8c316c13 app.py         (EimantasPusinskas 2023-01-22 16:33:51 +0000 135)         user = Users.query.filter(Users.email == user_id).first()
+c5fa0792 application.py (mattmallencode    2023-01-22 18:29:50 +0000 136)         team_id = user.team_id
+8c316c13 app.py         (EimantasPusinskas 2023-01-22 16:33:51 +0000 137)         if user.team_id == None:
+69a33218 application.py (EimantasPusinskas 2023-01-23 14:42:02 +0000 138)             form.email.errors.append("You are not a member of an organization")
+8c316c13 app.py         (EimantasPusinskas 2023-01-22 16:33:51 +0000 139)         else:
+8c316c13 app.py         (EimantasPusinskas 2023-01-22 16:33:51 +0000 140)             #checks if user sending invite is an admin
+8c316c13 app.py         (EimantasPusinskas 2023-01-22 16:33:51 +0000 141)             if user.admin_status == False:
+69a33218 application.py (EimantasPusinskas 2023-01-23 14:42:02 +0000 142)                 form.email.errors.append("You must be an admin to invite members to your organization")
+c5fa0792 application.py (mattmallencode    2023-01-22 18:29:50 +0000 143)             else:
+1f0e1db9 application.py (EimantasPusinskas 2023-01-22 18:25:57 +0000 144)                 user_to_be_invited = Users.query.filter(Users.email==email).first()
+00000000 application.py (Not Committed Yet 2023-01-27 15:11:37 +0000 145)                 if user_to_be_invited != None:
+00000000 application.py (Not Committed Yet 2023-01-27 15:11:37 +0000 146)                     if user_to_be_invited.team_id == team_id:
+00000000 application.py (Not Committed Yet 2023-01-27 15:11:37 +0000 147)                         form.email.errors.append("This user is already a member of your team")
+1f0e1db9 application.py (EimantasPusinskas 2023-01-22 18:25:57 +0000 148)                 else:
+1f0e1db9 application.py (EimantasPusinskas 2023-01-22 18:25:57 +0000 149)                     # collects form data and inserts into invite table
+1f0e1db9 application.py (EimantasPusinskas 2023-01-22 18:25:57 +0000 150)                     sec = token_urlsafe(16)
+07fbb831 application.py (EimantasPusinskas 2023-01-22 18:32:33 +0000 151)                     host = "http://127.0.0.1:5000"
+07fbb831 application.py (EimantasPusinskas 2023-01-22 18:32:33 +0000 152)                     url = f"{host}/login/{email}_{team_id}_{sec}"
+1f0e1db9 application.py (EimantasPusinskas 2023-01-22 18:25:57 +0000 153)                     invite.team_id = team_id
+07fbb831 application.py (EimantasPusinskas 2023-01-22 18:32:33 +0000 154)                     invite.invite_id = f"{email}_{team_id}_{sec}"
+de4eb8fd app.py         (OliverLinger      2023-01-23 16:38:06 +0000 155)                     
+1f0e1db9 application.py (EimantasPusinskas 2023-01-22 18:25:57 +0000 156)                     db.session.add(invite)
+1f0e1db9 application.py (EimantasPusinskas 2023-01-22 18:25:57 +0000 157)                     db.session.commit()
+1f0e1db9 application.py (EimantasPusinskas 2023-01-22 18:25:57 +0000 158)                     # creates email message
+1f0e1db9 application.py (EimantasPusinskas 2023-01-22 18:25:57 +0000 159) 
+de4eb8fd app.py         (OliverLinger      2023-01-23 16:38:06 +0000 160)                     msg = Message("Sherpa Invitation", sender = ("Sherpa CRM", "Sherpacrm90@gmail.com"), recipients = [form.email.data])
+de4eb8fd app.py         (OliverLinger      2023-01-23 16:38:06 +0000 161)                     msg.html = f"You have been invited to join a Sherpa organisation. Click <a href = '{url}'> here</a> to join"#
+1f0e1db9 application.py (EimantasPusinskas 2023-01-22 18:25:57 +0000 162)                     # connects to mail SMTP server and sends message
+1f0e1db9 application.py (EimantasPusinskas 2023-01-22 18:25:57 +0000 163)                     mail.connect()
+1f0e1db9 application.py (EimantasPusinskas 2023-01-22 18:25:57 +0000 164)                     mail.send(msg)
+1f0e1db9 application.py (EimantasPusinskas 2023-01-22 18:25:57 +0000 165)                     response = "Member has been invited"
+8c316c13 app.py         (EimantasPusinskas 2023-01-22 16:33:51 +0000 166)                     
+69a33218 application.py (EimantasPusinskas 2023-01-23 14:42:02 +0000 167)                     db.session.add(invite)
+69a33218 application.py (EimantasPusinskas 2023-01-23 14:42:02 +0000 168)                     db.session.commit()
+69a33218 application.py (EimantasPusinskas 2023-01-23 14:42:02 +0000 169)   
+69a33218 application.py (EimantasPusinskas 2023-01-23 14:42:02 +0000 170)     return render_template("invite.html", form = form, response = response)
+943b8177 app.py         (EimantasPusinskas 2023-01-19 15:19:20 +0000 171) 
+463fb29a application.py (Matt Mallen       2023-01-22 15:55:29 +0000 172) @application.route("/", methods=["GET", "POST"])
+463fb29a application.py (Matt Mallen       2023-01-22 15:55:29 +0000 173) @login_required
+5805760a app.py         (OliverLinger      2023-01-19 14:40:17 +0000 174) def home():
+c5fa0792 application.py (mattmallencode    2023-01-22 18:29:50 +0000 175)     # Query the db for the team_id using the cokies email.
+c5fa0792 application.py (mattmallencode    2023-01-22 18:29:50 +0000 176)     user_details = Users.query.filter_by(email=g.email).first()
+5805760a app.py         (OliverLinger      2023-01-19 14:40:17 +0000 177) 
+c5fa0792 application.py (mattmallencode    2023-01-22 18:29:50 +0000 178)         
+c5fa0792 application.py (mattmallencode    2023-01-22 18:29:50 +0000 179)     return render_template("home.html", user_details=user_details)
+2e3d19d8 application.py (Matt Mallen       2023-01-22 16:53:34 +0000 180) 
+2e3d19d8 application.py (Matt Mallen       2023-01-22 16:53:34 +0000 181) @application.route("/login", defaults={"invite_id": None}, methods=["GET", "POST"])
+b180c71a application.py (Matt Mallen       2023-01-22 16:41:02 +0000 182) @application.route("/login/<invite_id>", methods=["GET", "POST"])
+2e3d19d8 application.py (Matt Mallen       2023-01-22 16:53:34 +0000 183) def login(invite_id):
+41ef3834 app.py         (Matt Mallen       2023-01-20 11:39:43 +0000 184)     """
+41ef3834 app.py         (Matt Mallen       2023-01-20 11:39:43 +0000 185)     Route for authenticating a user.    
+41ef3834 app.py         (Matt Mallen       2023-01-20 11:39:43 +0000 186)     """
+0d1c18ed application.py (OliverLinger      2023-01-22 20:56:22 +0000 187)     # The login page fails when logging in without signing up
+af3b10ba app.py         (OliverLinger      2023-01-22 12:42:21 +0000 188)     #Initialize the form 
+af3b10ba app.py         (OliverLinger      2023-01-22 12:42:21 +0000 189)     form = LoginForm()
+663cbb16 application.py (Matt Mallen       2023-01-22 15:30:45 +0000 190)     email = form.email.data
+0d1c18ed application.py (OliverLinger      2023-01-22 20:56:22 +0000 191) 
+af3b10ba app.py         (OliverLinger      2023-01-22 12:42:21 +0000 192)     # If the user submitted the form and it passed validation 
+af3b10ba app.py         (OliverLinger      2023-01-22 12:42:21 +0000 193)     if form.validate_on_submit():
+663cbb16 application.py (Matt Mallen       2023-01-22 15:30:45 +0000 194)         user = Users.query.filter_by(email=email).first()
+0d1c18ed application.py (OliverLinger      2023-01-22 20:56:22 +0000 195)         # If the user does not exist take them to signup page
+0d1c18ed application.py (OliverLinger      2023-01-22 20:56:22 +0000 196)         if user is None:
+811a29a3 application.py (OliverLinger      2023-01-23 13:58:01 +0000 197)             form.email.errors.append("Incorrect email / password!")
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000 198)             return redirect(url_for("login"))
+0d1c18ed application.py (OliverLinger      2023-01-22 20:56:22 +0000 199) 
+0d1c18ed application.py (OliverLinger      2023-01-22 20:56:22 +0000 200)         elif user is not None and check_password_hash(user.password_hash, form.password.data):
+663cbb16 application.py (Matt Mallen       2023-01-22 15:30:45 +0000 201)             session.clear()
+663cbb16 application.py (Matt Mallen       2023-01-22 15:30:45 +0000 202)             session["email"] = email
+663cbb16 application.py (Matt Mallen       2023-01-22 15:30:45 +0000 203)             next_page = request.args.get("next")
+663cbb16 application.py (Matt Mallen       2023-01-22 15:30:45 +0000 204)             if not next_page:
+663cbb16 application.py (Matt Mallen       2023-01-22 15:30:45 +0000 205)                 next_page = url_for("home")
+b180c71a application.py (Matt Mallen       2023-01-22 16:41:02 +0000 206)             if invite_id != None:
+b180c71a application.py (Matt Mallen       2023-01-22 16:41:02 +0000 207)                 user = Users.query.filter_by(email=email).first()
+b180c71a application.py (Matt Mallen       2023-01-22 16:41:02 +0000 208)                 invitation = Invites.query.filter_by(invite_id=invite_id).first()
+c5fa0792 application.py (mattmallencode    2023-01-22 18:29:50 +0000 209)                 invitation_email = invitation.invite_id.split("_")[0]
+c5fa0792 application.py (mattmallencode    2023-01-22 18:29:50 +0000 210)                 print(invitation_email)
+c5fa0792 application.py (mattmallencode    2023-01-22 18:29:50 +0000 211)                 if  invitation != None and user.team_id == None and user.email == invitation_email:
+b180c71a application.py (Matt Mallen       2023-01-22 16:41:02 +0000 212)                     user.team_id = invitation.team_id
+00000000 application.py (Not Committed Yet 2023-01-27 15:11:37 +0000 213)                     user.admin_status = False
+00000000 application.py (Not Committed Yet 2023-01-27 15:11:37 +0000 214)                     user.owner_status = False
+b180c71a application.py (Matt Mallen       2023-01-22 16:41:02 +0000 215)                     db.session.delete(invitation)
+b180c71a application.py (Matt Mallen       2023-01-22 16:41:02 +0000 216)                     db.session.commit()
+663cbb16 application.py (Matt Mallen       2023-01-22 15:30:45 +0000 217)             return redirect(next_page)
+663cbb16 application.py (Matt Mallen       2023-01-22 15:30:45 +0000 218)         else:
+663cbb16 application.py (Matt Mallen       2023-01-22 15:30:45 +0000 219)             form.email.errors.append("Incorrect email / password!")
+af3b10ba app.py         (OliverLinger      2023-01-22 12:42:21 +0000 220)         # Login and validate the user
+af3b10ba app.py         (OliverLinger      2023-01-22 12:42:21 +0000 221)         # User needs to be an instance of your user class
+663cbb16 application.py (Matt Mallen       2023-01-22 15:30:45 +0000 222)     return render_template("login.html", form=form)
+0a32634d app.py         (ariashahi3        2023-01-19 14:27:20 +0000 223) 
+0f86129d app.py         (Matt Mallen       2023-01-20 13:34:09 +0000 224) @application.route("/signup", methods=["GET", "POST"])
+0a32634d app.py         (ariashahi3        2023-01-19 14:27:20 +0000 225) def signup():
+41ef3834 app.py         (Matt Mallen       2023-01-20 11:39:43 +0000 226)     """
+41ef3834 app.py         (Matt Mallen       2023-01-20 11:39:43 +0000 227)     Route for registering an account.
+41ef3834 app.py         (Matt Mallen       2023-01-20 11:39:43 +0000 228)     """
+0f86129d app.py         (Matt Mallen       2023-01-20 13:34:09 +0000 229)     # Initialize the form
+bad5ea25 app.py         (Matt Mallen       2023-01-20 10:58:21 +0000 230)     form = SignUpForm()
+0f86129d app.py         (Matt Mallen       2023-01-20 13:34:09 +0000 231)     # If the user submitted the form and it passed validation.
+41ef3834 app.py         (Matt Mallen       2023-01-20 11:39:43 +0000 232)     if form.validate_on_submit():
+0f86129d app.py         (Matt Mallen       2023-01-20 13:34:09 +0000 233)         email = form.email.data
+0f86129d app.py         (Matt Mallen       2023-01-20 13:34:09 +0000 234)         # Check that the user isn't already registered.
+0f86129d app.py         (Matt Mallen       2023-01-20 13:34:09 +0000 235)         if Users.query.filter_by(email=email).first() is None:
+0f86129d app.py         (Matt Mallen       2023-01-20 13:34:09 +0000 236)             password = form.password.data
+0f86129d app.py         (Matt Mallen       2023-01-20 13:34:09 +0000 237)             user = Users()
+0f86129d app.py         (Matt Mallen       2023-01-20 13:34:09 +0000 238)             user.email = email
+0f86129d app.py         (Matt Mallen       2023-01-20 13:34:09 +0000 239)             # Generate a hash for the user's password and insert credential's into the DB.
+0f86129d app.py         (Matt Mallen       2023-01-20 13:34:09 +0000 240)             user.password_hash = generate_password_hash(password)
+0f86129d app.py         (Matt Mallen       2023-01-20 13:34:09 +0000 241)             user.team_id = None
+0f86129d app.py         (Matt Mallen       2023-01-20 13:34:09 +0000 242)             user.admin_status = None
+663cbb16 application.py (Matt Mallen       2023-01-22 15:30:45 +0000 243)             user.owner_status = None            
+0f86129d app.py         (Matt Mallen       2023-01-20 13:34:09 +0000 244)             db.session.add(user)
+0f86129d app.py         (Matt Mallen       2023-01-20 13:34:09 +0000 245)             db.session.commit()
+c5fa0792 application.py (mattmallencode    2023-01-22 18:29:50 +0000 246)             return redirect(url_for("login"))
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000 247)             # If the email's already registered, inform the user.
+0f86129d app.py         (Matt Mallen       2023-01-20 13:34:09 +0000 248)         else:
+0f86129d app.py         (Matt Mallen       2023-01-20 13:34:09 +0000 249)             form.email.errors.append("That email is already registered!")
+0f86129d app.py         (Matt Mallen       2023-01-20 13:34:09 +0000 250)     return render_template("signup.html", form=form)
+0a32634d app.py         (ariashahi3        2023-01-19 14:27:20 +0000 251) 
+463fb29a application.py (Matt Mallen       2023-01-22 15:55:29 +0000 252) @application.route("/create_team", methods=["GET", "POST"])
+463fb29a application.py (Matt Mallen       2023-01-22 15:55:29 +0000 253) @login_required
+99d5cb76 app.py         (EimantasPusinskas 2023-01-25 16:00:13 +0000 254) def createTeam():
+4a021d30 application.py (OliverLinger      2023-01-22 15:13:37 +0000 255)     """
+4a021d30 application.py (OliverLinger      2023-01-22 15:13:37 +0000 256)     Route for registering an team.
+4a021d30 application.py (OliverLinger      2023-01-22 15:13:37 +0000 257)     """
+4a021d30 application.py (OliverLinger      2023-01-22 15:13:37 +0000 258)     form = CreateTeamForm()
+4a021d30 application.py (OliverLinger      2023-01-22 15:13:37 +0000 259)     if form.validate_on_submit():
+99d5cb76 app.py         (EimantasPusinskas 2023-01-25 16:00:13 +0000 260)         # checks if user is already a member of a team
+99d5cb76 app.py         (EimantasPusinskas 2023-01-25 16:00:13 +0000 261)         user = Users.query.filter_by(email=g.email).first()
+99d5cb76 app.py         (EimantasPusinskas 2023-01-25 16:00:13 +0000 262)         if user.team_id is None:
+99d5cb76 app.py         (EimantasPusinskas 2023-01-25 16:00:13 +0000 263)             team = Teams()
+99d5cb76 app.py         (EimantasPusinskas 2023-01-25 16:00:13 +0000 264)             team.name = form.name.data
+99d5cb76 app.py         (EimantasPusinskas 2023-01-25 16:00:13 +0000 265) 
+99d5cb76 app.py         (EimantasPusinskas 2023-01-25 16:00:13 +0000 266)             # team inserted into database and assigned unique id
+99d5cb76 app.py         (EimantasPusinskas 2023-01-25 16:00:13 +0000 267)             db.session.add(team)
+99d5cb76 app.py         (EimantasPusinskas 2023-01-25 16:00:13 +0000 268)             db.session.flush()
+99d5cb76 app.py         (EimantasPusinskas 2023-01-25 16:00:13 +0000 269)             # team object is refreshed with team id now accessible
+99d5cb76 app.py         (EimantasPusinskas 2023-01-25 16:00:13 +0000 270)             db.session.refresh(team)
+99d5cb76 app.py         (EimantasPusinskas 2023-01-25 16:00:13 +0000 271)            
+99d5cb76 app.py         (EimantasPusinskas 2023-01-25 16:00:13 +0000 272)             # updates users admin and owner status in Users table
+1f0e1db9 application.py (EimantasPusinskas 2023-01-22 18:25:57 +0000 273)             user.admin_status = True
+c5fa0792 application.py (mattmallencode    2023-01-22 18:29:50 +0000 274)             user.owner_status = True
+99d5cb76 app.py         (EimantasPusinskas 2023-01-25 16:00:13 +0000 275)             user.team_id = team.team_id
+c5fa0792 application.py (mattmallencode    2023-01-22 18:29:50 +0000 276) 
+99d5cb76 app.py         (EimantasPusinskas 2023-01-25 16:00:13 +0000 277)             # commits changes to database
+4a021d30 application.py (OliverLinger      2023-01-22 15:13:37 +0000 278)             db.session.commit()
+99d5cb76 app.py         (EimantasPusinskas 2023-01-25 16:00:13 +0000 279) 
+c5fa0792 application.py (mattmallencode    2023-01-22 18:29:50 +0000 280)             return redirect(url_for("home"))
+4a021d30 application.py (OliverLinger      2023-01-22 15:13:37 +0000 281)         else:
+99d5cb76 app.py         (EimantasPusinskas 2023-01-25 16:00:13 +0000 282)             form.name.errors.append("You are already a member of a team")
+463fb29a application.py (Matt Mallen       2023-01-22 15:55:29 +0000 283)     return render_template("create_team.html", form=form)
+af3b10ba app.py         (OliverLinger      2023-01-22 12:42:21 +0000 284) 
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000 285) 
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000 286) @application.route("/contacts", methods =["GET", "POST"])
+374de717 app.py         (EimantasPusinskas 2023-01-24 18:43:45 +0000 287) @login_required
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000 288) def contacts():
+37ab2f2c app.py         (EimantasPusinskas 2023-01-26 15:09:45 +0000 289)     form = ContactForm()
+8e1b6143 app.py         (EimantasPusinskas 2023-01-25 13:32:54 +0000 290)     # gets all contacts of user that is logged in and passes it to html template
+8e1b6143 app.py         (EimantasPusinskas 2023-01-25 13:32:54 +0000 291)     user = Users.query.filter_by(email=g.email).first()
+8e1b6143 app.py         (EimantasPusinskas 2023-01-25 13:32:54 +0000 292)     contacts = Contacts.query.filter_by(team_id=user.team_id)
+37ab2f2c app.py         (EimantasPusinskas 2023-01-26 15:09:45 +0000 293)     return render_template("contacts.html", form = form, contacts = contacts)
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000 294) 
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000 295) @application.route("/add_contact", methods = ["GET", "POST"])
+374de717 app.py         (EimantasPusinskas 2023-01-24 18:43:45 +0000 296) @login_required
+8e1b6143 app.py         (EimantasPusinskas 2023-01-25 13:32:54 +0000 297) # allows a user to add contacts to their contact list
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000 298) def add_contact():
+37ab2f2c app.py         (EimantasPusinskas 2023-01-26 15:09:45 +0000 299)     form = ContactForm()
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000 300)     if form.validate_on_submit():
+374de717 app.py         (EimantasPusinskas 2023-01-24 18:43:45 +0000 301)         user = Users.query.filter_by(email=g.email).first()
+374de717 app.py         (EimantasPusinskas 2023-01-24 18:43:45 +0000 302)         #  checks if contact being added belongs to user's organization already
+374de717 app.py         (EimantasPusinskas 2023-01-24 18:43:45 +0000 303)         if Contacts.query.filter_by(email=form.email.data, team_id=user.team_id).first() is None:
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000 304)             team_id = user.team_id
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000 305) 
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000 306)             contact = Contacts()
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000 307)             contact.contact_id = f"{form.email.data}_{team_id}"
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000 308)             contact.team_id = team_id
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000 309)             contact.name = form.name.data
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000 310)             contact.email = form.email.data
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000 311)             contact.phone_number = form.phone_number.data
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000 312)             contact.contact_owner = form.contact_owner.data
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000 313)             contact.company = form.company.data
+374de717 app.py         (EimantasPusinskas 2023-01-24 18:43:45 +0000 314)             contact.status = dict(form.status.choices).get(form.status.data)
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000 315) 
+374de717 app.py         (EimantasPusinskas 2023-01-24 18:43:45 +0000 316)             db.session.add(contact)
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000 317)             db.session.commit()
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000 318)             return redirect(url_for("contacts"))
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000 319)         else:
+374de717 app.py         (EimantasPusinskas 2023-01-24 18:43:45 +0000 320)             form.name.errors.append("This person is already in your contacts")
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000 321)     return render_template("add_contact.html", form = form)
+f36aed84 application.py (EimantasPusinskas 2023-01-24 17:27:01 +0000 322) 
+088d653d app.py         (EimantasPusinskas 2023-01-25 14:22:57 +0000 323) 
+088d653d app.py         (EimantasPusinskas 2023-01-25 14:22:57 +0000 324) @application.route("/remove_contact/<contact_id>", methods = ["GET", "POST"])
+088d653d app.py         (EimantasPusinskas 2023-01-25 14:22:57 +0000 325) @login_required
+088d653d app.py         (EimantasPusinskas 2023-01-25 14:22:57 +0000 326) def remove_contact(contact_id):
+088d653d app.py         (EimantasPusinskas 2023-01-25 14:22:57 +0000 327)     # retrieves contact specified in parameter and removes from Contacts database
+088d653d app.py         (EimantasPusinskas 2023-01-25 14:22:57 +0000 328)     contact = Contacts.query.filter_by(contact_id = contact_id).first()
+088d653d app.py         (EimantasPusinskas 2023-01-25 14:22:57 +0000 329)     if contact is not None:
+088d653d app.py         (EimantasPusinskas 2023-01-25 14:22:57 +0000 330)         db.session.delete(contact)
+088d653d app.py         (EimantasPusinskas 2023-01-25 14:22:57 +0000 331)         db.session.commit()
+088d653d app.py         (EimantasPusinskas 2023-01-25 14:22:57 +0000 332)     return redirect(url_for("contacts"))
+088d653d app.py         (EimantasPusinskas 2023-01-25 14:22:57 +0000 333) 
+37ab2f2c app.py         (EimantasPusinskas 2023-01-26 15:09:45 +0000 334) @application.route("/edit_contact/<contact_id>", methods=["GET", "POST"])
+37ab2f2c app.py         (EimantasPusinskas 2023-01-26 15:09:45 +0000 335) @login_required
+37ab2f2c app.py         (EimantasPusinskas 2023-01-26 15:09:45 +0000 336) def edit_contact(contact_id):
+37ab2f2c app.py         (EimantasPusinskas 2023-01-26 15:09:45 +0000 337)     form = ContactForm()
+37ab2f2c app.py         (EimantasPusinskas 2023-01-26 15:09:45 +0000 338)     
+37ab2f2c app.py         (EimantasPusinskas 2023-01-26 15:09:45 +0000 339)     contact = Contacts.query.filter_by(contact_id = contact_id).first()
+37ab2f2c app.py         (EimantasPusinskas 2023-01-26 15:09:45 +0000 340)     contact.name = form.name.data
+37ab2f2c app.py         (EimantasPusinskas 2023-01-26 15:09:45 +0000 341)     contact.email = form.email.data
+37ab2f2c app.py         (EimantasPusinskas 2023-01-26 15:09:45 +0000 342)     contact.phone_number = form.phone_number.data
+37ab2f2c app.py         (EimantasPusinskas 2023-01-26 15:09:45 +0000 343)     contact.contact_owner = form.contact_owner.data
+37ab2f2c app.py         (EimantasPusinskas 2023-01-26 15:09:45 +0000 344)     contact.company = form.company.data
+37ab2f2c app.py         (EimantasPusinskas 2023-01-26 15:09:45 +0000 345)     contact.status = dict(form.status.choices).get(form.status.data)
+37ab2f2c app.py         (EimantasPusinskas 2023-01-26 15:09:45 +0000 346)     db.session.flush()
+37ab2f2c app.py         (EimantasPusinskas 2023-01-26 15:09:45 +0000 347)     db.session.commit()
+37ab2f2c app.py         (EimantasPusinskas 2023-01-26 15:09:45 +0000 348) 
+37ab2f2c app.py         (EimantasPusinskas 2023-01-26 15:09:45 +0000 349)     return redirect(url_for('contacts'))
+088d653d app.py         (EimantasPusinskas 2023-01-25 14:22:57 +0000 350) 
+2df0743b app.py         (Matt Mallen       2023-01-18 14:59:02 +0000 351) if __name__ == "__main__":
+2df0743b app.py         (Matt Mallen       2023-01-18 14:59:02 +0000 352)     application.debug = True
+6df5674f application.py (Matt Mallen       2023-01-22 18:25:31 +0000 353)     application.run()
