@@ -30,7 +30,7 @@ class CreateTeamForm(FlaskForm):
 
 class InviteForm(FlaskForm):
     email = EmailField("Email:", validators=[InputRequired(), Email()])
-    submit = SubmitField("Invite")
+    submit = SubmitField("Send Invitation")
 
 class addContactForm(FlaskForm):
     name = StringField("Name", validators=[InputRequired()])

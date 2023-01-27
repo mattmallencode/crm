@@ -29,10 +29,13 @@ h1{
     display: flex;
     justify-content: center;
     padding: 10px 0 10px 0;
+    margin-top: 20%;
+    margin-left: 5%;
 }
 p{
     color: white;
 }
+
 input{
     display: flex;
     flex-direction: column;
@@ -42,7 +45,7 @@ input{
     outline: none;
     border-radius: 30px;
     color: white;
-    padding: 0 23px 0 45px;
+    
     background: rgb(15, 8, 8, 0.5);
     
 }
@@ -92,9 +95,50 @@ ul {
   }
   
   .invite_form{
-    background-color: black;
+    background-color: rgb(15, 8, 8, 0.5);
     color: white;
-    top: 50%;
-    margin: auto;
+    top:auto;
+    margin-top: 20%;
+    margin-left: 10%;
     display: inline-block;
+    border-radius: 25px;
+    padding: 10px;
+  }
+
+  .create_team_form{
+    background-color: rgb(15, 8, 8, 0.5);
+    color: white;
+    top:auto;
+    margin-top: 20%;
+    margin-left: 20%;
+    display: inline-block;
+    padding: 10px;
+    border-radius: 25px;
+  }
+  .invite_form_email_input{
+    width: 106%;
+    padding-top: 5px;
+    padding-bottom: 15px;
+  }
+
+  .send_invite_form_email{
+    width: 108%;
+  }
+  #invite{
+    text-align: center;
+    padding-left: 30%;
+    padding-right: 30%;
+    padding-top: 4px;
+  }
+
+  @media (max-width: 400px) {
+    h1{
+        color: black;
+        font-size: 500%;
+        display: block;
+        justify-content: center;
+        padding: 10px 0 10px 0;
+        margin-top: 20%;
+        margin-left: 5%;
+    }
   }

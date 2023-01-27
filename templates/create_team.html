@@ -10,27 +10,32 @@
                   <li><a href="{{ url_for('createTeamForm') }}">Create Team</a></li>
                 </ul>
         </nav>
-        <form method="POST", novalidate>
-        {{ form.hidden_tag() }}
-        {% for error in form.team_id.errors %}
-                <div>{{ error }}</div>
-        {% endfor %}
-        {{ form.team_id.label }}
-        {{ form.team_id() }}
-        <br>
-        {% for error in form.password.errors %}
-                <div>{{ error }}</div>
-        {% endfor %}
-        {{ form.password.label }}
-        {{ form.password() }}
-        <br>
-        {% for error in form.password2.errors %}
-               <div>{{ error }}</div>            {% endfor %}
-        {{ form.password2.label }}
-        {{ form.password2() }}
-        <br>
-        {{ form.submit(id="register") }}
-        <br>
-      </form>
+        <h1>
+                Create Team
+        </h1>
+        <div class="create_team_form">
+                <form method="POST", novalidate>
+                {{ form.hidden_tag() }}
+                {% for error in form.team_id.errors %}
+                        <div>{{ error }}</div>
+                {% endfor %}
+                {{ form.team_id.label }}
+                {{ form.team_id() }}
+                <br>
+                {% for error in form.password.errors %}
+                        <div>{{ error }}</div>
+                {% endfor %}
+                {{ form.password.label }}
+                {{ form.password() }}
+                <br>
+                {% for error in form.password2.errors %}
+                <div>{{ error }}</div>            {% endfor %}
+                {{ form.password2.label }}
+                {{ form.password2() }}
+                <br>
+                {{ form.submit(id="register") }}
+                <br>
+                </form>
+        </div>
     </body>
 {% endblock %}
