@@ -301,10 +301,9 @@ def add_contact():
 
             db.session.add(contact)
             db.session.commit()
-            return redirect(url_for("contacts"))
         else:
             form.name.errors.append("This person is already in your contacts")
-    return render_template("add_contact.html", form = form)
+    return redirect(url_for("contacts"))
 
 
 @application.route("/remove_contact/<contact_id>", methods = ["GET", "POST"])
@@ -329,6 +328,7 @@ def edit_contact(contact_id):
     contact.contact_owner = form.contact_owner.data
     contact.company = form.company.data
     contact.status = dict(form.status.choices).get(form.status.data)
+
     db.session.flush()
     db.session.commit()
 
