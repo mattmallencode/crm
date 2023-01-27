@@ -7,6 +7,7 @@ body{
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
+    display: flex;
 }
 .box{
     display: flex;
@@ -58,3 +59,42 @@ button{
     border-radius: 30px;
     border: none;
 }
+
+nav{
+    position: fixed;
+    top: 0%;
+    left: 0%;
+    right: 0%;
+    width: 100%;
+}
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+  }
+  
+  li {
+    float: left;
+  }
+  
+  li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+  
+  li a:hover {
+    background-color: #111;
+  }
+  
+  .invite_form{
+    background-color: black;
+    color: white;
+    top: 50%;
+    margin: auto;
+    display: inline-block;
+  }

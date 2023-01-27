@@ -2,6 +2,14 @@
 
 {% block main_content %}
 <body>
+    <nav>
+        <ul>
+          <li><a href="{{ url_for('home') }}">Home</a></li>
+          <li><a href="{{ url_for('invite') }}">Invite</a></li>
+          <li><a href="{{ url_for('contacts') }}">Contacts</a></li>
+          <li><a href="{{ url_for('createTeamForm') }}">Create Team</a></li>
+        </ul>
+      </nav>
     <h1>Contacts</h1>
     
     <section>
@@ -19,17 +27,38 @@
                 <th>Contact Owner</th>
                 <th>Company</th>
                 <th>Status</th>
+                <th>Edit Contact</th>
                 <th>Remove Contact</th>
             </tr>
 
             {% for contact in contacts %}
                 <tr>
-                    <td>{{contact.name}}</td>
-                    <td>{{contact.email}}</td>
-                    <td>{{contact.phone_number}}</td>
-                    <td>{{contact.contact_owner}}</td>
-                    <td>{{contact.company}}</td>
-                    <td>{{contact.status}}</td>
+                    <form action = "{{url_for('edit_contact', contact_id=contact.contact_id)}}" method = "POST">
+                        {{form.hidden_tag()}}
+                    
+                        <td>{{form.name(value = contact.name)}}
+                            {% for error in form.name.errors %}
+                                <div>{{ error }}</div>
+                            {% endfor %}
+                        </td>
+
+                        <td>{{form.email(value = contact.email)}}
+                            {% for error in form.email.errors %}
+                                <div>{{ error }}</div>
+                            {% endfor %}
+                        </td>
+
+                        <td>{{form.phone_number(value = contact.phone_number)}}</td>
+
+                        <td>{{form.contact_owner(value = contact.contact_owner)}}</td>
+
+                        <td>{{form.company(value = contact.company)}}</td>
+
+                        <td>{{form.status(value = contact.status)}}</td>
+
+                        <td>{{form.submit(value="Save Changes")}}</td>
+                    </form>
+                    
                     <td><a href = "{{url_for('remove_contact',contact_id=contact.contact_id)}}">Remove</a></td>
                 </tr>
 

@@ -1,22 +1,28 @@
-<!DOCTYPE html>
-<html lang = "en">
-    <head>
-        <meta charset="utf-8">
-        <title>Sherpa CRM</title>
-    </head>
+{% extends "base.html" %}
+{% block main_content %}
     <body>
-        <form action = "" method = "POST">
-            <p>Invite a member to join your organisation</p>
-            {{ form.hidden_tag() }}
+        <nav>
+            <ul>
+              <li><a href="{{ url_for('home') }}">Home</a></li>
+              <li><a href="{{ url_for('invite') }}">Invite</a></li>
+              <li><a href="{{ url_for('contacts') }}">Contacts</a></li>
+              <li><a href="{{ url_for('createTeamForm') }}">Create Team</a></li>
+            </ul>
+        </nav>
+        <div class="invite_form">
+            <form action = "" method = "POST">
+                <p>Invite a member to join your organisation</p>
+                {{ form.hidden_tag() }}
 
-            {{ form.email.label }}
-            {{ form.email() }}
-            {% for error in form.email.errors %}
-            <div>{{ error }}</div>
-            {% endfor %}
-            {{ form.submit(id="invite") }}
-        </form>
-
+                {{ form.email.label }}
+                {{ form.email() }}
+                {% for error in form.email.errors %}
+                <div>{{ error }}</div>
+                {% endfor %}
+                {{ form.submit(id="invite") }}
+            </form>
+        </div>
         <p>{{response}}</p>
     </body>
 </html>
+{% endblock %}

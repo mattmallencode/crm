@@ -27,7 +27,7 @@ class InviteForm(FlaskForm):
     email = EmailField("Email:", validators=[InputRequired(), Email()])
     submit = SubmitField("Invite")
 
-class addContactForm(FlaskForm):
+class ContactForm(FlaskForm):
     name = StringField("Name", validators=[InputRequired()])
     email = EmailField("Email", validators=[InputRequired(), Email()])
     phone_number = StringField("Phone Number")
