@@ -131,7 +131,7 @@ The following flow chart details the sign up process flow for a new Sherpa user.
 
 
 ![Flow chart detailing the signup process flow for a new user.](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/Sign%20Up.png)
-*Figure: 1*
+<br>*Figure: 1*
 
 *Endpoint: /signup*
 
@@ -144,7 +144,7 @@ The following flow chart details the sign up process flow for a new Sherpa user.
 The following flow chart details the login process flow for an existing Sherpa user.
 
 ![Flow chart detailing the signup process flow for a new user.](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/Log%20In.png)
-*Figure: 2*
+<br>*Figure: 2*
 
 *Endpoint: /login*
 
@@ -160,7 +160,7 @@ The following flow chart details the login process flow for an existing Sherpa u
 The following flow chart details the process flow for creating a Sherpa team.
 
 ![Flow chart detailing the team creation process flow.](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/Team%20Creation.png)
-*Figure: 3*
+<br>*Figure: 3*
 
 *Endpoint: /create_team*
 
@@ -177,7 +177,7 @@ The following flow chart details the process flow for creating a Sherpa team.
 
 The following flow chart details the process flow for inviting another user to a Sherpa team.
 ![Flow chart detailing the team invitation process flow.](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/Invite.png)
-*Figure: 4*
+<br>*Figure: 4*
 
 *Endpoint: /invite*
 
@@ -191,6 +191,7 @@ The following flow chart details the process flow for inviting another user to a
 The following flow chart details the process flow for accepting a Sherpa invitation. It is a modified version of the login flow: see Figure 2.
 
 ![Flow chart detailing the team invitation acceptance process flow.](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/Invite%20Accept.png)
+<br>*Figure: 5*
 
 *Endpoint: /invite/<invite_id>*
 
