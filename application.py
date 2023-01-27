@@ -3,10 +3,13 @@ from dotenv import load_dotenv
 import os
 from flask_sqlalchemy import SQLAlchemy as sa
 from flask_mail import Mail, Message
-from forms import SignUpForm, LoginForm, CreateTeamForm, InviteForm, addContactForm
+from forms import SignUpForm, LoginForm, CreateTeamForm, InviteForm, ContactForm
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 from secrets import token_urlsafe
+
+# Load environment variables from .env file.
+load_dotenv()
 
 # Initialize the flask application
 application = Flask(__name__)
@@ -21,12 +24,20 @@ application.config["MAIL_PASSWORD"] = os.environ.get("MAIL_PASSWORD")
 application.config["MAIL_USE_TLS"] = False
 application.config["MAIL_USE_SSL"] = True
 
+# Initialize MySQL credentials from the environment variables we just loaded.
+DB_HOST = os.environ.get("DB_HOST")
+DB_PORT = int(os.environ.get("DB_PORT"))
+DB_USER = os.environ.get("DB_USER")
+DB_PASSWORD = os.environ.get("DB_PASSWORD")
+DB_DB = os.environ.get("DB_DB") # database to use.
+# Set up SQLAlchemy with the above credentials.
+application.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_DB}"
+# Set up an SQLAlchemy session for our application.
+db = sa(application)
 # creates Mail instance for managing emails
 mail = Mail(application)
 
 
-# Load environment variables from .env file.
-load_dotenv()
 
 
 # Initialize MySQL credentials from the environment variables we just loaded.
@@ -58,7 +69,7 @@ class Users(db.Model):
 
 class Invites(db.Model):
     invite_id = db.Column(db.String, primary_key=True)
-    team_id = db.Column(db.String)
+    team_id = db.Column(db.Integer)
 
     def __init__(self, invite_id = None, team_id = None):
         self.invite_id = invite_id
@@ -83,6 +94,14 @@ class Contacts(db.Model):
         self.contact_owner = contact_owner
         self.company = company
         self.status = status
+
+class Teams(db.Model):
+    team_id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+
+    def __init__ (self, team_id = None, name = None):
+        self.team_id = team_id
+        self.name = name
 
 
 @application.before_request
@@ -132,14 +151,14 @@ def invite():
                     url = f"{host}/login/{email}_{team_id}_{sec}"
                     invite.team_id = team_id
                     invite.invite_id = f"{email}_{team_id}_{sec}"
-
+                    
                     db.session.add(invite)
                     db.session.commit()
-
                     # creates email message
-                    msg = Message("Sherpa Invitation", sender = ("Sherpa CRM", "Sherpacrm90@gmail.com"), recipients = [request.form["address"]])
-                    msg.html = f"You have been invited to join a Sherpa organisation. Click <a href = '{url}'> here</a> to join"
 
+                    msg = Message("Sherpa Invitation", sender = ("Sherpa CRM", "Sherpacrm90@gmail.com"), recipients = [form.email.data])
+                    print("hello")
+                    msg.html = f"You have been invited to join a Sherpa organisation. Click <a href = '{url}'> here</a> to join"#
                     # connects to mail SMTP server and sends message
                     mail.connect()
                     mail.send(msg)
@@ -232,43 +251,52 @@ def signup():
 
 @application.route("/create_team", methods=["GET", "POST"])
 @login_required
-def createTeamForm():
+def createTeam():
     """
     Route for registering an team.
     """
     form = CreateTeamForm()
     if form.validate_on_submit():
-        if Users.query.filter_by(team_id=team_id).first() is None:
-            password = form.password.data
-            team_id = form.team_id.data
-            user = Users()
-            user.team_id = team_id
-            # Generate a hash for the user's password and insert credential's into the DB.
-            user.password_hash = generate_password_hash(password)
-            user.team_id = None
+        # checks if user is already a member of a team
+        user = Users.query.filter_by(email=g.email).first()
+        if user.team_id is None:
+            team = Teams()
+            team.name = form.name.data
 
+            # team inserted into database and assigned unique id
+            db.session.add(team)
+            db.session.flush()
+            # team object is refreshed with team id now accessible
+            db.session.refresh(team)
+           
+            # updates users admin and owner status in Users table
             user.admin_status = True
             user.owner_status = True
+            user.team_id = team.team_id
 
-            db.session.add(user)
+            # commits changes to database
             db.session.commit()
+
             return redirect(url_for("home"))
-        # If the team id is already registered, inform the user.
         else:
-            form.team_id.errors.append("This team id is already registered!")
-        return render_template("create_team.html", form=form)
+            form.name.errors.append("You are already a member of a team")
     return render_template("create_team.html", form=form)
 
 
 @application.route("/contacts", methods =["GET", "POST"])
 @login_required
 def contacts():
-    return render_template("contacts.html")
+    form = ContactForm()
+    # gets all contacts of user that is logged in and passes it to html template
+    user = Users.query.filter_by(email=g.email).first()
+    contacts = Contacts.query.filter_by(team_id=user.team_id)
+    return render_template("contacts.html", form = form, contacts = contacts)
 
 @application.route("/add_contact", methods = ["GET", "POST"])
 @login_required
+# allows a user to add contacts to their contact list
 def add_contact():
-    form = addContactForm()
+    form = ContactForm()
     if form.validate_on_submit():
         user = Users.query.filter_by(email=g.email).first()
         #  checks if contact being added belongs to user's organization already
@@ -291,6 +319,34 @@ def add_contact():
         else:
             form.name.errors.append("This person is already in your contacts")
     return render_template("add_contact.html", form = form)
+
+
+@application.route("/remove_contact/<contact_id>", methods = ["GET", "POST"])
+@login_required
+def remove_contact(contact_id):
+    # retrieves contact specified in parameter and removes from Contacts database
+    contact = Contacts.query.filter_by(contact_id = contact_id).first()
+    if contact is not None:
+        db.session.delete(contact)
+        db.session.commit()
+    return redirect(url_for("contacts"))
+
+@application.route("/edit_contact/<contact_id>", methods=["GET", "POST"])
+@login_required
+def edit_contact(contact_id):
+    form = ContactForm()
+    
+    contact = Contacts.query.filter_by(contact_id = contact_id).first()
+    contact.name = form.name.data
+    contact.email = form.email.data
+    contact.phone_number = form.phone_number.data
+    contact.contact_owner = form.contact_owner.data
+    contact.company = form.company.data
+    contact.status = dict(form.status.choices).get(form.status.data)
+    db.session.flush()
+    db.session.commit()
+
+    return redirect(url_for('contacts'))
 
 if __name__ == "__main__":
     application.debug = True
