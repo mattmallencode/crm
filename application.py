@@ -25,9 +25,6 @@ application.config["MAIL_USE_TLS"] = False
 application.config["MAIL_USE_SSL"] = True
 
 
-# Load environment variables from .env file.
-load_dotenv()
-
 # Initialize MySQL credentials from the environment variables we just loaded.
 DB_HOST = os.environ.get("DB_HOST")
 DB_PORT = int(os.environ.get("DB_PORT"))
