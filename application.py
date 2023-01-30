@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 from flask_sqlalchemy import SQLAlchemy as sa
 from flask_mail import Mail, Message
-from forms import SignUpForm, LoginForm, CreateTeamForm, InviteForm, ContactForm
+from forms import SignUpForm, LoginForm, CreateTeamForm, InviteForm, ContactForm, LogoutForm
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 from secrets import token_urlsafe
@@ -333,6 +333,17 @@ def edit_contact(contact_id):
     db.session.commit()
 
     return redirect(url_for('contacts'))
+
+@application.route("/profile", defaults={"logout": "user"}, methods=["GET", "POST"])
+@application.route("/profile/<logout>", methods=["GET", "POST"])
+@login_required
+def profile(logout):
+    form = LogoutForm()
+    if form.validate_on_submit():
+        session.clear()
+        return redirect(url_for('home'))
+    return render_template("profile.html", form=form)
+
 
 if __name__ == "__main__":
     application.debug = True
