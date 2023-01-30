@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block main_content %}
-<body>  
+<body> 
+  {% if user_details.team_id %} 
   <nav>
     <ul>
       <li><a href="{{ url_for('home') }}">Home</a></li>
@@ -9,6 +10,7 @@
       <li><a href="{{ url_for('profile') }}">Profile</a></li>
     </ul>
   </nav>
+  {% endif %}
 <body>
   {% if user_details.team_id %}
     <section>
@@ -17,6 +19,8 @@
     </section>
   {% else %}
     <section>
+      <br>
+      <br>
       <p>You are not a member of a team. Either accept an invite or create your own to be a member of an team.</p>
       <a href="create_team">Create A Team</a>
     </section>
