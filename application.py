@@ -24,6 +24,7 @@ application.config["MAIL_PASSWORD"] = os.environ.get("MAIL_PASSWORD")
 application.config["MAIL_USE_TLS"] = False
 application.config["MAIL_USE_SSL"] = True
 
+
 # Initialize MySQL credentials from the environment variables we just loaded.
 DB_HOST = os.environ.get("DB_HOST")
 DB_PORT = int(os.environ.get("DB_PORT"))
