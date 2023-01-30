@@ -40,3 +40,5 @@ class removeContactForm(FlaskForm):
     email = EmailField("Email", validators=[InputRequired(), Email()])
     submit = SubmitField("Remove Contact")
 
+class LogoutForm(FlaskForm):
+    submit = SubmitField("Log Out")
