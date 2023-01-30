@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 from flask_sqlalchemy import SQLAlchemy as sa
 from flask_mail import Mail, Message
-from forms import SignUpForm, LoginForm, CreateTeamForm, InviteForm, ContactForm, LogoutForm
+from forms import SignUpForm, LoginForm, CreateTeamForm, InviteForm, ContactForm, LogoutForm, LeaveTeamForm
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 from secrets import token_urlsafe
@@ -44,13 +44,15 @@ class Users(db.Model):
     team_id = db.Column(db.Integer)
     owner_status = db.Column(db.Boolean)
     admin_status = db.Column(db.Boolean)
+    name = db.Column(db.String)
 
-    def __init__(self, email=None, password_hash=None, team_id=None, owner_status=None, admin_status=None):
+    def __init__(self, email=None, password_hash=None, team_id=None, owner_status=None, admin_status=None, name=None):
         self.email = email
         self.password_hash = password_hash
         self.team_id = team_id
         self.owner_status = owner_status
         self.admin_status = admin_status
+        self.name = name
 
 
 class Invites(db.Model):
@@ -225,6 +227,7 @@ def signup():
             # Generate a hash for the user's password and insert credential's into the DB.
             user.password_hash = generate_password_hash(password)
             user.team_id = None
+            user.name = form.name.data
             user.admin_status = None
             user.owner_status = None            
             db.session.add(user)
@@ -361,15 +364,36 @@ def edit_contact(contact_id):
         
     return redirect(url_for('contacts'))
 
-@application.route("/profile", defaults={"logout": "user"}, methods=["GET", "POST"])
-@application.route("/profile/<logout>", methods=["GET", "POST"])
+@application.route("/profile", methods=["GET", "POST"])
 @login_required
-def profile(logout):
+def profile():
     form = LogoutForm()
     if form.validate_on_submit():
         session.clear()
         return redirect(url_for('home'))
-    return render_template("profile.html", form=form)
+    user = Users.query.filter_by(email=g.email).first()
+    team = Teams.query.filter_by(team_id=user.team_id).first()
+    return render_template("profile.html", form=form, user=user, team=team)
+
+
+@application.route("/team", methods=["GET", "POST"])
+@login_required
+def team():
+    form = LeaveTeamForm()
+    user_details = Users.query.filter_by(email=g.email).first()
+    team = Teams.query.filter_by(team_id=user_details.team_id).first()
+    team_members = Users.query.filter_by(team_id=user_details.team_id).all()
+    if form.validate_on_submit():
+        if form.sure_checkbox.data == True:
+            if user_details.owner_status == True:
+                form.sure_checkbox.errors.append("Can't leave a team if you own it!")
+            else:
+                user_details.team_id = None
+                user_details.admin_status = False
+                db.session.commit()
+        else:
+            form.sure_checkbox.errors.append("You must click the checkbox to confirm!")
+    return render_template("team.html", user_details=user_details, team=team, team_members=team_members, form=form)
 
 
 if __name__ == "__main__":

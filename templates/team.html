@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block main_content %}
+<body>  
+  <nav>
+    <ul>
+      <li><a href="{{ url_for('home') }}">Home</a></li>
+      <li><a href="{{ url_for('contacts') }}">Contacts</a></li>
+      <li><a href="{{ url_for('team') }}">Team</a></li>
+      <li><a href="{{ url_for('profile') }}">Profile</a></li>
+    </ul>
+  </nav>
+<body>
+  {% if user_details.team_id %}
+    <section>
+      <h1>{{ team["name"] }}</h1>
+    </section>
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        {% for team_member in team_members %}
+        <tr>
+          <td>{{ team_member.email }}</td>
+          <td>{{ team_member.name }}</td>
+        </tr>
+        {% endfor %}
+      </tr>
+    </table>
+      {% if user_details.admin_status == True %}
+      <a href="{{ url_for('invite') }}">Invite a new team mate.</a>
+      {% endif %}
+      <div class="invite-form">
+        <div class="create_team_form">
+            <form action = "" method = "POST">
+                
+                {{ form.hidden_tag() }}
+                {{ form.sure_checkbox.label }}
+                <div class="invite_form_email_input">{{ form.sure_checkbox }}</div>
+                {% for error in form.sure_checkbox.errors %}
+                {{ error }}
+                {% endfor %}
+                {{ form.submit }}
+            </form>
+        </div>
+  {% else %}
+    <section>
+      <p>You are not a member of a team. Either accept an invite or create your own to be a member of an team.</p>
+      <a href="create_team">Create A Team</a>
+    </section>
+  {% endif %}
+</body>
+{% endblock %}
