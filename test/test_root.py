@@ -53,6 +53,24 @@ def test_teams():
     assert teams.team_id == 1
     assert teams.name == 'RagnBone'
 
-''' We will use the pytest asyncio to test the login requests etc..'''
-def test_login_required(client):
-    response = client
+# test that the page will redirect if the user is not logged in.
+def test_login_page_not_logged_in(client):
+    resource = client.get('/')
+    assert resource.status_code == 302
+# Test login when the page is logged in 
+def test_login_page_logged_in(client):
+    with client:
+        client.post('/login', data=dict(email='test@gmail.com', password='test'))
+        resource = client.get('/login')
+        assert resource.status_code == 200
+
+def test_sign_up(client):
+    with client:
+            client.post('/signup', data=dict(email='test@gmail.com', password='test'))
+            resource = client.get('signup')
+            assert resource.status_code == 200
+
+# Create team test 
+# try create a team while logged in will result in an error 
+# Try and create a team when loged in and you will be succesful 
+
