@@ -54,7 +54,7 @@ class Users(db.Model):
         self.admin_status = admin_status
         self.name = name
 
-
+# Invites data model i.e. a representation of the users table in the database.
 class Invites(db.Model):
     invite_id = db.Column(db.String, primary_key=True)
     team_id = db.Column(db.Integer)
@@ -63,6 +63,7 @@ class Invites(db.Model):
         self.invite_id = invite_id
         self.team_id = team_id
 
+# Contacts data model i.e. a representation of the contacts table in the database.
 class Contacts(db.Model):
     contact_id = db.Column(db.String, primary_key=True)
     team_id = db.Column(db.Integer)
@@ -83,6 +84,7 @@ class Contacts(db.Model):
         self.company = company
         self.status = status
 
+# Teams data model i.e. a representation of the teams table in the database.
 class Teams(db.Model):
     team_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
@@ -91,18 +93,20 @@ class Teams(db.Model):
         self.team_id = team_id
         self.name = name
 
-
 @application.before_request
 def load_logged_in_user():
+    """Gets user's email for the authenticated session prior to each request."""
     g.email = session.get("email", None)
 
 def login_required(view):
+    """Decorator that redirects a user to the login page if they're unauthenticated and trying to access a protected endpoint."""
     @wraps(view)
     def wrapped_view(**kwargs):
         if g.email is None:
             return redirect(url_for("login", next=request.url))
         return view(**kwargs)
     return wrapped_view
+
 
 @application.route("/invite", methods = ["GET", "POST"])
 @login_required
@@ -340,10 +344,12 @@ def edit_contact(contact_id):
 @application.route("/profile", methods=["GET", "POST"])
 @login_required
 def profile():
+    """Route for viewing profile information and logging out."""
     form = LogoutForm()
+    # If user clicked log out, then clear their session's cookies and redirect to login.
     if form.validate_on_submit():
         session.clear()
-        return redirect(url_for('home'))
+        return redirect(url_for('login'))
     user = Users.query.filter_by(email=g.email).first()
     team = Teams.query.filter_by(team_id=user.team_id).first()
     return render_template("profile.html", form=form, user=user, team=team)
@@ -352,18 +358,23 @@ def profile():
 @application.route("/team", methods=["GET", "POST"])
 @login_required
 def team():
+    """Route for viewing team members, links to inviting team members (if admin), and allows leaving teams."""
     form = LeaveTeamForm()
     user_details = Users.query.filter_by(email=g.email).first()
     team = Teams.query.filter_by(team_id=user_details.team_id).first()
     team_members = Users.query.filter_by(team_id=user_details.team_id).all()
     if form.validate_on_submit():
+        # User must click a confirmation checkbox.
         if form.sure_checkbox.data == True:
+            # If the user is an owner, don't let them leave.
             if user_details.owner_status == True:
                 form.sure_checkbox.errors.append("Can't leave a team if you own it!")
+            # User isn't an owner and they confirmed, remove them from the team.
             else:
                 user_details.team_id = None
                 user_details.admin_status = False
                 db.session.commit()
+        # User didn't click the checkbox.
         else:
             form.sure_checkbox.errors.append("You must click the checkbox to confirm!")
     return render_template("team.html", user_details=user_details, team=team, team_members=team_members, form=form)
