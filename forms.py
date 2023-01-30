@@ -33,10 +33,12 @@ class ContactForm(FlaskForm):
     phone_number = StringField("Phone Number")
     contact_owner = StringField("Contact Owner")
     company = StringField("Company")
-    status = SelectField("Status", choices = [("new", "New"), ("open", "Open"), ("progress", "In Progress"), ("deal", "Open Deal"), ("unqualified", "Unqualified"), ("attempt", "Attempted To Contact"), ("connected", "Connected"), ("timing", "Bad Timing")])
+    status = SelectField("Status", choices = [("New", "New"), ("Open", "Open"), ("In Progress", "In Progress"), ("Open Deal", "Open Deal"), ("Unqualified", "Unqualified"), ("Attempted To Contact", "Attempted To Contact"), ("Connected", "Connected"), ("Bad Timing", "Bad Timing")])
     submit = SubmitField("Add Contact")
 
 class removeContactForm(FlaskForm):
     email = EmailField("Email", validators=[InputRequired(), Email()])
     submit = SubmitField("Remove Contact")
 
+class LogoutForm(FlaskForm):
+    submit = SubmitField("Log Out")
