@@ -13,7 +13,12 @@
     <h1>Contacts</h1>
     
     <section id="contacts-list">
-        <h2>My Contacts</h2>
+        <section>
+            <p><a href = "{{url_for('contacts')}}">All Contacts</a></p>
+            <p><a href = "{{url_for('contacts', filter='assigned')}}">My Assigned Contacts</a></p>
+            <p><a href = "{{url_for('contacts', filter='unassigned')}}">Unassigned Contacts</a></p>
+        </section>
+
         <table>
             <tr>
                 <th>Name</th>

@@ -269,13 +269,21 @@ def createTeam():
     return render_template("create_team.html", form=form)
 
 
-@application.route("/contacts", methods =["GET", "POST"])
+@application.route("/contacts", defaults={"filter": None} , methods =["GET", "POST"])
+@application.route("/contacts/<filter>", methods =["GET", "POST"])
 @login_required
-def contacts():
+def contacts(filter):
     form = ContactForm()
     # gets all contacts of user that is logged in and passes it to html template
     user = Users.query.filter_by(email=g.email).first()
-    contacts = Contacts.query.filter_by(team_id=user.team_id)
+
+    if filter == "assigned":
+        contacts = Contacts.query.filter_by(team_id=user.team_id, contact_owner=user.email)
+    elif filter == "unassigned":
+        contacts = Contacts.query.filter_by(team_id=user.team_id, contact_owner=None)
+    else:
+        contacts = Contacts.query.filter_by(team_id=user.team_id)
+
     return render_template("contacts.html", form = form, contacts = contacts)
 
 @application.route("/add_contact", methods = ["GET", "POST"])
@@ -307,7 +315,7 @@ def add_contact():
 
             contact.company = form.company.data
             contact.status = dict(form.status.choices).get(form.status.data)
-            
+
             db.session.add(contact)
             db.session.commit()
         else:
