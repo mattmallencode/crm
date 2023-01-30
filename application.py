@@ -270,13 +270,21 @@ def createTeam():
     return render_template("create_team.html", form=form)
 
 
-@application.route("/contacts", methods =["GET", "POST"])
+@application.route("/contacts", defaults={"filter": None} , methods =["GET", "POST"])
+@application.route("/contacts/<filter>", methods =["GET", "POST"])
 @login_required
-def contacts():
+def contacts(filter):
     form = ContactForm()
     # gets all contacts of user that is logged in and passes it to html template
     user = Users.query.filter_by(email=g.email).first()
-    contacts = Contacts.query.filter_by(team_id=user.team_id)
+
+    if filter == "assigned":
+        contacts = Contacts.query.filter_by(team_id=user.team_id, contact_owner=user.email)
+    elif filter == "unassigned":
+        contacts = Contacts.query.filter_by(team_id=user.team_id, contact_owner=None)
+    else:
+        contacts = Contacts.query.filter_by(team_id=user.team_id)
+
     return render_template("contacts.html", form = form, contacts = contacts)
 
 @application.route("/add_contact", methods = ["GET", "POST"])
@@ -284,8 +292,9 @@ def contacts():
 # allows a user to add contacts to their contact list
 def add_contact():
     form = ContactForm()
+    user = Users.query.filter_by(email=g.email).first()
+    user_contacts = Contacts.query.filter_by(team_id=user.team_id)
     if form.validate_on_submit():
-        user = Users.query.filter_by(email=g.email).first()
         #  checks if contact being added belongs to user's organization already
         if Contacts.query.filter_by(email=form.email.data, team_id=user.team_id).first() is None:
             team_id = user.team_id
@@ -296,7 +305,15 @@ def add_contact():
             contact.name = form.name.data
             contact.email = form.email.data
             contact.phone_number = form.phone_number.data
-            contact.contact_owner = form.contact_owner.data
+            
+            if Users.query.filter_by(email=form.contact_owner.data, team_id=user.team_id).first() is None:
+                form.contact_owner.errors.append("Invalid user email")
+            else:
+                if (user.owner_status == True) and (user.admin_status == True):
+                    contact.contact_owner = form.contact_owner.data
+                else:
+                    form.contact_owner.errors.append("You do not have sufficient permissions to assign a contact.")
+
             contact.company = form.company.data
             contact.status = dict(form.status.choices).get(form.status.data)
 
@@ -321,18 +338,28 @@ def remove_contact(contact_id):
 @login_required
 def edit_contact(contact_id):
     form = ContactForm()
-    
-    contact = Contacts.query.filter_by(contact_id = contact_id).first()
-    contact.name = form.name.data
-    contact.email = form.email.data
-    contact.phone_number = form.phone_number.data
-    contact.contact_owner = form.contact_owner.data
-    contact.company = form.company.data
-    contact.status = dict(form.status.choices).get(form.status.data)
+    if form.validate_on_submit():
+        user = Users.query.filter_by(email=g.email).first()
 
-    db.session.flush()
-    db.session.commit()
+        contact = Contacts.query.filter_by(contact_id = contact_id).first()
+        contact.name = form.name.data
+        contact.email = form.email.data
+        contact.phone_number = form.phone_number.data
 
+        if Users.query.filter_by(email=form.contact_owner.data, team_id=user.team_id).first() is None:
+            form.contact_owner.errors.append("Invalid user email")
+        else:
+            if (user.owner_status == True) and (user.admin_status == True):
+                contact.contact_owner = form.contact_owner.data
+            else:
+                form.contact_owner.errors.append("You do not have sufficient permissions to assign a contact.")
+
+        contact.company = form.company.data
+        contact.status = dict(form.status.choices).get(form.status.data)
+
+        db.session.flush()
+        db.session.commit()
+        
     return redirect(url_for('contacts'))
 
 @application.route("/profile", defaults={"logout": "user"}, methods=["GET", "POST"])
