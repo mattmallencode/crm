@@ -13,13 +13,13 @@
     </nav>
     <h1>Contacts</h1>
     
-    <section id="add-contact">
-        <h2>Add a Contact</h2>
-        <p><a href = "add_contact">Add A Contact</a></p>
-    </section>
-
     <section id="contacts-list">
-        <h2>My Contacts</h2>
+        <section>
+            <p><a href = "{{url_for('contacts')}}">All Contacts</a></p>
+            <p><a href = "{{url_for('contacts', filter='assigned')}}">My Assigned Contacts</a></p>
+            <p><a href = "{{url_for('contacts', filter='unassigned')}}">Unassigned Contacts</a></p>
+        </section>
+
         <table>
             <tr>
                 <th>Name</th>
@@ -50,7 +50,12 @@
 
                         <td>{{form.phone_number(value = contact.phone_number)}}</td>
 
-                        <td>{{form.contact_owner(value = contact.contact_owner)}}</td>
+                        <td>{% for error in form.contact_owner.errors %}
+                                <div>{{ error }}</div>
+                            {% endfor %}
+                            {{form.contact_owner(value = contact.contact_owner)}}
+                        </td>
+                            
 
                         <td>{{form.company(value = contact.company)}}</td>
 
