@@ -1,14 +1,15 @@
 *{
     font-family: sans-serif;
 }
+
 body{
     background-color: white;
     background-image: url("../static/login_bg.jpg"); /*https://www.vecteezy.com/vector-art/2742352-group-of-men-and-women-happy-with-business-up-on-a-mountain-with-sunset-background, https://gratisography.com/?s=mountains */
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    display: flex;
 }
+
 .box{
     display: flex;
     justify-content: center;
