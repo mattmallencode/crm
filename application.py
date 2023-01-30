@@ -269,14 +269,18 @@ def createTeam():
     return render_template("create_team.html", form=form)
 
 
-@application.route("/contacts", defaults={"filter": None} , methods =["GET", "POST"])
-@application.route("/contacts/<filter>", methods =["GET", "POST"])
+@application.route("/contacts", defaults={"filter":"all", "page":1} , methods =["GET", "POST"])
+@application.route("/contacts/<filter>/<page>", methods =["GET", "POST"])
 @login_required
-def contacts(filter):
+def contacts(filter, page):
     form = ContactForm()
+    page = int(page)
+    page_offset = (page - 1) * 25
+
     # gets all contacts of user that is logged in and passes it to html template
     user = Users.query.filter_by(email=g.email).first()
 
+    # Filters contact results 
     if filter == "assigned":
         contacts = Contacts.query.filter_by(team_id=user.team_id, contact_owner=user.email)
     elif filter == "unassigned":
@@ -284,7 +288,12 @@ def contacts(filter):
     else:
         contacts = Contacts.query.filter_by(team_id=user.team_id)
 
-    return render_template("contacts.html", form = form, contacts = contacts)
+    contacts = contacts.limit(25).offset(page_offset)
+
+    num_pages = contacts.count() // 25
+    if (contacts.count() % 25) > 0:
+        num_pages += 1
+    return render_template("contacts.html", form = form, contacts = contacts, page = page, filter=filter, num_pages = num_pages)
 
 @application.route("/add_contact", methods = ["GET", "POST"])
 @login_required
