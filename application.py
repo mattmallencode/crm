@@ -342,7 +342,9 @@ def profile(logout):
     if form.validate_on_submit():
         session.clear()
         return redirect(url_for('home'))
-    return render_template("profile.html", form=form)
+    user = Users.query.filter_by(email=g.email).first()
+    team = Teams.query.filter_by(team_id=user.team_id).first()
+    return render_template("profile.html", form=form, user=user, team=team)
 
 
 if __name__ == "__main__":

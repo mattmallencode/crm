@@ -21,6 +21,8 @@
                 <div class="send_invite_form_email">{{ form.submit(id="invite") }}</div>
             </form>
         </div>
+        <p>Email: {{ user["email"] }}</p>
+        <p>Team: {{ team["name"] }}</p>
         <p id="invite-response">{{response}}</p>
     </body>
 {% endblock %}
