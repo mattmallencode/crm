@@ -159,6 +159,7 @@ ul {
     padding-top: 4px;
   }
 
+
   @media (max-width: 400px) {
     h1{
         color: black;
@@ -169,4 +170,16 @@ ul {
         margin-top: 20%;
         margin-left: 5%;
     }
+  }
+
+  .contactH1{
+    margin-top: 10%;
+  }
+  #add-contact{
+    margin-left: 20%;
+    background-color: rgb(15, 8, 8, 0.5);
+
+  }
+  table{
+    margin-left: -750px;
   }
