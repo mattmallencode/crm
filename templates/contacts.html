@@ -14,9 +14,9 @@
     
     <section id="contacts-list">
         <section>
-            <p><a href = "{{url_for('contacts')}}">All Contacts</a></p>
-            <p><a href = "{{url_for('contacts', filter='assigned')}}">My Assigned Contacts</a></p>
-            <p><a href = "{{url_for('contacts', filter='unassigned')}}">Unassigned Contacts</a></p>
+            <p><a href = "{{url_for('contacts', filter='all', page=1)}}">All Contacts</a></p>
+            <p><a href = "{{url_for('contacts', filter='assigned', page=1)}}">My Assigned Contacts</a></p>
+            <p><a href = "{{url_for('contacts', filter='unassigned', page=1)}}">Unassigned Contacts</a></p>
         </section>
         
         <table>
@@ -102,6 +102,21 @@
                 </form>
             </tr>
         </table>
+    </section>
+
+    <section>
+        {% set next_page = page + 1 %}
+        {% set previous_page = page - 1 %}
+
+        <p>Showing Page {{page}} of {{num_pages}}</p>
+        {% if page > 1 %}
+            <p><a href = "{{url_for('contacts', filter=filter, page=previous_page)}}">Previous Page</a></p>
+        {% endif %}
+    
+        {% if page < num_pages %}
+    	    <p><a href = "{{url_for('contacts', filter=filter, page=next_page)}}">Next Page</a></p>
+        {% endif %}
+        
     </section>
     
 </body>

@@ -291,21 +291,34 @@ def createTeam():
     return render_template("create_team.html", form=form, user=user)
 
 
-@application.route("/contacts", defaults={"filter": None} , methods =["GET", "POST"])
-@application.route("/contacts/<filter>", methods =["GET", "POST"])
+@application.route("/contacts", defaults={"filter":"all", "page":1} , methods =["GET", "POST"])
+@application.route("/contacts/<filter>/<page>", methods =["GET", "POST"])
 @login_required
 @team_required
-def contacts(filter):
+def contacts(filter, page):
     search_form = SearchForm()
     form = ContactForm()
+    page = int(page)
+    page_offset = (page - 1) * 25
+
     # gets all contacts of user that is logged in and passes it to html template
     user = Users.query.filter_by(email=g.email).first()
+
+    # Filters contact results 
     if filter == "assigned":
         contacts = Contacts.query.filter_by(team_id=user.team_id, contact_owner=user.email)
     elif filter == "unassigned":
         contacts = Contacts.query.filter_by(team_id=user.team_id, contact_owner=None)
     else:
         contacts = Contacts.query.filter_by(team_id=user.team_id)
+
+    contacts = contacts.limit(25).offset(page_offset)
+
+    num_pages = contacts.count() // 25
+    
+    if (contacts.count() % 25) > 0:
+        num_pages += 1
+        
     if search_form.validate_on_submit():
         user_search = search_form.search_bar.data
         optimization = optimize_search(user_search)
@@ -315,7 +328,8 @@ def contacts(filter):
             contacts = contacts.filter(Contacts.phone_number.like(f"%{user_search}%"))
         else:
             contacts = contacts.filter(Contacts.email.like(f"%{user_search}%") | Contacts.name.like(f"%{user_search}%") | Contacts.company.like(f"%{user_search}%"))
-    return render_template("contacts.html", form = form, search_form=search_form, contacts = contacts)
+            
+    return render_template("contacts.html", form = form, search_form = search_form, contacts = contacts, page = page, filter=filter, num_pages = num_pages)
 
 def optimize_search(search):
     if "@" in search or "." in search:
