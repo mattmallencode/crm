@@ -1,8 +1,9 @@
-
 from test import client
 import mock
+import pytest
+import smtplib
 from mock import call
-
+from flask import session, request
 from httpx import AsyncClient
 
 from application import Users, Teams,Invites, Contacts, login_required
@@ -65,12 +66,8 @@ def test_login_page_logged_in(client):
         assert resource.status_code == 200
 
 def test_sign_up(client):
-    with client:
+    with client:    
             client.post('/signup', data=dict(email='test@gmail.com', password='test'))
             resource = client.get('signup')
             assert resource.status_code == 200
-
-# Create team test 
-# try create a team while logged in will result in an error 
-# Try and create a team when loged in and you will be succesful 
-
+    
