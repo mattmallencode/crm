@@ -138,6 +138,7 @@ def invite():
         user_id = g.email
         # checks if user sending invite is a member of an organization
         user = Users.query.filter(Users.email == user_id).first()
+        team_id = user.team_id
         if user.team_id == None:
             form.email.errors.append("You are not a member of an organization")
         else:
@@ -156,7 +157,6 @@ def invite():
                     url = f"{host}/login/{email}_{team_id}_{sec}"
                     invite.team_id = team_id
                     invite.invite_id = f"{email}_{team_id}_{sec}"
-                    
                     db.session.add(invite)
                     db.session.commit()
                     # creates email message
