@@ -211,7 +211,6 @@ def login(invite_id):
                 user = Users.query.filter_by(email=email).first()
                 invitation = Invites.query.filter_by(invite_id=invite_id).first()
                 invitation_email = invitation.invite_id.split("_")[0]
-                print(invitation_email)
                 if  invitation != None and user.team_id == None and user.email == invitation_email:
                     user.team_id = invitation.team_id
                     user.admin_status = False
@@ -291,11 +290,14 @@ def createTeam():
     return render_template("create_team.html", form=form, user=user)
 
 
-@application.route("/contacts", defaults={"filter":"all", "page":1} , methods =["GET", "POST"])
-@application.route("/contacts/<filter>/<page>", methods =["GET", "POST"])
+@application.route("/contacts", defaults={"filter":"all", "page":1, "prev_sort": "None", "sort": "None", "order": "DESC"} , methods =["GET", "POST"])
+@application.route("/contacts/<filter>/<prev_sort>/<sort>/<page>/<order>", methods =["GET", "POST"])
 @login_required
 @team_required
-def contacts(filter, page):
+def contacts(filter, page, prev_sort, sort, order):
+    # nameASC
+    # Order By name ASC
+    # <Button>
     search_form = SearchForm()
     form = ContactForm()
     page = int(page)
@@ -311,13 +313,6 @@ def contacts(filter, page):
         contacts = Contacts.query.filter_by(team_id=user.team_id, contact_owner=None)
     else:
         contacts = Contacts.query.filter_by(team_id=user.team_id)
-
-    contacts = contacts.limit(25).offset(page_offset)
-
-    num_pages = contacts.count() // 25
-    
-    if (contacts.count() % 25) > 0:
-        num_pages += 1
         
     if search_form.validate_on_submit():
         user_search = search_form.search_bar.data
@@ -328,8 +323,21 @@ def contacts(filter, page):
             contacts = contacts.filter(Contacts.phone_number.like(f"%{user_search}%"))
         else:
             contacts = contacts.filter(Contacts.email.like(f"%{user_search}%") | Contacts.name.like(f"%{user_search}%") | Contacts.company.like(f"%{user_search}%"))
-            
-    return render_template("contacts.html", form = form, search_form = search_form, contacts = contacts, page = page, filter=filter, num_pages = num_pages)
+    if sort != prev_sort:
+        order="ASC"
+    else:
+        if order == "ASC":
+            order = "DESC"
+        else:
+            order = "ASC"
+    if sort != "None": 
+        contacts = order_contacts(sort, order, contacts)
+    contacts = contacts.limit(25).offset(page_offset)
+    num_pages = contacts.count() // 25
+    
+    if (contacts.count() % 25) > 0:
+        num_pages += 1
+    return render_template("contacts.html", form = form, search_form = search_form, contacts = contacts, page = page, filter=filter, num_pages = num_pages, prev_sort=prev_sort, sort=sort, order=order)
 
 def optimize_search(search):
     if "@" in search or "." in search:
@@ -338,6 +346,39 @@ def optimize_search(search):
         return "number"
     else:
         return "name/company/email"
+
+def order_contacts(sort, order, contacts):
+    if sort == "name":
+        if order == "ASC":
+            contacts = contacts.order_by(Contacts.name)
+        else:
+            contacts = contacts.order_by(Contacts.name.desc())
+    elif sort == "email":
+        if order == "ASC":
+            contacts = contacts.order_by(Contacts.email)
+        else:
+            contacts = contacts.order_by(Contacts.email.desc())
+    elif sort == "phone_number":
+        if order == "ASC":
+            contacts = contacts.order_by(Contacts.phone_number)
+        else:
+            contacts = contacts.order_by(Contacts.phone_number.desc())
+    elif sort == "contact_owner":
+        if order == "ASC":
+            contacts = contacts.order_by(Contacts.contact_owner)
+        else:
+            contacts = contacts.order_by(Contacts.contact_owner.desc())
+    elif sort == "company":
+        if order == "ASC":
+            contacts = contacts.order_by(Contacts.company)
+        else:
+            contacts = contacts.order_by(Contacts.company.desc())
+    elif sort == "status":
+        if order == "ASC":
+            contacts = contacts.order_by(Contacts.status)
+        else:
+            contacts = contacts.order_by(Contacts.status.desc())
+    return contacts
 
 @application.route("/add_contact", methods = ["GET", "POST"])
 @login_required
