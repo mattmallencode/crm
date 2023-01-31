@@ -5,9 +5,8 @@
     <nav>
         <ul>
           <li><a href="{{ url_for('home') }}">Home</a></li>
-          <li><a href="{{ url_for('invite') }}">Invite</a></li>
           <li><a href="{{ url_for('contacts') }}">Contacts</a></li>
-          <li><a href="{{ url_for('createTeam') }}">Create Team</a></li>
+          <li><a href="{{ url_for('team') }}">Team</a></li>
           <li><a href="{{ url_for('profile') }}">Profile</a></li>
         </ul>
     </nav>
@@ -19,8 +18,15 @@
             <p><a href = "{{url_for('contacts', filter='assigned', page=1)}}">My Assigned Contacts</a></p>
             <p><a href = "{{url_for('contacts', filter='unassigned', page=1)}}">Unassigned Contacts</a></p>
         </section>
-
+        
         <table>
+            <tr>
+                <form action = "" method = "POST" novalidate>
+                    {{form.hidden_tag()}}
+                    <td>{{search_form.search_bar}}</td>
+                    <td>{{search_form.submit}}</td>
+                </form>
+            </tr>
             <tr>
                 <th>Name</th>
                 <th>email</th>

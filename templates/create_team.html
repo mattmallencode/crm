@@ -2,25 +2,33 @@
 
 {% block main_content %}
     <body>
+      {% if user.team_id %} 
       <nav>
         <ul>
           <li><a href="{{ url_for('home') }}">Home</a></li>
-          <li><a href="{{ url_for('invite') }}">Invite</a></li>
           <li><a href="{{ url_for('contacts') }}">Contacts</a></li>
-          <li><a href="{{ url_for('createTeam') }}">Create Team</a></li>
+          <li><a href="{{ url_for('team') }}">Team</a></li>
           <li><a href="{{ url_for('profile') }}">Profile</a></li>
         </ul>
-    </nav>
-        <form id="create-team-form" action = " " method="POST" novalidate>
-        {{ form.hidden_tag() }}
-        {% for error in form.name.errors %}
+      </nav>
+      {% endif %} 
+      <div class="invite-form">
+        <h1>
+            Create Team
+        </h1>
+        <div class="create_team_form">
+            <p>Invite a member to join your organisation</p>
+            <form action = "" method = "POST">
+                
+                {{ form.hidden_tag() }}
+
+                {{ form.name.label }}
+                <div class="invite_form_email_input">{{ form.name() }}</div>
+                {% for error in form.name.errors %}
                 <div>{{ error }}</div>
-        {% endfor %}
-        {{ form.name.label }}
-        {{ form.name() }}
-        <br>
-        {{ form.submit(id="create_team") }}
-        <br>
-      </form>
+                {% endfor %}
+                <div class="send_invite_form_email">{{ form.submit(id="invite") }}</div>
+            </form>
+        </div>
     </body>
 {% endblock %}
