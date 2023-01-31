@@ -1,7 +1,6 @@
 *{
     font-family: sans-serif;
 }
-
 body{
     background-color: white;
     background-image: url("../static/login_bg.jpg"); /*https://www.vecteezy.com/vector-art/2742352-group-of-men-and-women-happy-with-business-up-on-a-mountain-with-sunset-background, https://gratisography.com/?s=mountains */
@@ -10,11 +9,25 @@ body{
     background-attachment: fixed;
 }
 
+h1{
+    color:white;
+    margin-top: 5%;
+    margin-left: 2%;
+}
+.contacts_background{
+    background: rgb(15, 8, 8, 0.5);
+    border-radius: 30px;
+}
 .box{
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 90%;
+    margin-top: 15%;
+    background: rgb(15, 8, 8, 0.5);
+    border-radius: 30px;
+    margin-left: 20%;
+    margin-right: 20%;
 }
 
 .container{
@@ -24,44 +37,43 @@ body{
     padding: 0 15px 0 15px;
 }
 
-h1{
+.Heading{
     color: white;
-    font-size: 500%;
-    display: flex;
-    justify-content: center;
-    padding: 10px 0 10px 0;
-    margin-top: 20%;
-    margin-left: 5%;
+    text-align: center;
+    
+}
+.loginSubmitP{
+    color: white;
+    text-align: center;
 }
 p{
     color: white;
 }
-
 input{
-    display: flex;
-    flex-direction: column;
-    height: 20px;
-    width: 90%;
-    border: none;
-    outline: none;
     border-radius: 30px;
-    color: white;
-    
-    background: rgb(15, 8, 8, 0.5);
-    
+    height: 30px;
+    text-indent: 30px;
+    padding-right: 35%;
 }
 
 i{
-    position: relative;
-    top: -18px;
-    left: 17px;
-    color: white;
+    color: black;
+    position:absolute;
+    margin-top: 10px;
+    margin-left: 10px;
+    
+}
+::placeholder{
+    padding-left: 20px;
+    overflow: visible;
 }
 
-button{
-    padding: 0 50% 0 50%;
-    border-radius: 30px;
-    border: none;
+.loginRegisterSubmit{
+    padding-right: 65%;
+}
+
+.loginRegisterLink{
+    color:red;
 }
 
 nav{
@@ -95,91 +107,16 @@ ul {
     background-color: #111;
   }
   
-  .invite-form{
+  section section  a {
     color: white;
-    top: 50%;
-    margin: 5%;
-    display: inline-block;
+    padding: 2%;
+    margin-left: 2%;
+    background-color: #333;
+    border-radius: 5px;
+    text-decoration: none;
   }
 
-  .invite-form input {
-    margin: 5%;
+  section section  a:hover{
+    background-color: #111;
   }
-
-#contacts-list {
-    margin-top: 19%;
-    margin-right: 18%;
-}
-
-#add-contact {
-    margin-top: 10%;
-}
-
-#create-team-form {
-    margin-top: 5%;
-}
-
-#invite-response {
-    margin-top: 10%;
-}
-  .invite_form{
-    background-color: rgb(15, 8, 8, 0.5);
-    color: white;
-    top:auto;
-    margin-top: 20%;
-    margin-left: 10%;
-    display: inline-block;
-    border-radius: 25px;
-    padding: 10px;
-  }
-
-  .create_team_form{
-    background-color: rgb(15, 8, 8, 0.5);
-    color: white;
-    top:auto;
-    margin-top: 20%;
-    margin-left: 20%;
-    display: inline-block;
-    padding: 10px;
-    border-radius: 25px;
-  }
-  .invite_form_email_input{
-    width: 106%;
-    padding-top: 5px;
-    padding-bottom: 15px;
-  }
-
-  .send_invite_form_email{
-    width: 108%;
-  }
-  #invite{
-    text-align: center;
-    padding-left: 30%;
-    padding-right: 30%;
-    padding-top: 4px;
-  }
-
-
-  @media (max-width: 400px) {
-    h1{
-        color: black;
-        font-size: 500%;
-        display: block;
-        justify-content: center;
-        padding: 10px 0 10px 0;
-        margin-top: 20%;
-        margin-left: 5%;
-    }
-  }
-
-  .contactH1{
-    margin-top: 10%;
-  }
-  #add-contact{
-    margin-left: 20%;
-    background-color: rgb(15, 8, 8, 0.5);
-
-  }
-  table{
-    margin-left: -750px;
-  }
+  

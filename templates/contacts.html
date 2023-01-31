@@ -10,13 +10,14 @@
           <li><a href="{{ url_for('profile') }}">Profile</a></li>
         </ul>
     </nav>
+    <div class="contacts_background">
     <h1 class="contactH1">Contacts</h1>
     
     <section id="contacts-list">
         <section>
-            <p><a href = "{{url_for('contacts', prev_sort='None', order='ASC', sort='None', filter='all', page=1)}}">All Contacts</a></p>
-            <p><a href = "{{url_for('contacts', prev_sort='None', order='ASC', sort='None', filter='assigned', page=1)}}">My Assigned Contacts</a></p>
-            <p><a href = "{{url_for('contacts', prev_sort='None', order='ASC', sort='None', filter='unassigned', page=1)}}">Unassigned Contacts</a></p>
+            <a href = "{{url_for('contacts', prev_sort='None', order='ASC', sort='None', filter='all', page=1)}}">All Contacts</a>
+            <a href = "{{url_for('contacts', prev_sort='None', order='ASC', sort='None', filter='assigned', page=1)}}">My Assigned Contacts</a>
+            <a href = "{{url_for('contacts', prev_sort='None', order='ASC', sort='None', filter='unassigned', page=1)}}">Unassigned Contacts</a>
         </section>
         
         <table>
@@ -119,6 +120,6 @@
         {% endif %}
         
     </section>
-    
+    </div>
 </body>
 {% endblock %}
