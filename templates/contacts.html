@@ -15,9 +15,9 @@
     
     <section id="contacts-list">
         <section>
-            <a href = "{{url_for('contacts', filter='all', page=1)}}">All Contacts</a>
-            <a href = "{{url_for('contacts', filter='assigned', page=1)}}">My Assigned Contacts</a>
-            <a href = "{{url_for('contacts', filter='unassigned', page=1)}}">Unassigned Contacts</a>
+            <a href = "{{url_for('contacts', prev_sort='None', order='ASC', sort='None', filter='all', page=1)}}">All Contacts</a>
+            <a href = "{{url_for('contacts', prev_sort='None', order='ASC', sort='None', filter='assigned', page=1)}}">My Assigned Contacts</a>
+            <a href = "{{url_for('contacts', prev_sort='None', order='ASC', sort='None', filter='unassigned', page=1)}}">Unassigned Contacts</a>
         </section>
         
         <table>
@@ -28,13 +28,14 @@
                     <td>{{search_form.submit}}</td>
                 </form>
             </tr>
+            {% set prev_sort = sort %}
             <tr>
-                <th>Name</th>
-                <th>email</th>
-                <th>Phone Number</th>
-                <th>Contact Owner</th>
-                <th>Company</th>
-                <th>Status</th>
+                <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='name', page=page, filter=filter)}}">Name</a></th>
+                <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='email', page=page, filter=filter)}}">Email</a></th>
+                <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='phone_number', page=page, filter=filter)}}">Phone Number</a></th>
+                <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='contact_owner', page=page, filter=filter)}}">Contact Owner</a></th>
+                <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='company', page=page, filter=filter)}}">Company</a></th>
+                <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='status', page=page, filter=filter)}}">Status</a></th>
                 <th>Edit Contact</th>
                 <th>Remove Contact</th>
             </tr>
@@ -111,11 +112,11 @@
 
         <p>Showing Page {{page}} of {{num_pages}}</p>
         {% if page > 1 %}
-            <p><a href = "{{url_for('contacts', filter=filter, page=previous_page)}}">Previous Page</a></p>
+            <p><a href = "{{url_for('contacts', order='ASC', prev_sort=prev_sort, sort=sort, filter=filter, page=previous_page)}}">Previous Page</a></p>
         {% endif %}
     
         {% if page < num_pages %}
-    	    <p><a href = "{{url_for('contacts', filter=filter, page=next_page)}}">Next Page</a></p>
+    	    <p><a href = "{{url_for('contacts', order='ASC', prev_sort=prev_sort, sort=sort, filter=filter, page=next_page)}}">Next Page</a></p>
         {% endif %}
         
     </section>
