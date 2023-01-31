@@ -3,10 +3,11 @@ from dotenv import load_dotenv
 import os
 from flask_sqlalchemy import SQLAlchemy as sa
 from flask_mail import Mail, Message
-from forms import SignUpForm, LoginForm, CreateTeamForm, InviteForm, ContactForm, LogoutForm
+from forms import SignUpForm, LoginForm, CreateTeamForm, InviteForm, ContactForm, LogoutForm, LeaveTeamForm, SearchForm
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 from secrets import token_urlsafe
+import re
 
 # Load environment variables from .env file.
 load_dotenv()
@@ -45,15 +46,17 @@ class Users(db.Model):
     team_id = db.Column(db.Integer)
     owner_status = db.Column(db.Boolean)
     admin_status = db.Column(db.Boolean)
+    name = db.Column(db.String)
 
-    def __init__(self, email=None, password_hash=None, team_id=None, owner_status=None, admin_status=None):
+    def __init__(self, email=None, password_hash=None, team_id=None, owner_status=None, admin_status=None, name=None):
         self.email = email
         self.password_hash = password_hash
         self.team_id = team_id
         self.owner_status = owner_status
         self.admin_status = admin_status
+        self.name = name
 
-
+# Invites data model i.e. a representation of the users table in the database.
 class Invites(db.Model):
     invite_id = db.Column(db.String, primary_key=True)
     team_id = db.Column(db.Integer)
@@ -62,6 +65,7 @@ class Invites(db.Model):
         self.invite_id = invite_id
         self.team_id = team_id
 
+# Contacts data model i.e. a representation of the contacts table in the database.
 class Contacts(db.Model):
     contact_id = db.Column(db.String, primary_key=True)
     team_id = db.Column(db.Integer)
@@ -82,6 +86,7 @@ class Contacts(db.Model):
         self.company = company
         self.status = status
 
+# Teams data model i.e. a representation of the teams table in the database.
 class Teams(db.Model):
     team_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
@@ -90,12 +95,14 @@ class Teams(db.Model):
         self.team_id = team_id
         self.name = name
 
-
 @application.before_request
 def load_logged_in_user():
+    """Gets user's email for the authenticated session prior to each request."""
     g.email = session.get("email", None)
+    g.team_id = session.get("team_id", None)
 
 def login_required(view):
+    """Decorator that redirects a user to the login page if they're unauthenticated and trying to access a protected endpoint."""
     @wraps(view)
     def wrapped_view(**kwargs):
         if g.email is None:
@@ -103,8 +110,19 @@ def login_required(view):
         return view(**kwargs)
     return wrapped_view
 
+def team_required(view):
+    """Decorator that redirects a user to the login page if they're unauthenticated and trying to access a protected endpoint."""
+    @wraps(view)
+    def wrapped_view(**kwargs):
+        if g.team_id is None:
+            return redirect(url_for("home"))
+        return view(**kwargs)
+    return wrapped_view
+
+
 @application.route("/invite", methods = ["GET", "POST"])
 @login_required
+@team_required
 def invite():
     """
     Route for sending an email invitation to a user for your team.
@@ -139,7 +157,6 @@ def invite():
                     url = f"{host}/login/{email}_{team_id}_{sec}"
                     invite.team_id = team_id
                     invite.invite_id = f"{email}_{team_id}_{sec}"
-                    
                     db.session.add(invite)
                     db.session.commit()
                     # creates email message
@@ -201,6 +218,7 @@ def login(invite_id):
                     user.owner_status = False
                     db.session.delete(invitation)
                     db.session.commit()
+            session["team_id"] = user.team_id
             return redirect(next_page)
         else:
             form.email.errors.append("Incorrect email / password!")
@@ -226,6 +244,7 @@ def signup():
             # Generate a hash for the user's password and insert credential's into the DB.
             user.password_hash = generate_password_hash(password)
             user.team_id = None
+            user.name = form.name.data
             user.admin_status = None
             user.owner_status = None            
             db.session.add(user)
@@ -242,6 +261,7 @@ def createTeam():
     """
     Route for registering an team.
     """
+    user=None
     form = CreateTeamForm()
     if form.validate_on_submit():
         # checks if user is already a member of a team
@@ -263,21 +283,28 @@ def createTeam():
 
             # commits changes to database
             db.session.commit()
-
+            session["team_id"] = user.team_id
+            g.team_id = session.get("team_id")
             return redirect(url_for("home"))
         else:
             form.name.errors.append("You are already a member of a team")
-    return render_template("create_team.html", form=form)
+    return render_template("create_team.html", form=form, user=user)
 
 
-@application.route("/contacts", defaults={"filter": None} , methods =["GET", "POST"])
-@application.route("/contacts/<filter>", methods =["GET", "POST"])
+@application.route("/contacts", defaults={"filter":"all", "page":1} , methods =["GET", "POST"])
+@application.route("/contacts/<filter>/<page>", methods =["GET", "POST"])
 @login_required
-def contacts(filter):
+@team_required
+def contacts(filter, page):
+    search_form = SearchForm()
     form = ContactForm()
+    page = int(page)
+    page_offset = (page - 1) * 25
+
     # gets all contacts of user that is logged in and passes it to html template
     user = Users.query.filter_by(email=g.email).first()
 
+    # Filters contact results 
     if filter == "assigned":
         contacts = Contacts.query.filter_by(team_id=user.team_id, contact_owner=user.email)
     elif filter == "unassigned":
@@ -285,10 +312,36 @@ def contacts(filter):
     else:
         contacts = Contacts.query.filter_by(team_id=user.team_id)
 
-    return render_template("contacts.html", form = form, contacts = contacts)
+    contacts = contacts.limit(25).offset(page_offset)
+
+    num_pages = contacts.count() // 25
+    
+    if (contacts.count() % 25) > 0:
+        num_pages += 1
+        
+    if search_form.validate_on_submit():
+        user_search = search_form.search_bar.data
+        optimization = optimize_search(user_search)
+        if optimization == "email":
+            contacts = contacts.filter(Contacts.email.like(f"%{user_search}%"))
+        elif optimization == "number":
+            contacts = contacts.filter(Contacts.phone_number.like(f"%{user_search}%"))
+        else:
+            contacts = contacts.filter(Contacts.email.like(f"%{user_search}%") | Contacts.name.like(f"%{user_search}%") | Contacts.company.like(f"%{user_search}%"))
+            
+    return render_template("contacts.html", form = form, search_form = search_form, contacts = contacts, page = page, filter=filter, num_pages = num_pages)
+
+def optimize_search(search):
+    if "@" in search or "." in search:
+        return "email"
+    if re.search('[a-zA-Z]', search) == None:
+        return "number"
+    else:
+        return "name/company/email"
 
 @application.route("/add_contact", methods = ["GET", "POST"])
 @login_required
+@team_required
 # allows a user to add contacts to their contact list
 def add_contact():
     form = ContactForm()
@@ -326,6 +379,7 @@ def add_contact():
 
 @application.route("/remove_contact/<contact_id>", methods = ["GET", "POST"])
 @login_required
+@team_required
 def remove_contact(contact_id):
     # retrieves contact specified in parameter and removes from Contacts database
     contact = Contacts.query.filter_by(contact_id = contact_id).first()
@@ -336,6 +390,7 @@ def remove_contact(contact_id):
 
 @application.route("/edit_contact/<contact_id>", methods=["GET", "POST"])
 @login_required
+@team_required
 def edit_contact(contact_id):
     form = ContactForm()
     if form.validate_on_submit():
@@ -362,16 +417,46 @@ def edit_contact(contact_id):
         
     return redirect(url_for('contacts'))
 
-@application.route("/profile", defaults={"logout": "user"}, methods=["GET", "POST"])
-@application.route("/profile/<logout>", methods=["GET", "POST"])
+@application.route("/profile", methods=["GET", "POST"])
 @login_required
-def profile(logout):
+@team_required
+def profile():
+    """Route for viewing profile information and logging out."""
     form = LogoutForm()
+    # If user clicked log out, then clear their session's cookies and redirect to login.
     if form.validate_on_submit():
         session.clear()
-        return redirect(url_for('home'))
-    return render_template("profile.html", form=form)
+        return redirect(url_for('login'))
+    user = Users.query.filter_by(email=g.email).first()
+    team = Teams.query.filter_by(team_id=user.team_id).first()
+    return render_template("profile.html", form=form, user=user, team=team)
 
+
+@application.route("/team", methods=["GET", "POST"])
+@login_required
+@team_required
+def team():
+    """Route for viewing team members, links to inviting team members (if admin), and allows leaving teams."""
+    form = LeaveTeamForm()
+    user_details = Users.query.filter_by(email=g.email).first()
+    team = Teams.query.filter_by(team_id=user_details.team_id).first()
+    team_members = Users.query.filter_by(team_id=user_details.team_id).all()
+    if form.validate_on_submit():
+        # User must click a confirmation checkbox.
+        if form.sure_checkbox.data == True:
+            # If the user is an owner, don't let them leave.
+            if user_details.owner_status == True:
+                form.sure_checkbox.errors.append("Can't leave a team if you own it!")
+            # User isn't an owner and they confirmed, remove them from the team.
+            else:
+                user_details.team_id = None
+                user_details.admin_status = False
+                db.session.commit()
+        # User didn't click the checkbox.
+        else:
+            form.sure_checkbox.errors.append("You must click the checkbox to confirm!")
+    return render_template("team.html", user_details=user_details, team=team, team_members=team_members, form=form)
+    
 
 if __name__ == "__main__":
     application.debug = True

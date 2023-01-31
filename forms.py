@@ -1,8 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, EmailField, SelectField
+from wtforms import StringField, PasswordField, SubmitField, EmailField, SelectField, BooleanField
 from wtforms.validators import InputRequired, EqualTo, Email, Length
 
 class SignUpForm(FlaskForm):
+    name = StringField("Name", validators=[InputRequired()])
     email = EmailField("Email:", 
         validators=[InputRequired(), Email(), Length(max=100)], render_kw={"placeholder": "EMAIL"})
     password = PasswordField("Password:", 
@@ -42,3 +43,11 @@ class removeContactForm(FlaskForm):
 
 class LogoutForm(FlaskForm):
     submit = SubmitField("Log Out")
+
+class LeaveTeamForm(FlaskForm):
+    sure_checkbox = BooleanField("Please click to confirm leaving your team.")
+    submit = SubmitField("Leave Team")
+
+class SearchForm(FlaskForm):
+    search_bar = StringField("Search Contacts...")
+    submit = SubmitField("Search")

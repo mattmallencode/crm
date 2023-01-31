@@ -1,30 +1,40 @@
-{% extends "base.html" %}
-
-{% block main_content %}
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8" />
+    <title>Sherpa</title>
+    <link rel="stylesheet" type="text/css" href="{{url_for("static", filename="redemptionArc.css")}}" >
+    <script src="https://kit.fontawesome.com/13ea2b7ad4.js" crossorigin="anonymous"></script>
+</head>
     <body>
+        
         <div class="box">
             <div class="container">
                 <!--<img src="../static/sherpa_logo.png" height="50px" width="50px" alt="Sherpa's logo">-->
-                <h1>Login</h1>
+                <h1 id="loginHeading">Login</h1>
                 <form method="POST" novalidate>
                     {{ form.hidden_tag() }}
                     {% for error in form.email.errors %}
                     <div>{{ error }}</div>
                     {% endfor %}
-                    {{ form.email.label }}
+                    
+                    <i class="fa-solid fa-user"></i>
                     {{ form.email() }}
                     <br>
+                    
                     {% for error in form.password.errors %}
                     <div>{{ error }}</div>
                     {% endfor %}
-                    {{ form.password.label }}
-                    {{ form.password() }}
+                    
                     <br>
-                    {{ form.submit(id="login") }}
+                    <i class="fa-solid fa-lock"></i>
+                    <div>{{ form.password() }}</div>
+                    <br>
+                    <div id="loginSubmit">{{ form.submit(id="login") }}</div>
                     <br>
                 </form>
-                <p>Have you created an account yet? To register please click <a class = "signup_link" href="/signup">here</a>.</p>
+                <p id="loginP">Have you created an account yet? To register please click <a class = "signup_link" href="/signup">here</a>.</p>
             </div>
         </div>
     </body>
-{% endblock %}
+</html>
