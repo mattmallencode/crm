@@ -29,13 +29,14 @@ class InviteForm(FlaskForm):
     submit = SubmitField("Send Invitation")
 
 class ContactForm(FlaskForm):
+    contact_id = StringField()
     name = StringField("Name", validators=[InputRequired()])
     email = EmailField("Email", validators=[InputRequired(), Email()])
     phone_number = StringField("Phone Number")
     contact_owner = StringField("Contact Owner")
     company = StringField("Company")
     status = SelectField("Status", choices = [("New", "New"), ("Open", "Open"), ("In Progress", "In Progress"), ("Open Deal", "Open Deal"), ("Unqualified", "Unqualified"), ("Attempted To Contact", "Attempted To Contact"), ("Connected", "Connected"), ("Bad Timing", "Bad Timing")])
-    submit = SubmitField("Add Contact")
+    submit = SubmitField("")
 
 class removeContactForm(FlaskForm):
     email = EmailField("Email", validators=[InputRequired(), Email()])

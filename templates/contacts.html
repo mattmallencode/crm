@@ -23,7 +23,7 @@
         <table>
             <tr>
                 <form action = "" method = "POST" novalidate>
-                    {{form.hidden_tag()}}
+                    {{search_form.hidden_tag()}}
                     <td>{{search_form.search_bar}}</td>
                     <td>{{search_form.submit}}</td>
                 </form>
@@ -39,68 +39,68 @@
                 <th>Edit Contact</th>
                 <th>Remove Contact</th>
             </tr>
-            {% for contact in contacts %}
+            {% for form in forms %}
                 <tr>
-                    <form action = "{{url_for('edit_contact', contact_id=contact.contact_id)}}" method = "POST">
+                    <form action = "{{url_for('edit_contact', contact_id=form.contact_id.data)}}" method = "POST">
                         {{form.hidden_tag()}}
                     
-                        <td>{{form.name(value = contact.name)}}
+                        <td>{{form.name()}}
                             {% for error in form.name.errors %}
                                 <div>{{ error }}</div>
                             {% endfor %}
                         </td>
-
-                        <td>{{form.email(value = contact.email)}}
+                        
+                        <td>{{form.email()}}
                             {% for error in form.email.errors %}
                                 <div>{{ error }}</div>
                             {% endfor %}
                         </td>
 
-                        <td>{{form.phone_number(value = contact.phone_number)}}</td>
+                        <td>{{form.phone_number()}}</td>
 
                         <td>{% for error in form.contact_owner.errors %}
                                 <div>{{ error }}</div>
                             {% endfor %}
-                            {{form.contact_owner(value = contact.contact_owner)}}
+                            {{form.contact_owner()}}
                         </td>
                             
 
-                        <td>{{form.company(value = contact.company)}}</td>
+                        <td>{{form.company()}}</td>
 
-                        <td>{{form.status(value = contact.status)}}</td>
+                        <td>{{form.status()}}</td>
 
-                        <td>{{form.submit(value="Save Changes")}}</td>
+                        <td>{{form.submit(value='Save Changes')}}</td>
                     </form>
                     
-                    <td><a href = "{{url_for('remove_contact',contact_id=contact.contact_id)}}">Remove</a></td>
+                    <td><a href = "{{url_for('remove_contact', contact_id=form.contact_id.data)}}">Remove</a></td>
                 </tr>
             {% endfor %}
 
             <tr>
                 <form action = "{{url_for('add_contact')}}" method = "POST">
-                    {{form.hidden_tag()}}
+                    {{form2.hidden_tag()}}
                 
-                    <td>{{form.name()}}
-                        {% for error in form.name.errors %}
+                    <td>{{form2.name()}}
+                        {% for error in form2.name.errors %}
                             <div>{{ error }}</div>
                         {% endfor %}
                     </td>
 
-                    <td>{{form.email()}}
-                        {% for error in form.email.errors %}
+                    <td>{{form2.email()}}
+                        {% for error in form2.email.errors %}
                             <div>{{ error }}</div>
                         {% endfor %}
                     </td>
 
-                    <td>{{form.phone_number()}}</td>
+                    <td>{{form2.phone_number()}}</td>
 
-                    <td>{{form.contact_owner()}}</td>
+                    <td>{{form2.contact_owner()}}</td>
 
-                    <td>{{form.company()}}</td>
+                    <td>{{form2.company()}}</td>
 
-                    <td>{{form.status()}}</td>
+                    <td>{{form2.status()}}</td>
 
-                    <td>{{form.submit()}}</td>
+                    <td>{{form2.submit(value='Add Contact')}}</td>
                 </form>
             </tr>
         </table>
