@@ -15,9 +15,9 @@
     
     <section id="contacts-list">
         <section>
-            <a href = "{{url_for('contacts', prev_sort='None', order='ASC', sort='None', filter='all', page=1)}}">All Contacts</a>
-            <a href = "{{url_for('contacts', prev_sort='None', order='ASC', sort='None', filter='assigned', page=1)}}">My Assigned Contacts</a>
-            <a href = "{{url_for('contacts', prev_sort='None', order='ASC', sort='None', filter='unassigned', page=1)}}">Unassigned Contacts</a>
+            <a href = "{{url_for('contacts', prev_sort='None', order='ASC', sort='None', filter='all', page=1 , error='None')}}">All Contacts</a>
+            <a href = "{{url_for('contacts', prev_sort='None', order='ASC', sort='None', filter='assigned', page=1 , error='None')}}">My Assigned Contacts</a>
+            <a href = "{{url_for('contacts', prev_sort='None', order='ASC', sort='None', filter='unassigned', page=1 , error='None')}}">Unassigned Contacts</a>
         </section>
         
         <table>
@@ -30,18 +30,18 @@
             </tr>
             {% set prev_sort = sort %}
             <tr>
-                <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='name', page=page, filter=filter)}}">Name</a></th>
-                <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='email', page=page, filter=filter)}}">Email</a></th>
-                <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='phone_number', page=page, filter=filter)}}">Phone Number</a></th>
-                <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='contact_owner', page=page, filter=filter)}}">Contact Owner</a></th>
-                <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='company', page=page, filter=filter)}}">Company</a></th>
-                <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='status', page=page, filter=filter)}}">Status</a></th>
+                <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='name', page=page, filter=filter, error='None')}}">Name</a></th>
+                <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='email', page=page, filter=filter, error='None')}}">Email</a></th>
+                <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='phone_number', page=page, filter=filter, error='None')}}">Phone Number</a></th>
+                <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='contact_owner', page=page, filter=filter, error='None')}}">Contact Owner</a></th>
+                <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='company', page=page, filter=filter, error='None')}}">Company</a></th>
+                <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='status', page=page, filter=filter, error='None')}}">Status</a></th>
                 <th>Edit Contact</th>
                 <th>Remove Contact</th>
             </tr>
             {% for form in forms %}
                 <tr>
-                    <form action = "{{url_for('edit_contact', contact_id=form.contact_id.data)}}" method = "POST">
+                    <form action = "{{url_for('edit_contact', contact_id=form.contact_id.data, prev_sort=prev_sort, order=order, sort=sort, filter=filter, page=page, error=error)}}" method = "POST">
                         {{form.hidden_tag()}}
                     
                         <td>{{form.name()}}
@@ -77,7 +77,7 @@
             {% endfor %}
 
             <tr>
-                <form action = "{{url_for('add_contact')}}" method = "POST">
+                <form action = "{{url_for('add_contact', prev_sort=prev_sort, order=order, sort=sort, filter=filter, page=page, error=error)}}" method = "POST">
                     {{form2.hidden_tag()}}
                 
                     <td>{{form2.name()}}
@@ -107,7 +107,9 @@
     </section>
 
     <section>
-        <p>{{error}}</p>
+        {% if error != 'None' %} 
+            <p>{{error}}</p>
+        {% endif %}
     </section>
 
     <section>
@@ -116,11 +118,11 @@
 
         <p>Showing Page {{page}} of {{num_pages}}</p>
         {% if page > 1 %}
-            <p><a href = "{{url_for('contacts', order='ASC', prev_sort=prev_sort, sort=sort, filter=filter, page=previous_page)}}">Previous Page</a></p>
+            <p><a href = "{{url_for('contacts', prev_sort='None', order='ASC', sort='None', filter='unassigned', page=1 , error='None')}}">Previous Page</a></p>
         {% endif %}
     
         {% if page < num_pages %}
-    	    <p><a href = "{{url_for('contacts', order='ASC', prev_sort=prev_sort, sort=sort, filter=filter, page=next_page)}}">Next Page</a></p>
+    	    <p><a href = "{{url_for('contacts', prev_sort='None', order='ASC', sort='None', filter='unassigned', page=1 , error='None')}}">Next Page</a></p>
         {% endif %}
         
     </section>
