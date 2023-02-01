@@ -310,7 +310,7 @@ def contacts(filter, page, prev_sort, sort, order):
     if filter == "assigned":
         contacts = Contacts.query.filter_by(team_id=user.team_id, contact_owner=user.email)
     elif filter == "unassigned":
-        contacts = Contacts.query.filter_by(team_id=user.team_id, contact_owner=None)
+        contacts = Contacts.query.filter_by(team_id=user.team_id, contact_owner="")
     else:
         contacts = Contacts.query.filter_by(team_id=user.team_id)
         
@@ -413,20 +413,19 @@ def add_contact():
             contact.name = form.name.data
             contact.email = form.email.data
             contact.phone_number = form.phone_number.data
-            
-            if Users.query.filter_by(email=form.contact_owner.data, team_id=user.team_id).first() is None:
+            if form.contact_owner.data != "" and Users.query.filter_by(email=form.contact_owner.data, team_id=user.team_id).first() is None:
                 form.contact_owner.errors.append("Invalid user email")
             else:
-                if (user.owner_status == True) and (user.admin_status == True):
+                if contact.contact_owner == "" or ((user.owner_status == True) and (user.admin_status == True)):
                     contact.contact_owner = form.contact_owner.data
+
+                    contact.company = form.company.data
+                    contact.status = dict(form.status.choices).get(form.status.data)
+
+                    db.session.add(contact)
+                    db.session.commit()
                 else:
                     form.contact_owner.errors.append("You do not have sufficient permissions to assign a contact.")
-
-            contact.company = form.company.data
-            contact.status = dict(form.status.choices).get(form.status.data)
-
-            db.session.add(contact)
-            db.session.commit()
         else:
             form.name.errors.append("This person is already in your contacts")
     return redirect(url_for("contacts"))
@@ -456,29 +455,35 @@ def edit_contact(contact_id):
         contact = Contacts.query.filter_by(contact_id=contact_id, team_id=g.team_id).first()
         contact.name = form.name.data
         contact.email = form.email.data
-        contact.phone_number = form.phone_number.data
-
-        if Users.query.filter_by(email=form.contact_owner.data, team_id=g.team_id).first() is None:
-            form.contact_owner.errors.append("Invalid user email")
-        else:
-            if (user.owner_status == True) and (user.admin_status == True):
-                contact.contact_owner = form.contact_owner.data
+        former_id = contact.contact_id
+        contact.contact_id = f"{form.email.data}_{contact.team_id}"
+        dupe_contact = None
+        if contact.contact_id != former_id:
+            try:
+                dupe_contact = Contacts.query.filter_by(contact_id = contact.contact_id).first()
+            except:
+                dupe_contact = "Duplicate!"
+        if dupe_contact == None:
+            contact.phone_number = form.phone_number.data
+            if form.contact_owner.data != "" and Users.query.filter_by(email=form.contact_owner.data, team_id=user.team_id).first() is None:
+                form.contact_owner.errors.append("Invalid user email")
             else:
-                form.contact_owner.errors.append("You do not have sufficient permissions to assign a contact.")
+                if form.contact_owner.data == contact.contact_owner or ((user.owner_status == True) and (user.admin_status == True)):
+                    contact.contact_owner = form.contact_owner.data
+                    contact.company = form.company.data
+                    contact.status = dict(form.status.choices).get(form.status.data)
+                    #contact.status.choices.default
+                    db.session.flush()
+                    db.session.refresh(contact)
 
-        contact.company = form.company.data
-        contact.status = dict(form.status.choices).get(form.status.data)
-
-        #contact.status.choices.default
-        db.session.flush()
-        db.session.refresh(contact)
-
-        contact.contact_id = f"{form.email.data}_{g.team_id}"
-        db.session.flush()
-        db.session.commit()
-
-        
-    return redirect(url_for('contacts'))
+                    contact.contact_id = f"{form.email.data}_{g.team_id}"
+                    db.session.flush()
+                    db.session.commit()
+                else:
+                    form.contact_owner.errors.append("You do not have sufficient permissions to assign a contact.")
+        else:
+            form.contact_owner.errors.append("Can't create a duplicate contact!")
+        return redirect(url_for('contacts'))
 
 @application.route("/profile", methods=["GET", "POST"])
 @login_required
