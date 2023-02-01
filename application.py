@@ -297,7 +297,7 @@ def createTeam():
 @team_required
 def contacts(filter, page):
     search_form = SearchForm()
-    form = ContactForm()
+    form2 = ContactForm()
     page = int(page)
     page_offset = (page - 1) * 25
 
@@ -312,13 +312,7 @@ def contacts(filter, page):
     else:
         contacts = Contacts.query.filter_by(team_id=user.team_id)
 
-    contacts = contacts.limit(25).offset(page_offset)
-
-    num_pages = contacts.count() // 25
     
-    if (contacts.count() % 25) > 0:
-        num_pages += 1
-        
     if search_form.validate_on_submit():
         user_search = search_form.search_bar.data
         optimization = optimize_search(user_search)
@@ -328,8 +322,28 @@ def contacts(filter, page):
             contacts = contacts.filter(Contacts.phone_number.like(f"%{user_search}%"))
         else:
             contacts = contacts.filter(Contacts.email.like(f"%{user_search}%") | Contacts.name.like(f"%{user_search}%") | Contacts.company.like(f"%{user_search}%"))
-            
-    return render_template("contacts.html", form = form, search_form = search_form, contacts = contacts, page = page, filter=filter, num_pages = num_pages)
+
+
+    contacts = contacts.limit(25).offset(page_offset)
+
+    num_pages = contacts.count() // 25
+    if (contacts.count() % 25) > 0:
+        num_pages += 1
+
+
+    forms=[]
+    for contact in contacts:
+        form = ContactForm()
+        form.contact_id.data = contact.contact_id
+        form.name.data = contact.name
+        form.email.data = contact.email
+        form.phone_number.data = contact.phone_number
+        form.contact_owner.data = contact.contact_owner
+        form.company.data = contact.company
+        form.status.data = contact.status
+        forms.append(form)
+ 
+    return render_template("contacts.html", forms = forms, form2 = form2, search_form = search_form, contacts = contacts, page = page, filter=filter, num_pages = num_pages)
 
 def optimize_search(search):
     if "@" in search or "." in search:
@@ -381,8 +395,9 @@ def add_contact():
 @login_required
 @team_required
 def remove_contact(contact_id):
+    print(contact_id)
     # retrieves contact specified in parameter and removes from Contacts database
-    contact = Contacts.query.filter_by(contact_id = contact_id).first()
+    contact = Contacts.query.filter_by(contact_id=contact_id).first()
     if contact is not None:
         db.session.delete(contact)
         db.session.commit()
@@ -393,15 +408,16 @@ def remove_contact(contact_id):
 @team_required
 def edit_contact(contact_id):
     form = ContactForm()
+    print(contact_id)
     if form.validate_on_submit():
         user = Users.query.filter_by(email=g.email).first()
 
-        contact = Contacts.query.filter_by(contact_id = contact_id).first()
+        contact = Contacts.query.filter_by(contact_id=contact_id, team_id=g.team_id).first()
         contact.name = form.name.data
         contact.email = form.email.data
         contact.phone_number = form.phone_number.data
 
-        if Users.query.filter_by(email=form.contact_owner.data, team_id=user.team_id).first() is None:
+        if Users.query.filter_by(email=form.contact_owner.data, team_id=g.team_id).first() is None:
             form.contact_owner.errors.append("Invalid user email")
         else:
             if (user.owner_status == True) and (user.admin_status == True):
@@ -412,8 +428,14 @@ def edit_contact(contact_id):
         contact.company = form.company.data
         contact.status = dict(form.status.choices).get(form.status.data)
 
+        #contact.status.choices.default
+        db.session.flush()
+        db.session.refresh(contact)
+
+        contact.contact_id = f"{form.email.data}_{g.team_id}"
         db.session.flush()
         db.session.commit()
+
         
     return redirect(url_for('contacts'))
 
