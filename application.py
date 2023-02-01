@@ -449,7 +449,6 @@ def remove_contact(contact_id):
 @team_required
 def edit_contact(contact_id):
     form = ContactForm()
-    print(contact_id)
     if form.validate_on_submit():
         user = Users.query.filter_by(email=g.email).first()
 
@@ -476,7 +475,6 @@ def edit_contact(contact_id):
         contact.contact_id = f"{form.email.data}_{g.team_id}"
         db.session.flush()
         db.session.commit()
-
         
     return redirect(url_for('contacts'))
 
