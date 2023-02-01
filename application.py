@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, g
+from flask import Flask, render_template, request, redirect, url_for, session, g, current_app
 from dotenv import load_dotenv
 import os
 from flask_sqlalchemy import SQLAlchemy as sa
@@ -105,7 +105,7 @@ def login_required(view):
     """Decorator that redirects a user to the login page if they're unauthenticated and trying to access a protected endpoint."""
     @wraps(view)
     def wrapped_view(**kwargs):
-        if g.email is None:
+        if not current_app.config.get('LOGIN_DISABLED', False) or g.user is None:
             return redirect(url_for("login", next=request.url))
         return view(**kwargs)
     return wrapped_view
@@ -178,8 +178,6 @@ def invite():
 def home():
     # Query the db for the team_id using the cokies email.
     user_details = Users.query.filter_by(email=g.email).first()
-
-        
     return render_template("home.html", user_details=user_details)
 
 @application.route("/login", defaults={"invite_id": None}, methods=["GET", "POST"])

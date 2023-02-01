@@ -1,12 +1,11 @@
 from test import client
 import mock
 import pytest
-import smtplib
-from mock import call
-from flask import session, request
-from httpx import AsyncClient
+from flask import session, request, appcontext_pushed, g, jsonify, json
+from application import Users, Teams,Invites, Contacts, login_required, application
 
-from application import Users, Teams,Invites, Contacts, login_required
+from httpx import AsyncClient
+from . import init_db
 
 def test_landing(client):
     landing = client.get("/login")
@@ -67,7 +66,28 @@ def test_login_page_logged_in(client):
 
 def test_sign_up(client):
     with client:    
-            client.post('/signup', data=dict(email='test@gmail.com', password='test'))
-            resource = client.get('signup')
-            assert resource.status_code == 200
-    
+        client.post('/signup', data=dict(email='test@gmail.com', password='test'))
+        resource = client.get('signup')
+        assert resource.status_code == 200
+
+'''@pytest.yield_fixture
+async def client():
+    async with AsyncClient(application=application, base_url='http://localhost:8000/') as async_client:
+            yield async_client
+
+@pytest.yield_fixture
+def user_to_create():
+    yield UserCreate(
+            email="test_client@example.com",
+            username="test_client",
+            password="testclientpassword"
+    )
+class TestAPI:
+
+    @pytest.mark.asyncio
+    async def test_user_create(self, client, init_db, user_to_create):
+        response = await client.post('/', json=user_to_create.dict())
+        assert response.status_code == 200
+        data = response.json()
+        assert data['username'] == user_to_create.username
+    '''
