@@ -3,7 +3,7 @@ from wtforms import StringField, PasswordField, SubmitField, EmailField, SelectF
 from wtforms.validators import InputRequired, EqualTo, Email, Length
 
 class SignUpForm(FlaskForm):
-    name = StringField("Name", validators=[InputRequired()])
+    name = StringField("Name", validators=[InputRequired()], render_kw={"placeholder": "FULL NAME"})
     email = EmailField("Email:", 
         validators=[InputRequired(), Email(), Length(max=100)], render_kw={"placeholder": "EMAIL"})
     password = PasswordField("Password:", 
@@ -14,7 +14,7 @@ class SignUpForm(FlaskForm):
 
 class LoginForm(FlaskForm):
     email = StringField("EMAIL:", 
-        validators=[InputRequired(), Length(max=100)], render_kw={"placeholder": "USERNAME"})
+        validators=[InputRequired(), Length(max=100)], render_kw={"placeholder": "EMAIL"})
     password = PasswordField("Password:", 
         validators=[InputRequired(),Length(max=100)], render_kw={"placeholder": "PASSWORD"})
 
