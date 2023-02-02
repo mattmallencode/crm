@@ -11,114 +11,114 @@
         </ul>
     </nav>
     <div class="contacts_background">
-    <h1 class="contactH1">Contacts</h1>
-    
-    <section id="contacts-list">
-        <section>
-            <a href = "{{url_for('contacts', filter='all', page=1)}}">All Contacts</a>
-            <a href = "{{url_for('contacts', filter='assigned', page=1)}}">My Assigned Contacts</a>
-            <a href = "{{url_for('contacts', filter='unassigned', page=1)}}">Unassigned Contacts</a>
-        </section>
+        <h1 class="contactH1">Contacts</h1>
         
-        <table>
-            <tr>
-                <form action = "" method = "POST" novalidate>
-                    {{form.hidden_tag()}}
-                    <td>{{search_form.search_bar}}</td>
-                    <td>{{search_form.submit}}</td>
-                </form>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <th>email</th>
-                <th>Phone Number</th>
-                <th>Contact Owner</th>
-                <th>Company</th>
-                <th>Status</th>
-                <th>Edit Contact</th>
-                <th>Remove Contact</th>
-            </tr>
-            {% for contact in contacts %}
+        <section id="contacts-list">
+            <section>
+                <a href = "{{url_for('contacts', filter='all', page=1)}}">All Contacts</a>
+                <a href = "{{url_for('contacts', filter='assigned', page=1)}}">My Assigned Contacts</a>
+                <a href = "{{url_for('contacts', filter='unassigned', page=1)}}">Unassigned Contacts</a>
+            </section>
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <table>
                 <tr>
-                    <form action = "{{url_for('edit_contact', contact_id=contact.contact_id)}}" method = "POST">
+                    <form action = "" method = "POST" novalidate>
+                        {{form.hidden_tag()}}
+                            <td>{{search_form.search_bar}}</td>
+                            <td id="contacts_search_button">{{search_form.submit(id='contacts_search_button')}}</td>     
+                    </form>
+                </tr>
+                <tr>
+                    <th>Name</th>
+                    <th>email</th>
+                    <th>Phone Number</th>
+                    <th>Contact Owner</th>
+                    <th>Company</th>
+                    <th>Status</th>
+                    <th>Edit Contact</th>
+                    <th>Remove Contact</th>
+                </tr>
+                {% for contact in contacts %}
+                    <tr>
+                        <form action = "{{url_for('edit_contact', contact_id=contact.contact_id)}}" method = "POST">
+                            {{form.hidden_tag()}}
+                        
+                            <td>{{form.name(value = contact.name)}}
+                                {% for error in form.name.errors %}
+                                    <div>{{ error }}</div>
+                                {% endfor %}
+                            </td>
+
+                            <td>{{form.email(value = contact.email)}}
+                                {% for error in form.email.errors %}
+                                    <div>{{ error }}</div>
+                                {% endfor %}
+                            </td>
+
+                            <td>{{form.phone_number(value = contact.phone_number)}}</td>
+
+                            <td>{% for error in form.contact_owner.errors %}
+                                    <div>{{ error }}</div>
+                                {% endfor %}
+                                {{form.contact_owner(value = contact.contact_owner)}}
+                            </td>
+                                
+
+                            <td>{{form.company(value = contact.company)}}</td>
+
+                            <td>{{form.status(value = contact.status, id='contacts_status')}}</td>
+
+                            <td>{{form.submit(value="Save Changes")}}</td>
+                        </form>
+                        
+                        <td><a href = "{{url_for('remove_contact',contact_id=contact.contact_id)}}">Remove</a></td>
+                    </tr>
+                {% endfor %}
+
+                <tr>
+                    <form action = "{{url_for('add_contact')}}" method = "POST">
                         {{form.hidden_tag()}}
                     
-                        <td>{{form.name(value = contact.name)}}
+                        <td>{{form.name()}}
                             {% for error in form.name.errors %}
                                 <div>{{ error }}</div>
                             {% endfor %}
                         </td>
 
-                        <td>{{form.email(value = contact.email)}}
+                        <td>{{form.email()}}
                             {% for error in form.email.errors %}
                                 <div>{{ error }}</div>
                             {% endfor %}
                         </td>
 
-                        <td>{{form.phone_number(value = contact.phone_number)}}</td>
+                        <td>{{form.phone_number()}}</td>
 
-                        <td>{% for error in form.contact_owner.errors %}
-                                <div>{{ error }}</div>
-                            {% endfor %}
-                            {{form.contact_owner(value = contact.contact_owner)}}
-                        </td>
-                            
+                        <td>{{form.contact_owner()}}</td>
 
-                        <td>{{form.company(value = contact.company)}}</td>
+                        <td>{{form.company()}}</td>
 
-                        <td>{{form.status(value = contact.status)}}</td>
+                        <td>{{form.status()}}</td>
 
-                        <td>{{form.submit(value="Save Changes")}}</td>
+                        <td>{{form.submit()}}</td>
                     </form>
-                    
-                    <td><a href = "{{url_for('remove_contact',contact_id=contact.contact_id)}}">Remove</a></td>
                 </tr>
-            {% endfor %}
+            </table>
+        </section>
 
-            <tr>
-                <form action = "{{url_for('add_contact')}}" method = "POST">
-                    {{form.hidden_tag()}}
-                
-                    <td>{{form.name()}}
-                        {% for error in form.name.errors %}
-                            <div>{{ error }}</div>
-                        {% endfor %}
-                    </td>
+        <section>
+            {% set next_page = page + 1 %}
+            {% set previous_page = page - 1 %}
 
-                    <td>{{form.email()}}
-                        {% for error in form.email.errors %}
-                            <div>{{ error }}</div>
-                        {% endfor %}
-                    </td>
-
-                    <td>{{form.phone_number()}}</td>
-
-                    <td>{{form.contact_owner()}}</td>
-
-                    <td>{{form.company()}}</td>
-
-                    <td>{{form.status()}}</td>
-
-                    <td>{{form.submit()}}</td>
-                </form>
-            </tr>
-        </table>
-    </section>
-
-    <section>
-        {% set next_page = page + 1 %}
-        {% set previous_page = page - 1 %}
-
-        <p>Showing Page {{page}} of {{num_pages}}</p>
-        {% if page > 1 %}
-            <p><a href = "{{url_for('contacts', filter=filter, page=previous_page)}}">Previous Page</a></p>
-        {% endif %}
-    
-        {% if page < num_pages %}
-    	    <p><a href = "{{url_for('contacts', filter=filter, page=next_page)}}">Next Page</a></p>
-        {% endif %}
+            <p>Showing Page {{page}} of {{num_pages}}</p>
+            {% if page > 1 %}
+                <p><a href = "{{url_for('contacts', filter=filter, page=previous_page)}}">Previous Page</a></p>
+            {% endif %}
         
-    </section>
+            {% if page < num_pages %}
+                <p><a href = "{{url_for('contacts', filter=filter, page=next_page)}}">Next Page</a></p>
+            {% endif %}
+            
+        </section>
     </div>
 </body>
 {% endblock %}

@@ -7,16 +7,19 @@ body{
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
+    margin-top: 5% ;
 }
 
 h1{
     color:white;
-    margin-top: 5%;
-    margin-left: 2%;
+    margin-top: 2%;
+    margin-left: 5%;
+    padding-bottom: 2%;
 }
 .contacts_background{
     background: rgb(15, 8, 8, 0.5);
     border-radius: 30px;
+    position: fixed;
 }
 .box{
     display: flex;
@@ -111,6 +114,7 @@ ul {
     color: white;
     padding: 2%;
     margin-left: 2%;
+    margin-bottom: 12%;
     background-color: #333;
     border-radius: 5px;
     text-decoration: none;
@@ -118,5 +122,38 @@ ul {
 
   section section  a:hover{
     background-color: #111;
+  }
+
+  body div section table{
+    padding-top: 3%;
+    padding-left: 2%;
+  }
+
+  #contacts_search_button{
+    margin-left: 38%;
+  }
+
+  body section i{
+    color: black;
+    margin-top: 4%;
+    margin-left: 3%;
+  }
+
+  body section table tr th{
+    color: white;
+  }
+
+  #contacts_status{
+    height: 36px;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+    text-indent: 15px;
+    border-width: 3px;
+  }
+  #contacts_status:hover{
+    background-color:#111;
+  }
+  body div section p{
+    margin-left: 2%;
   }
   
