@@ -44,7 +44,7 @@
                     <form action = "{{url_for('edit_contact', contact_id=form.contact_id.data, prev_sort=prev_sort, order=order, sort=sort, filter=filter, page=page, error=error)}}" method = "POST">
                         {{form.hidden_tag()}}
                     
-                        <td><a href="{{url_for('contact', contact_id=form.contact_id.data)}}">{{form.name()}}</a>
+                        <td><a href="{{url_for('contact', contact_id=form.contact_id.data, activity='None')}}">{{form.name()}}</a>
                             {% for error in form.name.errors %}
                                 <div>{{ error }}</div>
                             {% endfor %}

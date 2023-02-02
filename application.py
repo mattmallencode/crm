@@ -9,6 +9,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from secrets import token_urlsafe
 import re
 from flask_oauthlib.client import OAuth
+from turbo_flask import Turbo
 
 # Load environment variables from .env file.
 load_dotenv()
@@ -46,6 +47,8 @@ application.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql://{DB_USER}:{DB_
 db = sa(application)
 # creates Mail instance for managing emails
 mail = Mail(application)
+# creates a Turbo instance
+turbo = Turbo(application)
 
 # Users data model i.e. a representation of the users table in the database.
 
@@ -654,14 +657,19 @@ def get_gmail_token(token=None):
     return session.get("gmail_token")
 
 
-@application.route("/contact/<contact_id>", methods=["GET", "POST"])
+@application.route("/contact/<contact_id>/<activity>", methods=["GET", "POST"])
 @login_required
 @team_required
-def contact(contact_id):
-    """Displays the page for a specific contact."""
-    contact = Contacts.query.filter_by(
-        contact_id=contact_id, team_id=g.team_id).first()
-    return render_template("contact.html", contact=contact)
+def contact(contact_id, activity):
+    contact = Contacts.query.filter_by(contact_id=contact_id, team_id=g.team_id).first()
+    
+    if turbo.can_stream():
+        return turbo.stream(
+            turbo.append(render_template("contact.html", contact=contact, activity=activity), 'activity_box')
+        )
+    else:
+        return render_template("contact.html", contact=contact, activity=activity)
+
 
 
 if __name__ == "__main__":
