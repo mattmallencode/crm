@@ -8,6 +8,7 @@ from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 from secrets import token_urlsafe
 import re
+from turbo_flask import Turbo
 
 # Load environment variables from .env file.
 load_dotenv()
@@ -38,6 +39,8 @@ application.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql://{DB_USER}:{DB_
 db = sa(application)
 # creates Mail instance for managing emails
 mail = Mail(application)
+# creates a Turbo instance
+turbo = Turbo(application)
 
 # Users data model i.e. a representation of the users table in the database.
 class Users(db.Model):
@@ -536,12 +539,20 @@ def team():
             form.sure_checkbox.errors.append("You must click the checkbox to confirm!")
     return render_template("team.html", user_details=user_details, team=team, team_members=team_members, form=form)
 
-@application.route("/contact/<contact_id>", methods=["GET", "POST"])
+@application.route("/contact/<contact_id>/<activity>", defaults={"contact_id":"None", "activity":"activity"}, methods = ["GET", "POST"])
+@application.route("/contact/<contact_id>/<activity>", methods=["GET", "POST"])
 @login_required
 @team_required
-def contact(contact_id):
+def contact(contact_id, activity):
     contact = Contacts.query.filter_by(contact_id=contact_id, team_id=g.team_id).first()
-    return render_template("contact.html", contact=contact)
+    
+    if turbo.can_stream():
+        return turbo.stream(
+            turbo.append(render_template("contact.html", contact=contact, activity=activity), 'activity_box')
+        )
+    else:
+        return render_template("contact.html", contact=contact, activity=activity)
+
 
 if __name__ == "__main__":
     application.debug = True
