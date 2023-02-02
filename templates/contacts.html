@@ -72,35 +72,35 @@
                         <td>{{form.submit(value='Save Changes')}}</td>
                     </form>
                     
-                    <td><a href = "{{url_for('remove_contact', contact_id=form.contact_id.data)}}">Remove</a></td>
+                    <td><a href = "{{url_for('remove_contact', contact_id=form.contact_id.data, prev_sort=prev_sort, order=order, sort=sort, filter=filter, page=page, error=error)}}">Remove</a></td>
                 </tr>
             {% endfor %}
 
             <tr>
-                <form action = "{{url_for('add_contact', prev_sort=prev_sort, order=order, sort=sort, filter=filter, page=page, error=error)}}" method = "POST">
-                    {{form2.hidden_tag()}}
+                <form action = "{{url_for('add_contact', prev_sort=None, order=None, sort=None, filter=None, page=1, error=error)}}" method = "POST">
+                    {{add_contact.hidden_tag()}}
                 
-                    <td>{{form2.name()}}
-                        {% for error in form2.name.errors %}
+                    <td>{{add_contact.name()}}
+                        {% for error in add_contact.name.errors %}
                             <div>{{ error }}</div>
                         {% endfor %}
                     </td>
 
-                    <td>{{form2.email()}}
-                        {% for error in form2.email.errors %}
+                    <td>{{add_contact.email()}}
+                        {% for error in add_contact.email.errors %}
                             <div>{{ error }}</div>
                         {% endfor %}
                     </td>
 
-                    <td>{{form2.phone_number()}}</td>
+                    <td>{{add_contact.phone_number()}}</td>
 
-                    <td>{{form2.contact_owner()}}</td>
+                    <td>{{add_contact.contact_owner()}}</td>
 
-                    <td>{{form2.company()}}</td>
+                    <td>{{add_contact.company()}}</td>
 
-                    <td>{{form2.status()}}</td>
+                    <td>{{add_contact.status()}}</td>
 
-                    <td>{{form2.submit(value='Add Contact')}}</td>
+                    <td>{{add_contact.submit(value='Add Contact')}}</td>
                 </form>
             </tr>
         </table>

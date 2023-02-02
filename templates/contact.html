@@ -9,7 +9,7 @@
           <li><a href="{{ url_for('profile') }}">Profile</a></li>
         </ul>
     </nav>
-    
+    <a href="{{ url_for('authorize_email', contact_id=contact.contact_id) }}">Email</a>
     <section>
         <h1>{{contact.name}}</h1>
         <p>Email: {{contact.email}}</p>
