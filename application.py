@@ -535,7 +535,13 @@ def team():
         else:
             form.sure_checkbox.errors.append("You must click the checkbox to confirm!")
     return render_template("team.html", user_details=user_details, team=team, team_members=team_members, form=form)
-    
+
+@application.route("/contact/<contact_id>", methods=["GET", "POST"])
+@login_required
+@team_required
+def contact(contact_id):
+    contact = Contacts.query.filter_by(contact_id=contact_id, team_id=g.team_id).first()
+    return render_template("contact.html", contact=contact)
 
 if __name__ == "__main__":
     application.debug = True
