@@ -290,16 +290,16 @@ def createTeam():
     return render_template("create_team.html", form=form, user=user)
 
 
-@application.route("/contacts", defaults={"filter":"all", "page":1, "prev_sort": "None", "sort": "None", "order": "DESC"} , methods =["GET", "POST"])
-@application.route("/contacts/<filter>/<prev_sort>/<sort>/<page>/<order>", methods =["GET", "POST"])
+@application.route("/contacts", defaults={"filter":"all", "page":1, "prev_sort": "None", "sort": "None", "order": "DESC", "error":"None"} , methods =["GET", "POST"])
+@application.route("/contacts/<filter>/<prev_sort>/<sort>/<page>/<order>/<error>", methods =["GET", "POST"])
 @login_required
 @team_required
-def contacts(filter, page, prev_sort, sort, order):
+def contacts(filter, page, prev_sort, sort, order, error):
     # nameASC
     # Order By name ASC
     # <Button>
     search_form = SearchForm()
-    form = ContactForm()
+    form2 = ContactForm()
     page = int(page)
     page_offset = (page - 1) * 25
 
@@ -310,7 +310,7 @@ def contacts(filter, page, prev_sort, sort, order):
     if filter == "assigned":
         contacts = Contacts.query.filter_by(team_id=user.team_id, contact_owner=user.email)
     elif filter == "unassigned":
-        contacts = Contacts.query.filter_by(team_id=user.team_id, contact_owner=None)
+        contacts = Contacts.query.filter_by(team_id=user.team_id, contact_owner="")
     else:
         contacts = Contacts.query.filter_by(team_id=user.team_id)
         
@@ -337,7 +337,21 @@ def contacts(filter, page, prev_sort, sort, order):
     
     if (contacts.count() % 25) > 0:
         num_pages += 1
-    return render_template("contacts.html", form = form, search_form = search_form, contacts = contacts, page = page, filter=filter, num_pages = num_pages, prev_sort=prev_sort, sort=sort, order=order)
+    
+    forms=[]
+    for contact in contacts:
+        form = ContactForm()
+        form.contact_id.data = contact.contact_id
+        form.name.data = contact.name
+        form.email.data = contact.email
+        form.phone_number.data = contact.phone_number
+        form.contact_owner.data = contact.contact_owner
+        form.company.data = contact.company
+        form.status.data = contact.status
+        forms.append(form) 
+
+    return render_template("contacts.html", forms = forms, form2 = form2, search_form = search_form, contacts = contacts, num_pages = num_pages, filter=filter, page=page, prev_sort=prev_sort, sort=sort, order=order, error=error)
+    
 
 def optimize_search(search):
     if "@" in search or "." in search:
@@ -380,14 +394,17 @@ def order_contacts(sort, order, contacts):
             contacts = contacts.order_by(Contacts.status.desc())
     return contacts
 
-@application.route("/add_contact", methods = ["GET", "POST"])
+
+@application.route("/add_contact", defaults={"filter":"all", "page":1, "prev_sort": "None", "sort": "None", "order": "DESC", "error":"None"} , methods =["GET", "POST"])
+@application.route("/add_contact/<filter>/<prev_sort>/<sort>/<page>/<order>/<error>", methods = ["GET", "POST"])
 @login_required
 @team_required
 # allows a user to add contacts to their contact list
-def add_contact():
+def add_contact(filter, page, prev_sort, sort, order, error):
     form = ContactForm()
     user = Users.query.filter_by(email=g.email).first()
     user_contacts = Contacts.query.filter_by(team_id=user.team_id)
+    error="None"
     if form.validate_on_submit():
         #  checks if contact being added belongs to user's organization already
         if Contacts.query.filter_by(email=form.email.data, team_id=user.team_id).first() is None:
@@ -399,64 +416,85 @@ def add_contact():
             contact.name = form.name.data
             contact.email = form.email.data
             contact.phone_number = form.phone_number.data
-            
-            if Users.query.filter_by(email=form.contact_owner.data, team_id=user.team_id).first() is None:
-                form.contact_owner.errors.append("Invalid user email")
+            if form.contact_owner.data != "" and Users.query.filter_by(email=form.contact_owner.data, team_id=user.team_id).first() is None:
+                #form.contact_owner.errors.append("Invalid user email")
+                error=error
             else:
-                if (user.owner_status == True) and (user.admin_status == True):
+                if contact.contact_owner == "" or ((user.owner_status == True) and (user.admin_status == True)):
                     contact.contact_owner = form.contact_owner.data
+
+                    contact.company = form.company.data
+                    contact.status = dict(form.status.choices).get(form.status.data)
+
+                    db.session.add(contact)
+                    db.session.commit()
                 else:
-                    form.contact_owner.errors.append("You do not have sufficient permissions to assign a contact.")
-
-            contact.company = form.company.data
-            contact.status = dict(form.status.choices).get(form.status.data)
-
-            db.session.add(contact)
-            db.session.commit()
+                    #form.contact_owner.errors.append("You do not have sufficient permissions to assign a contact.")
+                    error="You do not have sufficient permissions to assign a contact."
         else:
-            form.name.errors.append("This person is already in your contacts")
-    return redirect(url_for("contacts"))
+            #form.name.errors.append("This person is already in your contacts")
+            error="This person is already in your contacts"
+    return redirect(url_for("contacts", prev_sort=prev_sort, order=order, sort=sort, page=page, filter=filter, error=error))
 
 
 @application.route("/remove_contact/<contact_id>", methods = ["GET", "POST"])
 @login_required
 @team_required
 def remove_contact(contact_id):
+    print(contact_id)
     # retrieves contact specified in parameter and removes from Contacts database
-    contact = Contacts.query.filter_by(contact_id = contact_id).first()
+    contact = Contacts.query.filter_by(contact_id=contact_id).first()
     if contact is not None:
         db.session.delete(contact)
         db.session.commit()
     return redirect(url_for("contacts"))
 
-@application.route("/edit_contact/<contact_id>", methods=["GET", "POST"])
+
+@application.route("/edit_contact", defaults={"contact_id": "None", "filter":"all", "page":1, "prev_sort": "None", "sort": "None", "order": "DESC", "error":"None"} , methods =["GET", "POST"])
+@application.route("/edit_contact/<contact_id>/<filter>/<prev_sort>/<sort>/<page>/<order>/<error>", methods=["GET", "POST"])
 @login_required
 @team_required
-def edit_contact(contact_id):
+def edit_contact(contact_id, filter, page, prev_sort, sort, order, error):
     form = ContactForm()
+    error="None"
     if form.validate_on_submit():
         user = Users.query.filter_by(email=g.email).first()
 
-        contact = Contacts.query.filter_by(contact_id = contact_id).first()
+        contact = Contacts.query.filter_by(contact_id=contact_id, team_id=g.team_id).first()
         contact.name = form.name.data
         contact.email = form.email.data
-        contact.phone_number = form.phone_number.data
-
-        if Users.query.filter_by(email=form.contact_owner.data, team_id=user.team_id).first() is None:
-            form.contact_owner.errors.append("Invalid user email")
-        else:
-            if (user.owner_status == True) and (user.admin_status == True):
-                contact.contact_owner = form.contact_owner.data
+        former_id = contact.contact_id
+        contact.contact_id = f"{form.email.data}_{contact.team_id}"
+        dupe_contact = None
+        if contact.contact_id != former_id:
+            try:
+                dupe_contact = Contacts.query.filter_by(contact_id = contact.contact_id).first()
+            except:
+                dupe_contact = "Duplicate!"
+        if dupe_contact == None:
+            contact.phone_number = form.phone_number.data
+            if form.contact_owner.data != "" and Users.query.filter_by(email=form.contact_owner.data, team_id=user.team_id).first() is None:
+                #form.contact_owner.errors.append("Invalid user email")
+                error="Invalid User Email"
             else:
-                form.contact_owner.errors.append("You do not have sufficient permissions to assign a contact.")
+                if form.contact_owner.data == contact.contact_owner or ((user.owner_status == True) and (user.admin_status == True)):
+                    contact.contact_owner = form.contact_owner.data
+                    contact.company = form.company.data
+                    contact.status = dict(form.status.choices).get(form.status.data)
+                    #contact.status.choices.default
+                    db.session.flush()
+                    db.session.refresh(contact)
 
-        contact.company = form.company.data
-        contact.status = dict(form.status.choices).get(form.status.data)
-
-        db.session.flush()
-        db.session.commit()
-        
-    return redirect(url_for('contacts'))
+                    contact.contact_id = f"{form.email.data}_{g.team_id}"
+                    db.session.flush()
+                    db.session.commit()
+                else:
+                    #form.contact_owner.errors.append("You do not have sufficient permissions to assign a contact.")
+                    error="You do not have sufficient permissions to assign a contact."
+        else:
+            #form.contact_owner.errors.append("Can't create a duplicate contact!")
+            error="Can't create a duplicate contact!"
+    return redirect(url_for('contacts', prev_sort=prev_sort, order=order, sort=sort, page=page, filter=filter, error=error))
 
 @application.route("/profile", methods=["GET", "POST"])
 @login_required
@@ -497,7 +535,13 @@ def team():
         else:
             form.sure_checkbox.errors.append("You must click the checkbox to confirm!")
     return render_template("team.html", user_details=user_details, team=team, team_members=team_members, form=form)
-    
+
+@application.route("/contact/<contact_id>", methods=["GET", "POST"])
+@login_required
+@team_required
+def contact(contact_id):
+    contact = Contacts.query.filter_by(contact_id=contact_id, team_id=g.team_id).first()
+    return render_template("contact.html", contact=contact)
 
 if __name__ == "__main__":
     application.debug = True
