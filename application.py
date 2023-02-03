@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 from flask_sqlalchemy import SQLAlchemy as sa
 from flask_mail import Mail, Message
-from forms import SignUpForm, LoginForm, CreateTeamForm, InviteForm, ContactForm, LogoutForm, LeaveTeamForm, SearchForm, EmailForm
+from forms import SignUpForm, LoginForm, CreateTeamForm, InviteForm, ContactForm, LogoutForm, LeaveTeamForm, SearchForm, EmailForm, NoteForm
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 from secrets import token_urlsafe
@@ -107,8 +107,6 @@ class Contacts(db.Model):
         self.status = status
 
 # Teams data model i.e. a representation of the teams table in the database.
-
-
 class Teams(db.Model):
     team_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
@@ -116,6 +114,18 @@ class Teams(db.Model):
     def __init__(self, team_id=None, name=None):
         self.team_id = team_id
         self.name = name
+
+class Notes(db.Model):
+    note_id = db.Column(db.Integer, primary_key=True)
+    contact_id = db.Column(db.String)
+    note = db.Column(db.String)
+    author = db.Column(db.String)
+
+    def __init__(self, note_id=None, contact_id=None, note=None, author=None):
+        self.note_id = note_id
+        self.contact_id = contact_id
+        self.note = note
+        self.author = author
 
 
 @application.before_request
@@ -664,24 +674,44 @@ def get_gmail_token(token=None):
 @login_required
 @team_required
 def contact(contact_id, activity):
-    form = EmailForm()
-    gmail_token = session.get("gmail_token")
-    gmail_email = session.get("user_gmail")
-    contact = Contacts.query.filter_by(contact_id=contact_id, team_id=g.team_id).first()
-    if gmail_token != None:
-        if form.validate_on_submit():
-            subject = form.subject.data
-            message = form.message.data
-            from_email = gmail_email
-            to_email = contact.email
-            activity = "emails"
-            send_email(subject, message, from_email, to_email)
-    if turbo.can_stream():
-        return turbo.stream(
-            turbo.update(render_template("contact_interactions.html", contact=contact, activity=activity, gmail_token=gmail_token, form=form, gmail_email=gmail_email), 'activity_box')
-        )
+    if activity == "emails":
+      form = EmailForm()
+      gmail_token = session.get("gmail_token")
+      gmail_email = session.get("user_gmail")
+      contact = Contacts.query.filter_by(contact_id=contact_id, team_id=g.team_id).first()
+
+      if gmail_token != None:
+          if form.validate_on_submit():
+              subject = form.subject.data
+              message = form.message.data
+              from_email = gmail_email
+              to_email = contact.email
+              activity = "emails"
+              send_email(subject, message, from_email, to_email)
+      if turbo.can_stream():
+          return turbo.stream(
+              turbo.update(render_template("contact_interactions.html", contact=contact, activity=activity, gmail_token=gmail_token, form=form, gmail_email=gmail_email), 'activity_box')
+          )
+      else:
+          return render_template("contact.html", contact=contact, activity=activity, gmail_token=gmail_token, form=form, gmail_email=gmail_email)
+      noteForm = NoteForm()
     else:
-        return render_template("contact.html", contact=contact, activity=activity, gmail_token=gmail_token, form=form, gmail_email=gmail_email)
+      if noteForm.validate_on_submit():
+          note = Notes()
+          note.contact_id = contact_id
+          note.note = noteForm.note.data
+          note.author = g.email
+
+          db.session.add(note)
+          db.session.commit()
+
+      if turbo.can_stream():
+          return turbo.stream(
+              turbo.push(turbo.replace(render_template("contact.html", contact=contact, activity=activity, noteForm=noteForm), 'activity_box')))
+      else:
+          return render_template("contact.html", contact=contact, activity=activity, noteForm=noteForm)
+   
+        
 
 def send_email(subject, message, from_email, to_email):
     

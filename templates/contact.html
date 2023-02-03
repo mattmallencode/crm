@@ -29,7 +29,9 @@
             <li><a href ="{{url_for('contact', contact_id=contact.contact_id, activity='tasks')}}">Tasks</a></li>
             <li><a href ="{{url_for('contact', contact_id=contact.contact_id, activity='meetings')}}">Meetings</a></li>
         </ul>
+
     {% include "contact_interactions.html" %}
+
     </section>
 </body>
 {% endblock %}
