@@ -131,6 +131,13 @@ ul {
 
   #contacts_search_button{
     margin-left: 38%;
+    text-align: center;
+    display: flex;
+  }
+
+  #contacts_search_button:hover{
+    color: white;
+    background-color: #111;
   }
 
   body section i{
@@ -143,17 +150,58 @@ ul {
     color: white;
   }
 
-  #contacts_status{
+  .contacts_status{
     height: 36px;
     border-top-left-radius: 30px;
     border-bottom-left-radius: 30px;
     text-indent: 15px;
     border-width: 3px;
   }
-  #contacts_status:hover{
+  .contacts_status:hover{
     background-color:#111;
+    color: white;
   }
   body div section p{
     margin-left: 2%;
   }
-  
+  #remove_contact{
+    margin-left: 10%;
+    background-color: white;
+    border: 2px solid;
+    border-color: #111;
+    padding: 3% 10% 3% 10%;
+    border-radius: 30px;
+  }
+  #remove_contact:hover{
+    color: white;
+    background-color: #111;
+  }
+  body div section table tbody tr th a{
+    color: white;
+    background-color: #333;
+    padding: 3% 10% 3% 10%;
+    border-radius: 30px;
+  }
+
+  .contacts_table_heading{
+    color: white;
+    background-color: #333;
+    border-radius: 30px;
+  }
+
+  body div section table tbody tr th a:hover{
+    color: white;
+    background-color: #111;
+  }
+
+  .contact_save_add_button{
+    width:100%;
+    text-indent: 4px;
+    padding-right: 10%;
+    text-align: center;
+    position: relative;
+  }
+  .contact_save_add_button:hover{
+    color: white;
+    background-color: #111;
+  }
