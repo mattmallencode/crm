@@ -19,13 +19,13 @@
             <a href = "{{url_for('contacts', prev_sort='None', order='ASC', sort='None', filter='assigned', page=1 , error='None')}}">My Assigned Contacts</a>
             <a href = "{{url_for('contacts', prev_sort='None', order='ASC', sort='None', filter='unassigned', page=1 , error='None')}}">Unassigned Contacts</a>
         </section>
-        
+        <i class="fa-solid fa-magnifying-glass"></i>
         <table>
             <tr>
                 <form action = "" method = "POST" novalidate>
                     {{search_form.hidden_tag()}}
                     <td>{{search_form.search_bar}}</td>
-                    <td>{{search_form.submit}}</td>
+                    <td>{{search_form.submit(id="contacts_search_button")}}</td>
                 </form>
             </tr>
             {% set prev_sort = sort %}
@@ -36,8 +36,8 @@
                 <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='contact_owner', page=page, filter=filter, error='None')}}">Contact Owner</a></th>
                 <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='company', page=page, filter=filter, error='None')}}">Company</a></th>
                 <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='status', page=page, filter=filter, error='None')}}">Status</a></th>
-                <th>Edit Contact</th>
-                <th>Remove Contact</th>
+                <th class="contacts_table_heading">Edit Contact</th>
+                <th class="contacts_table_heading">Remove Contact</th>
             </tr>
             {% for form in forms %}
                 <tr>
@@ -67,12 +67,16 @@
 
                         <td>{{form.company()}}</td>
 
-                        <td>{{form.status()}}</td>
+                        <td>{{form.status(class="contacts_status")}}</td>
 
-                        <td>{{form.submit(value='Save Changes')}}</td>
+                        <td>{{form.submit(value='Save Changes', class="contact_save_add_button")}}</td>
                     </form>
                     
-                    <td><a href = "{{url_for('remove_contact', contact_id=form.contact_id.data, prev_sort=prev_sort, order=order, sort=sort, filter=filter, page=page, error=error)}}">Remove</a></td>
+
+    
+
+                    <td><a id="remove_contact", href = "{{url_for('remove_contact', contact_id=form.contact_id.data, prev_sort=prev_sort, order=order, sort=sort, filter=filter, page=page, error=error)}}">Remove</a></td>
+
                 </tr>
             {% endfor %}
 
@@ -98,9 +102,10 @@
 
                     <td>{{add_contact.company()}}</td>
 
-                    <td>{{add_contact.status()}}</td>
+                    <td>{{add_contact.status(class="contacts_status")}}</td>
 
-                    <td>{{add_contact.submit(value='Add Contact')}}</td>
+                    <td>{{add_contact.submit(value='Add Contact', class="contact_save_add_button")}}</td>
+
                 </form>
             </tr>
         </table>
