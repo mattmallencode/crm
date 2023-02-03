@@ -52,3 +52,7 @@ class LeaveTeamForm(FlaskForm):
 class SearchForm(FlaskForm):
     search_bar = StringField("Search Contacts...")
     submit = SubmitField("Search")
+
+class NoteForm(FlaskForm):
+    note = StringField("Note", validators=[Length(1, 140, "Note must not be more than 140 characters in length")])
+    submit = SubmitField("Add Note")
