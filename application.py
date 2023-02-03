@@ -3,13 +3,16 @@ from dotenv import load_dotenv
 import os
 from flask_sqlalchemy import SQLAlchemy as sa
 from flask_mail import Mail, Message
-from forms import SignUpForm, LoginForm, CreateTeamForm, InviteForm, ContactForm, LogoutForm, LeaveTeamForm, SearchForm
+from forms import SignUpForm, LoginForm, CreateTeamForm, InviteForm, ContactForm, LogoutForm, LeaveTeamForm, SearchForm, EmailForm
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 from secrets import token_urlsafe
 import re
 from flask_oauthlib.client import OAuth
 from turbo_flask import Turbo
+from email.mime.text import MIMEText
+import json
+import base64
 
 # Load environment variables from .env file.
 load_dotenv()
@@ -647,8 +650,8 @@ def authorized(resp):
     session.pop("contact_id_redirect", default=None)
     session["gmail_token"] = (resp["access_token"],)
     user = gmail.get("userinfo")
-    session["user_email"] = user.data["email"]
-    return redirect(url_for("contact", contact_id=contact_id_redirect, _external=True))
+    session["user_gmail"] = user.data["email"]
+    return redirect(url_for("contact", contact_id=contact_id_redirect, activity="emails", _external=True))
 
 
 @gmail.tokengetter
@@ -661,16 +664,40 @@ def get_gmail_token(token=None):
 @login_required
 @team_required
 def contact(contact_id, activity):
+    form = EmailForm()
+    gmail_token = session.get("gmail_token")
+    gmail_email = session.get("user_gmail")
     contact = Contacts.query.filter_by(contact_id=contact_id, team_id=g.team_id).first()
-    
+    if gmail_token != None:
+        if form.validate_on_submit():
+            subject = form.subject.data
+            message = form.message.data
+            from_email = gmail_email
+            to_email = contact.email
+            activity = "emails"
+            send_email(subject, message, from_email, to_email)
     if turbo.can_stream():
         return turbo.stream(
-            turbo.append(render_template("contact.html", contact=contact, activity=activity), 'activity_box')
+            turbo.update(render_template("contact_interactions.html", contact=contact, activity=activity, gmail_token=gmail_token, form=form, gmail_email=gmail_email), 'activity_box')
         )
     else:
-        return render_template("contact.html", contact=contact, activity=activity)
+        return render_template("contact.html", contact=contact, activity=activity, gmail_token=gmail_token, form=form, gmail_email=gmail_email)
 
-
+def send_email(subject, message, from_email, to_email):
+    
+    message = MIMEText(message)
+    message["from"] = from_email
+    message["to"] = to_email
+    message["subject"] = subject
+    message = json.dumps({'raw': base64.urlsafe_b64encode(message.as_bytes()).decode()})
+    url = f"https://gmail.googleapis.com/gmail/v1/users/{from_email}/messages/send"
+    
+    response = gmail.post(url, data=message, format="text")
+    if response.status == 200:
+        return "Email sent successfully"
+    else:
+        print(response.data)
+        return "Failed to send email"
 
 if __name__ == "__main__":
     application.debug = True
