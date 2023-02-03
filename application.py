@@ -674,43 +674,47 @@ def get_gmail_token(token=None):
 @login_required
 @team_required
 def contact(contact_id, activity):
+    form = EmailForm()
+    noteForm = NoteForm()
+    contact = Contacts.query.filter_by(contact_id=contact_id, team_id=g.team_id).first()
+    gmail_token = session.get("gmail_token")
+    gmail_email = session.get("user_gmail")
+    
     if activity == "emails":
-      form = EmailForm()
-      gmail_token = session.get("gmail_token")
-      gmail_email = session.get("user_gmail")
-      contact = Contacts.query.filter_by(contact_id=contact_id, team_id=g.team_id).first()
+        if gmail_token != None:
+            if form.validate_on_submit():
+                subject = form.subject.data
+                message = form.message.data
+                from_email = gmail_email
+                to_email = contact.email
+                activity = "emails"
+                send_email(subject, message, from_email, to_email)
 
-      if gmail_token != None:
-          if form.validate_on_submit():
-              subject = form.subject.data
-              message = form.message.data
-              from_email = gmail_email
-              to_email = contact.email
-              activity = "emails"
-              send_email(subject, message, from_email, to_email)
-      if turbo.can_stream():
-          return turbo.stream(
+        if turbo.can_stream():
+            return turbo.stream(
               turbo.update(render_template("contact_interactions.html", contact=contact, activity=activity, gmail_token=gmail_token, form=form, gmail_email=gmail_email), 'activity_box')
-          )
-      else:
-          return render_template("contact.html", contact=contact, activity=activity, gmail_token=gmail_token, form=form, gmail_email=gmail_email)
-      noteForm = NoteForm()
+            )
+        else:
+            return render_template("contact.html", contact=contact, activity=activity, gmail_token=gmail_token, form=form, gmail_email=gmail_email)
+    
+    elif activity == "notes":
+        
+        if noteForm.validate_on_submit():
+            note = Notes()
+            note.contact_id = contact_id
+            note.note = noteForm.note.data
+            note.author = g.email
+
+            db.session.add(note)
+            db.session.commit()
+
+        if turbo.can_stream():
+            return turbo.stream(
+                turbo.push(turbo.replace(render_template("contact.html", contact=contact, activity=activity, noteForm=noteForm), 'activity_box')))
+        else:
+            return render_template("contact.html", contact=contact, activity=activity, noteForm=noteForm)
     else:
-      if noteForm.validate_on_submit():
-          note = Notes()
-          note.contact_id = contact_id
-          note.note = noteForm.note.data
-          note.author = g.email
-
-          db.session.add(note)
-          db.session.commit()
-
-      if turbo.can_stream():
-          return turbo.stream(
-              turbo.push(turbo.replace(render_template("contact.html", contact=contact, activity=activity, noteForm=noteForm), 'activity_box')))
-      else:
-          return render_template("contact.html", contact=contact, activity=activity, noteForm=noteForm)
-   
+        return render_template("contact.html", contact=contact, activity=activity, gmail_token=gmail_token, form=form, gmail_email=gmail_email)
         
 
 def send_email(subject, message, from_email, to_email):
