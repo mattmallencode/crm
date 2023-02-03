@@ -38,6 +38,11 @@ class ContactForm(FlaskForm):
     status = SelectField("Status", choices = [("New", "New"), ("Open", "Open"), ("In Progress", "In Progress"), ("Open Deal", "Open Deal"), ("Unqualified", "Unqualified"), ("Attempted To Contact", "Attempted To Contact"), ("Connected", "Connected"), ("Bad Timing", "Bad Timing")])
     submit = SubmitField("")
 
+class EmailForm(FlaskForm):
+    subject = StringField("Subject")
+    message = StringField("Message")
+    submit = SubmitField("Send")
+
 class removeContactForm(FlaskForm):
     email = EmailField("Email", validators=[InputRequired(), Email()])
     submit = SubmitField("Remove Contact")

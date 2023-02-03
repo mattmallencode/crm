@@ -9,7 +9,6 @@
           <li><a href="{{ url_for('profile') }}">Profile</a></li>
         </ul>
     </nav>
-    <a href="{{ url_for('authorize_email', contact_id=contact.contact_id) }}">Email</a>
     <section>
         <h1>{{contact.name}}</h1>
         <p>Email: {{contact.email}}</p>
@@ -22,31 +21,17 @@
         <ul>
             <li><a href ="{{url_for('contact', contact_id=contact.contact_id, activity='activity')}}">Activity</a></li>
             <li><a href ="{{url_for('contact', contact_id=contact.contact_id, activity='notes')}}">Notes</a></li>
+            {% if gmail_token %}
             <li><a href ="{{url_for('contact', contact_id=contact.contact_id, activity='emails')}}">Emails</a></li>
+            {% else %}
+            <li><a href ="{{ url_for('authorize_email', contact_id=contact.contact_id) }}">Emails</a></li>
+            {% endif %}
             <li><a href ="{{url_for('contact', contact_id=contact.contact_id, activity='tasks')}}">Tasks</a></li>
             <li><a href ="{{url_for('contact', contact_id=contact.contact_id, activity='meetings')}}">Meetings</a></li>
         </ul>
-        
-        <section id = "activity_box">
-            {% if activity == 'activity' %}
-                <p>Activity.....</p>
-            {% elif activity == 'notes' %} 
-                <section>
-                    <form action = "{{url_for('contact', contact_id=contact.contact_id, activity=activity)}}" method = "POST">
-                        {{noteForm.hidden_tag()}}
-                        
-                        {{noteForm.note()}}
-                        {% for error in noteForm.note.errors %}
-                            <div>{{ error }}</div>
-                        {% endfor %}
-                        <br>
-                        {{noteForm.submit()}}
-                    </form>
-                </section>
-            {% else %}
-                <p>Other...</p>
-            {% endif %}
-        </section>
+
+    {% include "contact_interactions.html" %}
+
     </section>
 </body>
 {% endblock %}
