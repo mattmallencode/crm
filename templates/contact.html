@@ -9,13 +9,31 @@
           <li><a href="{{ url_for('profile') }}">Profile</a></li>
         </ul>
     </nav>
-    
+    <a href="{{ url_for('authorize_email', contact_id=contact.contact_id) }}">Email</a>
     <section>
         <h1>{{contact.name}}</h1>
         <p>Email: {{contact.email}}</p>
         <p>Phone Number: {{contact.phone_number}}</p>
         <p>Contact Owner:{{contact.contact_owner}}</p>
         <p>Status: {{contact.status}}</p>
+    </section>
+
+    <section>
+        <ul>
+            <li><a href ="{{url_for('contact', contact_id=contact.contact_id, activity='activity')}}">Activity</a></li>
+            <li><a href ="{{url_for('contact', contact_id=contact.contact_id, activity='notes')}}">Notes</a></li>
+            <li><a href ="{{url_for('contact', contact_id=contact.contact_id, activity='emails')}}">Emails</a></li>
+            <li><a href ="{{url_for('contact', contact_id=contact.contact_id, activity='tasks')}}">Tasks</a></li>
+            <li><a href ="{{url_for('contact', contact_id=contact.contact_id, activity='meetings')}}">Meetings</a></li>
+        </ul>
+        
+        <section id = "activity_box" class = "activity_box">
+            {% if activity == 'activity' %}
+                <p>Activity.....</p>
+            {% else %} 
+                <p>other....</p>
+            {% endif %}
+        </section>
     </section>
 </body>
 {% endblock %}
