@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 from flask_sqlalchemy import SQLAlchemy as sa
 from flask_mail import Mail, Message
-from forms import SignUpForm, LoginForm, CreateTeamForm, InviteForm, ContactForm, LogoutForm, LeaveTeamForm, SearchForm
+from forms import SignUpForm, LoginForm, CreateTeamForm, InviteForm, ContactForm, LogoutForm, LeaveTeamForm, SearchForm, NoteForm
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 from secrets import token_urlsafe
@@ -104,8 +104,6 @@ class Contacts(db.Model):
         self.status = status
 
 # Teams data model i.e. a representation of the teams table in the database.
-
-
 class Teams(db.Model):
     team_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
@@ -113,6 +111,18 @@ class Teams(db.Model):
     def __init__(self, team_id=None, name=None):
         self.team_id = team_id
         self.name = name
+
+class Notes(db.Model):
+    note_id = db.Column(db.Integer, primary_key=True)
+    contact_id = db.Column(db.String)
+    note = db.Column(db.String)
+    author = db.Column(db.String)
+
+    def __init__(self, note_id=None, contact_id=None, note=None, author=None):
+        self.note_id = note_id
+        self.contact_id = contact_id
+        self.note = note
+        self.author = author
 
 
 @application.before_request
@@ -662,13 +672,22 @@ def get_gmail_token(token=None):
 @team_required
 def contact(contact_id, activity):
     contact = Contacts.query.filter_by(contact_id=contact_id, team_id=g.team_id).first()
+    noteForm = NoteForm()
+
+    if noteForm.validate_on_submit():
+        note = Notes()
+        note.contact_id = contact_id
+        note.note = noteForm.note.data
+        note.author = g.email
+
+        db.session.add(note)
+        db.session.commit()
     
     if turbo.can_stream():
         return turbo.stream(
-            turbo.append(render_template("contact.html", contact=contact, activity=activity), 'activity_box')
-        )
+            turbo.push(turbo.replace(render_template("contact.html", contact=contact, activity=activity, noteForm=noteForm), 'activity_box')))
     else:
-        return render_template("contact.html", contact=contact, activity=activity)
+        return render_template("contact.html", contact=contact, activity=activity, noteForm=noteForm)
 
 
 
