@@ -819,7 +819,8 @@ def parse_thread(thread):
             elif header['name'].lower() == 'subject':
                 email['subject'] = header['value']
             elif header['name'].lower() == 'date':
-                email['timestamp'] = header['value']
+                # Need to get rid of timezone info from timestamps.
+                email['timestamp'] = " ".join(header['value'].split(" ")[0:-1])
         # Build the body of the email and add to the dict, then append the email to this thread's list.
         email["body"] = build_email_body(message['payload'])
         emails.append(email)
