@@ -205,3 +205,26 @@ ul {
     color: white;
     background-color: #111;
   }
+
+  #dashboard {
+    display: grid;
+    grid-template-columns: auto auto;
+    
+  }
+
+  #dashboard section{
+    background-color: #FFF8DC;
+    height: 250px;
+    margin: 25px;
+    padding: 25px;
+
+  }
+
+  #dashboard section *{
+    color: black;
+  }
+
+  #dashboard section:hover{
+    box-shadow: 5px 5px #606060;
+    
+  }

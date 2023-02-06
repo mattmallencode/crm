@@ -13,6 +13,7 @@ from turbo_flask import Turbo
 from email.mime.text import MIMEText
 import json
 import base64
+from datetime import datetime
 
 # Load environment variables from .env file.
 load_dotenv()
@@ -123,12 +124,14 @@ class Notes(db.Model):
     contact_id = db.Column(db.String)
     note = db.Column(db.String)
     author = db.Column(db.String)
+    date = db.Column(db.String)
 
-    def __init__(self, note_id=None, contact_id=None, note=None, author=None):
+    def __init__(self, note_id=None, contact_id=None, note=None, author=None, date=None):
         self.note_id = note_id
         self.contact_id = contact_id
         self.note = note
         self.author = author
+        self.date = date
 
 
 @application.before_request
@@ -708,25 +711,33 @@ def contact(contact_id, activity):
             return render_template("contact.html", contact=contact, activity=activity, gmail_token=gmail_token, form=form, gmail_email=gmail_email)
 
     elif activity == "notes":
+        response=""
+        notes = Notes.query.filter_by(contact_id=contact_id)
 
         if noteForm.validate_on_submit():
             note = Notes()
             note.contact_id = contact_id
             note.note = noteForm.note.data
             note.author = g.email
+            note.date = datetime.now().strftime("%d/%m/%Y %H:%M")
 
             db.session.add(note)
             db.session.commit()
 
+            noteForm.note.data=None
+
+            response = "Note Added"
+
+    
         if turbo.can_stream():
             return turbo.stream(
-                turbo.push(turbo.replace(render_template("contact.html", contact=contact, activity=activity, noteForm=noteForm), 'activity_box')))
+                turbo.update(render_template("contact_interactions.html", notes=notes, contact=contact, activity=activity, noteForm=noteForm, response=response), 'activity_box'))
         else:
-            return render_template("contact.html", contact=contact, activity=activity, noteForm=noteForm)
+            return render_template("contact.html", notes=notes, contact=contact, activity=activity, noteForm=noteForm)
+
     else:
-        return render_template("contact.html", contact=contact, activity=activity, gmail_token=gmail_token, form=form, gmail_email=gmail_email)
-
-
+        return render_template("contact.html", contact=contact, activity=activity, form=form, noteForm=noteForm, gmail_token=gmail_token, gmail_email=gmail_email)
+        
 def send_email(subject, message, from_email, to_email, contact_id):
 
     message = MIMEText(message)
@@ -788,6 +799,20 @@ def parse_thread(thread):
 
         emails.append(email)
     return emails
+
+
+
+@application.route("/remove_note/<note_id>/<contact_id>", methods = ["GET", "POST"])
+@login_required
+@team_required
+def remove_note(note_id, contact_id):
+    note = Notes.query.filter_by(note_id=note_id).first()
+    if note is not None:
+        db.session.delete(note)
+        db.session.commit()
+    return redirect(url_for("contact", contact_id=contact_id, activity="notes"))
+
+    
 
 
 if __name__ == "__main__":
