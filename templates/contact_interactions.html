@@ -1,0 +1,21 @@
+<section id = "activity_box" class = "activity_box">
+    {% if activity == 'activity' %}
+        <p>Activity.....</p>
+    {% elif activity == 'emails' %}
+    <form action = "" method = "POST">
+        <p>To: {{ contact.email }}</p>
+        <p>From: {{ gmail_email }}</p>
+        {{form.hidden_tag()}}
+        {{form.subject.label}}
+        {{form.subject()}}
+        <br>
+        {{form.message.label}}
+        {{form.message}}
+        <br>
+        {{form.submit()}}
+    </form>
+    
+    {% else %} 
+        <p>other....</p>
+    {% endif %}
+</section>
