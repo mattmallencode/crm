@@ -28,14 +28,17 @@ body{
     padding: 0 15px 0 15px;
 }
 
-#loginHeading{
+.Heading{
     color: white;
     text-align: center;
     
 }
-#loginP{
+.loginSubmitP{
     color: white;
     text-align: center;
+}
+p{
+    color: white;
 }
 input{
     border-radius: 30px;
@@ -53,9 +56,13 @@ i{
 }
 ::placeholder{
     padding-left: 20px;
+    overflow: visible;
 }
 
-#loginSubmit{
-    
+.loginRegisterSubmit{
     padding-right: 65%;
+}
+
+.loginRegisterLink{
+    color:red;
 }

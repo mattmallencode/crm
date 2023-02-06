@@ -10,98 +10,111 @@
           <li><a href="{{ url_for('profile') }}">Profile</a></li>
         </ul>
     </nav>
+    <div class="contacts_background">
     <h1 class="contactH1">Contacts</h1>
     
     <section id="contacts-list">
         <section>
-            <p><a href = "{{url_for('contacts', filter='all', page=1)}}">All Contacts</a></p>
-            <p><a href = "{{url_for('contacts', filter='assigned', page=1)}}">My Assigned Contacts</a></p>
-            <p><a href = "{{url_for('contacts', filter='unassigned', page=1)}}">Unassigned Contacts</a></p>
+            <a href = "{{url_for('contacts', prev_sort='None', order='ASC', sort='None', filter='all', page=1 , error='None')}}">All Contacts</a>
+            <a href = "{{url_for('contacts', prev_sort='None', order='ASC', sort='None', filter='assigned', page=1 , error='None')}}">My Assigned Contacts</a>
+            <a href = "{{url_for('contacts', prev_sort='None', order='ASC', sort='None', filter='unassigned', page=1 , error='None')}}">Unassigned Contacts</a>
         </section>
-        
+        <i class="fa-solid fa-magnifying-glass"></i>
         <table>
             <tr>
                 <form action = "" method = "POST" novalidate>
-                    {{form.hidden_tag()}}
+                    {{search_form.hidden_tag()}}
                     <td>{{search_form.search_bar}}</td>
-                    <td>{{search_form.submit}}</td>
+                    <td>{{search_form.submit(id="contacts_search_button")}}</td>
                 </form>
             </tr>
+            {% set prev_sort = sort %}
             <tr>
-                <th>Name</th>
-                <th>email</th>
-                <th>Phone Number</th>
-                <th>Contact Owner</th>
-                <th>Company</th>
-                <th>Status</th>
-                <th>Edit Contact</th>
-                <th>Remove Contact</th>
+                <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='name', page=page, filter=filter, error='None')}}">Name</a></th>
+                <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='email', page=page, filter=filter, error='None')}}">Email</a></th>
+                <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='phone_number', page=page, filter=filter, error='None')}}">Phone Number</a></th>
+                <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='contact_owner', page=page, filter=filter, error='None')}}">Contact Owner</a></th>
+                <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='company', page=page, filter=filter, error='None')}}">Company</a></th>
+                <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='status', page=page, filter=filter, error='None')}}">Status</a></th>
+                <th class="contacts_table_heading">Edit Contact</th>
+                <th class="contacts_table_heading">Remove Contact</th>
             </tr>
-            {% for contact in contacts %}
+            {% for form in forms %}
                 <tr>
-                    <form action = "{{url_for('edit_contact', contact_id=contact.contact_id)}}" method = "POST">
+                    <form action = "{{url_for('edit_contact', contact_id=form.contact_id.data, prev_sort=prev_sort, order=order, sort=sort, filter=filter, page=page, error=error)}}" method = "POST">
                         {{form.hidden_tag()}}
-                    
-                        <td>{{form.name(value = contact.name)}}
+
+                        <td><a href="{{url_for('contact', contact_id=form.contact_id.data, activity='activity')}}">View</a>{{form.name()}}
                             {% for error in form.name.errors %}
                                 <div>{{ error }}</div>
                             {% endfor %}
                         </td>
-
-                        <td>{{form.email(value = contact.email)}}
+                        
+                        <td>{{form.email()}}
                             {% for error in form.email.errors %}
                                 <div>{{ error }}</div>
                             {% endfor %}
                         </td>
 
-                        <td>{{form.phone_number(value = contact.phone_number)}}</td>
+                        <td>{{form.phone_number()}}</td>
 
                         <td>{% for error in form.contact_owner.errors %}
                                 <div>{{ error }}</div>
                             {% endfor %}
-                            {{form.contact_owner(value = contact.contact_owner)}}
+                            {{form.contact_owner()}}
                         </td>
                             
 
-                        <td>{{form.company(value = contact.company)}}</td>
+                        <td>{{form.company()}}</td>
 
-                        <td>{{form.status(value = contact.status)}}</td>
+                        <td>{{form.status(class="contacts_status")}}</td>
 
-                        <td>{{form.submit(value="Save Changes")}}</td>
+                        <td>{{form.submit(value='Save Changes', class="contact_save_add_button")}}</td>
                     </form>
                     
-                    <td><a href = "{{url_for('remove_contact',contact_id=contact.contact_id)}}">Remove</a></td>
+
+    
+
+                    <td><a id="remove_contact", href = "{{url_for('remove_contact', contact_id=form.contact_id.data, prev_sort=prev_sort, order=order, sort=sort, filter=filter, page=page, error=error)}}">Remove</a></td>
+
                 </tr>
             {% endfor %}
 
             <tr>
-                <form action = "{{url_for('add_contact')}}" method = "POST">
-                    {{form.hidden_tag()}}
+                <form action = "{{url_for('add_contact', prev_sort=None, order=None, sort=None, filter=None, page=1, error=error)}}" method = "POST">
+                    {{add_contact.hidden_tag()}}
                 
-                    <td>{{form.name()}}
-                        {% for error in form.name.errors %}
+                    <td>{{add_contact.name()}}
+                        {% for error in add_contact.name.errors %}
                             <div>{{ error }}</div>
                         {% endfor %}
                     </td>
 
-                    <td>{{form.email()}}
-                        {% for error in form.email.errors %}
+                    <td>{{add_contact.email()}}
+                        {% for error in add_contact.email.errors %}
                             <div>{{ error }}</div>
                         {% endfor %}
                     </td>
 
-                    <td>{{form.phone_number()}}</td>
+                    <td>{{add_contact.phone_number()}}</td>
 
-                    <td>{{form.contact_owner()}}</td>
+                    <td>{{add_contact.contact_owner()}}</td>
 
-                    <td>{{form.company()}}</td>
+                    <td>{{add_contact.company()}}</td>
 
-                    <td>{{form.status()}}</td>
+                    <td>{{add_contact.status(class="contacts_status")}}</td>
 
-                    <td>{{form.submit()}}</td>
+                    <td>{{add_contact.submit(value='Add Contact', class="contact_save_add_button")}}</td>
+
                 </form>
             </tr>
         </table>
+    </section>
+
+    <section>
+        {% if error != 'None' %} 
+            <p>{{error}}</p>
+        {% endif %}
     </section>
 
     <section>
@@ -110,14 +123,14 @@
 
         <p>Showing Page {{page}} of {{num_pages}}</p>
         {% if page > 1 %}
-            <p><a href = "{{url_for('contacts', filter=filter, page=previous_page)}}">Previous Page</a></p>
+            <p><a href = "{{url_for('contacts', prev_sort='None', order='ASC', sort='None', filter='unassigned', page=1 , error='None')}}">Previous Page</a></p>
         {% endif %}
     
         {% if page < num_pages %}
-    	    <p><a href = "{{url_for('contacts', filter=filter, page=next_page)}}">Next Page</a></p>
+    	    <p><a href = "{{url_for('contacts', prev_sort='None', order='ASC', sort='None', filter='unassigned', page=1 , error='None')}}">Next Page</a></p>
         {% endif %}
         
     </section>
-    
+    </div>
 </body>
 {% endblock %}

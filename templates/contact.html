@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block main_content %}
+<body>
+    <nav>
+        <ul>
+          <li><a href="{{ url_for('home') }}">Home</a></li>
+          <li><a href="{{ url_for('contacts') }}">Contacts</a></li>
+          <li><a href="{{ url_for('team') }}">Team</a></li>
+          <li><a href="{{ url_for('profile') }}">Profile</a></li>
+        </ul>
+    </nav>
+    <section>
+        <h1>{{contact.name}}</h1>
+        <p>Email: {{contact.email}}</p>
+        <p>Phone Number: {{contact.phone_number}}</p>
+        <p>Contact Owner:{{contact.contact_owner}}</p>
+        <p>Status: {{contact.status}}</p>
+    </section>
+
+    <section>
+        <ul>
+            <li><a href ="{{url_for('contact', contact_id=contact.contact_id, activity='activity')}}">Activity</a></li>
+            <li><a href ="{{url_for('contact', contact_id=contact.contact_id, activity='notes')}}">Notes</a></li>
+            {% if gmail_token %}
+            <li><a href ="{{url_for('contact', contact_id=contact.contact_id, activity='emails')}}">Emails</a></li>
+            {% else %}
+            <li><a href ="{{ url_for('authorize_email', contact_id=contact.contact_id) }}">Emails</a></li>
+            {% endif %}
+            <li><a href ="{{url_for('contact', contact_id=contact.contact_id, activity='tasks')}}">Tasks</a></li>
+            <li><a href ="{{url_for('contact', contact_id=contact.contact_id, activity='meetings')}}">Meetings</a></li>
+        </ul>
+
+    {% include "contact_interactions.html" %}
+
+    </section>
+</body>
+{% endblock %}

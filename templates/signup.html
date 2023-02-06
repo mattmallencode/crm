@@ -1,37 +1,52 @@
-{% extends "base.html" %}
-
-{% block main_content %}
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8" />
+    <title>Sherpa</title>
+    <link rel="stylesheet" type="text/css" href="{{url_for("static", filename="redemptionArc.css")}}" >
+    <script src="https://kit.fontawesome.com/13ea2b7ad4.js" crossorigin="anonymous"></script>
+</head>
     <body>
         <div class="box">
         <div class="container">
+                <h1 class="Heading">Sign up</h1>
+                <p class="loginSubmitP">
+                        Welcome to Sherpa. To register please fill out all the forms below 
+                        and then press the register button to continue.
+                </p>
         <form method="POST", novalidate>
         {{ form.hidden_tag() }}
         {% for error in form.name.errors %}
                 <div>{{ error }}</div>
         {% endfor %}
-        {{ form.name.label }}
+        <i class="fa-solid fa-user"></i>
         {{ form.name() }}
         {% for error in form.name.errors %}
                 <div>{{ error }}</div>
         {% endfor %}
-        {{ form.email.label }}
+        <br>
+        <i class="fa-solid fa-envelope"></i>
         {{ form.email() }}
         <br>
+        <i class="fa-solid fa-lock"></i>
         {% for error in form.password.errors %}
                 <div>{{ error }}</div>
         {% endfor %}
-        {{ form.password.label }}
+        
         {{ form.password() }}
         <br>
         {% for error in form.password2.errors %}
                <div>{{ error }}</div>            {% endfor %}
-        {{ form.password2.label }}
+        <i class="fa-solid fa-lock"></i>
         {{ form.password2() }}
         <br>
-        {{ form.submit(id="register") }}
+        <div class="loginRegisterSubmit">{{ form.submit(id="register") }}</div>
         <br>
+        <p>
+                If you already have an account with us please click <a class = "loginRegisterLink" href="/login">here</a> to login.
+        </p>
       </form>
 </div>
 </div>
     </body>
-{% endblock %}
+</html>
