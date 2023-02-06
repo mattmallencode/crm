@@ -1,5 +1,8 @@
 import pytest
-from application import application
+from application import application, db
+from dotenv import load_dotenv
+load_dotenv
+import os 
 
 @pytest.fixture
 def client():
@@ -10,7 +13,13 @@ def client():
     :return: App for testing
     """
 
-    #app.config['TESTING'] = True
+    application.config['TESTING'] = True
     client = application.test_client()
 
     yield client
+
+@pytest.yield_fixture()
+async def init_db():
+    conn = await db.set_bind(os.getenv('DB_HOST'))
+    yield conn
+    await conn.close()
