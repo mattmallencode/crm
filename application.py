@@ -107,6 +107,8 @@ class Contacts(db.Model):
         self.status = status
 
 # Teams data model i.e. a representation of the teams table in the database.
+
+
 class Teams(db.Model):
     team_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
@@ -114,6 +116,7 @@ class Teams(db.Model):
     def __init__(self, team_id=None, name=None):
         self.team_id = team_id
         self.name = name
+
 
 class Notes(db.Model):
     note_id = db.Column(db.Integer, primary_key=True)
@@ -676,29 +679,36 @@ def get_gmail_token(token=None):
 def contact(contact_id, activity):
     form = EmailForm()
     noteForm = NoteForm()
-    contact = Contacts.query.filter_by(contact_id=contact_id, team_id=g.team_id).first()
+    contact = Contacts.query.filter_by(
+        contact_id=contact_id, team_id=g.team_id).first()
     gmail_token = session.get("gmail_token")
     gmail_email = session.get("user_gmail")
-    
+
     if activity == "emails":
         if gmail_token != None:
+            response_status = get_emails(contact.email, contact.contact_id)
+            if response_status != 200:
+                return redirect(url_for('authorize_email', contact_id=contact_id))
             if form.validate_on_submit():
                 subject = form.subject.data
                 message = form.message.data
                 from_email = gmail_email
                 to_email = contact.email
                 activity = "emails"
-                send_email(subject, message, from_email, to_email)
+                response = send_email(subject, message, from_email, to_email, contact.contact_id)
+                if response != 200:
+                    return redirect(url_for('authorize_email', contact_id=contact_id))
 
         if turbo.can_stream():
             return turbo.stream(
-              turbo.update(render_template("contact_interactions.html", contact=contact, activity=activity, gmail_token=gmail_token, form=form, gmail_email=gmail_email), 'activity_box')
+                turbo.update(render_template("contact_interactions.html", contact=contact, activity=activity,
+                             gmail_token=gmail_token, form=form, gmail_email=gmail_email), 'activity_box')
             )
         else:
             return render_template("contact.html", contact=contact, activity=activity, gmail_token=gmail_token, form=form, gmail_email=gmail_email)
-    
+
     elif activity == "notes":
-        
+
         if noteForm.validate_on_submit():
             note = Notes()
             note.contact_id = contact_id
@@ -715,24 +725,73 @@ def contact(contact_id, activity):
             return render_template("contact.html", contact=contact, activity=activity, noteForm=noteForm)
     else:
         return render_template("contact.html", contact=contact, activity=activity, gmail_token=gmail_token, form=form, gmail_email=gmail_email)
-        
 
-def send_email(subject, message, from_email, to_email):
-    
+
+def send_email(subject, message, from_email, to_email, contact_id):
+
     message = MIMEText(message)
     message["from"] = from_email
     message["to"] = to_email
     message["subject"] = subject
-    message = json.dumps({'raw': base64.urlsafe_b64encode(message.as_bytes()).decode()})
+    message = json.dumps(
+        {'raw': base64.urlsafe_b64encode(message.as_bytes()).decode()})
     url = f"https://gmail.googleapis.com/gmail/v1/users/{from_email}/messages/send"
-    
+
     response = gmail.post(url, data=message, format="text")
-    if response.status == 200:
-        return "Email sent successfully"
-    else:
-        print(response.data)
-        return "Failed to send email"
+    return response.status
+
+
+def get_emails(contact_email, contact_id):
+    """
+    url = f"https://gmail.googleapis.com/gmail/v1/users/120355103@umail.ucc.ie/messages/18618297d2d18725"
+    email = gmail.get(url)
+    query = f"from: {contact_email} OR to: {contact_email}"
+    user_gmail = session.get('user_gmail')
+    url = f"https://gmail.googleapis.com/gmail/v1/users/{user_gmail}/threads"
+    response_fetch_threads = gmail.get(url, data={"q": query})
+    if response_fetch_threads.status != 200:
+        return response_fetch_threads.data
+    threads = []
+    if "threads" in response_fetch_threads.data:
+        for thread in response_fetch_threads.data["threads"]:
+            url = f"https://gmail.googleapis.com/gmail/v1/users/{user_gmail}/threads/{thread['id']}"
+            emails = gmail.get(url).data
+            threads.append(parse_thread(emails))
+    """
+    return 200
+    
+
+def parse_thread(thread):
+    emails = []
+    for message in thread['messages']:
+        email = {}
+        email['subject'] = None
+        email['sender'] = None
+        email['sender_email'] = None
+        email['recipient'] = None
+        email['recipient_email'] = None
+        email['timestamp'] = None
+        email['body'] = None
+
+        for header in message['payload']['headers']:
+            if header['name'].lower() == 'from':
+                email['sender_email'] = header['value']
+            elif header['name'].lower() == 'to':
+                email['recipient_email'] = header['value']
+            elif header['name'].lower() == 'subject':
+                email['subject']= header['value']
+            elif header['name'].lower == 'Date':
+                email['timestamp'] = header['value']
+        # Todo: Need to account for response being in parts
+        if 'data' in message['payload']['body']:
+            email['body'] = base64.b64decode(message['payload']['body']['data']).decode("utf-8")
+
+        emails.append(email)
+    return emails
+
 
 if __name__ == "__main__":
     application.debug = True
     application.run()
+
+
