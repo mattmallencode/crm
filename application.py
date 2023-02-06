@@ -232,7 +232,7 @@ def home():
 @application.route("/login/<invite_id>", methods=["GET", "POST"])
 def login(invite_id):
     """
-    Route for authenticating a user.    
+    Route for authenticating a user.
     """
     # The login page fails when logging in without signing up
     # Initialize the form
@@ -680,64 +680,84 @@ def get_gmail_token(token=None):
 @login_required
 @team_required
 def contact(contact_id, activity):
+    """
+    This is the route for the contact page i.e. an individual contact, not the list.
+    Calls the relevant function depending on user selection.
+
+    <activity>
+    ----------
+    emails -- Sending and viewing emails to and from the contact.
+    notes -- Add and view notes related to the contact.
+    """
     form = EmailForm()
     noteForm = NoteForm()
     contact = Contacts.query.filter_by(
         contact_id=contact_id, team_id=g.team_id).first()
     gmail_token = session.get("gmail_token")
     gmail_email = session.get("user_gmail")
-
     if activity == "emails":
-        if gmail_token != None:
-            response_status, threads = get_emails(
-                contact.email)
-            if response_status != 200:
-                return redirect(url_for('authorize_email', contact_id=contact_id))
-            if form.validate_on_submit():
-                subject = form.subject.data
-                message = form.message.data
-                from_email = gmail_email
-                to_email = contact.email
-                activity = "emails"
-                response = send_email(
-                    subject, message, from_email, to_email, contact.contact_id)
-                if response != 200:
-                    return redirect(url_for('authorize_email', contact_id=contact_id))
-
-        if turbo.can_stream():
-            return turbo.stream(
-                turbo.update(render_template("contact_interactions.html", contact=contact, activity=activity,
-                             gmail_token=gmail_token, form=form, gmail_email=gmail_email, threads=threads), 'activity_box')
-            )
-        else:
-            return render_template("contact.html", contact=contact, activity=activity, gmail_token=gmail_token, form=form, gmail_email=gmail_email, threads=threads)
-
+        return email_activity(gmail_token, form, gmail_email, contact_id, contact)
     elif activity == "notes":
-        response = ""
-        notes = Notes.query.filter_by(contact_id=contact_id)
-
-        if noteForm.validate_on_submit():
-            note = Notes()
-            note.contact_id = contact_id
-            note.note = noteForm.note.data
-            note.author = g.email
-            note.date = datetime.now().strftime("%d/%m/%Y %H:%M")
-
-            db.session.add(note)
-            db.session.commit()
-
-            noteForm.note.data = None
-
-            response = "Note Added"
-
-        if turbo.can_stream():
-            return turbo.stream(
-                turbo.update(render_template("contact_interactions.html", notes=notes, contact=contact, activity=activity, noteForm=noteForm, response=response), 'activity_box'))
-        else:
-            return render_template("contact.html", notes=notes, contact=contact, activity=activity, noteForm=noteForm)
-
+        return notes_activity(contact_id, gmail_token, contact)
     else:
         return render_template("contact.html", contact=contact, activity=activity, form=form, noteForm=noteForm, gmail_token=gmail_token, gmail_email=gmail_email)
+
+
+def notes_activity(contact_id, gmail_token, contact):
+    """Function for the notes activity on the contacts page."""
+    response = ""
+    notes = Notes.query.filter_by(contact_id=contact_id)
+    noteForm = NoteForm()
+    if noteForm.validate_on_submit():
+        note = Notes()
+        note.contact_id = contact_id
+        note.note = noteForm.note.data
+        note.author = g.email
+        # Timestamp the note.
+        note.date = datetime.now().strftime("%d/%m/%Y %H:%M")
+        db.session.add(note)
+        db.session.commit()
+        noteForm.note.data = None
+        response = "Note Added"
+    # If we can, just update the part of the page that's changed i.e. the activity box.
+    if turbo.can_stream():
+        return turbo.stream(turbo.update(render_template("contact_interactions.html", notes=notes, gmail_token=gmail_token, contact=contact, activity="notes", noteForm=noteForm, response=response), 'activity_box'))
+    else:
+        return render_template("contact.html", notes=notes, contact=contact, gmail_token=gmail_token, activity="notes", noteForm=noteForm)
+
+
+def email_activity(gmail_token, form, gmail_email, contact_id, contact):
+    """Function for the email activity on the contacts page."""
+    # Make sure user has authorized their gmail.
+    if gmail_token != None:
+        # Fetch this user's emails.
+        response_status, threads = get_emails(
+            contact.email)
+        # If the fetching of the user's emails wasn't successful redirect them to re-authorize their email.
+        if response_status != 200:
+            return redirect(url_for('authorize_email', contact_id=contact_id))
+        # If the user's submitted a valid email, send the email on their behalf.
+        if form.validate_on_submit():
+            subject = form.subject.data
+            message = form.message.data
+            from_email = gmail_email
+            to_email = contact.email
+            response = send_email(
+                subject, message, from_email, to_email, contact.contact_id)
+            # If sending the email failed, redirect them so they can oAuth their email.
+            if response != 200:
+                return redirect(url_for('authorize_email', contact_id=contact_id))
+    # User isn't authenticated, redirect them so they can oAuth their email.
+    else:
+        return redirect(url_for('authorize_email', contact_id=contact_id))
+    # If we can, just update the part of the page that's changed i.e. the activity box.
+    if turbo.can_stream():
+        return turbo.stream(
+            turbo.update(render_template("contact_interactions.html", contact=contact, activity="emails",
+                                         gmail_token=gmail_token, form=form, gmail_email=gmail_email, threads=threads), 'activity_box')
+        )
+    else:
+        return render_template("contact.html", contact=contact, activity="emails", gmail_token=gmail_token, form=form, gmail_email=gmail_email, threads=threads)
 
 
 def send_email(subject, message, from_email, to_email):
@@ -763,7 +783,7 @@ def get_emails(contact_email):
     response_fetch_threads = gmail.get(url, data={"q": query})
     # If the request failed, return the status.
     if response_fetch_threads.status != 200:
-        return response_fetch_threads.status
+        return response_fetch_threads.status, None
     threads = []
     # For each thread returned by gmail.
     for thread in response_fetch_threads.data["threads"]:
@@ -798,7 +818,6 @@ def parse_thread(thread):
                 email['recipient_email'] = header['value']
             elif header['name'].lower() == 'subject':
                 email['subject'] = header['value']
-                print("hello")
             elif header['name'].lower() == 'date':
                 email['timestamp'] = header['value']
         # Build the body of the email and add to the dict, then append the email to this thread's list.
