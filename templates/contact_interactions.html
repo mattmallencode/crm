@@ -13,6 +13,9 @@
             {{form.message}}
             <br>
             {{form.submit()}}
+            {% if reply is not none %}
+                <a href="{{url_for('contact', contact_id=contact.contact_id, activity='emails')}}">Cancel Reply</a>
+            {% endif %}
         </form>
         {% for thread in threads %}
             <article>
@@ -23,9 +26,12 @@
                     <p><b>{{ email["sender_email"] }}</b></p>
                     <p>{{ email["recipient_email"] }}</p>
                     <p>{{ email["body"] }}</p>
+                    <p>{{ email["id"] }}</p>
+                    <p>{{ email["threadId"] }}</p>
                 </section>
                 <br>
                 {% endfor %}
+                <a href="{{url_for('reply_email', message_id=thread[-1]['id'], subject=thread[0]['subject'], thread_id=thread[-1]['threadId'], contact_id=contact.contact_id)}}">Reply</a>
             </article>
             <br><br>
         {% endfor %}
