@@ -2,20 +2,53 @@
     {% if activity == 'activity' %}
         <p>Activity.....</p>
     {% elif activity == 'emails' %}
-    <form action = "" method = "POST">
-        <p>To: {{ contact.email }}</p>
-        <p>From: {{ gmail_email }}</p>
-        {{form.hidden_tag()}}
-        {{form.subject.label}}
-        {{form.subject()}}
+        <form action = "" method = "POST">
+            <p>To: {{ contact.email }}</p>
+            <p>From: {{ gmail_email }}</p>
+            {{form.hidden_tag()}}
+            {{form.subject.label}}
+            {{form.subject()}}
+            <br>
+            {{form.message.label}}
+            {{form.message}}
+            <br>
+            {{form.submit()}}
+        </form>
+    {% elif activity == 'notes' %}
+        <section>
+            <form action = "{{url_for('contact', contact_id=contact.contact_id, activity='notes')}}" method = "POST">
+                {{noteForm.hidden_tag()}}
+
+                {% for error in noteForm.note.errors %}
+                    <div>{{ error }}</div>
+                {% endfor %}
+                {{noteForm.note()}}
+                <p>140 character limit per note</p>
+                <br>
+                {{noteForm.submit()}}
+            </form>
+
+            {% if response != "" %} 
+                {{response}}
+            {% endif %}
+        </section>
         <br>
-        {{form.message.label}}
-        {{form.message}}
-        <br>
-        {{form.submit()}}
-    </form>
-    
-    {% else %} 
+        <section>
+            {% if notes %}
+                {% for note in notes %}
+                    <section id = "note">
+                        <p>Note by {{note.author}} on {{note.date}}</p>
+                        <p>{{note.note}}</p> 
+                        {% set contact_id = contact.contact_id + "r" %}
+                        <br>
+                        <p><a href = "{{url_for('remove_note', note_id=note.note_id, contact_id=contact.contact_id)}}">Remove</a></p>
+                    </section>        
+                {% endfor %}
+            {% endif %}
+        </section>
+
+
+    {% else %}
         <p>other....</p>
     {% endif %}
 </section>

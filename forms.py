@@ -59,5 +59,5 @@ class SearchForm(FlaskForm):
     submit = SubmitField("Search")
 
 class NoteForm(FlaskForm):
-    note = StringField("Note", validators=[Length(1, 140, "Note must not be more than 140 characters in length")])
+    note = StringField("Note", validators=[Length(1, 140, "Note must be between 1 and 140 characters in length")])
     submit = SubmitField("Add Note")
