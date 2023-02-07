@@ -31,33 +31,43 @@
         {% endfor %}
     {% elif activity == 'notes' %}
         <section>
+            <h2>Make A Note</h2>
             <form action = "{{url_for('contact', contact_id=contact.contact_id, activity='notes')}}" method = "POST">
                 {{noteForm.hidden_tag()}}
-
-                {% for error in noteForm.note.errors %}
+                <section>
+                    {% for error in noteForm.note.errors %}
                     <div>{{ error }}</div>
-                {% endfor %}
-                {{noteForm.note()}}
-                <p>140 character limit per note</p>
-                <br>
-                {{noteForm.submit()}}
+                    {% endfor %}
+                    {{noteForm.note()}}
+
+                </section>
+                <section>
+                    {% if response != "" %} 
+                        {{response}}
+                    {% endif %}
+                </section>
+                <section>
+                    {{noteForm.submit()}}
+                </section>
+                
             </form>
 
-            {% if response != "" %} 
-                {{response}}
-            {% endif %}
         </section>
-        <br>
         <section>
+            <h2>View Notes</h2>
             {% if notes %}
                 {% for note in notes %}
                     <section id = "note">
-                        <p>Note by {{note.author}} on {{note.date}}</p>
-                        <p>{{note.note}}</p> 
-                        {% set contact_id = contact.contact_id + "r" %}
-                        <br>
-                        <p><a href = "{{url_for('remove_note', note_id=note.note_id, contact_id=contact.contact_id)}}">Remove</a></p>
-                    </section>        
+                        <section>
+                            <p>Note by {{note.author}} on {{note.date}}</p>
+                            <p>{{note.note}}</p> 
+                        </section>
+                       
+                        <section>
+                            {% set contact_id = contact.contact_id + "r" %}
+                            <p><a href = "{{url_for('remove_note', note_id=note.note_id, contact_id=contact.contact_id)}}">Remove</a></p>
+                        </section>
+                        </section>        
                 {% endfor %}
             {% endif %}
         </section>
