@@ -145,7 +145,7 @@ def login_required(view):
     """Decorator that redirects a user to the login page if they're unauthenticated and trying to access a protected endpoint."""
     @wraps(view)
     def wrapped_view(**kwargs):
-        if not current_app.config.get('LOGIN_DISABLED', False) or g.user is None:
+        if g.email is None:
             return redirect(url_for("login", next=request.url))
         return view(**kwargs)
     return wrapped_view
@@ -232,7 +232,7 @@ def home():
 @application.route("/login/<invite_id>", methods=["GET", "POST"])
 def login(invite_id):
     """
-    Route for authenticating a user.    
+    Route for authenticating a user.
     """
     # The login page fails when logging in without signing up
     # Initialize the form
@@ -680,66 +680,88 @@ def get_gmail_token(token=None):
 @login_required
 @team_required
 def contact(contact_id, activity):
+    """
+    This is the route for the contact page i.e. an individual contact, not the list.
+    Calls the relevant function depending on user selection.
+
+    <activity>
+    ----------
+    emails -- Sending and viewing emails to and from the contact.
+    notes -- Add and view notes related to the contact.
+    """
     form = EmailForm()
     noteForm = NoteForm()
     contact = Contacts.query.filter_by(
         contact_id=contact_id, team_id=g.team_id).first()
     gmail_token = session.get("gmail_token")
     gmail_email = session.get("user_gmail")
-
     if activity == "emails":
-        if gmail_token != None:
-            response_status = get_emails(contact.email, contact.contact_id)
-            if response_status != 200:
-                return redirect(url_for('authorize_email', contact_id=contact_id))
-            if form.validate_on_submit():
-                subject = form.subject.data
-                message = form.message.data
-                from_email = gmail_email
-                to_email = contact.email
-                activity = "emails"
-                response = send_email(subject, message, from_email, to_email, contact.contact_id)
-                if response != 200:
-                    return redirect(url_for('authorize_email', contact_id=contact_id))
-
-        if turbo.can_stream():
-            return turbo.stream(
-                turbo.update(render_template("contact_interactions.html", contact=contact, activity=activity,
-                             gmail_token=gmail_token, form=form, gmail_email=gmail_email), 'activity_box')
-            )
-        else:
-            return render_template("contact.html", contact=contact, activity=activity, gmail_token=gmail_token, form=form, gmail_email=gmail_email)
-
+        return email_activity(gmail_token, form, gmail_email, contact_id, contact)
     elif activity == "notes":
-        response=""
-        notes = Notes.query.filter_by(contact_id=contact_id)
-
-        if noteForm.validate_on_submit():
-            note = Notes()
-            note.contact_id = contact_id
-            note.note = noteForm.note.data
-            note.author = g.email
-            note.date = datetime.now().strftime("%d/%m/%Y %H:%M")
-
-            db.session.add(note)
-            db.session.commit()
-
-            noteForm.note.data=None
-
-            response = "Note Added"
-
-    
-        if turbo.can_stream():
-            return turbo.stream(
-                turbo.update(render_template("contact_interactions.html", notes=notes, contact=contact, activity=activity, noteForm=noteForm, response=response), 'activity_box'))
-        else:
-            return render_template("contact.html", notes=notes, contact=contact, activity=activity, noteForm=noteForm)
-
+        return notes_activity(contact_id, gmail_token, contact)
     else:
         return render_template("contact.html", contact=contact, activity=activity, form=form, noteForm=noteForm, gmail_token=gmail_token, gmail_email=gmail_email)
-        
-def send_email(subject, message, from_email, to_email, contact_id):
 
+
+def notes_activity(contact_id, gmail_token, contact):
+    """Function for the notes activity on the contacts page."""
+    response = ""
+    notes = Notes.query.filter_by(contact_id=contact_id)
+    noteForm = NoteForm()
+    if noteForm.validate_on_submit():
+        note = Notes()
+        note.contact_id = contact_id
+        note.note = noteForm.note.data
+        note.author = g.email
+        # Timestamp the note.
+        note.date = datetime.now().strftime("%d/%m/%Y %H:%M")
+        db.session.add(note)
+        db.session.commit()
+        noteForm.note.data = None
+        response = "Note Added"
+    # If we can, just update the part of the page that's changed i.e. the activity box.
+    if turbo.can_stream():
+        return turbo.stream(turbo.update(render_template("contact_interactions.html", notes=notes, gmail_token=gmail_token, contact=contact, activity="notes", noteForm=noteForm, response=response), 'activity_box'))
+    else:
+        return render_template("contact.html", notes=notes, contact=contact, gmail_token=gmail_token, activity="notes", noteForm=noteForm)
+
+
+def email_activity(gmail_token, form, gmail_email, contact_id, contact):
+    """Function for the email activity on the contacts page."""
+    # Make sure user has authorized their gmail.
+    if gmail_token != None:
+        # Fetch this user's emails.
+        response_status, threads = get_emails(
+            contact.email)
+        # If the fetching of the user's emails wasn't successful redirect them to re-authorize their email.
+        if response_status != 200:
+            return redirect(url_for('authorize_email', contact_id=contact_id))
+        # If the user's submitted a valid email, send the email on their behalf.
+        if form.validate_on_submit():
+            subject = form.subject.data
+            message = form.message.data
+            from_email = gmail_email
+            to_email = contact.email
+            response = send_email(
+                subject, message, from_email, to_email, contact.contact_id)
+            # If sending the email failed, redirect them so they can oAuth their email.
+            if response != 200:
+                return redirect(url_for('authorize_email', contact_id=contact_id))
+    # User isn't authenticated, redirect them so they can oAuth their email.
+    else:
+        return redirect(url_for('authorize_email', contact_id=contact_id))
+    # If we can, just update the part of the page that's changed i.e. the activity box.
+    if turbo.can_stream():
+        return turbo.stream(
+            turbo.update(render_template("contact_interactions.html", contact=contact, activity="emails",
+                                         gmail_token=gmail_token, form=form, gmail_email=gmail_email, threads=threads), 'activity_box')
+        )
+    else:
+        return render_template("contact.html", contact=contact, activity="emails", gmail_token=gmail_token, form=form, gmail_email=gmail_email, threads=threads)
+
+
+def send_email(subject, message, from_email, to_email):
+    """Function to send an email with an oAuth authenticated gmail account."""
     message = MIMEText(message)
     message["from"] = from_email
     message["to"] = to_email
@@ -747,76 +769,91 @@ def send_email(subject, message, from_email, to_email, contact_id):
     message = json.dumps(
         {'raw': base64.urlsafe_b64encode(message.as_bytes()).decode()})
     url = f"https://gmail.googleapis.com/gmail/v1/users/{from_email}/messages/send"
-
     response = gmail.post(url, data=message, format="text")
     return response.status
 
 
-def get_emails(contact_email, contact_id):
-    """
-    url = f"https://gmail.googleapis.com/gmail/v1/users/120355103@umail.ucc.ie/messages/18618297d2d18725"
-    email = gmail.get(url)
+def get_emails(contact_email):
+    """Function to fetch any email's in the user's gmail from contact_email OR to contact_email."""
+    # The query asks gmail to return all emails in the user's account TO contact_email OR FROM contact_email.
     query = f"from: {contact_email} OR to: {contact_email}"
     user_gmail = session.get('user_gmail')
     url = f"https://gmail.googleapis.com/gmail/v1/users/{user_gmail}/threads"
+    # Get all the threads for this gmail account that match our query.
     response_fetch_threads = gmail.get(url, data={"q": query})
+    # If the request failed, return the status.
     if response_fetch_threads.status != 200:
-        return response_fetch_threads.data
+        return response_fetch_threads.status, None
     threads = []
-    if "threads" in response_fetch_threads.data:
-        for thread in response_fetch_threads.data["threads"]:
-            url = f"https://gmail.googleapis.com/gmail/v1/users/{user_gmail}/threads/{thread['id']}"
-            emails = gmail.get(url).data
-            threads.append(parse_thread(emails))
-    """
-    return 200
-    
+    # For each thread returned by gmail.
+    for thread in response_fetch_threads.data["threads"]:
+        url = f"https://gmail.googleapis.com/gmail/v1/users/{user_gmail}/threads/{thread['id']}"
+        # Fetch all the emails in that thread.
+        emails = gmail.get(url).data
+        # Add the parsed emails to the threads list.
+        threads.append(parse_thread(emails))
+    # Sort the threads by the thread with the most recent reply.
+    threads = sorted(threads, key=lambda x: x[-1]['timestamp'], reverse=True)
+    # Return the response status and the list of email threads.
+    return (200, threads)
+
 
 def parse_thread(thread):
+    """Function to parse a thread of emails returned by gmail's API."""
     emails = []
+    # For each email in this thread.
     for message in thread['messages']:
+        # Set up a dictionary to represent the email.
         email = {}
         email['subject'] = None
-        email['sender'] = None
         email['sender_email'] = None
-        email['recipient'] = None
         email['recipient_email'] = None
         email['timestamp'] = None
         email['body'] = None
-
+        # Map each value to its appropriate header (except body.)
         for header in message['payload']['headers']:
             if header['name'].lower() == 'from':
                 email['sender_email'] = header['value']
             elif header['name'].lower() == 'to':
                 email['recipient_email'] = header['value']
             elif header['name'].lower() == 'subject':
-                email['subject']= header['value']
-            elif header['name'].lower == 'Date':
-                email['timestamp'] = header['value']
-        # Todo: Need to account for response being in parts
-        if 'data' in message['payload']['body']:
-            email['body'] = base64.b64decode(message['payload']['body']['data']).decode("utf-8")
-
+                email['subject'] = header['value']
+            elif header['name'].lower() == 'date':
+                # Need to get rid of timezone info from timestamps.
+                email['timestamp'] = " ".join(header['value'].split(" ")[0:-1])
+        # Build the body of the email and add to the dict, then append the email to this thread's list.
+        email["body"] = build_email_body(message['payload'])
         emails.append(email)
+    # Return the list of emails i.e. the now parsed thread.
     return emails
 
 
+def build_email_body(message):
+    """Method to build the body of a gmail api response by traversing the nested dictionaries in the JSON."""
+    # If data is in the body key, we've found the content of the email's body.
+    if 'data' in message['body']:
+        body = base64.b64decode(message['body']['data']).decode("utf-8")
+        return body
+    # Otherwise, traverse to the next level of the nested dictionary.
+    else:
+        return build_email_body(message["parts"][0])
 
-@application.route("/remove_note/<note_id>/<contact_id>", methods = ["GET", "POST"])
+
+@application.route("/remove_note/<note_id>/<contact_id>", methods=["GET", "POST"])
 @login_required
 @team_required
 def remove_note(note_id, contact_id):
+    """This route removes the specified note for the specified contact."""
+    # Fetch the note from the db.
     note = Notes.query.filter_by(note_id=note_id).first()
+    # Delete the note if it exists.
     if note is not None:
         db.session.delete(note)
         db.session.commit()
     return redirect(url_for("contact", contact_id=contact_id, activity="notes"))
 
-    
 
-
+# Run the application in debug mode.
 if __name__ == "__main__":
     application.debug = True
     application.run()
-
-
