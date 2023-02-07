@@ -209,22 +209,129 @@ ul {
   #dashboard {
     display: grid;
     grid-template-columns: auto auto;
-    
   }
 
   #dashboard section{
     background-color: #FFF8DC;
-    height: 250px;
-    margin: 25px;
+    margin: 20px;
     padding: 25px;
-
+    box-shadow: 3px 3px #606060;
   }
 
-  #dashboard section *{
+  #dashboard *{
     color: black;
   }
 
   #dashboard section:hover{
-    box-shadow: 5px 5px #606060;
-    
+    box-shadow: 0px 0px 20px #606060;
   }
+
+  #contact {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    background-color: gainsboro;
+    padding: 2.5%;
+    
+    box-shadow: 0px 0px 10px #111;
+  }
+
+  #contact *{
+    color: black;
+    text-align: left;
+  }
+
+  #contact li *{
+    color: white;
+  }
+
+  #contact h1{
+    font-size: 50px;
+    color: black;
+  }
+
+  #contact section h1 + *{
+    border-bottom: 2px solid #575757;
+  }
+
+  #contact h2{
+    font-size: 16px;
+    color: #575757;
+  }
+
+  #contact h1, #contact h2, #contact p{
+    margin: 0%;
+  }
+
+  #contact section{
+    margin: 0% 2%;
+
+  }
+
+  #contact section section{
+    margin: 5% 0%;
+  }
+
+  #contact_activity {
+    border-left: 2px solid #575757;
+  }
+
+  #contact_activity li{
+    padding: 2% 2%;
+    border-right: 2px solid black;
+  }   
+
+  #contact_activity li:hover{
+    background-color: black;
+  }
+
+  #contact_activity ul li a{
+    padding: 0%;
+    margin: 0%;
+  }
+
+  #activity_box{
+    padding-left: 2%;
+  }
+
+  #activity_box section section{
+    margin: 1% 0%;
+  }
+
+  #contact input#note{
+    height: 100px;
+    border-radius: 0%;
+    text-indent: 0%;
+    text-align: start;
+    justify-content: start;
+    background-color: #FFF8DC;
+  }
+
+  #contact input#submit{
+    padding: 1% 2%;
+    text-indent: 0%;
+    background-color:#e5d07b;
+    border-radius: 0%;
+  }
+
+  #note{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  #note section p{
+    font-size: 14px;
+  }
+
+  #note section p + p{
+    font-size: 20px;
+  }
+
+  #contact_activity h2{
+    font-size: 26px;
+  }
+
+  #contact_activity section section a{
+    background-color: #e5d07b;
+    border: 2px solid black;
+  }
+ 
