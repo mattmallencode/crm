@@ -675,6 +675,7 @@ def get_gmail_token(token=None):
     """Function for fetching user's gmail token."""
     return session.get("gmail_token")
 
+
 @application.route("/contact/<contact_id>/<activity>", defaults={"reply": None}, methods=["GET", "POST"])
 @application.route("/contact/<contact_id>/<activity>/<reply>", methods=["GET", "POST"])
 @login_required
@@ -692,9 +693,9 @@ def contact(contact_id, activity, reply):
     form = EmailForm()
     if reply != None:
         reply = reply.split(",")
-        #reply_msg_id = reply[0]
-        #reply_thread_id = reply[1]
-        #reply_subject = reply[2]
+        # reply_msg_id = reply[0]
+        # reply_thread_id = reply[1]
+        # reply_subject = reply[2]
         form.subject.data = reply[2]
     noteForm = NoteForm()
     contact = Contacts.query.filter_by(
@@ -755,6 +756,7 @@ def email_activity(gmail_token, form, gmail_email, contact_id, contact, reply):
         # If the fetching of the user's emails wasn't successful redirect them to re-authorize their email.
         if response_status != 200:
             return redirect(url_for('authorize_email', contact_id=contact_id))
+
     # User isn't authenticated, redirect them so they can oAuth their email.
     else:
         return redirect(url_for('authorize_email', contact_id=contact_id))
@@ -774,14 +776,20 @@ def send_email(subject, message, from_email, to_email, reply=None):
     message["from"] = from_email
     message["to"] = to_email
     if reply != None:
+        # reply[0] is the message_id we wish to reply to.
         message["in-reply-to"] = reply[0]
+        # reply[0] is the message_id we wish to reply to.
         message["references"] = reply[0]
-        message["threadId"] = reply[1]
+        message["message-id"] = reply[0]
+        # reply[2] is the subject of the email thread we wish to reply to.
         message["subject"] = reply[2]
-        print(message)
     else:
         message["subject"] = subject
-    message = json.dumps(
+    if reply != None:
+        message = json.dumps(
+            {'raw': base64.urlsafe_b64encode(message.as_bytes()).decode(), "threadId": reply[1]})
+    else:
+        message = json.dumps(
         {'raw': base64.urlsafe_b64encode(message.as_bytes()).decode()})
     url = f"https://gmail.googleapis.com/gmail/v1/users/{from_email}/messages/send"
     response = gmail.post(url, data=message, format="text")
@@ -828,7 +836,6 @@ def parse_thread(thread):
         email['recipient_email'] = None
         email['timestamp'] = None
         email['body'] = None
-        email['id'] = message['id']
         email['threadId'] = message['threadId']
         # Map each value to its appropriate header (except body.)
         for header in message['payload']['headers']:
@@ -841,6 +848,8 @@ def parse_thread(thread):
             elif header['name'].lower() == 'date':
                 # Need to get rid of timezone info from timestamps.
                 email['timestamp'] = " ".join(header['value'].split(" ")[0:-1])
+            elif header['name'].lower() == "message-id":
+                email['id'] = header['value']
         # Build the body of the email and add to the dict, then append the email to this thread's list.
         email["body"] = build_email_body(message['payload'])
         emails.append(email)
@@ -852,18 +861,21 @@ def build_email_body(message):
     """Method to build the body of a gmail api response by traversing the nested dictionaries in the JSON."""
     # If data is in the body key, we've found the content of the email's body.
     if 'data' in message['body']:
-        body = base64.b64decode(message['body']['data']).decode("utf-8")
+        encoded_body = message['body']['data']
+        body = base64.urlsafe_b64decode(encoded_body).decode("utf-8")
         return body
     # Otherwise, traverse to the next level of the nested dictionary.
     else:
         return build_email_body(message["parts"][0])
 
+
 @application.route("/reply_email/<message_id>/<thread_id>/<contact_id>/<subject>", methods=["GET", "POST"])
 @login_required
 @team_required
 def reply_email(message_id, thread_id, contact_id, subject):
-    reply=message_id + "," + thread_id + "," + subject
+    reply = message_id + "," + thread_id + "," + subject
     return redirect(url_for("contact", contact_id=contact_id, activity="emails", reply=reply))
+
 
 @application.route("/remove_note/<note_id>/<contact_id>", methods=["GET", "POST"])
 @login_required
