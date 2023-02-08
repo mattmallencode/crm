@@ -1,17 +1,17 @@
-from test import client
-import mock
+#from test import client
+#import mock
 import pytest
 from flask import session, request, appcontext_pushed, g, jsonify, json
 from application import Users, Teams,Invites, Contacts, login_required, application
 
-from httpx import AsyncClient
-from . import init_db
+#from httpx import AsyncClient
+#from . import init_db
 
 def test_landing(client):
     landing = client.get("/login")
     html = landing.data.decode()
-    # Test that this link is visible on the html login page.
-    assert '<a class = "signup_link" href="/signup">here</a>' in html
+    # Test that this link is visible on the html login page
+    assert 'Have you created an account yet? To register please click' in html
 
     # Test that this page returned an OK 200 code
     assert landing.status_code == 200
@@ -91,3 +91,64 @@ class TestAPI:
         data = response.json()
         assert data['username'] == user_to_create.username
     '''
+
+#test for the creation of a team
+def test_create_team(client):
+    # Login the user
+    response = client.post(
+        "/login",
+        data=dict(email="john@johnmail.com", password="john"),
+        follow_redirects=True,
+    )
+
+    # Store the session cookie
+    with client.session_transaction() as session:
+        session["email"] = "john@johnmail.com"
+
+    # Check if team is created successfully
+    response = client.post(
+        "/create_team",
+        data=dict(name="John Test Team"),
+        follow_redirects=True,
+    )
+    assert response.status_code == 200
+    assert b"<p>Invite a member to join your organisation</p>" in response.data
+
+    # Check if the user is already a member of a team           <--Probably should be added to features
+    #response = client.post(                                    
+    #    "/create_team",
+    #   data=dict(name="John Test Team 2"),
+    #    follow_redirects=True,
+    #)
+    #assert response.status_code == 200
+    #`assert b"put the html in this noc" in response.data
+'''                                 #<--- couldnt download the application module
+def test_add_contact(client):
+    #login the user
+    response = client.post(
+        "/login",
+        data=dict(email="john@johnmail.com", password="john"),
+        follow_redirects=True,
+    )
+    # Create a contact form with valid data
+    form = {
+        'name': 'swag lord 69',
+        'email': 'sw@glord.com',
+        'phone_number': '123456789',
+        'company': 'Test Swag Company',
+        'status': 'New'
+    }
+    
+    # Submit the form
+    response = client.post("/contacts", data=form, follow_redirects=True)
+
+    # Check if the contact was added to the database
+    contact = Contacts.query.filter_by(email=form['email']).first()
+    assert contact is not None
+    assert contact.name == form['name']
+    assert contact.email == form['email']
+    assert contact.phone_number == form['phone_number']
+    assert contact.company == form['company']
+    assert contact.status == form['status']
+'''   
+
