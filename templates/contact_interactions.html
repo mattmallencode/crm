@@ -20,8 +20,6 @@
                 </section>
             </form>
         </section>
-       
-        
         <section id="emails">
             <h2>Emails with {{contact.name}}</h2>
             {% for thread in threads %}
@@ -34,16 +32,13 @@
                     <p><b>To:</b> {{ email["recipient_email"] }}</p>
                     <p><b>Body:</b> {{ email["body"] }}</p>
                 </section>
-                {% endfor %}
-                
+                {% endfor %} 
                 <section id="reply">
                     <a href="{{url_for('reply_email', message_id=thread[-1]['id'], subject=thread[0]['subject'], thread_id=thread[-1]['threadId'], contact_id=contact.contact_id)}}">Reply</a>
                 </section>
             </article>
             {% endfor %}
         </section>
-       
-
     {% elif activity == 'notes' %}
         <section>
             <h2>Make A Note</h2>
