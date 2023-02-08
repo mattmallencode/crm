@@ -676,11 +676,11 @@ def get_gmail_token(token=None):
     """Function for fetching user's gmail token."""
     return session.get("gmail_token")
 
-
-@application.route("/contact/<contact_id>/<activity>", methods=["GET", "POST"])
+@application.route("/contact/<contact_id>/<activity>", defaults={"reply": None}, methods=["GET", "POST"])
+@application.route("/contact/<contact_id>/<activity>/<reply>", methods=["GET", "POST"])
 @login_required
 @team_required
-def contact(contact_id, activity):
+def contact(contact_id, activity, reply):
     """
     This is the route for the contact page i.e. an individual contact, not the list.
     Calls the relevant function depending on user selection.
@@ -691,13 +691,19 @@ def contact(contact_id, activity):
     notes -- Add and view notes related to the contact.
     """
     form = EmailForm()
+    if reply != None:
+        reply = reply.split(",")
+        #reply_msg_id = reply[0]
+        #reply_thread_id = reply[1]
+        #reply_subject = reply[2]
+        form.subject.data = reply[2]
     noteForm = NoteForm()
     contact = Contacts.query.filter_by(
         contact_id=contact_id, team_id=g.team_id).first()
     gmail_token = session.get("gmail_token")
     gmail_email = session.get("user_gmail")
     if activity == "emails":
-        return email_activity(gmail_token, form, gmail_email, contact_id, contact)
+        return email_activity(gmail_token, form, gmail_email, contact_id, contact, reply)
     elif activity == "notes":
         return notes_activity(contact_id, gmail_token, contact)
     else:
@@ -727,16 +733,10 @@ def notes_activity(contact_id, gmail_token, contact):
         return render_template("contact.html", notes=notes, contact=contact, gmail_token=gmail_token, activity="notes", noteForm=noteForm)
 
 
-def email_activity(gmail_token, form, gmail_email, contact_id, contact):
+def email_activity(gmail_token, form, gmail_email, contact_id, contact, reply):
     """Function for the email activity on the contacts page."""
     # Make sure user has authorized their gmail.
     if gmail_token != None:
-        # Fetch this user's emails.
-        response_status, threads = get_emails(
-            contact.email)
-        # If the fetching of the user's emails wasn't successful redirect them to re-authorize their email.
-        if response_status != 200:
-            return redirect(url_for('authorize_email', contact_id=contact_id))
         # If the user's submitted a valid email, send the email on their behalf.
         if form.validate_on_submit():
             subject = form.subject.data
@@ -744,10 +744,18 @@ def email_activity(gmail_token, form, gmail_email, contact_id, contact):
             from_email = gmail_email
             to_email = contact.email
             response = send_email(
-                subject, message, from_email, to_email, contact.contact_id)
+                subject, message, from_email, to_email, reply)
             # If sending the email failed, redirect them so they can oAuth their email.
             if response != 200:
                 return redirect(url_for('authorize_email', contact_id=contact_id))
+            form.subject.data = ""
+            form.message.data = ""
+        # Fetch this user's emails.
+        response_status, threads = get_emails(
+            contact.email)
+        # If the fetching of the user's emails wasn't successful redirect them to re-authorize their email.
+        if response_status != 200:
+            return redirect(url_for('authorize_email', contact_id=contact_id))
     # User isn't authenticated, redirect them so they can oAuth their email.
     else:
         return redirect(url_for('authorize_email', contact_id=contact_id))
@@ -755,18 +763,25 @@ def email_activity(gmail_token, form, gmail_email, contact_id, contact):
     if turbo.can_stream():
         return turbo.stream(
             turbo.update(render_template("contact_interactions.html", contact=contact, activity="emails",
-                                         gmail_token=gmail_token, form=form, gmail_email=gmail_email, threads=threads), 'activity_box')
+                                         gmail_token=gmail_token, form=form, gmail_email=gmail_email, threads=threads, reply=reply), 'activity_box')
         )
     else:
-        return render_template("contact.html", contact=contact, activity="emails", gmail_token=gmail_token, form=form, gmail_email=gmail_email, threads=threads)
+        return render_template("contact.html", contact=contact, activity="emails", gmail_token=gmail_token, form=form, gmail_email=gmail_email, threads=threads, reply=reply)
 
 
-def send_email(subject, message, from_email, to_email):
+def send_email(subject, message, from_email, to_email, reply=None):
     """Function to send an email with an oAuth authenticated gmail account."""
     message = MIMEText(message)
     message["from"] = from_email
     message["to"] = to_email
-    message["subject"] = subject
+    if reply != None:
+        message["in-reply-to"] = reply[0]
+        message["references"] = reply[0]
+        message["threadId"] = reply[1]
+        message["subject"] = reply[2]
+        print(message)
+    else:
+        message["subject"] = subject
     message = json.dumps(
         {'raw': base64.urlsafe_b64encode(message.as_bytes()).decode()})
     url = f"https://gmail.googleapis.com/gmail/v1/users/{from_email}/messages/send"
@@ -791,6 +806,9 @@ def get_emails(contact_email):
         url = f"https://gmail.googleapis.com/gmail/v1/users/{user_gmail}/threads/{thread['id']}"
         # Fetch all the emails in that thread.
         emails = gmail.get(url).data
+        f = open("test.json", "w")
+        f.write(json.dumps(emails, indent=4))
+        f.close()
         # Add the parsed emails to the threads list.
         threads.append(parse_thread(emails))
     # Sort the threads by the thread with the most recent reply.
@@ -811,6 +829,8 @@ def parse_thread(thread):
         email['recipient_email'] = None
         email['timestamp'] = None
         email['body'] = None
+        email['id'] = message['id']
+        email['threadId'] = message['threadId']
         # Map each value to its appropriate header (except body.)
         for header in message['payload']['headers']:
             if header['name'].lower() == 'from':
@@ -839,6 +859,12 @@ def build_email_body(message):
     else:
         return build_email_body(message["parts"][0])
 
+@application.route("/reply_email/<message_id>/<thread_id>/<contact_id>/<subject>", methods=["GET", "POST"])
+@login_required
+@team_required
+def reply_email(message_id, thread_id, contact_id, subject):
+    reply=message_id + "," + thread_id + "," + subject
+    return redirect(url_for("contact", contact_id=contact_id, activity="emails", reply=reply))
 
 @application.route("/remove_note/<note_id>/<contact_id>", methods=["GET", "POST"])
 @login_required

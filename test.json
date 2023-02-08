@@ -1,64 +1,877 @@
-[
-    [
+{
+    "id": "18616d28665c349d",
+    "historyId": "405424",
+    "messages": [
         {
-            "subject": "Test subject",
-            "sender_email": "120355103@umail.ucc.ie",
-            "recipient_email": "h@h.com",
-            "timestamp": "Mon, 6 Feb 2023 09:12:10 -0800",
-            "body": "s"
+            "id": "18616d28665c349d",
+            "threadId": "18616d28665c349d",
+            "labelIds": [
+                "SENT"
+            ],
+            "snippet": "I am testing the email feature!",
+            "payload": {
+                "partId": "",
+                "mimeType": "text/plain",
+                "filename": "",
+                "headers": [
+                    {
+                        "name": "Received",
+                        "value": "from 43070876226 named unknown by gmailapi.google.com with HTTPREST; Fri, 3 Feb 2023 02:29:01 -0800"
+                    },
+                    {
+                        "name": "Content-Type",
+                        "value": "text/plain; charset=\"us-ascii\""
+                    },
+                    {
+                        "name": "MIME-Version",
+                        "value": "1.0"
+                    },
+                    {
+                        "name": "Content-Transfer-Encoding",
+                        "value": "7bit"
+                    },
+                    {
+                        "name": "from",
+                        "value": "120355103@umail.ucc.ie"
+                    },
+                    {
+                        "name": "to",
+                        "value": "h@h.com"
+                    },
+                    {
+                        "name": "subject",
+                        "value": "Think turbo is working!"
+                    },
+                    {
+                        "name": "Date",
+                        "value": "Fri, 3 Feb 2023 02:29:01 -0800"
+                    },
+                    {
+                        "name": "Message-Id",
+                        "value": "<CADfBtt5RSL+hBnPXpe_K+dobEvR-UNGrGXNDXUBwuxipBkxrTw@mail.gmail.com>"
+                    }
+                ],
+                "body": {
+                    "size": 31,
+                    "data": "SSBhbSB0ZXN0aW5nIHRoZSBlbWFpbCBmZWF0dXJlIQ=="
+                }
+            },
+            "sizeEstimate": 447,
+            "historyId": "405424",
+            "internalDate": "1675420141000"
         },
         {
-            "subject": "Delivery Status Notification (Failure)",
-            "sender_email": "Mail Delivery Subsystem <mailer-daemon@googlemail.com>",
-            "recipient_email": "120355103@umail.ucc.ie",
-            "timestamp": "Mon, 06 Feb 2023 09:12:11 -0800 (PST)",
-            "body": "\r\n** Address not found **\r\n\r\nYour message wasn't delivered to h@h.com because the domain h.com couldn't be found. Check for typos or unnecessary spaces and try again.\r\n\r\nLearn more here: https://support.google.com/mail/?p=BadRcptDomain\r\n\r\nThe response was:\r\n\r\nDNS Error: DNS type 'mx' lookup of h.com responded with code NXDOMAIN\r\nDomain name not found: h.com Learn more at https://support.google.com/mail/?p=BadRcptDomain\r\n"
-        }
-    ],
-    [
-        {
-            "subject": "Think turbo is working!",
-            "sender_email": "120355103@umail.ucc.ie",
-            "recipient_email": "h@h.com",
-            "timestamp": "Fri, 3 Feb 2023 05:04:37 -0800",
-            "body": "I am testing the email feature!"
+            "id": "18616d28b262ca90",
+            "threadId": "18616d28665c349d",
+            "labelIds": [
+                "IMPORTANT",
+                "STARRED",
+                "CATEGORY_UPDATES",
+                "INBOX"
+            ],
+            "snippet": "Address not found Your message wasn&#39;t delivered to h@h.com because the domain h.com couldn&#39;t be found. Check for typos or unnecessary spaces and try again. LEARN MORE The response was: DNS",
+            "payload": {
+                "partId": "",
+                "mimeType": "multipart/report",
+                "filename": "",
+                "headers": [
+                    {
+                        "name": "Delivered-To",
+                        "value": "120355103@umail.ucc.ie"
+                    },
+                    {
+                        "name": "Received",
+                        "value": "by 2002:a05:7208:c0d5:b0:62:7643:5122 with SMTP id u21csp1001505rba;        Fri, 3 Feb 2023 02:29:02 -0800 (PST)"
+                    },
+                    {
+                        "name": "X-Received",
+                        "value": "by 2002:a17:906:eb99:b0:87b:da76:51b7 with SMTP id mh25-20020a170906eb9900b0087bda7651b7mr9403799ejb.63.1675420142283;        Fri, 03 Feb 2023 02:29:02 -0800 (PST)"
+                    },
+                    {
+                        "name": "ARC-Seal",
+                        "value": "i=1; a=rsa-sha256; t=1675420142; cv=none;        d=google.com; s=arc-20160816;        b=TzTt/H4isjSYaUrpZhpUs+he/k2NvnK4H5Gs2XH36d11L0BTYzOhyS+QkOc3x4EsMZ         MHzCnq9UQOswa6ZVWYLVoZ94EktZDLIPM3uDazb06xDuUffPyBr+mje7lOOdcQ3Ujost         DGNw7FRZPxT+wO0q0Jn3ZO3QHJ8PbeOPnH5U5e9V2x2JPA54s9VRna934FezfG6ZbWUF         8SUvGpGaGKcT7AnCMCkH/AkeJu50PjeEj1L3yjivxvzHUShlK1pzcwt7YrZA97dp2Xiw         SR1uZ68fUlaz5NnjRF1/ncI3v/eBLHKgmqET3r3afBq8ryvrpM4c3DJt6sP8nXT/81z7         z8Yg=="
+                    },
+                    {
+                        "name": "ARC-Message-Signature",
+                        "value": "i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;        h=in-reply-to:references:subject:from:date:message-id:auto-submitted         :to:dkim-signature;        bh=/reMtk4DAOcmbQ7oNqhmLadRVqM4Qk5VTrS6ZjnBCAc=;        b=Alcm37cPxE9tqF4ToRiy9d4nPJpnRlWg5nb95od/2iXP/Rvil+4/P22h8HaGF+mTJw         fyixTwHSfJQIfEWE6MRxRZ4zTjqa7cChC0rHR7kTlN78EhIjF56WeIDchFiuqlX3i+y5         bZL+cC7empAwa9n61MP/Arz8YGGogauNNUoPrraqPrt46/SVJEczI/mlzDCBgUMmM4no         lcx/osmo0ngX9P4Vwh4YxThNMxQqisVA/D1Pu4ZUUe42FTXVMY/g8rqKaB8JM7TmwGUV         2Nu7+0leVyaxK7xi/u0SFx0uFDNF7JdLtOrb2WwgfpbXXxkdF6OpXfW3n+n4SL+XeaLI         UhNA=="
+                    },
+                    {
+                        "name": "ARC-Authentication-Results",
+                        "value": "i=1; mx.google.com;       dkim=pass header.i=@googlemail.com header.s=20210112 header.b=pWttWP6d;       spf=none (google.com: mail-sor-f69.google.com does not designate permitted sender hosts) smtp.helo=mail-sor-f69.google.com;       dmarc=pass (p=QUARANTINE sp=QUARANTINE dis=NONE) header.from=googlemail.com"
+                    },
+                    {
+                        "name": "Return-Path",
+                        "value": "<>"
+                    },
+                    {
+                        "name": "Received",
+                        "value": "from mail-sor-f69.google.com (mail-sor-f69.google.com. [209.85.220.69])        by mx.google.com with SMTPS id m8-20020a056402430800b00499c03fd7b0sor757680edc.7.2023.02.03.02.29.02        for <120355103@umail.ucc.ie>        (Google Transport Security);        Fri, 03 Feb 2023 02:29:02 -0800 (PST)"
+                    },
+                    {
+                        "name": "Received-SPF",
+                        "value": "none (google.com: mail-sor-f69.google.com does not designate permitted sender hosts) client-ip=209.85.220.69;"
+                    },
+                    {
+                        "name": "Authentication-Results",
+                        "value": "mx.google.com;       dkim=pass header.i=@googlemail.com header.s=20210112 header.b=pWttWP6d;       spf=none (google.com: mail-sor-f69.google.com does not designate permitted sender hosts) smtp.helo=mail-sor-f69.google.com;       dmarc=pass (p=QUARANTINE sp=QUARANTINE dis=NONE) header.from=googlemail.com"
+                    },
+                    {
+                        "name": "DKIM-Signature",
+                        "value": "v=1; a=rsa-sha256; c=relaxed/relaxed;        d=googlemail.com; s=20210112;        h=in-reply-to:references:subject:from:date:message-id:auto-submitted         :to:from:to:cc:subject:date:message-id:reply-to;        bh=/reMtk4DAOcmbQ7oNqhmLadRVqM4Qk5VTrS6ZjnBCAc=;        b=pWttWP6dVVhDaS7iM6fIInxIXl2MXQZjkpD01VYWK8VMNyHxreaV5prcaXM4H/c06g         hcXkA1IRziVtrtfa0niilYBxIsc6A0wi8N658UAKIJpRv2STgkJPwabueunWI644FrU+         vLntU13g1hmeqcLsTfZSvAsCIkitpmWr6pV+ORyc2AGBM3HDXZy9xW8pG1Miy/iET08k         HQbDWv9fNFr768JRBo6FfyWmK8J36tu35eIKtaTbVHSvfDo3nZCO69beZa40yNKbcEZ4         Gj4SuL8Chu/KNuO35KPZpbnn6v846J+lOfdPMyoqI7OemGKqTCH907KEod9A0k3k46yx         RpZQ=="
+                    },
+                    {
+                        "name": "X-Google-DKIM-Signature",
+                        "value": "v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20210112;        h=in-reply-to:references:subject:from:date:message-id:auto-submitted         :to:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;        bh=/reMtk4DAOcmbQ7oNqhmLadRVqM4Qk5VTrS6ZjnBCAc=;        b=RQDtP7diAHn8h37WOa4SiDwlzPuMmIev92EK9MxiPJpK9YOeeId0zsW1RjApvDdVTD         6c5X97TkNViJZrU/jtFC6kl/33vFehKLPv4RZwiBe6zZc28eAdULRZTqUTDhGVXG0v5p         lNpe4+qDSfrzolB4Yt5PsS/gWsexYwZ5XVLY7Sc3gd3kNgLTEx+n00JWLdikTgNWFHn1         k8z/321L4m7vSo+vVaD9hQ2GxpWRxEgQQ3GlazMAQKjwdimS1akRPo36LsveLf7Zp6Nk         doT1WVw8tpJtZUmc8Ed1eAVV4hHR8vKM9pY6mnp+LyO0Qav+YwABRWznwrw547//ydR/         Q0Rg=="
+                    },
+                    {
+                        "name": "X-Gm-Message-State",
+                        "value": "AO0yUKWMwMEaBCsMFlP4us9474SCxHnpX350JMFYwKtn+mGACVwrItgM rPRRYvYv/UFZlsYAbEq04cFmRneeMi37ij2RkTPBpg=="
+                    },
+                    {
+                        "name": "X-Google-Smtp-Source",
+                        "value": "AK7set/42ExT3fEFU+uGpIK36eMceYndyFIzivFofkbuOnS8c5BSc2N0dIIX4SUvsMlTeeibbRroEeVwlN4wU0jnptzLjSIHnRQYOtc="
+                    },
+                    {
+                        "name": "X-Received",
+                        "value": "by 2002:a05:6402:12ce:b0:49c:48ad:3d17 with SMTP id k14-20020a05640212ce00b0049c48ad3d17mr2974658edx.17.1675420142162;        Fri, 03 Feb 2023 02:29:02 -0800 (PST)"
+                    },
+                    {
+                        "name": "Content-Type",
+                        "value": "multipart/report; boundary=\"0000000000006c472705f3c926bb\"; report-type=delivery-status"
+                    },
+                    {
+                        "name": "To",
+                        "value": "120355103@umail.ucc.ie"
+                    },
+                    {
+                        "name": "Received",
+                        "value": "by 2002:a05:6402:12ce:b0:49c:48ad:3d17 with SMTP id k14-20020a05640212ce00b0049c48ad3d17mr4562211edx.17; Fri, 03 Feb 2023 02:29:02 -0800 (PST)"
+                    },
+                    {
+                        "name": "Return-Path",
+                        "value": "<>"
+                    },
+                    {
+                        "name": "Auto-Submitted",
+                        "value": "auto-replied"
+                    },
+                    {
+                        "name": "Message-ID",
+                        "value": "<63dce1ee.050a0220.fa271.a29a.GMR@mx.google.com>"
+                    },
+                    {
+                        "name": "Date",
+                        "value": "Fri, 03 Feb 2023 02:29:02 -0800 (PST)"
+                    },
+                    {
+                        "name": "From",
+                        "value": "Mail Delivery Subsystem <mailer-daemon@googlemail.com>"
+                    },
+                    {
+                        "name": "Subject",
+                        "value": "Delivery Status Notification (Failure)"
+                    },
+                    {
+                        "name": "References",
+                        "value": "<CADfBtt5RSL+hBnPXpe_K+dobEvR-UNGrGXNDXUBwuxipBkxrTw@mail.gmail.com>"
+                    },
+                    {
+                        "name": "In-Reply-To",
+                        "value": "<CADfBtt5RSL+hBnPXpe_K+dobEvR-UNGrGXNDXUBwuxipBkxrTw@mail.gmail.com>"
+                    },
+                    {
+                        "name": "X-Failed-Recipients",
+                        "value": "h@h.com"
+                    }
+                ],
+                "body": {
+                    "size": 0
+                },
+                "parts": [
+                    {
+                        "partId": "0",
+                        "mimeType": "multipart/related",
+                        "filename": "",
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "multipart/related; boundary=\"0000000000006c4ffb05f3c926c4\""
+                            }
+                        ],
+                        "body": {
+                            "size": 0
+                        },
+                        "parts": [
+                            {
+                                "partId": "0.0",
+                                "mimeType": "multipart/alternative",
+                                "filename": "",
+                                "headers": [
+                                    {
+                                        "name": "Content-Type",
+                                        "value": "multipart/alternative; boundary=\"0000000000006c500105f3c926c5\""
+                                    }
+                                ],
+                                "body": {
+                                    "size": 0
+                                },
+                                "parts": [
+                                    {
+                                        "partId": "0.0.0",
+                                        "mimeType": "text/plain",
+                                        "filename": "",
+                                        "headers": [
+                                            {
+                                                "name": "Content-Type",
+                                                "value": "text/plain; charset=\"UTF-8\""
+                                            }
+                                        ],
+                                        "body": {
+                                            "size": 424,
+                                            "data": "DQoqKiBBZGRyZXNzIG5vdCBmb3VuZCAqKg0KDQpZb3VyIG1lc3NhZ2Ugd2Fzbid0IGRlbGl2ZXJlZCB0byBoQGguY29tIGJlY2F1c2UgdGhlIGRvbWFpbiBoLmNvbSBjb3VsZG4ndCBiZSBmb3VuZC4gQ2hlY2sgZm9yIHR5cG9zIG9yIHVubmVjZXNzYXJ5IHNwYWNlcyBhbmQgdHJ5IGFnYWluLg0KDQpMZWFybiBtb3JlIGhlcmU6IGh0dHBzOi8vc3VwcG9ydC5nb29nbGUuY29tL21haWwvP3A9QmFkUmNwdERvbWFpbg0KDQpUaGUgcmVzcG9uc2Ugd2FzOg0KDQpETlMgRXJyb3I6IEROUyB0eXBlICdteCcgbG9va3VwIG9mIGguY29tIHJlc3BvbmRlZCB3aXRoIGNvZGUgTlhET01BSU4NCkRvbWFpbiBuYW1lIG5vdCBmb3VuZDogaC5jb20gTGVhcm4gbW9yZSBhdCBodHRwczovL3N1cHBvcnQuZ29vZ2xlLmNvbS9tYWlsLz9wPUJhZFJjcHREb21haW4NCg=="
+                                        }
+                                    },
+                                    {
+                                        "partId": "0.0.1",
+                                        "mimeType": "text/html",
+                                        "filename": "",
+                                        "headers": [
+                                            {
+                                                "name": "Content-Type",
+                                                "value": "text/html; charset=\"UTF-8\""
+                                            }
+                                        ],
+                                        "body": {
+                                            "size": 1690,
+                                            "data": "DQo8aHRtbD4NCjxoZWFkPg0KPHN0eWxlPg0KKiB7DQpmb250LWZhbWlseTpSb2JvdG8sICJIZWx2ZXRpY2EgTmV1ZSIsIEhlbHZldGljYSwgQXJpYWwsIHNhbnMtc2VyaWY7DQp9DQo8L3N0eWxlPg0KPC9oZWFkPg0KPGJvZHk-DQo8dGFibGUgY2VsbHBhZGRpbmc9IjAiIGNlbGxzcGFjaW5nPSIwIiBjbGFzcz0iZW1haWwtd3JhcHBlciIgc3R5bGU9InBhZGRpbmctdG9wOjMycHg7YmFja2dyb3VuZC1jb2xvcjojZmZmZmZmOyI-PHRib2R5Pg0KPHRyPjx0ZD4NCjx0YWJsZSBjZWxscGFkZGluZz0wIGNlbGxzcGFjaW5nPTA-PHRib2R5Pg0KPHRyPjx0ZCBzdHlsZT0ibWF4LXdpZHRoOjU2MHB4O3BhZGRpbmc6MjRweCAyNHB4IDMycHg7YmFja2dyb3VuZC1jb2xvcjojZmFmYWZhO2JvcmRlcjoxcHggc29saWQgI2UwZTBlMDtib3JkZXItcmFkaXVzOjJweCI-DQo8aW1nIHN0eWxlPSJwYWRkaW5nOjAgMjRweCAxNnB4IDA7ZmxvYXQ6bGVmdCIgd2lkdGg9NzIgaGVpZ2h0PTcyIGFsdD0iRXJyb3IgSWNvbiIgc3JjPSJjaWQ6aWNvbi5wbmciPg0KPHRhYmxlIHN0eWxlPSJtaW4td2lkdGg6MjcycHg7cGFkZGluZy10b3A6OHB4Ij48dGJvZHk-DQo8dHI-PHRkPjxoMiBzdHlsZT0iZm9udC1zaXplOjIwcHg7Y29sb3I6IzIxMjEyMTtmb250LXdlaWdodDpib2xkO21hcmdpbjowIj4NCkFkZHJlc3Mgbm90IGZvdW5kDQo8L2gyPjwvdGQ-PC90cj4NCjx0cj48dGQgc3R5bGU9InBhZGRpbmctdG9wOjIwcHg7Y29sb3I6Izc1NzU3NTtmb250LXNpemU6MTZweDtmb250LXdlaWdodDpub3JtYWw7dGV4dC1hbGlnbjpsZWZ0Ij4NCllvdXIgbWVzc2FnZSB3YXNuJ3QgZGVsaXZlcmVkIHRvIDxhIHN0eWxlPSdjb2xvcjojMjEyMTIxO3RleHQtZGVjb3JhdGlvbjpub25lJz48Yj5oQGguY29tPC9iPjwvYT4gYmVjYXVzZSB0aGUgZG9tYWluIGguY29tIGNvdWxkbid0IGJlIGZvdW5kLiBDaGVjayBmb3IgdHlwb3Mgb3IgdW5uZWNlc3Nhcnkgc3BhY2VzIGFuZCB0cnkgYWdhaW4uDQo8L3RkPjwvdHI-DQo8dHI-PHRkIHN0eWxlPSJwYWRkaW5nLXRvcDoyNHB4O2NvbG9yOiM0Mjg1RjQ7Zm9udC1zaXplOjE0cHg7Zm9udC13ZWlnaHQ6Ym9sZDt0ZXh0LWFsaWduOmxlZnQiPg0KPGEgc3R5bGU9InRleHQtZGVjb3JhdGlvbjpub25lIiBocmVmPSJodHRwczovL3N1cHBvcnQuZ29vZ2xlLmNvbS9tYWlsLz9wPUJhZFJjcHREb21haW4iPkxFQVJOIE1PUkU8L2E-DQo8L3RkPjwvdHI-DQo8L3Rib2R5PjwvdGFibGU-DQo8L3RkPjwvdHI-DQo8L3Rib2R5PjwvdGFibGU-DQo8L3RkPjwvdHI-DQo8dHIgc3R5bGU9ImJvcmRlcjpub25lO2JhY2tncm91bmQtY29sb3I6I2ZmZjtmb250LXNpemU6MTIuOHB4O3dpZHRoOjkwJSI-DQo8dGQgYWxpZ249ImxlZnQiIHN0eWxlPSJwYWRkaW5nOjQ4cHggMTBweCI-DQpUaGUgcmVzcG9uc2Ugd2FzOjxici8-DQo8cCBzdHlsZT0iZm9udC1mYW1pbHk6bW9ub3NwYWNlIj4NCkROUyBFcnJvcjogRE5TIHR5cGUgJiMzOTtteCYjMzk7IGxvb2t1cCBvZiBoLmNvbSByZXNwb25kZWQgd2l0aCBjb2RlIE5YRE9NQUlODQpEb21haW4gbmFtZSBub3QgZm91bmQ6IGguY29tIExlYXJuIG1vcmUgYXQgaHR0cHM6Ly9zdXBwb3J0Lmdvb2dsZS5jb20vbWFpbC8_cD1CYWRSY3B0RG9tYWluDQo8L3A-DQo8L3RkPg0KPC90cj4NCjwvdGJvZHk-PC90YWJsZT4NCjwvYm9keT4NCjwvaHRtbD4NCg=="
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "partId": "0.1",
+                                "mimeType": "image/png",
+                                "filename": "icon.png",
+                                "headers": [
+                                    {
+                                        "name": "Content-Type",
+                                        "value": "image/png; name=\"icon.png\""
+                                    },
+                                    {
+                                        "name": "Content-Disposition",
+                                        "value": "attachment; filename=\"icon.png\""
+                                    },
+                                    {
+                                        "name": "Content-Transfer-Encoding",
+                                        "value": "base64"
+                                    },
+                                    {
+                                        "name": "Content-ID",
+                                        "value": "<icon.png>"
+                                    }
+                                ],
+                                "body": {
+                                    "attachmentId": "ANGjdJ_ahRDDrSxOOBctjMa69qcKfIZH96REJhyTgMjoo-HcAppqRJ9LoCgJihBxeEdcp7D3gtBc0a57gioi2A9RpGAm8rfV9IDVudqa_SrW4ePTdIgztuakoaJBu26zno5v3N3SvIzedhCxy9Vrg8t5UxcNTXaFejxQXijwmZ7objQwpppeU1dzJmvES0yp8Vn5OBndSzZtDqPJNqHa_EWQG_VF6utLUicy_v_lVOmjd8hGHXH6ykDtEeNG5XWaVwOGHRCJA19vThymC1Cdsmbr67ZFfzGx3Y28ZRyToAdDUGAiFLdDJ1tItzldfO3cuakw23CRfadsNbINK7cmLkv5jiUF7XYoc46UyBk290oyyRuBUXBSccLiw9UDATBJ8gD_6TWid3QTFmGayzXv",
+                                    "size": 1450
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "partId": "1",
+                        "mimeType": "message/delivery-status",
+                        "filename": "",
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "message/delivery-status"
+                            }
+                        ],
+                        "body": {
+                            "size": 0
+                        },
+                        "parts": [
+                            {
+                                "partId": "1.0",
+                                "mimeType": "text/plain",
+                                "filename": "",
+                                "headers": [
+                                    {
+                                        "name": "Reporting-MTA",
+                                        "value": "dns; googlemail.com"
+                                    },
+                                    {
+                                        "name": "Arrival-Date",
+                                        "value": "Fri, 03 Feb 2023 02:29:01 -0800 (PST)"
+                                    },
+                                    {
+                                        "name": "X-Original-Message-ID",
+                                        "value": "<CADfBtt5RSL+hBnPXpe_K+dobEvR-UNGrGXNDXUBwuxipBkxrTw@mail.gmail.com>"
+                                    }
+                                ],
+                                "body": {
+                                    "size": 311,
+                                    "data": "RmluYWwtUmVjaXBpZW50OiByZmM4MjI7IGhAaC5jb20NCkFjdGlvbjogZmFpbGVkDQpTdGF0dXM6IDUuMS4yDQpEaWFnbm9zdGljLUNvZGU6IHNtdHA7IEROUyBFcnJvcjogRE5TIHR5cGUgJ214JyBsb29rdXAgb2YgaC5jb20gcmVzcG9uZGVkIHdpdGggY29kZSBOWERPTUFJTg0KIERvbWFpbiBuYW1lIG5vdCBmb3VuZDogaC5jb20gTGVhcm4gbW9yZSBhdCBodHRwczovL3N1cHBvcnQuZ29vZ2xlLmNvbS9tYWlsLz9wPUJhZFJjcHREb21haW4NCkxhc3QtQXR0ZW1wdC1EYXRlOiBGcmksIDAzIEZlYiAyMDIzIDAyOjI5OjAyIC0wODAwIChQU1QpDQo="
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "partId": "2",
+                        "mimeType": "message/rfc822",
+                        "filename": "",
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "message/rfc822"
+                            }
+                        ],
+                        "body": {
+                            "size": 0
+                        },
+                        "parts": [
+                            {
+                                "partId": "2.0",
+                                "mimeType": "text/plain",
+                                "filename": "",
+                                "headers": [
+                                    {
+                                        "name": "DKIM-Signature",
+                                        "value": "v=1; a=rsa-sha256; c=relaxed/relaxed;        d=umail-ucc-ie.20210112.gappssmtp.com; s=20210112;        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject         :date:message-id:reply-to;        bh=MIq+nw09xQ2slpuUmFRJGIdA3jgO0I5JPGJ8v73QMUM=;        b=ZYTvbtirhHeJCU7phBkA872LZsS8csu8BxJ8kMQbiGLgLNADLmpNKa5VyQWfDBsDj5         6M8j718GP7GDO0ztPAqMV6PUpTaTKLf81BiqreeslTJJBuvI6bfWXd2kqLFxJR/a0lqv         B8phCcAsiD0AB9o+/nj2vb+DS8CJDUEXF8lnHpIDaaT22HKKkAX4vJTb9tAT2KfNUOcp         8IP5pi6kaiDJtiBJaicWsiYSqSfOVS/AJ7FXlv13/AP7NLmgYyJWrs3Kst876JO7PpXo         Iw93qRYamdxJn09UApOwXgoDgNmq9cxkUayhGlZJFIMFYgjShOli9A2c64pabv1hswOd         Hmfg=="
+                                    },
+                                    {
+                                        "name": "X-Google-DKIM-Signature",
+                                        "value": "v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20210112;        h=to:subject:message-id:date:from:mime-version:x-gm-message-state         :from:to:cc:subject:date:message-id:reply-to;        bh=MIq+nw09xQ2slpuUmFRJGIdA3jgO0I5JPGJ8v73QMUM=;        b=M6j5c5/BgMnTPVE2DGL9v9oDs2GdbVoZ9ehya6RAXjq8/D1ZA6B3xcr5QeMqyV2RQh         BIpsHLFQlHONWP5QKo3bApzATbCU8slKAE3agsYvr0MSAoH2wXtTYudoBc1ZADqkeHjx         cAUGpkcy/eScMA9ZjxxuuJjwCJFW0wkJf8dbbvsxktKa+1joy+QyRjvU38PZkJ0bIpXN         KzLK3jOJSobnSlAlgtslCzMb2xqx2BiZBnuCIYKS7sxFMavGR06kBCcL0WZLMgoglvCO         +8OsORQfM/pAZ0qi0Zznuu2y8HKCiLCwqp4n7JCsa5HlIUhche3KGnN9H41EoKuXLVYR         l/WA=="
+                                    },
+                                    {
+                                        "name": "X-Gm-Message-State",
+                                        "value": "AO0yUKVeEqwRHY1nrfYq60bH9KMan4c2eZxj7LUL7LeWHtgDKedBz5J6 Y3TWzAvPOsD0Jpoc8HVogLyExIfcH5f+zNoISIT6geQhlBwWAA=="
+                                    },
+                                    {
+                                        "name": "X-Google-Smtp-Source",
+                                        "value": "AK7set+Gw9RUeLuoJKzJ32ErbrChdcOZF2xh//UCHUn2c3iDbrwFojenLQ7Yc+vEn/tyaKGoPKrSyb4QNQiis2NNDX4="
+                                    },
+                                    {
+                                        "name": "X-Received",
+                                        "value": "by 2002:a05:6402:12ce:b0:49c:48ad:3d17 with SMTP id k14-20020a05640212ce00b0049c48ad3d17mr2974652edx.17.1675420141783; Fri, 03 Feb 2023 02:29:01 -0800 (PST)"
+                                    },
+                                    {
+                                        "name": "Received",
+                                        "value": "from 43070876226 named unknown by gmailapi.google.com with HTTPREST; Fri, 3 Feb 2023 02:29:01 -0800"
+                                    },
+                                    {
+                                        "name": "MIME-Version",
+                                        "value": "1.0"
+                                    },
+                                    {
+                                        "name": "from",
+                                        "value": "120355103@umail.ucc.ie"
+                                    },
+                                    {
+                                        "name": "Date",
+                                        "value": "Fri, 3 Feb 2023 02:29:01 -0800"
+                                    },
+                                    {
+                                        "name": "Message-ID",
+                                        "value": "<CADfBtt5RSL+hBnPXpe_K+dobEvR-UNGrGXNDXUBwuxipBkxrTw@mail.gmail.com>"
+                                    },
+                                    {
+                                        "name": "Subject",
+                                        "value": "Think turbo is working!"
+                                    },
+                                    {
+                                        "name": "To",
+                                        "value": "h@h.com"
+                                    },
+                                    {
+                                        "name": "Content-Type",
+                                        "value": "text/plain; charset=\"UTF-8\""
+                                    }
+                                ],
+                                "body": {
+                                    "size": 33,
+                                    "data": "SSBhbSB0ZXN0aW5nIHRoZSBlbWFpbCBmZWF0dXJlIQ0K"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            "sizeEstimate": 12889,
+            "historyId": "405424",
+            "internalDate": "1675420142000"
         },
         {
-            "subject": "Delivery Status Notification (Failure)",
-            "sender_email": "Mail Delivery Subsystem <mailer-daemon@googlemail.com>",
-            "recipient_email": "120355103@umail.ucc.ie",
-            "timestamp": "Fri, 03 Feb 2023 05:04:37 -0800 (PST)",
-            "body": "\r\n** Address not found **\r\n\r\nYour message wasn't delivered to h@h.com because the domain h.com couldn't be found. Check for typos or unnecessary spaces and try again.\r\n\r\nLearn more here: https://support.google.com/mail/?p=BadRcptDomain\r\n\r\nThe response was:\r\n\r\nDNS Error: DNS type 'mx' lookup of h.com responded with code NXDOMAIN\r\nDomain name not found: h.com Learn more at https://support.google.com/mail/?p=BadRcptDomain\r\n"
-        }
-    ],
-    [
-        {
-            "subject": "Think turbo is working!",
-            "sender_email": "120355103@umail.ucc.ie",
-            "recipient_email": "h@h.com",
-            "timestamp": "Fri, 3 Feb 2023 02:29:01 -0800",
-            "body": "I am testing the email feature!"
+            "id": "18616fca07dedf51",
+            "threadId": "18616d28665c349d",
+            "labelIds": [
+                "SENT"
+            ],
+            "snippet": "adding to the thread brev On Fri, Feb 3, 2023 at 10:29 AM &lt;120355103@umail.ucc.ie&gt; wrote: I am testing the email feature!",
+            "payload": {
+                "partId": "",
+                "mimeType": "multipart/alternative",
+                "filename": "",
+                "headers": [
+                    {
+                        "name": "MIME-Version",
+                        "value": "1.0"
+                    },
+                    {
+                        "name": "Date",
+                        "value": "Fri, 3 Feb 2023 11:14:59 +0000"
+                    },
+                    {
+                        "name": "References",
+                        "value": "<CADfBtt5RSL+hBnPXpe_K+dobEvR-UNGrGXNDXUBwuxipBkxrTw@mail.gmail.com>"
+                    },
+                    {
+                        "name": "In-Reply-To",
+                        "value": "<CADfBtt5RSL+hBnPXpe_K+dobEvR-UNGrGXNDXUBwuxipBkxrTw@mail.gmail.com>"
+                    },
+                    {
+                        "name": "Message-ID",
+                        "value": "<CADfBtt7-oNXMrHHLwffRo3MTtY5wAQGwfp+CaH+x7a-wDbDnjQ@mail.gmail.com>"
+                    },
+                    {
+                        "name": "Subject",
+                        "value": "Re: Think turbo is working!"
+                    },
+                    {
+                        "name": "From",
+                        "value": "Matthew Mallen <120355103@umail.ucc.ie>"
+                    },
+                    {
+                        "name": "To",
+                        "value": "h@h.com"
+                    },
+                    {
+                        "name": "Content-Type",
+                        "value": "multipart/alternative; boundary=\"000000000000d164d905f3c9cadd\""
+                    }
+                ],
+                "body": {
+                    "size": 0
+                },
+                "parts": [
+                    {
+                        "partId": "0",
+                        "mimeType": "text/plain",
+                        "filename": "",
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "text/plain; charset=\"UTF-8\""
+                            }
+                        ],
+                        "body": {
+                            "size": 131,
+                            "data": "YWRkaW5nIHRvIHRoZSB0aHJlYWQgYnJldg0KDQpPbiBGcmksIEZlYiAzLCAyMDIzIGF0IDEwOjI5IEFNIDwxMjAzNTUxMDNAdW1haWwudWNjLmllPiB3cm90ZToNCg0KPiBJIGFtIHRlc3RpbmcgdGhlIGVtYWlsIGZlYXR1cmUhDQo="
+                        }
+                    },
+                    {
+                        "partId": "1",
+                        "mimeType": "text/html",
+                        "filename": "",
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "text/html; charset=\"UTF-8\""
+                            },
+                            {
+                                "name": "Content-Transfer-Encoding",
+                                "value": "quoted-printable"
+                            }
+                        ],
+                        "body": {
+                            "size": 405,
+                            "data": "PGRpdiBkaXI9Imx0ciI-YWRkaW5nIHRvIHRoZSB0aHJlYWQgYnJldjwvZGl2Pjxicj48ZGl2IGNsYXNzPSJnbWFpbF9xdW90ZSI-PGRpdiBkaXI9Imx0ciIgY2xhc3M9ImdtYWlsX2F0dHIiPk9uIEZyaSwgRmViIDMsIDIwMjMgYXQgMTA6MjkgQU0gJmx0OzxhIGhyZWY9Im1haWx0bzoxMjAzNTUxMDNAdW1haWwudWNjLmllIj4xMjAzNTUxMDNAdW1haWwudWNjLmllPC9hPiZndDsgd3JvdGU6PGJyPjwvZGl2PjxibG9ja3F1b3RlIGNsYXNzPSJnbWFpbF9xdW90ZSIgc3R5bGU9Im1hcmdpbjowcHggMHB4IDBweCAwLjhleDtib3JkZXItbGVmdDoxcHggc29saWQgcmdiKDIwNCwyMDQsMjA0KTtwYWRkaW5nLWxlZnQ6MWV4Ij5JIGFtIHRlc3RpbmcgdGhlIGVtYWlsIGZlYXR1cmUhPC9ibG9ja3F1b3RlPjwvZGl2Pg0K"
+                        }
+                    }
+                ]
+            },
+            "sizeEstimate": 1281,
+            "historyId": "405424",
+            "internalDate": "1675422899000"
         },
         {
-            "subject": "Delivery Status Notification (Failure)",
-            "sender_email": "Mail Delivery Subsystem <mailer-daemon@googlemail.com>",
-            "recipient_email": "120355103@umail.ucc.ie",
-            "timestamp": "Fri, 03 Feb 2023 02:29:02 -0800 (PST)",
-            "body": "\r\n** Address not found **\r\n\r\nYour message wasn't delivered to h@h.com because the domain h.com couldn't be found. Check for typos or unnecessary spaces and try again.\r\n\r\nLearn more here: https://support.google.com/mail/?p=BadRcptDomain\r\n\r\nThe response was:\r\n\r\nDNS Error: DNS type 'mx' lookup of h.com responded with code NXDOMAIN\r\nDomain name not found: h.com Learn more at https://support.google.com/mail/?p=BadRcptDomain\r\n"
-        },
-        {
-            "subject": "Re: Think turbo is working!",
-            "sender_email": "Matthew Mallen <120355103@umail.ucc.ie>",
-            "recipient_email": "h@h.com",
-            "timestamp": "Fri, 3 Feb 2023 11:14:59 +0000",
-            "body": "adding to the thread brev\r\n\r\nOn Fri, Feb 3, 2023 at 10:29 AM <120355103@umail.ucc.ie> wrote:\r\n\r\n> I am testing the email feature!\r\n"
-        },
-        {
-            "subject": "Delivery Status Notification (Failure)",
-            "sender_email": "Mail Delivery Subsystem <mailer-daemon@googlemail.com>",
-            "recipient_email": "120355103@umail.ucc.ie",
-            "timestamp": "Fri, 03 Feb 2023 03:15:11 -0800 (PST)",
-            "body": "\r\n** Address not found **\r\n\r\nYour message wasn't delivered to h@h.com because the domain h.com couldn't be found. Check for typos or unnecessary spaces and try again.\r\n\r\nLearn more here: https://support.google.com/mail/?p=BadRcptDomain\r\n\r\nThe response was:\r\n\r\nDNS Error: DNS type 'mx' lookup of h.com responded with code NXDOMAIN\r\nDomain name not found: h.com Learn more at https://support.google.com/mail/?p=BadRcptDomain\r\n"
+            "id": "18616fccbccc21c1",
+            "threadId": "18616d28665c349d",
+            "labelIds": [
+                "IMPORTANT",
+                "CATEGORY_UPDATES",
+                "INBOX"
+            ],
+            "snippet": "Address not found Your message wasn&#39;t delivered to h@h.com because the domain h.com couldn&#39;t be found. Check for typos or unnecessary spaces and try again. LEARN MORE The response was: DNS",
+            "payload": {
+                "partId": "",
+                "mimeType": "multipart/report",
+                "filename": "",
+                "headers": [
+                    {
+                        "name": "Delivered-To",
+                        "value": "120355103@umail.ucc.ie"
+                    },
+                    {
+                        "name": "Received",
+                        "value": "by 2002:a05:7208:c0d5:b0:62:7643:5122 with SMTP id u21csp1024630rba;        Fri, 3 Feb 2023 03:15:11 -0800 (PST)"
+                    },
+                    {
+                        "name": "X-Received",
+                        "value": "by 2002:a17:907:204c:b0:882:ed4a:f23 with SMTP id pg12-20020a170907204c00b00882ed4a0f23mr10370927ejb.49.1675422911203;        Fri, 03 Feb 2023 03:15:11 -0800 (PST)"
+                    },
+                    {
+                        "name": "ARC-Seal",
+                        "value": "i=1; a=rsa-sha256; t=1675422911; cv=none;        d=google.com; s=arc-20160816;        b=R+EX904Db9z7J08rWGw4bL92WzS2aqNNl75G05vMNk/Wps2V9ZqG7A5N1mU+nvHnGQ         zfPzUdp1jyrewZkAzk5WZbkw7vyXUs58wGR663G8if/uqNVaBxZqUdzA2AVnsjTvYBtL         XCfPECjc0YAoNr7oRzz5B3Mztzrp6ehzPMC1Nm0yUFWogMWAC2/Ip0Df1vtaBDwV0A8S         XZYkSEldT0EHbR0T0D1gHDN0NoOhn7f6m3vtFcKVm2JSjbrSnpwPqYR6UFwvx06J0k4l         f4ERzT9AdG0MdrQVgCh8JsO+NSEbpa2hk5j7YP53F5N6zPcfstSB3A/0M0qHdbhO2xlJ         VDtw=="
+                    },
+                    {
+                        "name": "ARC-Message-Signature",
+                        "value": "i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;        h=in-reply-to:references:subject:from:date:message-id:auto-submitted         :to:dkim-signature;        bh=XGB2frzu2+aU8scbP4gGgmZmT1BL4M0XBsVSZ6L3Ngw=;        b=MvDJUqxHSMAi3RsuCdN8azd4831bNXfei5FOWL4bczS/1HCp6gLQ5KI14EeH0gZd7W         3CA/W6FZduG42aPDv594oBL2cWtMfWK8yrmTrDOHKBIaH5HoDdoiLaQfb3tdVuSyt4y7         Qt2Ok6cKGP1j0RQThFfhFYN0/1pxrUXn3dqccNMPwXwfVjVd0npNjQ1+onI5/TRGrDSW         f89CKHGni9DGCEntpWJBuXAfDt7gwgVU4t3B9PyqqdmbNlo68WsTpA6VHIBhWyCCVCtM         QJYU7rdMmlKaqJ6xoQAyLMQAt5CAJKyFuBDy3ZL+VBSqpgej/2gMKsfOwaEf6acHd9cn         uAng=="
+                    },
+                    {
+                        "name": "ARC-Authentication-Results",
+                        "value": "i=1; mx.google.com;       dkim=pass header.i=@googlemail.com header.s=20210112 header.b=QT2g0ZUn;       spf=none (google.com: mail-sor-f69.google.com does not designate permitted sender hosts) smtp.helo=mail-sor-f69.google.com;       dmarc=pass (p=QUARANTINE sp=QUARANTINE dis=NONE) header.from=googlemail.com"
+                    },
+                    {
+                        "name": "Return-Path",
+                        "value": "<>"
+                    },
+                    {
+                        "name": "Received",
+                        "value": "from mail-sor-f69.google.com (mail-sor-f69.google.com. [209.85.220.69])        by mx.google.com with SMTPS id u23-20020a1709063b9700b0087055ae3ffesor1467245ejf.120.2023.02.03.03.15.11        for <120355103@umail.ucc.ie>        (Google Transport Security);        Fri, 03 Feb 2023 03:15:11 -0800 (PST)"
+                    },
+                    {
+                        "name": "Received-SPF",
+                        "value": "none (google.com: mail-sor-f69.google.com does not designate permitted sender hosts) client-ip=209.85.220.69;"
+                    },
+                    {
+                        "name": "Authentication-Results",
+                        "value": "mx.google.com;       dkim=pass header.i=@googlemail.com header.s=20210112 header.b=QT2g0ZUn;       spf=none (google.com: mail-sor-f69.google.com does not designate permitted sender hosts) smtp.helo=mail-sor-f69.google.com;       dmarc=pass (p=QUARANTINE sp=QUARANTINE dis=NONE) header.from=googlemail.com"
+                    },
+                    {
+                        "name": "DKIM-Signature",
+                        "value": "v=1; a=rsa-sha256; c=relaxed/relaxed;        d=googlemail.com; s=20210112;        h=in-reply-to:references:subject:from:date:message-id:auto-submitted         :to:from:to:cc:subject:date:message-id:reply-to;        bh=XGB2frzu2+aU8scbP4gGgmZmT1BL4M0XBsVSZ6L3Ngw=;        b=QT2g0ZUnumcp1gUS4oWck0qdf/bphvZB8PDMl+ZBZau4PWbY/1UeTqmjUg1Et0j/N/         IA4PoNTf1PM61IRgOO2YSfGcvqRHeP/zm30CXHhpH5ET77Fv/hvQ6O6bjGXMwBxjLHwn         IzIjSdZrRuez/HkLTvIu2q4MFAXpmJtFk0K4mnIgOhhVBl1G+VfipeoU3217Lol/pEnc         27fufPKaxPnZ9ejAtZvajrmSO1l2jLv4q8F3I8I/BdmYFXX0Jo0j31OVLAHUr56F8f8H         6gLKGzN0SDgrmlUuvpNcO5BI6DHHUrnaUiXuf0mNotKzy4Yjw0GlPKp6xuQRxSIjokyE         1+6Q=="
+                    },
+                    {
+                        "name": "X-Google-DKIM-Signature",
+                        "value": "v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20210112;        h=in-reply-to:references:subject:from:date:message-id:auto-submitted         :to:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;        bh=XGB2frzu2+aU8scbP4gGgmZmT1BL4M0XBsVSZ6L3Ngw=;        b=bTcQNAhyaYGV9WV4oRjRHdmr21r3YOp5tIEEkI3XSEvn67D0Ta2Z9eyPsphExIYEvE         VjiwHuqKaP+G8QwOCpUkYM4m9IC3YzAL/GkHENeAUUq2SFG7Mus55151+rwAS3eWrmto         5ypdV7LyZBPi6ZBOpa1JXr4uHsZIDKYkPCBF/K7Fz9GiqJMFjcgwOitCistff28gk1p7         7WYfceKzSGkXYKlysmhfY9Cfvqo26HcK16a4s3q24oskXO4DDFXRtuEqjMF8Ip5LYJzL         CMYWqPBhfVe87VVO5YT0oo4DoUtrSnvRKOiy/7mQtv2dwEDMzMQSuH4UlSUcu9JunJuk         QYXA=="
+                    },
+                    {
+                        "name": "X-Gm-Message-State",
+                        "value": "AO0yUKXpoc7BKj7Ter9YE3qlroJ9YFQqA6AsSyy1vsELLuHR1GN+fs71 Z4VS5q67u4EqvCw5SWt18UkqJjhIf8SmMeEnxiiwxQ=="
+                    },
+                    {
+                        "name": "X-Google-Smtp-Source",
+                        "value": "AK7set+eFZ3NhjD2n+Q3ID8zVRzcN+2TlLT0nOfefWb68s2ojGbZ7+tm/FbyGqS7vb5W1BqaZuNG7/OH8Vkg7rXewfJgwbvWJwkHj2k="
+                    },
+                    {
+                        "name": "X-Received",
+                        "value": "by 2002:a17:906:fac4:b0:881:4488:297c with SMTP id lu4-20020a170906fac400b008814488297cmr2729979ejb.129.1675422911092;        Fri, 03 Feb 2023 03:15:11 -0800 (PST)"
+                    },
+                    {
+                        "name": "Content-Type",
+                        "value": "multipart/report; boundary=\"00000000000076ce2905f3c9cb7e\"; report-type=delivery-status"
+                    },
+                    {
+                        "name": "To",
+                        "value": "120355103@umail.ucc.ie"
+                    },
+                    {
+                        "name": "Received",
+                        "value": "by 2002:a17:906:fac4:b0:881:4488:297c with SMTP id lu4-20020a170906fac400b008814488297cmr4331219ejb.129; Fri, 03 Feb 2023 03:15:11 -0800 (PST)"
+                    },
+                    {
+                        "name": "Return-Path",
+                        "value": "<>"
+                    },
+                    {
+                        "name": "Auto-Submitted",
+                        "value": "auto-replied"
+                    },
+                    {
+                        "name": "Message-ID",
+                        "value": "<63dcecbf.170a0220.41653.af3c.GMR@mx.google.com>"
+                    },
+                    {
+                        "name": "Date",
+                        "value": "Fri, 03 Feb 2023 03:15:11 -0800 (PST)"
+                    },
+                    {
+                        "name": "From",
+                        "value": "Mail Delivery Subsystem <mailer-daemon@googlemail.com>"
+                    },
+                    {
+                        "name": "Subject",
+                        "value": "Delivery Status Notification (Failure)"
+                    },
+                    {
+                        "name": "References",
+                        "value": "<CADfBtt5RSL+hBnPXpe_K+dobEvR-UNGrGXNDXUBwuxipBkxrTw@mail.gmail.com> <CADfBtt7-oNXMrHHLwffRo3MTtY5wAQGwfp+CaH+x7a-wDbDnjQ@mail.gmail.com>"
+                    },
+                    {
+                        "name": "In-Reply-To",
+                        "value": "<CADfBtt7-oNXMrHHLwffRo3MTtY5wAQGwfp+CaH+x7a-wDbDnjQ@mail.gmail.com>"
+                    },
+                    {
+                        "name": "X-Failed-Recipients",
+                        "value": "h@h.com"
+                    }
+                ],
+                "body": {
+                    "size": 0
+                },
+                "parts": [
+                    {
+                        "partId": "0",
+                        "mimeType": "multipart/related",
+                        "filename": "",
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "multipart/related; boundary=\"00000000000076d57505f3c9cb7f\""
+                            }
+                        ],
+                        "body": {
+                            "size": 0
+                        },
+                        "parts": [
+                            {
+                                "partId": "0.0",
+                                "mimeType": "multipart/alternative",
+                                "filename": "",
+                                "headers": [
+                                    {
+                                        "name": "Content-Type",
+                                        "value": "multipart/alternative; boundary=\"00000000000076d57a05f3c9cb80\""
+                                    }
+                                ],
+                                "body": {
+                                    "size": 0
+                                },
+                                "parts": [
+                                    {
+                                        "partId": "0.0.0",
+                                        "mimeType": "text/plain",
+                                        "filename": "",
+                                        "headers": [
+                                            {
+                                                "name": "Content-Type",
+                                                "value": "text/plain; charset=\"UTF-8\""
+                                            }
+                                        ],
+                                        "body": {
+                                            "size": 424,
+                                            "data": "DQoqKiBBZGRyZXNzIG5vdCBmb3VuZCAqKg0KDQpZb3VyIG1lc3NhZ2Ugd2Fzbid0IGRlbGl2ZXJlZCB0byBoQGguY29tIGJlY2F1c2UgdGhlIGRvbWFpbiBoLmNvbSBjb3VsZG4ndCBiZSBmb3VuZC4gQ2hlY2sgZm9yIHR5cG9zIG9yIHVubmVjZXNzYXJ5IHNwYWNlcyBhbmQgdHJ5IGFnYWluLg0KDQpMZWFybiBtb3JlIGhlcmU6IGh0dHBzOi8vc3VwcG9ydC5nb29nbGUuY29tL21haWwvP3A9QmFkUmNwdERvbWFpbg0KDQpUaGUgcmVzcG9uc2Ugd2FzOg0KDQpETlMgRXJyb3I6IEROUyB0eXBlICdteCcgbG9va3VwIG9mIGguY29tIHJlc3BvbmRlZCB3aXRoIGNvZGUgTlhET01BSU4NCkRvbWFpbiBuYW1lIG5vdCBmb3VuZDogaC5jb20gTGVhcm4gbW9yZSBhdCBodHRwczovL3N1cHBvcnQuZ29vZ2xlLmNvbS9tYWlsLz9wPUJhZFJjcHREb21haW4NCg=="
+                                        }
+                                    },
+                                    {
+                                        "partId": "0.0.1",
+                                        "mimeType": "text/html",
+                                        "filename": "",
+                                        "headers": [
+                                            {
+                                                "name": "Content-Type",
+                                                "value": "text/html; charset=\"UTF-8\""
+                                            }
+                                        ],
+                                        "body": {
+                                            "size": 1690,
+                                            "data": "DQo8aHRtbD4NCjxoZWFkPg0KPHN0eWxlPg0KKiB7DQpmb250LWZhbWlseTpSb2JvdG8sICJIZWx2ZXRpY2EgTmV1ZSIsIEhlbHZldGljYSwgQXJpYWwsIHNhbnMtc2VyaWY7DQp9DQo8L3N0eWxlPg0KPC9oZWFkPg0KPGJvZHk-DQo8dGFibGUgY2VsbHBhZGRpbmc9IjAiIGNlbGxzcGFjaW5nPSIwIiBjbGFzcz0iZW1haWwtd3JhcHBlciIgc3R5bGU9InBhZGRpbmctdG9wOjMycHg7YmFja2dyb3VuZC1jb2xvcjojZmZmZmZmOyI-PHRib2R5Pg0KPHRyPjx0ZD4NCjx0YWJsZSBjZWxscGFkZGluZz0wIGNlbGxzcGFjaW5nPTA-PHRib2R5Pg0KPHRyPjx0ZCBzdHlsZT0ibWF4LXdpZHRoOjU2MHB4O3BhZGRpbmc6MjRweCAyNHB4IDMycHg7YmFja2dyb3VuZC1jb2xvcjojZmFmYWZhO2JvcmRlcjoxcHggc29saWQgI2UwZTBlMDtib3JkZXItcmFkaXVzOjJweCI-DQo8aW1nIHN0eWxlPSJwYWRkaW5nOjAgMjRweCAxNnB4IDA7ZmxvYXQ6bGVmdCIgd2lkdGg9NzIgaGVpZ2h0PTcyIGFsdD0iRXJyb3IgSWNvbiIgc3JjPSJjaWQ6aWNvbi5wbmciPg0KPHRhYmxlIHN0eWxlPSJtaW4td2lkdGg6MjcycHg7cGFkZGluZy10b3A6OHB4Ij48dGJvZHk-DQo8dHI-PHRkPjxoMiBzdHlsZT0iZm9udC1zaXplOjIwcHg7Y29sb3I6IzIxMjEyMTtmb250LXdlaWdodDpib2xkO21hcmdpbjowIj4NCkFkZHJlc3Mgbm90IGZvdW5kDQo8L2gyPjwvdGQ-PC90cj4NCjx0cj48dGQgc3R5bGU9InBhZGRpbmctdG9wOjIwcHg7Y29sb3I6Izc1NzU3NTtmb250LXNpemU6MTZweDtmb250LXdlaWdodDpub3JtYWw7dGV4dC1hbGlnbjpsZWZ0Ij4NCllvdXIgbWVzc2FnZSB3YXNuJ3QgZGVsaXZlcmVkIHRvIDxhIHN0eWxlPSdjb2xvcjojMjEyMTIxO3RleHQtZGVjb3JhdGlvbjpub25lJz48Yj5oQGguY29tPC9iPjwvYT4gYmVjYXVzZSB0aGUgZG9tYWluIGguY29tIGNvdWxkbid0IGJlIGZvdW5kLiBDaGVjayBmb3IgdHlwb3Mgb3IgdW5uZWNlc3Nhcnkgc3BhY2VzIGFuZCB0cnkgYWdhaW4uDQo8L3RkPjwvdHI-DQo8dHI-PHRkIHN0eWxlPSJwYWRkaW5nLXRvcDoyNHB4O2NvbG9yOiM0Mjg1RjQ7Zm9udC1zaXplOjE0cHg7Zm9udC13ZWlnaHQ6Ym9sZDt0ZXh0LWFsaWduOmxlZnQiPg0KPGEgc3R5bGU9InRleHQtZGVjb3JhdGlvbjpub25lIiBocmVmPSJodHRwczovL3N1cHBvcnQuZ29vZ2xlLmNvbS9tYWlsLz9wPUJhZFJjcHREb21haW4iPkxFQVJOIE1PUkU8L2E-DQo8L3RkPjwvdHI-DQo8L3Rib2R5PjwvdGFibGU-DQo8L3RkPjwvdHI-DQo8L3Rib2R5PjwvdGFibGU-DQo8L3RkPjwvdHI-DQo8dHIgc3R5bGU9ImJvcmRlcjpub25lO2JhY2tncm91bmQtY29sb3I6I2ZmZjtmb250LXNpemU6MTIuOHB4O3dpZHRoOjkwJSI-DQo8dGQgYWxpZ249ImxlZnQiIHN0eWxlPSJwYWRkaW5nOjQ4cHggMTBweCI-DQpUaGUgcmVzcG9uc2Ugd2FzOjxici8-DQo8cCBzdHlsZT0iZm9udC1mYW1pbHk6bW9ub3NwYWNlIj4NCkROUyBFcnJvcjogRE5TIHR5cGUgJiMzOTtteCYjMzk7IGxvb2t1cCBvZiBoLmNvbSByZXNwb25kZWQgd2l0aCBjb2RlIE5YRE9NQUlODQpEb21haW4gbmFtZSBub3QgZm91bmQ6IGguY29tIExlYXJuIG1vcmUgYXQgaHR0cHM6Ly9zdXBwb3J0Lmdvb2dsZS5jb20vbWFpbC8_cD1CYWRSY3B0RG9tYWluDQo8L3A-DQo8L3RkPg0KPC90cj4NCjwvdGJvZHk-PC90YWJsZT4NCjwvYm9keT4NCjwvaHRtbD4NCg=="
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "partId": "0.1",
+                                "mimeType": "image/png",
+                                "filename": "icon.png",
+                                "headers": [
+                                    {
+                                        "name": "Content-Type",
+                                        "value": "image/png; name=\"icon.png\""
+                                    },
+                                    {
+                                        "name": "Content-Disposition",
+                                        "value": "attachment; filename=\"icon.png\""
+                                    },
+                                    {
+                                        "name": "Content-Transfer-Encoding",
+                                        "value": "base64"
+                                    },
+                                    {
+                                        "name": "Content-ID",
+                                        "value": "<icon.png>"
+                                    }
+                                ],
+                                "body": {
+                                    "attachmentId": "ANGjdJ-zXufDfbXsT2J_9Qt4F-LCy0H4C3GUph7zQoUHi8uwfo3Hx0UpFTwMl9YnOgUMSAdsn7nNwoydeu-6PZMOdIHNOyFn5GQPv9rRoeao2utk8J-2QMdpblEBgxdMF-NbzaFj5v-PtgPq2ffAkrQN-vTe7srPnOf9rXlaBY5p2wucFw7C5toxGkb4Hc6VQgCRq5jMeDmw28TYpbGuFCRT-PYMMN2uxIxMbivrSH20Z-frF9Jr_0gpCSiSg3b3kbYZAJWvuvE-73YfI3SVw9EfcvglSQk8VOn5dzLuV5Xrrj2ASPeJlATdJsKE2hUjFFrqxZcczlliJB74sSn_i5FBa2cNwgKwa8kTguXzyNiCNUTe80Uffe9VyfCtXVwXnlnmbkh0nxKwqOmr3eRd",
+                                    "size": 1450
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "partId": "1",
+                        "mimeType": "message/delivery-status",
+                        "filename": "",
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "message/delivery-status"
+                            }
+                        ],
+                        "body": {
+                            "size": 0
+                        },
+                        "parts": [
+                            {
+                                "partId": "1.0",
+                                "mimeType": "text/plain",
+                                "filename": "",
+                                "headers": [
+                                    {
+                                        "name": "Reporting-MTA",
+                                        "value": "dns; googlemail.com"
+                                    },
+                                    {
+                                        "name": "Arrival-Date",
+                                        "value": "Fri, 03 Feb 2023 03:15:10 -0800 (PST)"
+                                    },
+                                    {
+                                        "name": "X-Original-Message-ID",
+                                        "value": "<CADfBtt7-oNXMrHHLwffRo3MTtY5wAQGwfp+CaH+x7a-wDbDnjQ@mail.gmail.com>"
+                                    }
+                                ],
+                                "body": {
+                                    "size": 311,
+                                    "data": "RmluYWwtUmVjaXBpZW50OiByZmM4MjI7IGhAaC5jb20NCkFjdGlvbjogZmFpbGVkDQpTdGF0dXM6IDUuMS4yDQpEaWFnbm9zdGljLUNvZGU6IHNtdHA7IEROUyBFcnJvcjogRE5TIHR5cGUgJ214JyBsb29rdXAgb2YgaC5jb20gcmVzcG9uZGVkIHdpdGggY29kZSBOWERPTUFJTg0KIERvbWFpbiBuYW1lIG5vdCBmb3VuZDogaC5jb20gTGVhcm4gbW9yZSBhdCBodHRwczovL3N1cHBvcnQuZ29vZ2xlLmNvbS9tYWlsLz9wPUJhZFJjcHREb21haW4NCkxhc3QtQXR0ZW1wdC1EYXRlOiBGcmksIDAzIEZlYiAyMDIzIDAzOjE1OjExIC0wODAwIChQU1QpDQo="
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "partId": "2",
+                        "mimeType": "message/rfc822",
+                        "filename": "",
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "message/rfc822"
+                            }
+                        ],
+                        "body": {
+                            "size": 0
+                        },
+                        "parts": [
+                            {
+                                "partId": "2.0",
+                                "mimeType": "multipart/alternative",
+                                "filename": "",
+                                "headers": [
+                                    {
+                                        "name": "DKIM-Signature",
+                                        "value": "v=1; a=rsa-sha256; c=relaxed/relaxed;        d=umail-ucc-ie.20210112.gappssmtp.com; s=20210112;        h=to:subject:message-id:date:from:in-reply-to:references:mime-version         :from:to:cc:subject:date:message-id:reply-to;        bh=9B5/ziAr7D6LMG86tzqR6OOr2rqcMQhAYYem+0k/QOI=;        b=Fk6J9P5NPRaN86dWpGRRwyg1f+Fkn8s/hexmdp9fQ35C7b5+yy02eesJAdFaclIiz0         naPKN+thpICWw8uOemqQGDU3q8WnMKGfxIMyKtldJCOW4dRNx9hYK7Jc5AoxXj2czzVv         tgfUoS/as0T/OIHzkv0NkGgHYdMLledzp37a5HPXvDTL1QFzK3tKnISPA9PZ3jC9qmiB         3/JK7COcONvff5aB5J9O7FKtyclb3IxzK8BSKnfCnc0OlOY9VeZcqFYKV2vRGidYyGfb         /FWjI4JOOCeRxJ7rbJPGybziijbgiUoo3fMWpGb9zERp8M/otceRtgzlTiwh8cm+UqiK         3vJQ=="
+                                    },
+                                    {
+                                        "name": "X-Google-DKIM-Signature",
+                                        "value": "v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20210112;        h=to:subject:message-id:date:from:in-reply-to:references:mime-version         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;        bh=9B5/ziAr7D6LMG86tzqR6OOr2rqcMQhAYYem+0k/QOI=;        b=W01sRaXkcF/iTRDex607xc0gnXGklTTxjNzeyNQRUzc2kwuAOtqV5a9HTcBalKPfdM         lTuGkn/V3kzi1aHmA4DzajaVk6sg08ZoG19tIj+XTZ7hv69HIX1tvyrSBwPt3yZCedNP         a8dTQUT8z6Ske2/GvOdykSIpKcqv7tnxm8fj9608DOpQGipTRAXRLD8rZt29+ZaFfDoJ         hydncvL74hTxJvisQN0zsKbvDqvU919V1eNuHSZ/aganfBCYNe25MGpePg04qjRd0abO         O9MwAR6I+9hq+ZRns78EQAaVSqoODCc5fTiUNMLnvGxo2u/eZB3bqXJmp0qZ+5s6md/I         8imQ=="
+                                    },
+                                    {
+                                        "name": "X-Gm-Message-State",
+                                        "value": "AO0yUKWDKRvJE4FqDrwgxUn7wdYoSBeiMzOvAkxebu1ydnwEuXxJXFT7 SWYGyPcmR7V/8eC2YzOH9x1C0XFqhYkn6p8c/2RcWGxb66DuWE2h"
+                                    },
+                                    {
+                                        "name": "X-Google-Smtp-Source",
+                                        "value": "AK7set+bz+x7nfgFxrQ5/FfUwoNxBSK5G/YY9kLzLmS9ZsrZBoLClhtpWYN4MjkBDF1TzwTCcElK753M47sbgm5hFHs="
+                                    },
+                                    {
+                                        "name": "X-Received",
+                                        "value": "by 2002:a17:906:fac4:b0:881:4488:297c with SMTP id lu4-20020a170906fac400b008814488297cmr2729971ejb.129.1675422910770; Fri, 03 Feb 2023 03:15:10 -0800 (PST)"
+                                    },
+                                    {
+                                        "name": "MIME-Version",
+                                        "value": "1.0"
+                                    },
+                                    {
+                                        "name": "References",
+                                        "value": "<CADfBtt5RSL+hBnPXpe_K+dobEvR-UNGrGXNDXUBwuxipBkxrTw@mail.gmail.com>"
+                                    },
+                                    {
+                                        "name": "In-Reply-To",
+                                        "value": "<CADfBtt5RSL+hBnPXpe_K+dobEvR-UNGrGXNDXUBwuxipBkxrTw@mail.gmail.com>"
+                                    },
+                                    {
+                                        "name": "From",
+                                        "value": "Matthew Mallen <120355103@umail.ucc.ie>"
+                                    },
+                                    {
+                                        "name": "Date",
+                                        "value": "Fri, 3 Feb 2023 11:14:59 +0000"
+                                    },
+                                    {
+                                        "name": "Message-ID",
+                                        "value": "<CADfBtt7-oNXMrHHLwffRo3MTtY5wAQGwfp+CaH+x7a-wDbDnjQ@mail.gmail.com>"
+                                    },
+                                    {
+                                        "name": "Subject",
+                                        "value": "Re: Think turbo is working!"
+                                    },
+                                    {
+                                        "name": "To",
+                                        "value": "h@h.com"
+                                    },
+                                    {
+                                        "name": "Content-Type",
+                                        "value": "multipart/alternative; boundary=\"00000000000072019905f3c9cb6b\""
+                                    }
+                                ],
+                                "body": {
+                                    "size": 0
+                                },
+                                "parts": [
+                                    {
+                                        "partId": "2.0.0",
+                                        "mimeType": "text/plain",
+                                        "filename": "",
+                                        "headers": [
+                                            {
+                                                "name": "Content-Type",
+                                                "value": "text/plain; charset=\"UTF-8\""
+                                            }
+                                        ],
+                                        "body": {
+                                            "size": 131,
+                                            "data": "YWRkaW5nIHRvIHRoZSB0aHJlYWQgYnJldg0KDQpPbiBGcmksIEZlYiAzLCAyMDIzIGF0IDEwOjI5IEFNIDwxMjAzNTUxMDNAdW1haWwudWNjLmllPiB3cm90ZToNCg0KPiBJIGFtIHRlc3RpbmcgdGhlIGVtYWlsIGZlYXR1cmUhDQo="
+                                        }
+                                    },
+                                    {
+                                        "partId": "2.0.1",
+                                        "mimeType": "text/html",
+                                        "filename": "",
+                                        "headers": [
+                                            {
+                                                "name": "Content-Type",
+                                                "value": "text/html; charset=\"UTF-8\""
+                                            },
+                                            {
+                                                "name": "Content-Transfer-Encoding",
+                                                "value": "quoted-printable"
+                                            }
+                                        ],
+                                        "body": {
+                                            "size": 405,
+                                            "data": "PGRpdiBkaXI9Imx0ciI-YWRkaW5nIHRvIHRoZSB0aHJlYWQgYnJldjwvZGl2Pjxicj48ZGl2IGNsYXNzPSJnbWFpbF9xdW90ZSI-PGRpdiBkaXI9Imx0ciIgY2xhc3M9ImdtYWlsX2F0dHIiPk9uIEZyaSwgRmViIDMsIDIwMjMgYXQgMTA6MjkgQU0gJmx0OzxhIGhyZWY9Im1haWx0bzoxMjAzNTUxMDNAdW1haWwudWNjLmllIj4xMjAzNTUxMDNAdW1haWwudWNjLmllPC9hPiZndDsgd3JvdGU6PGJyPjwvZGl2PjxibG9ja3F1b3RlIGNsYXNzPSJnbWFpbF9xdW90ZSIgc3R5bGU9Im1hcmdpbjowcHggMHB4IDBweCAwLjhleDtib3JkZXItbGVmdDoxcHggc29saWQgcmdiKDIwNCwyMDQsMjA0KTtwYWRkaW5nLWxlZnQ6MWV4Ij5JIGFtIHRlc3RpbmcgdGhlIGVtYWlsIGZlYXR1cmUhPC9ibG9ja3F1b3RlPjwvZGl2Pg0K"
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "sizeEstimate": 13886,
+            "historyId": "405424",
+            "internalDate": "1675422911000"
         }
     ]
-]
+}
