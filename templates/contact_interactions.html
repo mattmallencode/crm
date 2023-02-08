@@ -2,39 +2,43 @@
     {% if activity == 'activity' %}
         <p>Activity.....</p>
     {% elif activity == 'emails' %}
-        <form action = "" method = "POST">
-            <p>To: {{ contact.email }}</p>
-            <p>From: {{ gmail_email }}</p>
-            {{form.hidden_tag()}}
-            {{form.subject.label}}
-            {{form.subject()}}
-            <br>
-            {{form.message.label}}
-            {{form.message}}
-            <br>
-            {{form.submit()}}
-            {% if reply is not none %}
-                <a href="{{url_for('contact', contact_id=contact.contact_id, activity='emails')}}">Cancel Reply</a>
-            {% endif %}
-        </form>
-        {% if threads %}
-        {% for thread in threads %}
-            <article>
-                <p>{{ thread[0]["subject"] }}</p>
-                {% for email in thread %}
+        <section>
+            <h2>Send Email to {{contact.name}}</h2>
+            <form action = "" method = "POST">
+                {{form.hidden_tag()}}
                 <section>
-                    <p>{{ email["timestamp"] }}</p>
-                    <p><b>{{ email["sender_email"] }}</b></p>
-                    <p>{{ email["recipient_email"] }}</p>
-                    <p>{{ email["body"] }}</p>
+                    {{form.subject(placeholder="Subject")}}
+                    {{form.message(placeholder="Message")}}
                 </section>
-                <br>
-                {% endfor %}
-                <a href="{{url_for('reply_email', message_id=thread[-1]['id'], subject=thread[0]['subject'], thread_id=thread[-1]['threadId'], contact_id=contact.contact_id)}}">Reply</a>
+                
+                <section>
+                    {{form.submit()}}
+
+                    {% if reply is not none %}
+                        <a id = "cancel_reply" href="{{url_for('contact', contact_id=contact.contact_id, activity='emails')}}">Cancel Reply</a>
+                    {% endif %}
+                </section>
+            </form>
+        </section>
+        <section id="emails">
+            <h2>Emails with {{contact.name}}</h2>
+            {% for thread in threads %}
+            <article>
+                <h3>{{ thread[0]["subject"] }}</h3>
+                {% for email in thread %}
+                <section id = "email">
+                    <p><b>Date:</b> {{ email["timestamp"] }}</p>
+                    <p><b>From:</b> {{ email["sender_email"] }}</p>
+                    <p><b>To:</b> {{ email["recipient_email"] }}</p>
+                    <p><b>Body:</b> {{ email["body"] }}</p>
+                </section>
+                {% endfor %} 
+                <section id="reply">
+                    <a href="{{url_for('reply_email', message_id=thread[-1]['id'], subject=thread[0]['subject'], thread_id=thread[-1]['threadId'], contact_id=contact.contact_id)}}">Reply</a>
+                </section>
             </article>
-            <br><br>
-        {% endfor %}
-        {% endif %}
+            {% endfor %}
+        </section>
     {% elif activity == 'notes' %}
         <section>
             <h2>Make A Note</h2>

@@ -325,13 +325,17 @@ ul {
     margin: 1% 0%;
   }
 
-  #contact input#note{
+  #contact input#note, input#message, input#subject{
     height: 100px;
     border-radius: 0%;
     text-indent: 0%;
     text-align: start;
     justify-content: start;
     background-color: #FFF8DC;
+  }
+
+  #activity_box input#subject{
+    height: 25px;
   }
 
   #contact input#submit{
@@ -361,4 +365,39 @@ ul {
   #contact_activity section section a{
     background-color: #e5d07b;
     border: 2px solid black;
+  }
+
+  #emails{
+    border-top: 1px solid black;
+    padding-top: 5%;
+  }
+
+  #emails h2{
+    padding-bottom: 2.5%;
+  }
+
+  #emails article{
+    background-color: #e5d07b;
+    margin-bottom: 3%;
+    padding: 2%;
+    box-shadow: 0px 0px 10px #606060;
+  }
+
+  #emails #email{
+    border-bottom: 2px solid black;
+    padding: 1%;
+  }
+
+  #emails article #reply a{
+    margin: 0%;
+    background-color: #b7aeae;
+    box-shadow: 0px 0px 5px #333;
+  }
+
+  #emails article #reply{
+    margin: 2.5% 0% 1% 0%;
+  }
+
+  #cancel_reply{
+    padding: 1%;
   }
