@@ -17,6 +17,7 @@
                 <a href="{{url_for('contact', contact_id=contact.contact_id, activity='emails')}}">Cancel Reply</a>
             {% endif %}
         </form>
+        {% if threads %}
         {% for thread in threads %}
             <article>
                 <p>{{ thread[0]["subject"] }}</p>
@@ -26,8 +27,6 @@
                     <p><b>{{ email["sender_email"] }}</b></p>
                     <p>{{ email["recipient_email"] }}</p>
                     <p>{{ email["body"] }}</p>
-                    <p>{{ email["id"] }}</p>
-                    <p>{{ email["threadId"] }}</p>
                 </section>
                 <br>
                 {% endfor %}
@@ -35,6 +34,7 @@
             </article>
             <br><br>
         {% endfor %}
+        {% endif %}
     {% elif activity == 'notes' %}
         <section>
             <h2>Make A Note</h2>
