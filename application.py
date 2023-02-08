@@ -156,7 +156,7 @@ def team_required(view):
     @wraps(view)
     def wrapped_view(**kwargs):
         if g.team_id is None:
-            return redirect(url_for("home"))
+            return redirect(url_for("createTeam"))
         return view(**kwargs)
     return wrapped_view
 
@@ -221,6 +221,7 @@ def invite():
 
 @application.route("/", methods=["GET", "POST"])
 @login_required
+@team_required
 def home():
     # Query the db for the team_id using the cokies email.
     user_details = Users.query.filter_by(email=g.email).first()

@@ -19,7 +19,13 @@
             <a href = "{{url_for('contacts', prev_sort='None', order='ASC', sort='None', filter='assigned', page=1 , error='None')}}">My Assigned Contacts</a>
             <a href = "{{url_for('contacts', prev_sort='None', order='ASC', sort='None', filter='unassigned', page=1 , error='None')}}">Unassigned Contacts</a>
         </section>
-        <i class="fa-solid fa-magnifying-glass"></i>
+        <i id="search_icon_contacts"class="fa-solid fa-magnifying-glass"></i>
+        <i id="sorting_contacts_name"class="fas fa-sort"></i>
+        <i id="sorting_contacts_email"class="fas fa-sort"></i>
+        <i id="sorting_contacts_phone_number"class="fas fa-sort"></i>
+        <i id="sorting_contacts_contact_owner"class="fas fa-sort"></i>
+        <i id="sorting_contacts_company"class="fas fa-sort"></i>
+        <i id="sorting_contacts_status"class="fas fa-sort"></i>
         <table>
             <tr>
                 <form action = "" method = "POST" novalidate>
@@ -31,10 +37,15 @@
             {% set prev_sort = sort %}
             <tr>
                 <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='name', page=page, filter=filter, error='None')}}">Name</a></th>
+                
                 <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='email', page=page, filter=filter, error='None')}}">Email</a></th>
+                
                 <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='phone_number', page=page, filter=filter, error='None')}}">Phone Number</a></th>
+                
                 <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='contact_owner', page=page, filter=filter, error='None')}}">Contact Owner</a></th>
+                
                 <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='company', page=page, filter=filter, error='None')}}">Company</a></th>
+                
                 <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='status', page=page, filter=filter, error='None')}}">Status</a></th>
                 <th class="contacts_table_heading">Edit Contact</th>
                 <th class="contacts_table_heading">Remove Contact</th>
