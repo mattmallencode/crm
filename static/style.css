@@ -401,3 +401,53 @@ ul {
   #cancel_reply{
     padding: 1%;
   }
+  
+
+  #create_team, #team_page section{
+    background-color: #b7aeae;
+    box-shadow: 0px 0px 5px #333;
+    padding: 2% 2%;
+    margin: 0% 40% 0% 5%;
+    border-radius: 20px;
+  }
+
+  #create_team h1{
+    font-size: 30px;
+    margin: 0%;
+    padding: 0%;
+  }
+
+  #create_team input{
+    padding: 0% 2%;
+    text-indent: 0%;
+  }
+
+  #team_page{
+    margin-top: 5%;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    row-gap: 10%;
+  }
+
+  #team_page section{
+    padding: 1% 2% 2% 2%;
+  }
+
+  #team_page h1{
+    border-bottom: 2px solid #575757;
+    margin: 0%;
+    padding: 0%;
+  }
+
+  #team_page #invite_button{
+    border-top: 2px solid #575757;
+  }
+
+  #team_page a{
+    margin: 5% 0%;
+    
+  }
+
+ 
+  
+
