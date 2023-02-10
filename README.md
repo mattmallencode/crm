@@ -101,7 +101,7 @@ As a Sherpa user I want to search for a specific contact using a search bar.
 *User Story ID:  16*<br>
 As a Sherpa user I want to sort my team's contacts by email, phone number, etc.
 #### Post Notes
-*User Story ID:  18*<br>
+*User Story ID:  17*<br>
 As a Sherpa user, I want to add a note to a contact's page.
 #### Remove notes
 *User Story ID:  18*<br>
