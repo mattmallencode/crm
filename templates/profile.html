@@ -9,19 +9,23 @@
               <li><a href="{{ url_for('profile') }}">Profile</a></li>
             </ul>
           </nav>
-        <div class="invite-form">
-        <h1>
-            Your Profile
-        </h1>
-        <div class="invite_form">
-            <p>Logout</p>
-            <form action = "" method = "POST">
-                {{ form.hidden_tag() }}
-                <div class="send_invite_form_email">{{ form.submit(id="invite") }}</div>
-            </form>
-        </div>
-        <p>Email: {{ user["email"] }}</p>
-        <p>Team: {{ team["name"] }}</p>
-        <p id="invite-response">{{response}}</p>
+        
+        <section id="logout">
+            <section>
+                <h1>Your Profile</h1>
+                <p>Email: {{ user["email"] }}</p>
+                <p>Team: {{ team["name"] }}</p>
+            </section>
+
+            <section>
+                <h2>Logout</h2>
+                <form action = "" method = "POST">
+                    {{ form.hidden_tag() }}
+                    {{ form.submit() }}
+                </form>
+
+            </section>
+        </section>
+
     </body>
 {% endblock %}
