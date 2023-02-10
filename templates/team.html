@@ -41,13 +41,19 @@
           <h1>Leave Your Team</h1>
           <form action = "" method = "POST">
               {{ form.hidden_tag() }}
-              {{ form.sure_checkbox.label }}
-              {{ form.sure_checkbox() }}
-              {% for error in form.sure_checkbox.errors %}
-              <div>{{ error }}</div>
-              {% endfor %}
-                              
-              {{ form.submit() }}
+              <div>
+                {{ form.sure_checkbox() }}
+                {{ form.sure_checkbox.label }}
+              
+                {% for error in form.sure_checkbox.errors %}
+                <div>{{ error }}</div>
+                {% endfor %}
+              </div>
+             
+              <div>
+                {{ form.submit() }}
+              </div>  
+              
             </form>
         </section>
   </section>

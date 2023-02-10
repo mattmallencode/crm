@@ -338,7 +338,7 @@ ul {
     height: 25px;
   }
 
-  #contact input#submit{
+  #contact input#submit, input#submit{
     padding: 1% 2%;
     text-indent: 0%;
     background-color:#e5d07b;
@@ -403,7 +403,7 @@ ul {
   }
   
 
-  #create_team, #team_page section{
+  #create_team, #team_page section, #invite, #logout{
     background-color: #b7aeae;
     box-shadow: 0px 0px 5px #333;
     padding: 2% 2%;
@@ -411,13 +411,13 @@ ul {
     border-radius: 20px;
   }
 
-  #create_team h1{
+  #create_team h1, #invite h1, #logout h1{
     font-size: 30px;
     margin: 0%;
     padding: 0%;
   }
 
-  #create_team input{
+  #create_team input, #invite input{
     padding: 0% 2%;
     text-indent: 0%;
   }
@@ -441,13 +441,33 @@ ul {
 
   #team_page #invite_button{
     border-top: 2px solid #575757;
+    padding-top: 2.5%;
   }
 
   #team_page a{
-    margin: 5% 0%;
-    
+    margin: 0%;
   }
 
- 
+  #team_page form{
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    row-gap: 10%;
+    align-items: start;
+  }
+  
+  #team_page #sure_checkbox{
+    width: 20px;
+  }
+
+  #invite input#submit, #create_team input#submit{
+    background-color: #e5d07b;
+    border-radius: 30px;
+    margin-top: 1%;
+  }
+
+  #logout section + section{
+    border-top: 2px solid #575757;
+  }
+
   
 

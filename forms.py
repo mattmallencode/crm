@@ -51,7 +51,7 @@ class LogoutForm(FlaskForm):
     submit = SubmitField("Log Out")
 
 class LeaveTeamForm(FlaskForm):
-    sure_checkbox = BooleanField("Click the checkbox to confirm you are leaving your team.")
+    sure_checkbox = BooleanField("Click the checkbox to confirm you are leaving your team")
     submit = SubmitField("Leave Team")
 
 class SearchForm(FlaskForm):
