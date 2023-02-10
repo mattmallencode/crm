@@ -63,19 +63,19 @@ As a business employee, I want to accept an invitation to join my employer's She
 
 #### View Contacts
 *User Story ID: 3*<br>
-As an employee, I would be able to visit my home page after logging in and look at the list of all my contacts.
+As a Sherpa user, I want to view all my team's contacts.
 #### Add Contacts
 *User Story ID: 4*<br>
-As a business owner and employee I should be able to add contacts to my contact list.
+As a Sherpa user, I want to add contacts to my contact list.
 #### Edit Contacts
 *User Story ID: 5*<br>
-An employee or business owner should be able to edit their list of contacts. ie. Change various details like a phone number.
+As a Sherpa user, I want to edit one of my team's contacts i.e. change various details like a phone number.
 #### Remove Contacts
 *User Story ID: 6*<br>
-An employee or business owner should be able to remove contacts from their contact list.
+As a Sherpa user, I want to remove one of my team's contacts.
 #### User Logout
 *User Story ID: 7*<br>
-Once a Sherpa user is logged in they should be able to log out of their account.
+As a Sherpa user, I want to log out of my account.
 #### View User Profile
 *User Story ID: 8*<br>
 A Sherpa user should be able to access their personal profile and view it once logged in.
