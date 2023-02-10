@@ -78,41 +78,34 @@ As a Sherpa user, I want to remove one of my team's contacts.
 As a Sherpa user, I want to log out of my account.
 #### View User Profile
 *User Story ID: 8*<br>
-A Sherpa user should be able to access their personal profile and view it once logged in.
+As a Sherpa user, I want to view my personal profile.
 #### Leave Team
 *User Story ID:  9*<br>
-A logged-in Sherpa user who is already a member of a team should be able to leave a team if they wish.
+As a Sherpa user, I want to leave my team.
 #### Assign Contact
 *User Story ID:  10*<br>
-A User of Sherpa that is a member of your team should be able to assign a contact to you and you should be able to assign contacts to them.
+As a Sherpa team owner/admin I want to assign a contact to a member of my team.
 #### View Team
 *User Story ID:  11*<br>
-A user of Sherpa who is a member of a team should be able to see their entire team.
+As a Sherpa user I want to view my team i.e. the list of team members.
 #### View Assigned Contacts
 *User Story ID:  12*<br>
-A user of Sherpa should be able to see their assigned contacts once they are logged in.
+As a Sherpa user I want to view the contacts that have been assigned to me.
 #### View Unassigned Contacts
 *User Story ID:  13*<br>
-A logged in user of Sherpa is able to see a list of their unassigned contacts.
-#### View 25 Contacts per page.
-*User Story ID:  14*<br>
-A Sherpa user should be able to see 25 of their contacts per page.
+As a Sherpa user I want to view the contacts that have yet to be assigned to a member of my team.
 #### Search For Contacts
 *User Story ID:  15*<br>
-A Sherpa user should be able to search for a specific contact using a search bar.
+As a Sherpa user I want to search for a specific contact using a search bar.
 #### Sort Contacts 
 *User Story ID:  16*<br>
-A Sherpa user is able to sort their contacts by using discernible patterns between those contacts.
-#### Filter Contacts 
-*User Story ID:  17*<br>
-A Sherpa user should be able to reduce the number of contacts they have to look through by filtering them.
+As a Sherpa user I want to sort my team's contacts by email, phone number, etc.
 #### Post Notes
 *User Story ID:  18*<br>
-A Sherpa user, once they have added a contact they are able to post notes to their contacts.
-This allows Assigned contacts to view notes posted. 
+As a Sherpa user, I want to add a note to a contact's page.
 #### Remove notes
 *User Story ID:  18*<br>
-Once a note has been added it is possible to review previously posted notes as well as remove them.
+As a Sherpa user, I want to remove a note on a contact's page.
 ### Requirements
 #### User Registration
 *Requirement ID: 1*<br>  
