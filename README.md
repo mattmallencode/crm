@@ -95,16 +95,16 @@ As a Sherpa user I want to view the contacts that have been assigned to me.
 *User Story ID:  13*<br>
 As a Sherpa user I want to view the contacts that have yet to be assigned to a member of my team.
 #### Search For Contacts
-*User Story ID:  15*<br>
+*User Story ID:  14*<br>
 As a Sherpa user I want to search for a specific contact using a search bar.
 #### Sort Contacts 
-*User Story ID:  16*<br>
+*User Story ID:  15*<br>
 As a Sherpa user I want to sort my team's contacts by email, phone number, etc.
 #### Post Notes
-*User Story ID:  17*<br>
+*User Story ID:  16*<br>
 As a Sherpa user, I want to add a note to a contact's page.
 #### Remove notes
-*User Story ID:  18*<br>
+*User Story ID:  17*<br>
 As a Sherpa user, I want to remove a note on a contact's page.
 ### Requirements
 #### User Registration
