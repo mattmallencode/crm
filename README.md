@@ -1,3 +1,4 @@
+
 ﻿# Sherpa: A Free and Open-Source CRM
 ![Sherpa logo: a picture of a Yak beneath a mountain range with the text "Sherpa".`enter code here](https://raw.githubusercontent.com/mattmallencode/crm/main/static/sherpa_logo.png)
 <br>  
@@ -33,7 +34,9 @@ Aria Shahi, 119522223
 		 - [User Authentication](#user-authentication)
 		 - [Team Creation](#team-creation)
 		 - [Team Invitation Generation and Delivery](#team-invitation-generation-and-delivery)
-		 - [Team Invitation Acceptance](#team-invitation-acceptance)
+		 - [Accepting team invitation](#accepting-team-invitation)
+		 - [Addition Of Contacts To Users Contact Page](#addition-of-contacts-to-users-contact-page)
+		 - [Addition Of Notes Implementation](#addition-of-notes-implementation)
  - [Design](#design)
 	 - [Data Models](#data-models)
 		 - [Users](#users)
@@ -46,8 +49,14 @@ Aria Shahi, 119522223
 	 - [User Registration and Authentication](#user-registration-and-authentication)
 	 - [Creating Teams](#creating-teams)
 	 - [Sending and Accepting Team Invites](#sending-and-accepting-team-invites)
+	 - [Addition Of Contacts To Users Contact Page](#addition-of-contacts-to-users-contact-page)
+	 - [Addition Of Notes](#addition-of-notes)
 - [Testing](#testing)
-	- [Testing landing page](#testing-landing-page)
+	- [ Test Landing Page](#test-landing-page)
+	- [ Test User](#test-user)
+	- [ Test Invites](#test-invites)
+	- [ Test Contacts](#test-contacts)
+	- [  Test Teams](#test-teams)
 ## Introduction
 This document outlines the design and implementation of Sherpa, a free and open-source Customer Relationship Management System (CRMS). A CRMS helps businesses drive sales, track customer interactions, and provide quality service. This is achieved by storing the data of existing and potential customers in a central database that can be accessed and managed by anyone within the organization with appropriate permissions.
 
@@ -127,16 +136,16 @@ In order to do anything meaningful with Sherpa (beyond creating an account and p
 *Satisfies User Story: 1, 2*
 
 An owner or administrator of a team must be able to invite another user to join their team. This can be achieved by providing the email of the person they wish to invite and Sherpa will send them an invitation link on their behalf via email.
-####  Team Invitation Acceptance
+####  Accepting Team Invitation
 *Requirement ID: 5*<br>  
 *Satisfies User Story: 2*
 A user must be able to accept an invitation to a team. They can achieve this by clicking the invitation link they received in their email and then logging in. A user may only accept the invitation if they're not already a member of a team and log in using the same email the invitation was sent to.
-#### Addition of contacts.
+#### Addition Of Contacts
 *Requirement ID: 6*<br>  
 *Satisfies User Story: 4, 5, 6, 12, 13, 14, 15, 16, 17, 18*
 A user must be able to add contacts to their contact list. This is completed by logging in and navigating to the home page.  On the home page go to your contacts page. Then click on the add contact button. Once you have added a contact you can remove a contact, send a contact, or edit a contact. Once you have added a contact you can search contacts, filter, and sort them. If no contacts are present the above user stories cannot take place. Posting notes can only be achieved after adding a contact.
-#### Addition of notes 
-*Requirement ID: 18*<br>
+#### Addition Of Notes 
+*Requirement ID: 7*<br>
 A User must have previously added a post to be able to view and remove previous notes. This can be completed by adding a contact. Once a contact has been added it is possible for you to post notes that your assigned contacts can view. Adding this allows you to remove notes as well as view them.
 
 *Satisfies User Story: *
@@ -292,7 +301,7 @@ The following flow chart details the process for adding contacts to a Sherpa use
 *Endpoint: /contacts*
 
 - You input contact details, If the form validates then the database is queried to see if there is an existing contact, otherwise the details are discarded and the form is reloaded. If not then the contact is added to the database and added to the Sherpa user's contact list. Once the contact has been added then the form is reloaded allowing you to execute a range of operations of your contact list. Such as deleting, filtering, and viewing assigned and unassigned contacts,  
-### Addition of notes 
+### Addition Of Notes Implementation
 - *Implementation of requirement: 18*
 *Endpoint: /contacts*
 The following flow chart details the process of adding a note on the contacts page. 
@@ -305,13 +314,22 @@ The following flow chart details the process of adding a note on the contacts pa
 Using turbo that specific section of the page is updated ( the activity box on the page ).
 
 ## Testing 
-### Landing Page
+### Test Landing Page
+*Test case: 1*<br>
+
 - Using Pytest the landing page was tested. Using client make a get request to the url of the page, "/login".  Store the recieved data from that get request in the html variable. Using pytest "assert" statement, assert that the landing status of the page is "200". It means the page was served without issues.
 ### Test User
+*Test case: 2*<br>
+
 - Using Pytest a fake instance of a user and dummy information was passed into it. Then using assert statements check that the passed information was correctly received by the Users class.
-### Test invites
+### Test Invites
+*Test case: 3*<br>
 - Using pytest a fake invite was created by calling the invite class and using the assert statement we can find out whether the class behaves as it should.
-### Test contacts
+### Test Contacts
+*Test case: 4*<br>
+
 - Using Pytest create a fake instance of a contact being added. Check that all contact details are received properly. 
-### Test teams 
+### Test Teams 
+*Test case: 5*<br>
 -  Using Pytest a fake instance of  a team was created using the Teams class. Parameters for a team creation were passed and the behavior was checked using an assert statement.
+
