@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 from flask_sqlalchemy import SQLAlchemy as sa
 from flask_mail import Mail, Message
-from forms import SignUpForm, LoginForm, CreateTeamForm, InviteForm, ContactForm, LogoutForm, LeaveTeamForm, SearchForm, EmailForm, NoteForm
+from forms import SignUpForm, LoginForm, CreateTeamForm, InviteForm, ContactForm, LogoutForm, LeaveTeamForm, SearchForm, EmailForm, NoteForm, MeetingForm
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 from secrets import token_urlsafe
@@ -194,27 +194,27 @@ def invite():
                     if user_to_be_invited.team_id == team_id:
                         form.email.errors.append(
                             "This user is already a member of your team")
-                else:
-                    # collects form data and inserts into invite table
-                    sec = token_urlsafe(16)
-                    host = "http://127.0.0.1:5000"
-                    url = f"{host}/login/{email}_{team_id}_{sec}"
-                    invite.team_id = team_id
-                    invite.invite_id = f"{email}_{team_id}_{sec}"
-                    db.session.add(invite)
-                    db.session.commit()
-                    # creates email message
+                        return render_template("invite.html", form=form, response=response)
+                # collects form data and inserts into invite table
+                sec = token_urlsafe(16)
+                host = "http://127.0.0.1:5000"
+                url = f"{host}/login/{email}_{team_id}_{sec}"
+                invite.team_id = team_id
+                invite.invite_id = f"{email}_{team_id}_{sec}"
+                db.session.add(invite)
+                db.session.commit()
+                # creates email message
 
-                    msg = Message("Sherpa Invitation", sender=(
-                        "Sherpa CRM", "Sherpacrm90@gmail.com"), recipients=[form.email.data])
-                    msg.html = f"You have been invited to join a Sherpa organisation. Click <a href = '{url}'> here</a> to join"
-                    # connects to mail SMTP server and sends message
-                    mail.connect()
-                    mail.send(msg)
-                    response = "Member has been invited"
+                msg = Message("Sherpa Invitation", sender=(
+                    "Sherpa CRM", "Sherpacrm90@gmail.com"), recipients=[form.email.data])
+                msg.html = f"You have been invited to join a Sherpa organisation. Click <a href = '{url}'> here</a> to join"
+                # connects to mail SMTP server and sends message
+                mail.connect()
+                mail.send(msg)
+                response = "Member has been invited"
 
-                    db.session.add(invite)
-                    db.session.commit()
+                db.session.add(invite)
+                db.session.commit()
 
     return render_template("invite.html", form=form, response=response)
 
@@ -704,9 +704,23 @@ def contact(contact_id, activity, reply):
         return email_activity(google_token, form, google_email, contact_id, contact, reply)
     elif activity == "notes":
         return notes_activity(contact_id, google_token, contact)
+    elif activity == "meetings":
+        return meetings_activity(contact_id, google_token, contact)
     else:
         return render_template("contact.html", contact=contact, activity=activity, form=form, noteForm=noteForm, google_token=google_token, google_email=google_email)
 
+def meetings_activity(contact_id, google_token, contact):
+    form = MeetingForm()
+    if google_token != None:
+        pass
+    # User isn't authenticated, redirect them so they can oAuth their email.
+    else:
+        return redirect(url_for('authorize_email', contact_id=contact_id))
+    # If we can, just update the part of the page that's changed i.e. the activity box.
+    if turbo.can_stream():
+        return turbo.stream(turbo.update(render_template("contact_interactions.html", google_token=google_token, activity="meetings", form=form), 'activity_box'))
+    else:
+        return render_template("contact.html", contact=contact, google_token=google_token, activity="meetings", form=form)
 
 def notes_activity(contact_id, google_token, contact):
     """Function for the notes activity on the contacts page."""
@@ -755,7 +769,6 @@ def email_activity(google_token, form, google_email, contact_id, contact, reply)
         # If the fetching of the user's emails wasn't successful redirect them to re-authorize their email.
         if response_status != 200:
             return redirect(url_for('authorize_email', contact_id=contact_id))
-
     # User isn't authenticated, redirect them so they can oAuth their email.
     else:
         return redirect(url_for('authorize_email', contact_id=contact_id))

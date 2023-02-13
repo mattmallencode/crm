@@ -81,8 +81,21 @@
                 {% endfor %}
             {% endif %}
         </section>
-
-
+    {% elif activity == "meetings" %}
+    <section>
+        <h2>Schedule a meeting with {{contact.name}}</h2>
+        <form action = "" method = "POST">
+            {{form.hidden_tag()}}
+            <section>
+                {{form.title(placeholder="Title")}}
+                {{form.description(placeholder="Description")}}
+                {{form.date_time(placeholder="Date & Time")}}
+            </section>
+            <section>
+                {{form.schedule()}}
+            </section>
+        </form>
+    </section>    
     {% else %}
         <p>other....</p>
     {% endif %}
