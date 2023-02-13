@@ -9,44 +9,60 @@
       <li><a href="{{ url_for('profile') }}">Profile</a></li>
     </ul>
   </nav>
-<body>
+
   {% if user_details.team_id %}
-    <section>
-      <h1>{{ team["name"] }}</h1>
-    </section>
-    <table>
-      <tr>
-        <th>Name</th>
-        <th>Email</th>
-        {% for team_member in team_members %}
-        <tr>
-          <td>{{ team_member.email }}</td>
-          <td>{{ team_member.name }}</td>
-        </tr>
-        {% endfor %}
-      </tr>
-    </table>
-      {% if user_details.admin_status == True %}
-      <a href="{{ url_for('invite') }}">Invite a new team mate.</a>
-      {% endif %}
-      <div class="invite-form">
-        <div class="create_team_form">
-            <form action = "" method = "POST">
-                
-                {{ form.hidden_tag() }}
+  <section id="team_page">
+    
+      <section>
+          <h1>My Team: {{ team["name"] }}</h1>
+          
+          <table>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+            </tr>
+
+            {% for team_member in team_members %}
+            <tr>
+              <td>{{ team_member.name }}</td>
+              <td>{{ team_member.email }}</td>
+            </tr>
+            {% endfor %}
+          </table>
+          
+          {% if user_details.admin_status == True %}
+            <p id="invite_button"><a href="{{ url_for('invite') }}">Invite a new team mate.</a></p>
+          {% endif %}
+            
+      </section>
+      
+
+      <section>
+          <h1>Leave Your Team</h1>
+          <form action = "" method = "POST">
+              {{ form.hidden_tag() }}
+              <div>
+                {{ form.sure_checkbox() }}
                 {{ form.sure_checkbox.label }}
-                <div class="invite_form_email_input">{{ form.sure_checkbox }}</div>
+              
                 {% for error in form.sure_checkbox.errors %}
-                {{ error }}
+                <div>{{ error }}</div>
                 {% endfor %}
-                {{ form.submit }}
+              </div>
+             
+              <div>
+                {{ form.submit() }}
+              </div>  
+              
             </form>
-        </div>
+        </section>
+  </section>
+    
   {% else %}
-    <section>
+  <section>
       <p>You are not a member of a team. Either accept an invite or create your own to be a member of an team.</p>
       <a href="create_team">Create A Team</a>
-    </section>
+  </section>
   {% endif %}
 </body>
 {% endblock %}

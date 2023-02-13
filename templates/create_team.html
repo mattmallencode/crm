@@ -12,23 +12,27 @@
         </ul>
       </nav>
       {% endif %} 
-      <div class="invite-form">
-        <h1>
-            Create Team
-        </h1>
-        <div class="create_team_form">
-            <p>Invite a member to join your organisation</p>
-            <form action = "" method = "POST">
-                
-                {{ form.hidden_tag() }}
-
-                {{ form.name.label }}
-                <div class="invite_form_email_input">{{ form.name() }}</div>
-                {% for error in form.name.errors %}
+      <section id="create_team">
+        <section>
+          <h1>Create Team</h1>
+          <p>Create a Team to manage your organisation using Sherpa CRM.</p>
+        </section>
+        
+            
+        <form action = "" method = "POST">
+            {{ form.hidden_tag() }}
+            <section>
+              {{ form.name(placeholder="Team Name") }}
+              {% for error in form.name.errors %}
                 <div>{{ error }}</div>
-                {% endfor %}
-                <div class="send_invite_form_email">{{ form.submit(id="invite") }}</div>
-            </form>
-        </div>
+              {% endfor %}
+            </section>
+            
+            <section>
+              {{ form.submit(value="Create") }}
+            </section>
+            
+        </form>
+      </section>
     </body>
 {% endblock %}
