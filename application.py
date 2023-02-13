@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 from flask_sqlalchemy import SQLAlchemy as sa
 from flask_mail import Mail, Message
-from forms import SignUpForm, LoginForm, CreateTeamForm, InviteForm, ContactForm, LogoutForm, LeaveTeamForm, SearchForm, EmailForm, NoteForm
+from forms import SignUpForm, LoginForm, CreateTeamForm, InviteForm, ContactForm, LogoutForm, LeaveTeamForm, SearchForm, EmailForm, NoteForm, MeetingForm
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 from secrets import token_urlsafe
@@ -35,7 +35,7 @@ application.config["MAIL_USE_SSL"] = True
 
 # oauth configuration for remote apps.
 oauth = OAuth(application)
-gmail = oauth.remote_app("gmail", content_type="application/json", consumer_key=application.config.get("GOOGLE_ID"), consumer_secret=application.config.get("GOOGLE_SECRET"), request_token_params={"scope": ["https://www.googleapis.com/auth/gmail.send", "https://www.googleapis.com/auth/gmail.readonly", "https://www.googleapis.com/auth/userinfo.email"]}, base_url="https://www.googleapis.com/oauth2/v1/", authorize_url="https://accounts.google.com/o/oauth2/auth", access_token_method="POST", access_token_url="https://accounts.google.com/o/oauth2/token", request_token_url=None,
+google = oauth.remote_app("google", content_type="application/json", consumer_key=application.config.get("GOOGLE_ID"), consumer_secret=application.config.get("GOOGLE_SECRET"), request_token_params={"scope": ["https://www.googleapis.com/auth/gmail.send", "https://www.googleapis.com/auth/gmail.readonly", "https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/calendar.events"]}, base_url="https://www.googleapis.com/oauth2/v1/", authorize_url="https://accounts.google.com/o/oauth2/auth", access_token_method="POST", access_token_url="https://accounts.google.com/o/oauth2/token", request_token_url=None,
                          )
 
 
@@ -194,27 +194,27 @@ def invite():
                     if user_to_be_invited.team_id == team_id:
                         form.email.errors.append(
                             "This user is already a member of your team")
-                else:
-                    # collects form data and inserts into invite table
-                    sec = token_urlsafe(16)
-                    host = "http://127.0.0.1:5000"
-                    url = f"{host}/login/{email}_{team_id}_{sec}"
-                    invite.team_id = team_id
-                    invite.invite_id = f"{email}_{team_id}_{sec}"
-                    db.session.add(invite)
-                    db.session.commit()
-                    # creates email message
+                        return render_template("invite.html", form=form, response=response)
+                # collects form data and inserts into invite table
+                sec = token_urlsafe(16)
+                host = "http://127.0.0.1:5000"
+                url = f"{host}/login/{email}_{team_id}_{sec}"
+                invite.team_id = team_id
+                invite.invite_id = f"{email}_{team_id}_{sec}"
+                db.session.add(invite)
+                db.session.commit()
+                # creates email message
 
-                    msg = Message("Sherpa Invitation", sender=(
-                        "Sherpa CRM", "Sherpacrm90@gmail.com"), recipients=[form.email.data])
-                    msg.html = f"You have been invited to join a Sherpa organisation. Click <a href = '{url}'> here</a> to join"
-                    # connects to mail SMTP server and sends message
-                    mail.connect()
-                    mail.send(msg)
-                    response = "Member has been invited"
+                msg = Message("Sherpa Invitation", sender=(
+                    "Sherpa CRM", "Sherpacrm90@gmail.com"), recipients=[form.email.data])
+                msg.html = f"You have been invited to join a Sherpa organisation. Click <a href = '{url}'> here</a> to join"
+                # connects to mail SMTP server and sends message
+                mail.connect()
+                mail.send(msg)
+                response = "Member has been invited"
 
-                    db.session.add(invite)
-                    db.session.commit()
+                db.session.add(invite)
+                db.session.commit()
 
     return render_template("invite.html", form=form, response=response)
 
@@ -656,25 +656,25 @@ def team():
 def authorize_email(contact_id):
     """Route for getting oAuth cred's for user's gmail."""
     session["contact_id_redirect"] = contact_id
-    return gmail.authorize(callback=url_for(f"authorized", _external=True))
+    return google.authorize(callback=url_for(f"authorized", _external=True))
 
 
 @application.route("/authorize_email/authorized/")
-@gmail.authorized_handler
+@google.authorized_handler
 def authorized(resp):
-    """Route for handling successful gmail oAuth."""
+    """Route for handling successful google oAuth."""
     contact_id_redirect = session.get("contact_id_redirect")
     session.pop("contact_id_redirect", default=None)
-    session["gmail_token"] = (resp["access_token"],)
-    user = gmail.get("userinfo")
-    session["user_gmail"] = user.data["email"]
+    session["google_token"] = (resp["access_token"],)
+    user = google.get("userinfo")
+    session["user_google"] = user.data["email"]
     return redirect(url_for("contact", contact_id=contact_id_redirect, activity="emails", _external=True))
 
 
-@gmail.tokengetter
-def get_gmail_token(token=None):
-    """Function for fetching user's gmail token."""
-    return session.get("gmail_token")
+@google.tokengetter
+def get_google_token(token=None):
+    """Function for fetching user's google token."""
+    return session.get("google_token")
 
 
 @application.route("/contact/<contact_id>/<activity>", defaults={"reply": None}, methods=["GET", "POST"])
@@ -694,24 +694,35 @@ def contact(contact_id, activity, reply):
     form = EmailForm()
     if reply != None:
         reply = reply.split(",")
-        # reply_msg_id = reply[0]
-        # reply_thread_id = reply[1]
-        # reply_subject = reply[2]
         form.subject.data = reply[2]
     noteForm = NoteForm()
     contact = Contacts.query.filter_by(
         contact_id=contact_id, team_id=g.team_id).first()
-    gmail_token = session.get("gmail_token")
-    gmail_email = session.get("user_gmail")
+    google_token = session.get("google_token")
+    google_email = session.get("user_google")
     if activity == "emails":
-        return email_activity(gmail_token, form, gmail_email, contact_id, contact, reply)
+        return email_activity(google_token, form, google_email, contact_id, contact, reply)
     elif activity == "notes":
-        return notes_activity(contact_id, gmail_token, contact)
+        return notes_activity(contact_id, google_token, contact)
+    elif activity == "meetings":
+        return meetings_activity(contact_id, google_token, contact)
     else:
-        return render_template("contact.html", contact=contact, activity=activity, form=form, noteForm=noteForm, gmail_token=gmail_token, gmail_email=gmail_email)
+        return render_template("contact.html", contact=contact, activity=activity, form=form, noteForm=noteForm, google_token=google_token, google_email=google_email)
 
+def meetings_activity(contact_id, google_token, contact):
+    form = MeetingForm()
+    if google_token != None:
+        pass
+    # User isn't authenticated, redirect them so they can oAuth their email.
+    else:
+        return redirect(url_for('authorize_email', contact_id=contact_id))
+    # If we can, just update the part of the page that's changed i.e. the activity box.
+    if turbo.can_stream():
+        return turbo.stream(turbo.update(render_template("contact_interactions.html", google_token=google_token, activity="meetings", form=form), 'activity_box'))
+    else:
+        return render_template("contact.html", contact=contact, google_token=google_token, activity="meetings", form=form)
 
-def notes_activity(contact_id, gmail_token, contact):
+def notes_activity(contact_id, google_token, contact):
     """Function for the notes activity on the contacts page."""
     response = ""
     notes = Notes.query.filter_by(contact_id=contact_id)
@@ -729,26 +740,27 @@ def notes_activity(contact_id, gmail_token, contact):
         response = "Note Added"
     # If we can, just update the part of the page that's changed i.e. the activity box.
     if turbo.can_stream():
-        return turbo.stream(turbo.update(render_template("contact_interactions.html", notes=notes, gmail_token=gmail_token, contact=contact, activity="notes", noteForm=noteForm, response=response), 'activity_box'))
+        return turbo.stream(turbo.update(render_template("contact_interactions.html", notes=notes, google_token=google_token, contact=contact, activity="notes", noteForm=noteForm, response=response), 'activity_box'))
     else:
-        return render_template("contact.html", notes=notes, contact=contact, gmail_token=gmail_token, activity="notes", noteForm=noteForm)
+        return render_template("contact.html", notes=notes, contact=contact, google_token=google_token, activity="notes", noteForm=noteForm)
 
 
-def email_activity(gmail_token, form, gmail_email, contact_id, contact, reply):
+def email_activity(google_token, form, google_email, contact_id, contact, reply):
     """Function for the email activity on the contacts page."""
-    # Make sure user has authorized their gmail.
-    if gmail_token != None:
+    # Make sure user has authorized their google.
+    if google_token != None:
         # If the user's submitted a valid email, send the email on their behalf.
         if form.validate_on_submit():
             subject = form.subject.data
             message = form.message.data
-            from_email = gmail_email
+            from_email = google_email
             to_email = contact.email
             response = send_email(
                 subject, message, from_email, to_email, reply)
             # If sending the email failed, redirect them so they can oAuth their email.
             if response != 200:
                 return redirect(url_for('authorize_email', contact_id=contact_id))
+            reply = None
             form.subject.data = ""
             form.message.data = ""
         # Fetch this user's emails.
@@ -757,7 +769,6 @@ def email_activity(gmail_token, form, gmail_email, contact_id, contact, reply):
         # If the fetching of the user's emails wasn't successful redirect them to re-authorize their email.
         if response_status != 200:
             return redirect(url_for('authorize_email', contact_id=contact_id))
-
     # User isn't authenticated, redirect them so they can oAuth their email.
     else:
         return redirect(url_for('authorize_email', contact_id=contact_id))
@@ -765,14 +776,14 @@ def email_activity(gmail_token, form, gmail_email, contact_id, contact, reply):
     if turbo.can_stream():
         return turbo.stream(
             turbo.update(render_template("contact_interactions.html", contact=contact, activity="emails",
-                                         gmail_token=gmail_token, form=form, gmail_email=gmail_email, threads=threads, reply=reply), 'activity_box')
+                                         google_token=google_token, form=form, google_email=google_email, threads=threads, reply=reply), 'activity_box')
         )
     else:
-        return render_template("contact.html", contact=contact, activity="emails", gmail_token=gmail_token, form=form, gmail_email=gmail_email, threads=threads, reply=reply)
+        return render_template("contact.html", contact=contact, activity="emails", google_token=google_token, form=form, google_email=google_email, threads=threads, reply=reply)
 
 
 def send_email(subject, message, from_email, to_email, reply=None):
-    """Function to send an email with an oAuth authenticated gmail account."""
+    """Function to send an email with an oAuth authenticated google account."""
     message = MIMEText(message)
     message["from"] = from_email
     message["to"] = to_email
@@ -793,40 +804,40 @@ def send_email(subject, message, from_email, to_email, reply=None):
         message = json.dumps(
         {'raw': base64.urlsafe_b64encode(message.as_bytes()).decode()})
     url = f"https://gmail.googleapis.com/gmail/v1/users/{from_email}/messages/send"
-    response = gmail.post(url, data=message, format="text")
+    response = google.post(url, data=message, format="text")
     return response.status
 
 
 def get_emails(contact_email):
-    """Function to fetch any email's in the user's gmail from contact_email OR to contact_email."""
-    # The query asks gmail to return all emails in the user's account TO contact_email OR FROM contact_email.
+    """Function to fetch any email's in the user's google from contact_email OR to contact_email."""
+    # The query asks google to return all emails in the user's account TO contact_email OR FROM contact_email.
     query = f"from: {contact_email} OR to: {contact_email}"
-    user_gmail = session.get('user_gmail')
-    url = f"https://gmail.googleapis.com/gmail/v1/users/{user_gmail}/threads"
-    # Get all the threads for this gmail account that match our query.
-    response_fetch_threads = gmail.get(url, data={"q": query})
+    user_google = session.get('user_google')
+    url = f"https://gmail.googleapis.com/gmail/v1/users/{user_google}/threads"
+    # Get all the threads for this google account that match our query.
+    response_fetch_threads = google.get(url, data={"q": query})
     # If the request failed, return the status.
     if response_fetch_threads.status != 200:
         return response_fetch_threads.status, None
     threads = []
-    # For each thread returned by gmail.
+    # For each thread returned by google.
     for thread in response_fetch_threads.data["threads"]:
-        url = f"https://gmail.googleapis.com/gmail/v1/users/{user_gmail}/threads/{thread['id']}"
+        url = f"https://gmail.googleapis.com/gmail/v1/users/{user_google}/threads/{thread['id']}"
         # Fetch all the emails in that thread.
-        emails = gmail.get(url).data
+        emails = google.get(url).data
         f = open("test.json", "w")
         f.write(json.dumps(emails, indent=4))
         f.close()
         # Add the parsed emails to the threads list.
         threads.append(parse_thread(emails))
     # Sort the threads by the thread with the most recent reply.
-    threads = sorted(threads, key=lambda x: x[-1]['timestamp'], reverse=True)
+    threads = sorted(threads, key=lambda x: max(email["timestamp"] for email in x), reverse=True)
     # Return the response status and the list of email threads.
     return (200, threads)
 
 
 def parse_thread(thread):
-    """Function to parse a thread of emails returned by gmail's API."""
+    """Function to parse a thread of emails returned by google's API."""
     emails = []
     # For each email in this thread.
     for message in thread['messages']:
@@ -848,7 +859,8 @@ def parse_thread(thread):
                 email['subject'] = header['value']
             elif header['name'].lower() == 'date':
                 # Need to get rid of timezone info from timestamps.
-                email['timestamp'] = " ".join(header['value'].split(" ")[0:-1])
+                date_format = "%a, %d %b %Y %H:%M:%S"
+                email['timestamp'] = datetime.strptime(" ".join(header['value'].split(" ")[0:-1]), date_format)
             elif header['name'].lower() == "message-id":
                 email['id'] = header['value']
         # Build the body of the email and add to the dict, then append the email to this thread's list.
@@ -859,7 +871,7 @@ def parse_thread(thread):
 
 
 def build_email_body(message):
-    """Method to build the body of a gmail api response by traversing the nested dictionaries in the JSON."""
+    """Method to build the body of a google api response by traversing the nested dictionaries in the JSON."""
     # If data is in the body key, we've found the content of the email's body.
     if 'data' in message['body']:
         encoded_body = message['body']['data']

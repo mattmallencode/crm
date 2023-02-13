@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, EmailField, SelectField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, EmailField, SelectField, BooleanField, DateTimeField
 from wtforms.validators import InputRequired, EqualTo, Email, Length
 
 class SignUpForm(FlaskForm):
@@ -42,6 +42,12 @@ class EmailForm(FlaskForm):
     subject = StringField("Subject")
     message = StringField("Message")
     submit = SubmitField("Send")
+
+class MeetingForm(FlaskForm):
+    title = StringField("Title")
+    description = StringField("Description")
+    date_time = DateTimeField("Date & Time")
+    schedule = SubmitField("Schedule")
 
 class removeContactForm(FlaskForm):
     email = EmailField("Email", validators=[InputRequired(), Email()])
