@@ -89,7 +89,12 @@
             <section>
                 {{form.title(placeholder="Title")}}
                 {{form.description(placeholder="Description")}}
-                {{form.date_time(placeholder="Date & Time")}}
+                <br>
+                {{form.date_time_start.label}}
+                {{form.date_time_start(placeholder="Date & Time")}}
+                <br>
+                {{form.date_time_end.label}}
+                {{form.date_time_end(placeholder="Date & Time")}}
             </section>
             <section>
                 {{form.schedule()}}

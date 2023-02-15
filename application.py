@@ -712,13 +712,15 @@ def contact(contact_id, activity, reply):
 def meetings_activity(contact_id, google_token, contact):
     form = MeetingForm()
     if google_token != None:
-        pass
+        if form.validate_on_submit():
+            print(form.date_time_start.data)
+            print(form.date_time_end.data)
     # User isn't authenticated, redirect them so they can oAuth their email.
     else:
         return redirect(url_for('authorize_email', contact_id=contact_id))
     # If we can, just update the part of the page that's changed i.e. the activity box.
     if turbo.can_stream():
-        return turbo.stream(turbo.update(render_template("contact_interactions.html", google_token=google_token, activity="meetings", form=form), 'activity_box'))
+        return turbo.stream(turbo.update(render_template("contact_interactions.html", contact=contact, google_token=google_token, activity="meetings", form=form), 'activity_box'))
     else:
         return render_template("contact.html", contact=contact, google_token=google_token, activity="meetings", form=form)
 
@@ -860,7 +862,10 @@ def parse_thread(thread):
             elif header['name'].lower() == 'date':
                 # Need to get rid of timezone info from timestamps.
                 date_format = "%a, %d %b %Y %H:%M:%S"
-                email['timestamp'] = datetime.strptime(" ".join(header['value'].split(" ")[0:-1]), date_format)
+                try:
+                    email['timestamp'] = datetime.strptime(" ".join(header['value'].split(" ")[0:-1]), date_format)
+                except:
+                    email['timestamp'] = datetime.strptime(" ".join(header['value'].split(" ")[0:-2]), date_format)
             elif header['name'].lower() == "message-id":
                 email['id'] = header['value']
         # Build the body of the email and add to the dict, then append the email to this thread's list.

@@ -46,7 +46,8 @@ class EmailForm(FlaskForm):
 class MeetingForm(FlaskForm):
     title = StringField("Title")
     description = StringField("Description")
-    date_time = DateTimeField("Date & Time")
+    date_time_start = DateTimeField("Start: ", render_kw={"type": "datetime-local"}, validators=[InputRequired()])
+    date_time_end = DateTimeField("End: ", render_kw={"type": "datetime-local"}, validators=[InputRequired()])
     schedule = SubmitField("Schedule")
 
 class removeContactForm(FlaskForm):
