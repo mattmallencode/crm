@@ -14,6 +14,8 @@ from email.mime.text import MIMEText
 import json
 import base64
 from datetime import datetime
+from dateutil import parser
+import uuid
 
 # Load environment variables from .env file.
 load_dotenv()
@@ -36,7 +38,7 @@ application.config["MAIL_USE_SSL"] = True
 # oauth configuration for remote apps.
 oauth = OAuth(application)
 google = oauth.remote_app("google", content_type="application/json", consumer_key=application.config.get("GOOGLE_ID"), consumer_secret=application.config.get("GOOGLE_SECRET"), request_token_params={"scope": ["https://www.googleapis.com/auth/gmail.send", "https://www.googleapis.com/auth/gmail.readonly", "https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/calendar.events"]}, base_url="https://www.googleapis.com/oauth2/v1/", authorize_url="https://accounts.google.com/o/oauth2/auth", access_token_method="POST", access_token_url="https://accounts.google.com/o/oauth2/token", request_token_url=None,
-                         )
+                          )
 
 
 # Initialize MySQL credentials from the environment variables we just loaded.
@@ -709,18 +711,97 @@ def contact(contact_id, activity, reply):
     else:
         return render_template("contact.html", contact=contact, activity=activity, form=form, noteForm=noteForm, google_token=google_token, google_email=google_email)
 
+
 def meetings_activity(contact_id, google_token, contact):
     form = MeetingForm()
     if google_token != None:
-        pass
+        if form.validate_on_submit():
+            response = schedule_meeting(form)
+            if response.status != 200:
+                return redirect(url_for('authorize_email', contact_id=contact_id))
+            form.title.data = ""
+            form.description.data = ""
+            form.date_time_start.data = None
+            form.date_time_end.data = None
+        try:
+            response_status, meetings = get_meetings(contact.email)
+            if response_status != 200:
+                return redirect(url_for('authorize_email', contact_id=contact_id))
+        except:
+            meetings=None
     # User isn't authenticated, redirect them so they can oAuth their email.
     else:
         return redirect(url_for('authorize_email', contact_id=contact_id))
     # If we can, just update the part of the page that's changed i.e. the activity box.
     if turbo.can_stream():
-        return turbo.stream(turbo.update(render_template("contact_interactions.html", google_token=google_token, activity="meetings", form=form), 'activity_box'))
+        return turbo.stream(turbo.update(render_template("contact_interactions.html", contact=contact, google_token=google_token, activity="meetings", form=form, meetings=meetings), 'activity_box'))
     else:
-        return render_template("contact.html", contact=contact, google_token=google_token, activity="meetings", form=form)
+        return render_template("contact.html", contact=contact, google_token=google_token, activity="meetings",meetings=meetings, form=form)
+
+
+def schedule_meeting(form):
+    url = "https://www.googleapis.com/calendar/v3/calendars/primary/events?conferenceDataVersion=1"
+    start_datetime = form.date_time_start.data.strftime("%Y-%m-%dT%H:%M:%S")
+    end_datetime = form.date_time_end.data.strftime("%Y-%m-%dT%H:%M:%S")
+    time_zone = session.get("time_zone")
+    conference_data = {
+        "createRequest": {
+            "conferenceSolutionKey": {
+                "type": "hangoutsMeet"
+            },
+            "requestId": str(uuid.uuid4())
+        }
+    }
+    data = {
+        "attendees": [{"email": contact.email}, {"email": session.get("user_google")}],
+        "sendUpdates": "all",
+        "summary": form.title.data,
+        "description": form.description.data,
+        "start": {"dateTime": start_datetime, "timeZone": time_zone},
+        "end": {"dateTime": end_datetime, "timeZone": time_zone},
+        "conferenceDataVersion": 1,
+        "conferenceData": conference_data
+    }
+    response = google.post(url, data=data, format="json")
+    return response
+
+def get_meetings(contact_email):
+    """Function to fetch any email's in the user's google from contact_email OR to contact_email."""
+    # The query asks google to return all emails in the user's account TO contact_email OR FROM contact_email.
+    query = contact_email
+    url = "https://www.googleapis.com/calendar/v3/calendars/primary/events"
+    # Get all the threads for this google account that match our query.
+    response_fetch_meetings = google.get(url, data={"q": query})
+    # If the request failed, return the status.
+    if response_fetch_meetings.status != 200:
+        return response_fetch_meetings.status, None
+    f = open("test.json", "w")
+    f.write(json.dumps(response_fetch_meetings.data, indent=4))
+    f.close()
+    return (200, parse_meetings(response_fetch_meetings.data))
+
+def parse_meetings(meetings):
+    """Function to parse calendar events / meetings returned by Google's API"""
+    meetings_parsed = []
+    for item in meetings['items']:
+        start_time = item['start'].get('dateTime', '')
+        end_time = item['end'].get('dateTime', '')
+
+        # Parse timestamps into datetime objects
+        start_datetime = parser.parse(start_time) if start_time else None
+        end_datetime = parser.parse(end_time) if end_time else None
+
+        meeting = {
+            'summary': item.get('summary', ''),
+            'description': item.get('description', ''),
+            'starts': start_datetime.strftime('%-H:%M %A, %B %d, %Y') if start_datetime else '',
+            'ends': end_datetime.strftime('%-H:%M %A, %B %d, %Y') if end_datetime else '',
+            'link': item['conferenceData']['entryPoints'][0]['uri']
+        }
+        meetings_parsed.append(meeting)
+    return meetings_parsed
+
+
 
 def notes_activity(contact_id, google_token, contact):
     """Function for the notes activity on the contacts page."""
@@ -745,6 +826,15 @@ def notes_activity(contact_id, google_token, contact):
         return render_template("contact.html", notes=notes, contact=contact, google_token=google_token, activity="notes", noteForm=noteForm)
 
 
+@login_required
+@team_required
+@application.route("/save_timezone", methods=["POST"])
+def save_timezone():
+    time_zone = request.form["time_zone"]
+    session["time_zone"] = time_zone
+    return '', 204
+
+
 def email_activity(google_token, form, google_email, contact_id, contact, reply):
     """Function for the email activity on the contacts page."""
     # Make sure user has authorized their google.
@@ -763,12 +853,15 @@ def email_activity(google_token, form, google_email, contact_id, contact, reply)
             reply = None
             form.subject.data = ""
             form.message.data = ""
-        # Fetch this user's emails.
-        response_status, threads = get_emails(
-            contact.email)
-        # If the fetching of the user's emails wasn't successful redirect them to re-authorize their email.
-        if response_status != 200:
-            return redirect(url_for('authorize_email', contact_id=contact_id))
+        try:
+            # Fetch this user's emails.
+            response_status, threads = get_emails(
+                contact.email)
+            # If the fetching of the user's emails wasn't successful redirect them to re-authorize their email.
+            if response_status != 200:
+                return redirect(url_for('authorize_email', contact_id=contact_id))
+        except:
+            threads = None
     # User isn't authenticated, redirect them so they can oAuth their email.
     else:
         return redirect(url_for('authorize_email', contact_id=contact_id))
@@ -802,7 +895,7 @@ def send_email(subject, message, from_email, to_email, reply=None):
             {'raw': base64.urlsafe_b64encode(message.as_bytes()).decode(), "threadId": reply[1]})
     else:
         message = json.dumps(
-        {'raw': base64.urlsafe_b64encode(message.as_bytes()).decode()})
+            {'raw': base64.urlsafe_b64encode(message.as_bytes()).decode()})
     url = f"https://gmail.googleapis.com/gmail/v1/users/{from_email}/messages/send"
     response = google.post(url, data=message, format="text")
     return response.status
@@ -831,7 +924,8 @@ def get_emails(contact_email):
         # Add the parsed emails to the threads list.
         threads.append(parse_thread(emails))
     # Sort the threads by the thread with the most recent reply.
-    threads = sorted(threads, key=lambda x: max(email["timestamp"] for email in x), reverse=True)
+    threads = sorted(threads, key=lambda x: max(
+        email["timestamp"] for email in x), reverse=True)
     # Return the response status and the list of email threads.
     return (200, threads)
 
@@ -860,7 +954,12 @@ def parse_thread(thread):
             elif header['name'].lower() == 'date':
                 # Need to get rid of timezone info from timestamps.
                 date_format = "%a, %d %b %Y %H:%M:%S"
-                email['timestamp'] = datetime.strptime(" ".join(header['value'].split(" ")[0:-1]), date_format)
+                try:
+                    email['timestamp'] = datetime.strptime(
+                        " ".join(header['value'].split(" ")[0:-1]), date_format)
+                except:
+                    email['timestamp'] = datetime.strptime(
+                        " ".join(header['value'].split(" ")[0:-2]), date_format)
             elif header['name'].lower() == "message-id":
                 email['id'] = header['value']
         # Build the body of the email and add to the dict, then append the email to this thread's list.
