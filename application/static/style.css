@@ -1,0 +1,508 @@
+*{
+    font-family: sans-serif;
+}
+body{
+    background-color: white;
+    /*
+    background-image: url("../static/login_bg.jpg"); /*https://www.vecteezy.com/vector-art/2742352-group-of-men-and-women-happy-with-business-up-on-a-mountain-with-sunset-background, https://gratisography.com/?s=mountains */
+    background-color: rgb(1,89,128,100);
+    /*background-color: rgb(0,36,35,46);*/
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    margin-top: 5% ;
+}
+
+h1{
+    color:white;
+    margin-top: 2%;
+    margin-left: 5%;
+    padding-bottom: 2%;
+}
+.contacts_background{
+    /*background: rgb(15, 8, 8, 0.5);*/
+    background-color: #b7aeae;
+    border-radius: 30px;
+    position: fixed;
+}
+.box{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 90%;
+    margin-top: 15%;
+    background: rgb(15, 8, 8, 0.5);
+    border-radius: 30px;
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+.container{
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    padding: 0 15px 0 15px;
+}
+
+.Heading{
+    color: white;
+    text-align: center;
+    
+}
+.loginSubmitP{
+    color: white;
+    text-align: center;
+}
+p{
+    color: white;
+}
+input{
+    border-radius: 30px;
+    height: 30px;
+    text-indent: 30px;
+    padding-right: 35%;
+}
+
+i{
+    color: black;
+    position:absolute;
+    margin-top: 10px;
+    margin-left: 10px;
+    
+}
+::placeholder{
+    padding-left: 20px;
+    overflow: visible;
+}
+
+.loginRegisterSubmit{
+    padding-right: 65%;
+}
+
+.loginRegisterLink{
+    color:red;
+}
+
+nav{
+    position: fixed;
+    top: 0%;
+    left: 0%;
+    right: 0%;
+    width: 100%;
+}
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+  }
+  
+  li {
+    float: left;
+  }
+  
+  li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+  
+  li a:hover {
+    background-color: #111;
+  }
+  
+  section section  a {
+    color: white;
+    padding: 2%;
+    margin-left: 2%;
+    margin-bottom: 12%;
+    background-color: #333;
+    border-radius: 5px;
+    text-decoration: none;
+  }
+
+  section section  a:hover{
+    background-color: #111;
+  }
+
+  body div section table{
+    padding-top: 3%;
+    padding-left: 2%;
+  }
+
+  #contacts_search_button{
+    margin-left: 38%;
+    text-align: center;
+    display: flex;
+  }
+
+  #contacts_search_button:hover{
+    color: white;
+    background-color: #111;
+  }
+
+  #search_icon_contacts {
+    color: black;
+    margin-top: 4%;
+    margin-left: 3%;
+  }
+
+  body section table tr th{
+    color: white;
+    margin-top: 7%;
+    margin-left: 10.8%;
+  }
+
+  .contacts_status{
+    height: 36px;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+    text-indent: 15px;
+    border-width: 3px;
+  }
+  .contacts_status:hover{
+    background-color:#111;
+    color: white;
+  }
+  body div section p{
+    margin-left: 2%;
+  }
+  #remove_contact{
+    margin-left: 10%;
+    background-color: white;
+    border: 2px solid;
+    border-color: #111;
+    padding: 3% 10% 3% 10%;
+    border-radius: 30px;
+  }
+  #remove_contact:hover{
+    color: white;
+    background-color: #111;
+  }
+  body .contacts_background section table tbody tr th a{
+    color: white;
+    background-color: #333;
+    padding: 3% 20% 3% 10%;
+    border-radius: 30px;
+
+  }
+  #sorting_contacts_name1{
+    position: absolute;
+    color:blue;
+    margin-top: 7%;
+    margin-left: 10.8%;
+    
+  }
+  #1orting_contacts_name{
+    position: absolute;
+    color:red;
+    margin-bottom: 100%;
+  }
+  body div section table tbody th i{
+    position: absolute;
+    color:yellow;
+    margin-bottom: 1000%;
+    margin-right: 100%;
+  }
+  #sorting_contacts_email{
+    color:white;
+    margin-top: 7%;
+    margin-left: 24.5%;
+  }
+  #sorting_contacts_phone_number{
+    color:white;
+    margin-top: 7%;
+    margin-left: 41%;
+  }
+  #sorting_contacts_{
+    color:white;
+    margin-top: 7%;
+    
+  }
+  #sorting_contacts_{
+    color:white;
+    margin-top: 7%;
+    
+  }
+  .contacts_table_heading{
+    color: white;
+    background-color: #333;
+    border-radius: 30px;
+  }
+
+  body div section table tbody tr th a:hover{
+    color: white;
+    background-color: #111;
+
+  }
+
+  .contact_save_add_button{
+    width:100%;
+    text-indent: 4px;
+    padding-right: 10%;
+    text-align: center;
+    position: relative;
+  }
+  .contact_save_add_button:hover{
+    color: white;
+    background-color: #111;
+  }
+
+  #dashboard {
+    display: grid;
+    grid-template-columns: auto auto;
+  }
+
+  #dashboard section{
+    background-color: #FFF8DC;
+    margin: 20px;
+    padding: 25px;
+    box-shadow: 3px 3px #606060;
+  }
+
+  #dashboard *{
+    color: black;
+  }
+
+  #dashboard section:hover{
+    box-shadow: 0px 0px 20px #606060;
+  }
+
+  #contact {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    background-color: gainsboro;
+    padding: 2.5%;
+    box-shadow: 0px 0px 10px #111;
+  }
+
+  #contact *{
+    color: black;
+    text-align: left;
+  }
+
+  #contact li *{
+    color: white;
+  }
+
+  #contact h1{
+    font-size: 50px;
+    color: black;
+  }
+
+  #contact section h1 + *{
+    border-bottom: 2px solid #575757;
+  }
+
+  #contact h2{
+    font-size: 16px;
+    color: #575757;
+  }
+
+  #contact h1, #contact h2, #contact p{
+    margin: 0%;
+  }
+
+  #contact section{
+    margin: 0% 2%;
+
+  }
+
+  #contact section section{
+    margin: 5% 0%;
+  }
+
+  #contact_activity {
+    border-left: 2px solid #575757;
+  }
+
+  #contact_activity li{
+    padding: 2% 2%;
+    border-right: 2px solid black;
+  }   
+
+  #contact_activity li:hover{
+    background-color: black;
+  }
+
+  #contact_activity ul li a{
+    padding: 0%;
+    margin: 0%;
+    
+  }
+  #view_contact{
+    color: yellow;
+    background-color: #333;
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-bottom: 1%;
+    border-radius: 30px;
+    text-decoration: none;
+  }
+
+  #view_contact:hover{
+    background-color: #111;
+  }
+
+  #name_input_contact{
+    margin-bottom: 9%;
+  }
+  
+
+  #activity_box{
+    padding-left: 2%;
+  }
+
+  #activity_box section section{
+    margin: 1% 0%;
+  }
+
+  #contact input#note, input#message, input#subject{
+    height: 100px;
+    border-radius: 0%;
+    text-indent: 0%;
+    text-align: start;
+    justify-content: start;
+    background-color: #FFF8DC;
+  }
+
+  #activity_box input#subject{
+    height: 25px;
+  }
+
+  #contact input#submit, input#submit{
+    padding: 1% 2%;
+    text-indent: 0%;
+    background-color:#e5d07b;
+    border-radius: 0%;
+  }
+
+  #note{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  #note section p{
+    font-size: 14px;
+  }
+
+  #note section p + p{
+    font-size: 20px;
+  }
+
+  #contact_activity h2{
+    font-size: 26px;
+  }
+
+  #contact_activity section section a{
+    background-color: #e5d07b;
+    border: 2px solid black;
+  }
+
+  #emails{
+    border-top: 1px solid black;
+    padding-top: 5%;
+  }
+
+  #emails h2{
+    padding-bottom: 2.5%;
+  }
+
+  #emails article{
+    background-color: #e5d07b;
+    margin-bottom: 3%;
+    padding: 2%;
+    box-shadow: 0px 0px 10px #606060;
+  }
+
+  #emails #email{
+    border-bottom: 2px solid black;
+    padding: 1%;
+  }
+
+  #emails article #reply a{
+    margin: 0%;
+    background-color: #b7aeae;
+    box-shadow: 0px 0px 5px #333;
+  }
+
+  #emails article #reply{
+    margin: 2.5% 0% 1% 0%;
+  }
+
+  #cancel_reply{
+    padding: 1%;
+  }
+  
+
+  #create_team, #team_page section, #invite, #logout{
+    background-color: #b7aeae;
+    box-shadow: 0px 0px 5px #333;
+    padding: 2% 2%;
+    margin: 0% 40% 0% 5%;
+    border-radius: 20px;
+  }
+
+  #create_team h1, #invite h1, #logout h1{
+    font-size: 30px;
+    margin: 0%;
+    padding: 0%;
+  }
+
+  #create_team input, #invite input{
+    padding: 0% 2%;
+    text-indent: 0%;
+  }
+
+  #team_page{
+    margin-top: 5%;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    row-gap: 10%;
+  }
+
+  #team_page section{
+    padding: 1% 2% 2% 2%;
+  }
+
+  #team_page h1{
+    border-bottom: 2px solid #575757;
+    margin: 0%;
+    padding: 0%;
+  }
+
+  #team_page #invite_button{
+    border-top: 2px solid #575757;
+    padding-top: 2.5%;
+  }
+
+  #team_page a{
+    margin: 0%;
+  }
+
+  #team_page form{
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    row-gap: 10%;
+    align-items: start;
+  }
+  
+  #team_page #sure_checkbox{
+    width: 20px;
+  }
+
+  #invite input#submit, #create_team input#submit{
+    background-color: #e5d07b;
+    border-radius: 30px;
+    margin-top: 1%;
+  }
+
+  #logout section + section{
+    border-top: 2px solid #575757;
+  }
+
+  
+

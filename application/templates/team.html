@@ -1,0 +1,68 @@
+{% extends "base_no_turbo.html" %}
+{% block main_content %}
+<body>  
+  <nav>
+    <ul>
+      <li><a href="{{ url_for('home') }}">Home</a></li>
+      <li><a href="{{ url_for('contacts') }}">Contacts</a></li>
+      <li><a href="{{ url_for('team') }}">Team</a></li>
+      <li><a href="{{ url_for('profile') }}">Profile</a></li>
+    </ul>
+  </nav>
+
+  {% if user_details.team_id %}
+  <section id="team_page">
+    
+      <section>
+          <h1>My Team: {{ team["name"] }}</h1>
+          
+          <table>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+            </tr>
+
+            {% for team_member in team_members %}
+            <tr>
+              <td>{{ team_member.name }}</td>
+              <td>{{ team_member.email }}</td>
+            </tr>
+            {% endfor %}
+          </table>
+          
+          {% if user_details.admin_status == True %}
+            <p id="invite_button"><a href="{{ url_for('invite') }}">Invite a new team mate.</a></p>
+          {% endif %}
+            
+      </section>
+      
+
+      <section>
+          <h1>Leave Your Team</h1>
+          <form action = "" method = "POST">
+              {{ form.hidden_tag() }}
+              <div>
+                {{ form.sure_checkbox() }}
+                {{ form.sure_checkbox.label }}
+              
+                {% for error in form.sure_checkbox.errors %}
+                <div>{{ error }}</div>
+                {% endfor %}
+              </div>
+             
+              <div>
+                {{ form.submit() }}
+              </div>  
+              
+            </form>
+        </section>
+  </section>
+    
+  {% else %}
+  <section>
+      <p>You are not a member of a team. Either accept an invite or create your own to be a member of an team.</p>
+      <a href="create_team">Create A Team</a>
+  </section>
+  {% endif %}
+</body>
+{% endblock %}

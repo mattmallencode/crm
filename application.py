@@ -1,9 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, session, g, current_app
-from dotenv import load_dotenv
 import os
 from flask_sqlalchemy import SQLAlchemy as sa
 from flask_mail import Mail, Message
-from forms import SignUpForm, LoginForm, CreateTeamForm, InviteForm, ContactForm, LogoutForm, LeaveTeamForm, SearchForm, EmailForm, NoteForm, MeetingForm
+from application.forms import SignUpForm, LoginForm, CreateTeamForm, InviteForm, ContactForm, LogoutForm, LeaveTeamForm, SearchForm, EmailForm, NoteForm, MeetingForm
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 from secrets import token_urlsafe
@@ -17,38 +16,12 @@ from datetime import datetime
 from dateutil import parser
 import uuid
 
-# Load environment variables from .env file.
-load_dotenv()
-
 # Initialize the flask application
 application = Flask(__name__)
-# Secret key for preventing CSRF attacks.
-application.config["SECRET_KEY"] = "placeholder"
-
-# initializes email configuration variables
-application.config["MAIL_SERVER"] = "smtp.gmail.com"
-application.config["MAIL_PORT"] = 465
-application.config["MAIL_USERNAME"] = os.environ.get("MAIL_USERNAME")
-application.config["MAIL_PASSWORD"] = os.environ.get("MAIL_PASSWORD")
-application.config["GOOGLE_ID"] = os.environ.get("GOOGLE_ID")
-application.config["GOOGLE_SECRET"] = os.environ.get("GOOGLE_SECRET")
-application.config["MAIL_USE_TLS"] = False
-application.config["MAIL_USE_SSL"] = True
 
 # oauth configuration for remote apps.
 oauth = OAuth(application)
-google = oauth.remote_app("google", content_type="application/json", consumer_key=application.config.get("GOOGLE_ID"), consumer_secret=application.config.get("GOOGLE_SECRET"), request_token_params={"scope": ["https://www.googleapis.com/auth/gmail.send", "https://www.googleapis.com/auth/gmail.readonly", "https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/calendar.events"]}, base_url="https://www.googleapis.com/oauth2/v1/", authorize_url="https://accounts.google.com/o/oauth2/auth", access_token_method="POST", access_token_url="https://accounts.google.com/o/oauth2/token", request_token_url=None,
-                          )
-
-
-# Initialize MySQL credentials from the environment variables we just loaded.
-DB_HOST = os.environ.get("DB_HOST")
-DB_PORT = int(os.environ.get("DB_PORT"))
-DB_USER = os.environ.get("DB_USER")
-DB_PASSWORD = os.environ.get("DB_PASSWORD")
-DB_DB = os.environ.get("DB_DB")  # database to use.
-# Set up SQLAlchemy with the above credentials.
-application.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_DB}"
+google = oauth.remote_app("google", content_type="application/json", consumer_key=application.config.get("GOOGLE_ID"), consumer_secret=application.config.get("GOOGLE_SECRET"), request_token_params={"scope": ["https://www.googleapis.com/auth/gmail.send", "https://www.googleapis.com/auth/gmail.readonly", "https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/calendar.events"]}, base_url="https://www.googleapis.com/oauth2/v1/", authorize_url="https://accounts.google.com/o/oauth2/auth", access_token_method="POST", access_token_url="https://accounts.google.com/o/oauth2/token", request_token_url=None)
 # Set up an SQLAlchemy session for our application.
 db = sa(application)
 # creates Mail instance for managing emails

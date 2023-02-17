@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block main_content %}
+<body id="contact_page">
+    <nav>
+        <ul>
+          <li><a href="{{ url_for('home') }}">Home</a></li>
+          <li><a href="{{ url_for('contacts') }}">Contacts</a></li>
+          <li><a href="{{ url_for('team') }}">Team</a></li>
+          <li><a href="{{ url_for('profile') }}">Profile</a></li>
+        </ul>
+    </nav>
+
+    <section id = "contact">
+        <section>
+            <section>
+                <h1>{{contact.name}}</h1>
+                <p>{{contact.company}}</p>
+            </section>
+            
+            <section>
+                <h2>Email</h2>
+                <p>{{contact.email}}</p>
+            </section>
+            <section>
+                <h2>Phone Number</h2>
+                <p>{{contact.phone_number}}</p>
+            </section>
+            <section>
+                <h2>Contact Owner</h2>
+                <p>{{contact.contact_owner}}</p>
+            </section>
+            <section>
+                <h2>Status</h2>
+                <p>{{contact.status}}</p>
+            </section>
+        </section>
+
+        <section id="contact_activity">
+            <ul>
+                <li><a href ="{{url_for('contact', contact_id=contact.contact_id, activity='activity')}}">Activity</a></li>
+                <li><a href ="{{url_for('contact', contact_id=contact.contact_id, activity='notes')}}">Notes</a></li>
+                {% if google_token %}
+                    <li><a href ="{{url_for('contact', contact_id=contact.contact_id, activity='emails')}}">Emails</a></li>
+                    <li><a href ="{{url_for('contact', contact_id=contact.contact_id, activity='tasks')}}">Tasks</a></li>
+                    <li><a onclick="save_timezone();" href ="{{url_for('contact', contact_id=contact.contact_id, activity='meetings')}}">Meetings</a></li>
+                {% else %}
+                    <li><a href ="{{ url_for('authorize_email', contact_id=contact.contact_id) }}">Emails</a></li>
+                    <li><a href ="{{ url_for('authorize_email', contact_id=contact.contact_id) }}">Tasks</a></li>
+                    <li><a href ="{{ url_for('authorize_email', contact_id=contact.contact_id) }}">Meetings</a></li>
+                {% endif %}
+            </ul>
+       
+            {% include "contact_interactions.html" %}
+       
+        </section>
+    </section>
+    
+</body>
+{% endblock %}

@@ -1,0 +1,133 @@
+<section id = "activity_box" class = "activity_box">
+    {% if activity == 'activity' %}
+        <p>Activity.....</p>
+    {% elif activity == 'emails' %}
+        <section>
+            <h2>Send Email to {{contact.name}}</h2>
+            <form action = "" method = "POST">
+                {{form.hidden_tag()}}
+                <section>
+                    {{form.subject(placeholder="Subject")}}
+                    {{form.message(placeholder="Message")}}
+                </section>
+                
+                <section>
+                    {{form.submit()}}
+
+                    {% if reply is not none %}
+                        <a id = "cancel_reply" href="{{url_for('contact', contact_id=contact.contact_id, activity='emails')}}">Cancel Reply</a>
+                    {% endif %}
+                </section>
+            </form>
+        </section>
+        <section id="emails">
+            <h2>Emails with {{contact.name}}</h2>
+            {% if threads is not none %}
+            {% for thread in threads %}
+            <article>
+                <h3>{{ thread[0]["subject"] }}</h3>
+                {% for email in thread %}
+                <section id = "email">
+                    <p><b>Date:</b> {{ email["timestamp"] }}</p>
+                    <p><b>From:</b> {{ email["sender_email"] }}</p>
+                    <p><b>To:</b> {{ email["recipient_email"] }}</p>
+                    <p><b>Body:</b> {{ email["body"] }}</p>
+                </section>
+                {% endfor %} 
+                <section id="reply">
+                    <a href="{{url_for('reply_email', message_id=thread[-1]['id'], subject=thread[0]['subject'], thread_id=thread[-1]['threadId'], contact_id=contact.contact_id)}}">Reply</a>
+                </section>
+            </article>
+            {% endfor %}
+            {% endif %}
+        </section>
+    {% elif activity == 'notes' %}
+        <section>
+            <h2>Make A Note</h2>
+            <form action = "{{url_for('contact', contact_id=contact.contact_id, activity='notes')}}" method = "POST">
+                {{noteForm.hidden_tag()}}
+                <section>
+                    {% for error in noteForm.note.errors %}
+                    <div>{{ error }}</div>
+                    {% endfor %}
+                    {{noteForm.note()}}
+
+                </section>
+                <section>
+                    {% if response != "" %} 
+                        {{response}}
+                    {% endif %}
+                </section>
+                <section>
+                    {{noteForm.submit()}}
+                </section>
+                
+            </form>
+
+        </section>
+        <section>
+            <h2>View Notes</h2>
+            {% if notes %}
+                {% for note in notes %}
+                    <section id = "note">
+                        <section>
+                            <p>Note by {{note.author}} on {{note.date}}</p>
+                            <p>{{note.note}}</p> 
+                        </section>
+                       
+                        <section>
+                            {% set contact_id = contact.contact_id + "r" %}
+                            <p><a href = "{{url_for('remove_note', note_id=note.note_id, contact_id=contact.contact_id)}}">Remove</a></p>
+                        </section>
+                        </section>        
+                {% endfor %}
+            {% endif %}
+        </section>
+    {% elif activity == "meetings" %}
+    <section>
+        <h2>Schedule a meeting with {{contact.name}}</h2>
+        <form action = "" method = "POST">
+            {{form.hidden_tag()}}
+            <section>
+                {{form.title(placeholder="Title")}}
+                {{form.description(placeholder="Description")}}
+                <br>
+                {% for error in form.date_time_start.errors %}
+                    <div>{{ error }}</div>
+                {% endfor %}
+                {{form.date_time_start.label}}
+                {{form.date_time_start(placeholder="Date & Time")}}
+                <br>
+                {% for error in form.date_time_end.errors %}
+                    <div>{{ error }}</div>
+                {% endfor %}
+                {{form.date_time_end.label}}
+                {{form.date_time_end(placeholder="Date & Time")}}
+            </section>
+            <section>
+                {{form.schedule()}}
+            </section>
+        </form>
+    </section>    
+    <section id="meetings">
+        <h2>Meetings with {{contact.name}}</h2>
+        {% if meetings is not none %}
+        {% for meeting in meetings %}
+            <section class="meeting">
+                <p><b>Summary:</b> {{ meeting["summary"] }}</p>
+                <p><b>Description:</b> {{ meeting["description"] }}</p>
+                <p><b>Starts:</b> {{ meeting["starts"] }}</p>
+                <p><b>Ends:</b> {{ meeting["ends"] }}</p>
+                <br>
+                <br>
+                <a href="{{meeting['link']}}">Join google meet</a>
+                <br>
+                <br>
+            </section>
+        {% endfor %}
+        {% endif %}
+    </section>
+    {% else %}
+        <p>other....</p>
+    {% endif %}
+</section>

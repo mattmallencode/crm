@@ -1,0 +1,38 @@
+{% extends "base_no_turbo.html" %}
+
+{% block main_content %}
+    <body>
+      {% if user.team_id %} 
+      <nav>
+        <ul>
+          <li><a href="{{ url_for('home') }}">Home</a></li>
+          <li><a href="{{ url_for('contacts') }}">Contacts</a></li>
+          <li><a href="{{ url_for('team') }}">Team</a></li>
+          <li><a href="{{ url_for('profile') }}">Profile</a></li>
+        </ul>
+      </nav>
+      {% endif %} 
+      <section id="create_team">
+        <section>
+          <h1>Create Team</h1>
+          <p>Create a Team to manage your organisation using Sherpa CRM.</p>
+        </section>
+        
+            
+        <form action = "" method = "POST">
+            {{ form.hidden_tag() }}
+            <section>
+              {{ form.name(placeholder="Team Name") }}
+              {% for error in form.name.errors %}
+                <div>{{ error }}</div>
+              {% endfor %}
+            </section>
+            
+            <section>
+              {{ form.submit(value="Create") }}
+            </section>
+            
+        </form>
+      </section>
+    </body>
+{% endblock %}
