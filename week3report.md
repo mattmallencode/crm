@@ -1,5 +1,0 @@
-Oliver continued with testing for week three. The main issues that arised happened when testing pages that required a login. pytest-asyncio is going to be implemented in the future which should allow for testing connections and modules that require a login. Besided the login problems the rest of the pages worked well.
-
-Matt and eimantas developed extra features throughout the week. These features included contact results being implemented over multiple pages, narrowing down the view of contats, a logout, view team feature, sorting and searching on the contacts page and team required decorator. Matt also integrated gmail using oAuth and emimants done some debugging.
-
-Aria continued with the css finishing the login and sign up pages and worked on the contacts page. He also worked on the report.
