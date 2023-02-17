@@ -22,6 +22,7 @@
         </section>
         <section id="emails">
             <h2>Emails with {{contact.name}}</h2>
+            {% if threads is not none %}
             {% for thread in threads %}
             <article>
                 <h3>{{ thread[0]["subject"] }}</h3>
@@ -38,6 +39,7 @@
                 </section>
             </article>
             {% endfor %}
+            {% endif %}
         </section>
     {% elif activity == 'notes' %}
         <section>
@@ -90,9 +92,15 @@
                 {{form.title(placeholder="Title")}}
                 {{form.description(placeholder="Description")}}
                 <br>
+                {% for error in form.date_time_start.errors %}
+                    <div>{{ error }}</div>
+                {% endfor %}
                 {{form.date_time_start.label}}
                 {{form.date_time_start(placeholder="Date & Time")}}
                 <br>
+                {% for error in form.date_time_end.errors %}
+                    <div>{{ error }}</div>
+                {% endfor %}
                 {{form.date_time_end.label}}
                 {{form.date_time_end(placeholder="Date & Time")}}
             </section>
