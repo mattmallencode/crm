@@ -3,7 +3,10 @@
 }
 body{
     background-color: white;
+    /*
     background-image: url("../static/login_bg.jpg"); /*https://www.vecteezy.com/vector-art/2742352-group-of-men-and-women-happy-with-business-up-on-a-mountain-with-sunset-background, https://gratisography.com/?s=mountains */
+    background-color: rgb(1,89,128,100);
+    /*background-color: rgb(0,36,35,46);*/
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -17,7 +20,8 @@ h1{
     padding-bottom: 2%;
 }
 .contacts_background{
-    background: rgb(15, 8, 8, 0.5);
+    /*background: rgb(15, 8, 8, 0.5);*/
+    background-color: #b7aeae;
     border-radius: 30px;
     position: fixed;
 }
@@ -185,11 +189,23 @@ ul {
     border-radius: 30px;
 
   }
-  #sorting_contacts_name{
-    color:white;
+  #sorting_contacts_name1{
+    position: absolute;
+    color:blue;
     margin-top: 7%;
     margin-left: 10.8%;
     
+  }
+  #1orting_contacts_name{
+    position: absolute;
+    color:red;
+    margin-bottom: 100%;
+  }
+  body div section table tbody th i{
+    position: absolute;
+    color:yellow;
+    margin-bottom: 1000%;
+    margin-right: 100%;
   }
   #sorting_contacts_email{
     color:white;
@@ -315,7 +331,26 @@ ul {
   #contact_activity ul li a{
     padding: 0%;
     margin: 0%;
+    
   }
+  #view_contact{
+    color: yellow;
+    background-color: #333;
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-bottom: 1%;
+    border-radius: 30px;
+    text-decoration: none;
+  }
+
+  #view_contact:hover{
+    background-color: #111;
+  }
+
+  #name_input_contact{
+    margin-bottom: 9%;
+  }
+  
 
   #activity_box{
     padding-left: 2%;

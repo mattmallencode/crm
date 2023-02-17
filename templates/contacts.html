@@ -36,7 +36,7 @@
             </tr>
             {% set prev_sort = sort %}
             <tr>
-                <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='name', page=page, filter=filter, error='None')}}">Name</a></th>
+                <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='name', page=page, filter=filter, error='None')}}">Name</a><i id="orting_contacts_name"class="fas fa-sort"></i></th>
                 
                 <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='email', page=page, filter=filter, error='None')}}">Email</a></th>
                 
@@ -54,8 +54,8 @@
                 <tr>
                     <form action = "{{url_for('edit_contact', contact_id=form.contact_id.data, prev_sort=prev_sort, order=order, sort=sort, filter=filter, page=page, error=error)}}" method = "POST">
                         {{form.hidden_tag()}}
-
-                        <td><a href="{{url_for('contact', contact_id=form.contact_id.data, activity='activity')}}">View</a>{{form.name()}}
+                        
+                        <td><a id = "view_contact", href="{{url_for('contact', contact_id=form.contact_id.data, activity='activity')}}">View</a>{{form.name(id="name_input_contact")}}
                             {% for error in form.name.errors %}
                                 <div>{{ error }}</div>
                             {% endfor %}
