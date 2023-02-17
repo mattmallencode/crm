@@ -109,6 +109,24 @@
             </section>
         </form>
     </section>    
+    <section id="meetings">
+        <h2>Meetings with {{contact.name}}</h2>
+        {% if meetings is not none %}
+        {% for meeting in meetings %}
+            <section class="meeting">
+                <p><b>Summary:</b> {{ meeting["summary"] }}</p>
+                <p><b>Description:</b> {{ meeting["description"] }}</p>
+                <p><b>Starts:</b> {{ meeting["starts"] }}</p>
+                <p><b>Ends:</b> {{ meeting["ends"] }}</p>
+                <br>
+                <br>
+                <a href="{{meeting['link']}}">Join google meet</a>
+                <br>
+                <br>
+            </section>
+        {% endfor %}
+        {% endif %}
+    </section>
     {% else %}
         <p>other....</p>
     {% endif %}
