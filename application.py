@@ -522,9 +522,15 @@ def add_contact(filter, page, prev_sort, sort, order, error):
                     error = "You do not have sufficient permissions to assign a contact."
         else:
             error = "This person is already in your contacts"
-    return redirect(url_for("contacts", prev_sort=prev_sort, order=order, sort=sort, page=page, filter=filter, error=error))
+    print(prev_sort, order, sort, page, filter, error)
+      # If we can, just update the part of the page that's changed i.e. the activity box.
+    if turbo.can_stream():
+        return turbo.stream(turbo.update(render_template("contacts_list.html"), 'contacts-table'))
+    else:
+        return render_template("contacts.html" )
 
 
+   
 @application.route("/remove_contact/<contact_id>/<filter>/<prev_sort>/<sort>/<page>/<order>/<error>", methods=["GET", "POST"])
 @login_required
 @team_required

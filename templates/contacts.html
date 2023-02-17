@@ -54,7 +54,7 @@
                 <tr>
                     <form action = "{{url_for('edit_contact', contact_id=form.contact_id.data, prev_sort=prev_sort, order=order, sort=sort, filter=filter, page=page, error=error)}}" method = "POST">
                         {{form.hidden_tag()}}
-
+    
                         <td><a href="{{url_for('contact', contact_id=form.contact_id.data, activity='activity')}}">View</a>{{form.name()}}
                             {% for error in form.name.errors %}
                                 <div>{{ error }}</div>
@@ -66,28 +66,28 @@
                                 <div>{{ error }}</div>
                             {% endfor %}
                         </td>
-
+    
                         <td>{{form.phone_number()}}</td>
-
+    
                         <td>{% for error in form.contact_owner.errors %}
                                 <div>{{ error }}</div>
                             {% endfor %}
                             {{form.contact_owner()}}
                         </td>
                             
-
+    
                         <td>{{form.company()}}</td>
-
+    
                         <td>{{form.status(class="contacts_status")}}</td>
-
+    
                         <td>{{form.submit(value='Save Changes', class="contact_save_add_button")}}</td>
                     </form>
                     
                     <td><a id="remove_contact", href = "{{url_for('remove_contact', contact_id=form.contact_id.data, prev_sort=prev_sort, order=order, sort=sort, filter=filter, page=page, error=error)}}">Remove</a></td>
-
+    
                 </tr>
             {% endfor %}
-
+    
             <tr>
                 <form action = "{{url_for('add_contact', prev_sort=None, order=None, sort=None, filter=None, page=1, error=error)}}" method = "POST">
                     {{add_contact.hidden_tag()}}
@@ -97,23 +97,23 @@
                             <div>{{ error }}</div>
                         {% endfor %}
                     </td>
-
+    
                     <td>{{add_contact.email()}}
                         {% for error in add_contact.email.errors %}
                             <div>{{ error }}</div>
                         {% endfor %}
                     </td>
-
+    
                     <td>{{add_contact.phone_number()}}</td>
-
+    
                     <td>{{add_contact.contact_owner()}}</td>
-
+    
                     <td>{{add_contact.company()}}</td>
-
+    
                     <td>{{add_contact.status(class="contacts_status")}}</td>
-
+    
                     <td>{{add_contact.submit(value='Add Contact', class="contact_save_add_button")}}</td>
-
+    
                 </form>
             </tr>
         </table>
