@@ -22,6 +22,7 @@
         </section>
         <section id="emails">
             <h2>Emails with {{contact.name}}</h2>
+            {% if threads is not none %}
             {% for thread in threads %}
             <article>
                 <h3>{{ thread[0]["subject"] }}</h3>
@@ -38,6 +39,7 @@
                 </section>
             </article>
             {% endfor %}
+            {% endif %}
         </section>
     {% elif activity == 'notes' %}
         <section>
@@ -89,13 +91,42 @@
             <section>
                 {{form.title(placeholder="Title")}}
                 {{form.description(placeholder="Description")}}
-                {{form.date_time(placeholder="Date & Time")}}
+                <br>
+                {% for error in form.date_time_start.errors %}
+                    <div>{{ error }}</div>
+                {% endfor %}
+                {{form.date_time_start.label}}
+                {{form.date_time_start(placeholder="Date & Time")}}
+                <br>
+                {% for error in form.date_time_end.errors %}
+                    <div>{{ error }}</div>
+                {% endfor %}
+                {{form.date_time_end.label}}
+                {{form.date_time_end(placeholder="Date & Time")}}
             </section>
             <section>
                 {{form.schedule()}}
             </section>
         </form>
     </section>    
+    <section id="meetings">
+        <h2>Meetings with {{contact.name}}</h2>
+        {% if meetings is not none %}
+        {% for meeting in meetings %}
+            <section class="meeting">
+                <p><b>Summary:</b> {{ meeting["summary"] }}</p>
+                <p><b>Description:</b> {{ meeting["description"] }}</p>
+                <p><b>Starts:</b> {{ meeting["starts"] }}</p>
+                <p><b>Ends:</b> {{ meeting["ends"] }}</p>
+                <br>
+                <br>
+                <a href="{{meeting['link']}}">Join google meet</a>
+                <br>
+                <br>
+            </section>
+        {% endfor %}
+        {% endif %}
+    </section>
     {% else %}
         <p>other....</p>
     {% endif %}
