@@ -525,9 +525,10 @@ def add_contact(filter, page, prev_sort, sort, order, error):
     print(prev_sort, order, sort, page, filter, error)
       # If we can, just update the part of the page that's changed i.e. the activity box.
     if turbo.can_stream():
-        return turbo.stream(turbo.update(render_template("contacts_list.html"), 'contacts-table'))
+        print(prev_sort, order, sort, page, filter, error, "hsidhfsh")
+        return turbo.stream(turbo.update(render_template("contacts_list.html", prev_sort=prev_sort, order=order, sort=sort, page=page, filter=filter, error=error, add_contact=form), 'contacts-table'))
     else:
-        return render_template("contacts.html" )
+        return render_template("contacts.html", prev_sort=prev_sort, order=order, sort=sort, page=page, filter=filter, error=error, add_contact=form)
 
 
    
