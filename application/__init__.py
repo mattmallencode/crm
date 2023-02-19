@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, g, current_app
 from flask_sqlalchemy import SQLAlchemy as sa
 from flask_mail import Mail, Message
-from application.forms import SignUpForm, LoginForm, CreateTeamForm, InviteForm, ContactForm, LogoutForm, LeaveTeamForm, SearchForm, EmailForm, NoteForm, MeetingForm
+from application.forms import SignUpForm, LoginForm, CreateTeamForm, InviteForm, ContactForm, LogoutForm, LeaveTeamForm, SearchForm, EmailForm, NoteForm, MeetingForm, DealForm
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 from secrets import token_urlsafe
@@ -111,6 +111,31 @@ def create_app(config_class=Config):
             self.note = note
             self.author = author
             self.date = date
+
+
+    # Deals data model i.e. a representation of the deals table in the database.
+
+    class Deals(db.Model):
+        deal_id = db.Column(db.Integer, primary_key=True)
+        team_id = db.Column(db.Integer)
+        name = db.Column(db.String)
+        stage = db.Column(db.String)
+        close_date = db.Column(db.DateTime)
+        owner = db.Column(db.String)
+        amount = db.Column(db.Integer)
+        associated_contact = db.Column(db.String)
+        associated_company = db.Column(db.String)
+
+        def __init__ (self, deal_id=None, team_id=None, name=None, stage=None, close_date=None, owner=None, amount=None, associated_contact=None, associated_company=None):
+            self.deal_id = deal_id
+            self.team_id = team_id
+            self.name = name
+            self.stage = stage
+            self.close_date = close_date
+            self.owner = owner
+            self.amount = amount
+            self.associated_contact = associated_contact
+            self.associated_company = associated_company
 
 
     @application.before_request
@@ -975,5 +1000,99 @@ def create_app(config_class=Config):
             db.session.delete(note)
             db.session.commit()
         return redirect(url_for("contact", contact_id=contact_id, activity="notes"))
+    
+    
+    @application.route("/deals", defaults={"page": 1, "error": "None"}, methods=["GET", "POST"])
+    @application.route("/deals/<page>/<error>", methods=["GET", "POST"])
+    @login_required
+    @team_required
+    def deals(page, error):
+        # Add deal form.
+        add_deal = DealForm()
+        # The page the user wishes to view.
+        page = int(page)
+        # Must offset results from DB query to fetch the page the user is interested in.
+        page_offset = (page - 1) * 25
+
+        # Gets all contacts of user that is logged in and passes it to html template
+        user = Users.query.filter_by(email=g.email).first()
+        deals = Deals.query.filter_by(team_id=user.team_id)
+
+        # Pageing functionality.
+        deals = deals.limit(25).offset(page_offset)
+        num_pages = deals.count() // 25
+        # Count the number of pages.
+        if (deals.count() % 25) > 0:
+            num_pages += 1
+
+        # Create an editable form for each contact. Will only ever 25 at a time.
+        forms = []
+        for deal in deals:
+            form = DealForm()
+            
+            form.deal_id.data = deal.deal_id
+            form.name.data = deal.name
+            form.stage.data = deal.stage
+            form.date.data = deal.close_date
+            form.owner.data = deal.owner
+            form.amount.data = deal.amount
+            form.associated_contact.data = deal.associated_contact
+            form.associated_company.data = deal.associated_company
+            forms.append(form)
+
+        return render_template("deals.html", forms=forms, add_deal=add_deal, num_pages=num_pages, page=page, error=error)
+
+
+    
+    @application.route("/add_deal", defaults={"page": 1, "error": "None"}, methods=["GET", "POST"])
+    @application.route("/add_deal/<page>/<error>", methods=["GET", "POST"])
+    @login_required
+    @team_required
+    def add_deal(page, error):
+        form = DealForm()
+        user = Users.query.filter_by(email=g.email).first()
+        deals = Deals.query.filter_by(team_id=user.team_id)
+        error = "None"
+        
+        deal = Deals()
+        deal.team_id = user.team_id
+        deal.name = form.name.data
+        deal.stage = dict(form.stage.choices).get(form.stage.data)
+        deal.close_date = form.date.data
+        deal.owner = form.owner.data 
+        deal.amount = form.amount.data 
+        deal.associated_contact = form.associated_contact.data
+        deal.associated_company = form.associated_company.data
+    
+        db.session.add(deal)     
+        db.session.commit()
+
+        return redirect(url_for("deals", page=page, error=error))
+    
+    
+    @application.route("/edit_deal", defaults={"deal_id": "None", "page": 1, "error": "None"}, methods=["GET", "POST"])
+    @application.route("/edit_deal/<deal_id>/<page>/<error>", methods=["GET", "POST"])
+    @login_required
+    @team_required
+    def edit_deal(deal_id, page, error):
+        form = DealForm()
+        deal = Deals.query.filter_by(deal_id=deal_id).first()       
+        if deal is not None:
+            user = Users.query.filter_by(email=g.email).first()
+            
+            deal.team_id = user.team_id
+            deal.name = form.name.data
+            deal.stage = dict(form.stage.choices).get(form.stage.data)
+            deal.close_date = form.date.data
+            deal.owner = form.owner.data 
+            deal.amount = form.amount.data 
+            deal.associated_contact = form.associated_contact.data
+            deal.associated_company = form.associated_company.data
+
+            print(form.date.data)
+
+            db.session.commit()
+        return redirect(url_for("deals", page=page, error=error))
+  
 
     return application
