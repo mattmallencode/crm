@@ -522,10 +522,7 @@ def create_app(config_class=Config):
             num_pages += 1
 
          # If we can, just update the part of the page that's changed i.e. the activity box
-        if turbo.can_stream():
-            return turbo.stream(turbo.append(render_template("contacts.html", prev_sort=prev_sort, order=order, sort=sort, page=page, filter=filter, error=error, forms=form, search_form=search_form, add_contact=add_contact, num_pages=num_pages), 'edit-table'))
-        else:
-            return render_template("contacts.html",prev_sort=prev_sort, order=order, sort=sort, page=page, filter=filter, error=error, form=form, search_form=search_form, add_contact=add_contact, num_pages=num_pages)
+        return redirect(url_for("add_contact", prev_sort=None, order=None, sort=None, filter=None, page=1, error=error))
 
     @application.route("/remove_contact/<contact_id>/<filter>/<prev_sort>/<sort>/<page>/<order>/<error>", methods=["GET", "POST"])
     @login_required
@@ -571,7 +568,6 @@ def create_app(config_class=Config):
             form.status.data = contact.status
             forms.append(form)
         
-        print(forms)
         if turbo.can_stream():
             return turbo.stream(turbo.update(render_template("contacts.html",contact_id=contact_id, prev_sort=prev_sort, order=order, sort=sort, page=page, filter=filter, error=error, forms=forms, search_form=search_form, add_contact=add_contact, activity="editing", num_pages=num_pages), 'edit-table'))
         else:
