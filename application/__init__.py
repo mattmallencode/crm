@@ -430,7 +430,7 @@ def create_app(config_class=Config):
             form.status.data = contact.status
             forms.append(form)
 
-        return render_template("contacts.html", forms=forms, add_contact=add_contact, search_form=search_form, contacts=contacts, num_pages=num_pages, filter=filter, page=page, prev_sort=prev_sort, sort=sort, order=order, error=error)
+        return render_template("contacts.html", forms=forms, add_contact=add_contact, search_form=search_form, contacts=contacts, num_pages=num_pages, filter=filter, page=page, prev_sort=prev_sort, sort=sort, order=order, error=error, activity="editing")
 
 
     def optimize_search(search):
@@ -493,10 +493,20 @@ def create_app(config_class=Config):
         order -- the order of the sort (if any), must be ASC or DESC.
         error -- error message due to form invalidation.
         """
-        form = ContactForm()
+        # Gets all contacts of user that is logged in and passes it to html template
         user = Users.query.filter_by(email=g.email).first()
-        user_contacts = Contacts.query.filter_by(team_id=user.team_id)
+        search_form = SearchForm()
+        # Add contact form.
+        add_contact= ContactForm()
+        # Must offset results from DB query to fetch the page the user is interested in.
+        page_offset = (page - 1) * 25
+        user = Users.query.filter_by(email=g.email).first()
         error = "None"
+        # Create an editable form for each contact. Will only ever 25 at a time.
+        form = ContactForm()
+
+        
+                
         if form.validate_on_submit():
             #  checks if contact being added belongs to user's organization already
             if Contacts.query.filter_by(email=form.email.data, team_id=user.team_id).first() is None:
@@ -525,9 +535,19 @@ def create_app(config_class=Config):
                     else:
                         error = "You do not have sufficient permissions to assign a contact."
             else:
-                error = "This person is already in your contacts"
-        return redirect(url_for("contacts", prev_sort=prev_sort, order=order, sort=sort, page=page, filter=filter, error=error))
+                error = "This person is already in your contact"
+        contacts = Contacts.query.filter_by(team_id=user.team_id)
+       
 
+        contacts = contacts.limit(25).offset(page_offset)
+        num_pages = contacts.count() // 25
+
+        # Count the number of pages.
+        if (contacts.count() % 25) > 0:
+            num_pages += 1
+
+         # If we can, just update the part of the page that's changed i.e. the activity box
+        return redirect(url_for("add_contact", prev_sort=None, order=None, sort=None, filter=None, page=1, error=error))
 
     @application.route("/remove_contact/<contact_id>/<filter>/<prev_sort>/<sort>/<page>/<order>/<error>", methods=["GET", "POST"])
     @login_required
@@ -544,11 +564,40 @@ def create_app(config_class=Config):
         order -- the order of the sort (if any), must be ASC or DESC.
         error -- error message due to form invalidation.
         """
+        # Get the first contact from the db
         contact = Contacts.query.filter_by(contact_id=contact_id).first()
+
+        form = ContactForm()
+        add_contact = ContactForm()
+        search_form = SearchForm()
+        # Cast the page as an integer as it defaults to string
+        page = int(page)
         if contact is not None:
             db.session.delete(contact)
             db.session.commit()
-        return redirect(url_for("contacts", prev_sort=prev_sort, order=order, sort=sort, page=page, filter=filter, error=error))
+        user = Users.query.filter_by(email=g.email).first()
+        contacts = Contacts.query.filter_by(team_id=user.team_id)
+        num_pages = contacts.count() // 25
+         # Count the number of pages.
+        if (contacts.count() % 25) > 0:
+            num_pages += 1
+        forms = []
+        for contact in contacts:
+            form = ContactForm()
+            form.contact_id.data = contact.contact_id
+            form.name.data = contact.name
+            form.email.data = contact.email
+            form.phone_number.data = contact.phone_number
+            form.contact_owner.data = contact.contact_owner
+            form.company.data = contact.company
+            form.status.data = contact.status
+            forms.append(form)
+        
+        if turbo.can_stream():
+            return turbo.stream(turbo.update(render_template("contacts.html",contact_id=contact_id, prev_sort=prev_sort, order=order, sort=sort, page=page, filter=filter, error=error, forms=forms, search_form=search_form, add_contact=add_contact, activity="editing", num_pages=num_pages), 'edit-table'))
+        else:
+            return render_template("contacts.html",contact_id=contact_id,prev_sort=prev_sort, order=order, sort=sort, page=page, filter=filter, error=error, form=forms, search_form=search_form, add_contact=add_contact, activity="editing", num_pages=num_pages)
+        
 
 
     @application.route("/edit_contact", defaults={"contact_id": "None", "filter": "all", "page": 1, "prev_sort": "None", "sort": "None", "order": "DESC", "error": "None"}, methods=["GET", "POST"])
@@ -568,6 +617,7 @@ def create_app(config_class=Config):
         error -- error message due to form invalidation.
         """
         form = ContactForm()
+        search_form=SearchForm()
         error = "None"
         if form.validate_on_submit():
             user = Users.query.filter_by(email=g.email).first()
@@ -610,7 +660,11 @@ def create_app(config_class=Config):
                         error = "You do not have sufficient permissions to assign a contact."
             else:
                 error = "Can't create a duplicate contact!"
-        return redirect(url_for('contacts', prev_sort=prev_sort, order=order, sort=sort, page=page, filter=filter, error=error))
+        if turbo.can_stream():
+            return turbo.stream(turbo.update(render_template("edit_list.html",contact_id=contact_id, prev_sort=prev_sort, order=order, sort=sort, page=page, filter=filter, error=error, form=form, search_form=search_form), 'edit-table'))
+        else:
+            return render_template("contacts.html",contact_id=contact_id,prev_sort=prev_sort, order=order, sort=sort, page=page, filter=filter, error=error, form=form, search_form=search_form)
+    
 
 
     @application.route("/profile", methods=["GET", "POST"])
