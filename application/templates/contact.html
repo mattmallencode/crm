@@ -5,6 +5,7 @@
         <ul>
           <li><a href="{{ url_for('home') }}">Home</a></li>
           <li><a href="{{ url_for('contacts') }}">Contacts</a></li>
+          <li><a href ="{{url_for('deals')}}">Deals</a></li>
           <li><a href="{{ url_for('team') }}">Team</a></li>
           <li><a href="{{ url_for('profile') }}">Profile</a></li>
         </ul>
@@ -41,11 +42,13 @@
                 <li><a href ="{{url_for('contact', contact_id=contact.contact_id, activity='notes')}}">Notes</a></li>
                 {% if google_token %}
                     <li><a href ="{{url_for('contact', contact_id=contact.contact_id, activity='emails')}}">Emails</a></li>
+                    <li><a href ="{{url_for('contact', contact_id=contact.contact_id, activity='tasks')}}">Tasks</a></li>
+                    <li><a onclick="save_timezone();" href ="{{url_for('contact', contact_id=contact.contact_id, activity='meetings')}}">Meetings</a></li>
                 {% else %}
                     <li><a href ="{{ url_for('authorize_email', contact_id=contact.contact_id) }}">Emails</a></li>
+                    <li><a href ="{{ url_for('authorize_email', contact_id=contact.contact_id) }}">Tasks</a></li>
+                    <li><a href ="{{ url_for('authorize_email', contact_id=contact.contact_id) }}">Meetings</a></li>
                 {% endif %}
-                <li><a href ="{{url_for('contact', contact_id=contact.contact_id, activity='tasks')}}">Tasks</a></li>
-                <li><a href ="{{url_for('contact', contact_id=contact.contact_id, activity='meetings')}}">Meetings</a></li>
             </ul>
        
             {% include "contact_interactions.html" %}

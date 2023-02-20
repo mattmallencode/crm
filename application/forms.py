@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, EmailField, SelectField, BooleanField, DateTimeField
+from wtforms import StringField, PasswordField, SubmitField, EmailField, SelectField, BooleanField, DateTimeField, DateTimeLocalField
 from wtforms.validators import InputRequired, EqualTo, Email, Length
 
 class SignUpForm(FlaskForm):
@@ -46,7 +46,8 @@ class EmailForm(FlaskForm):
 class MeetingForm(FlaskForm):
     title = StringField("Title")
     description = StringField("Description")
-    date_time = DateTimeField("Date & Time")
+    date_time_start = DateTimeField("Start: ", render_kw={"type": "datetime-local"}, validators=[InputRequired()], format="%Y-%m-%dT%H:%M")
+    date_time_end = DateTimeField("End: ", render_kw={"type": "datetime-local"}, validators=[InputRequired()], format="%Y-%m-%dT%H:%M")
     schedule = SubmitField("Schedule")
 
 class removeContactForm(FlaskForm):
@@ -67,3 +68,14 @@ class SearchForm(FlaskForm):
 class NoteForm(FlaskForm):
     note = StringField("Note", validators=[Length(1, 140, "Note must be between 1 and 140 characters in length")])
     submit = SubmitField("Add Note")
+
+class DealForm(FlaskForm):
+    deal_id = StringField()
+    name = StringField("Deal Name", validators=[InputRequired()])
+    stage = SelectField("Deal Stage", choices=[("Appointment Scheduled", "Appointment Scheduled"), ("Qualified To Buy", "Qualified To Buy"), ("Presentation Scheduled", "Presentation Scheduled"), ("Decision Maker Brought-In", "Decision Maker Brought-In"), ("Contract Sent", "Contract Sent"), ("Closed Won", "Closed Won"), ("Closed Lost", "Closed Lost")])
+    date = DateTimeLocalField("Close Date",format='%Y-%m-%dT%H:%M')
+    owner = StringField("Deal Owner")
+    amount = StringField("Amount")
+    associated_contact = StringField("Associated Contact")
+    associated_company = StringField("Associated Company")
+    submit = SubmitField()
