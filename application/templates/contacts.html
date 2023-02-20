@@ -21,12 +21,7 @@
             <a href = "{{url_for('contacts', prev_sort='None', order='ASC', sort='None', filter='unassigned', page=1 , error='None')}}">Unassigned Contacts</a>
         </section>
         <i id="search_icon_contacts"class="fa-solid fa-magnifying-glass"></i>
-        <i id="sorting_contacts_name"class="fas fa-sort"></i>
-        <i id="sorting_contacts_email"class="fas fa-sort"></i>
-        <i id="sorting_contacts_phone_number"class="fas fa-sort"></i>
-        <i id="sorting_contacts_contact_owner"class="fas fa-sort"></i>
-        <i id="sorting_contacts_company"class="fas fa-sort"></i>
-        <i id="sorting_contacts_status"class="fas fa-sort"></i>
+        
         <table>
             <tr>
                 <form action = "" method = "POST" novalidate>
@@ -37,7 +32,7 @@
             </tr>
             {% set prev_sort = sort %}
             <tr>
-                <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='name', page=page, filter=filter, error='None')}}">Name</a><i id="orting_contacts_name"class="fas fa-sort"></i></th>
+                <th><a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='name', page=page, filter=filter, error='None')}}">Name</a></th>
                 
                 <th> <a href="{{url_for('contacts', prev_sort=prev_sort, order=order, sort='email', page=page, filter=filter, error='None')}}">Email</a></th>
                 
