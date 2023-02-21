@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, g, current_app
 from flask_sqlalchemy import SQLAlchemy as sa
 from flask_mail import Mail, Message
-from application.forms import SignUpForm, LoginForm, CreateTeamForm, InviteForm, ContactForm, LogoutForm, LeaveTeamForm, SearchForm, EmailForm, NoteForm, MeetingForm, DealForm
+from application.forms import SignUpForm, LoginForm, CreateTeamForm, InviteForm, ContactForm, LogoutForm, LeaveTeamForm, SearchForm, EmailForm, NoteForm, MeetingForm, DealForm, DealsSearchForm
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 from secrets import token_urlsafe
@@ -1061,6 +1061,28 @@ def create_app(config_class=Config):
     @login_required
     @team_required
     def deals(page, error):
+
+        # Search bar.
+        search_form = DealsSearchForm()
+        
+        if search_form.validate_on_submit():
+            user_search = search_form.search_bar.data
+            global deals
+            # Before using the user's search let's optimize for it.
+            optimization = optimize_deals_search(user_search)
+            # If the user is looking for an name, only search the name column.
+            if optimization == "name":
+                deals = deals.filter(Deals.name.like(f"%{user_search}%"))
+            # If the user is looking for an number, only search the number column.
+            elif optimization == "deal_id":
+                deals = deals.filter(Deals.deal_id.like(f"%{user_search}%"))
+            # If the user is looking for an email, only search the email column.
+            elif optimization == "email":
+                deals = deals.filter(Deals.associated_contact.like(f"%{user_search}%"))
+            # If the user isn't looking for an email or number definitively then search all relevant columns.
+            else:
+                deals = deals.filter(Deals.email.like(f"%{user_search}%") | Deals.name.like(f"%{user_search}%") | Deals.company.like(f"%{user_search}%"))
+                
         # Add deal form.
         add_deal = DealForm()
         # The page the user wishes to view.
@@ -1079,6 +1101,8 @@ def create_app(config_class=Config):
         if (deals.count() % 25) > 0:
             num_pages += 1
 
+
+
         # Create an editable form for each contact. Will only ever 25 at a time.
         forms = []
         for deal in deals:
@@ -1094,9 +1118,14 @@ def create_app(config_class=Config):
             form.associated_company.data = deal.associated_company
             forms.append(form)
 
-        return render_template("deals.html", forms=forms, add_deal=add_deal, num_pages=num_pages, page=page, error=error)
+        return render_template("deals.html", forms=forms, add_deal=add_deal, num_pages=num_pages, page=page, error=error, search_form=search_form)
 
-
+    def optimize_deals_search(search):
+        """Report back to the caller whether the search term is likely an email or otherwise."""
+        if "@" in search or "." in search:
+            return "email"
+        else:
+            return "name/company/email"
     
     @application.route("/add_deal", defaults={"page": 1, "error": "None"}, methods=["GET", "POST"])
     @application.route("/add_deal/<page>/<error>", methods=["GET", "POST"])

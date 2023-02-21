@@ -17,6 +17,13 @@
 
         <table>
             <tr>
+                <form action = "" method = "POST" novalidate>
+                    {{search_form.hidden_tag()}}
+                    <td>{{search_form.search_bar}}</td>
+                    <td>{{search_form.submit(id="deals_search_button")}}</td>
+                </form>
+            </tr>
+            <tr>
                 <th>Deal Name</th>
                 <th>Deal Stage</th>
                 <th>Close Date</th>
@@ -25,7 +32,7 @@
                 <th>Associated Contacts</th>
                 <th>Associated Companies</th>
             </tr>
-
+            
             {% for form in forms %}
                 <tr>
                     <form action="{{url_for('edit_deal', deal_id=form.deal_id.data, page=page, error=error)}}" method = "POST">
