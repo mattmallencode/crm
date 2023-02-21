@@ -19,6 +19,12 @@ body{
 /* Header */
 h1{
     color:black;
+    animation: fadeIn;
+    animation-duration: 2s; 
+}
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
 }
 .contacts_background{
     /*background: rgb(15, 8, 8, 0.5);*/
@@ -140,17 +146,24 @@ li a {
   margin-left: 0;
  }
 table {
+  border: black;
   border-collapse: collapse;
-  width: 100%;
+  width: auto;
+  height: 100%;
+  
 }
 th, td {
-  background-color: gainsboro;
-  border-color: gainsboro;
-  border: 1px solid white;
+  border: 1px solid #f2f2f2;
   padding: 8px;
   text-align: left;
+  transition: transform 0.3s ease;
+}
+th, td:hover{
+  transform: scale(1.01);
 }
 table input{
+  column-fill: auto;
+  border: white;
   border-color: white;
 }
 th {
@@ -180,9 +193,10 @@ color: white;
   }
   
   #contact_filter_buttons {
-    width: 25%;
+    width: 10%;
     display: flex;
     flex-direction: column;
+    background-color: gainsboro;
 
   }
   
