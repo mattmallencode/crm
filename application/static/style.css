@@ -1,6 +1,7 @@
 *{
     font-family: sans-serif;
 }
+
 body{
     background-color: white;
     /*
@@ -14,6 +15,7 @@ body{
     background-repeat: no-repeat;
     background-attachment: fixed;
     margin-top: 5% ;
+    overflow-x: hidden;
 }
 
 h1{
@@ -34,8 +36,8 @@ h1{
     /*background-color:;*/
     /*background-color:;*/
     border-radius: 30px;
-    position: fixed;
 }
+
 .box{
     display: flex;
     justify-content: center;
@@ -82,7 +84,7 @@ i{
 }
 ::placeholder{
     padding-left: 20px;
-    overflow: visible;
+    /*overflow: visible;*/
 }
 
 .loginRegisterSubmit{
@@ -509,5 +511,3 @@ ul {
   #logout section + section{
     border-top: 2px solid #575757;
   }
-
-
