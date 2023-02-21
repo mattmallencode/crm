@@ -15,7 +15,7 @@
     <h1 class="contactH1">Contacts</h1>
     
     <section id="contacts">
-        <section>
+        <section id="contact_filter_buttons">
             <a href = "{{url_for('contacts', prev_sort='None', order='ASC', sort='None', filter='all', page=1 , error='None')}}">All Contacts</a>
             <a href = "{{url_for('contacts', prev_sort='None', order='ASC', sort='None', filter='assigned', page=1 , error='None')}}">My Assigned Contacts</a>
             <a href = "{{url_for('contacts', prev_sort='None', order='ASC', sort='None', filter='unassigned', page=1 , error='None')}}">Unassigned Contacts</a>
@@ -55,7 +55,7 @@
                         {% for error in form.name.errors %}
                             <div>{{ error }}</div>
                         {% endfor %}
-                </td>
+                    </td>
                     <td>{{form.email()}}
                         {% for error in form.email.errors %}
                             <div>{{ error }}</div>

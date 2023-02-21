@@ -618,6 +618,7 @@ def create_app(config_class=Config):
         """
         form = ContactForm()
         search_form=SearchForm()
+        add_contact=ContactForm()
         error = "None"
         if form.validate_on_submit():
             user = Users.query.filter_by(email=g.email).first()
@@ -659,11 +660,19 @@ def create_app(config_class=Config):
                     else:
                         error = "You do not have sufficient permissions to assign a contact."
             else:
+            
                 error = "Can't create a duplicate contact!"
+        contacts = contacts.limit(25).offset(page_offset)
+        num_pages = contacts.count() // 25
+
+        # Count the number of pages.
+        if (contacts.count() % 25) > 0:
+            num_pages += 1
+        page = int(page)
         if turbo.can_stream():
-            return turbo.stream(turbo.update(render_template("edit_list.html",contact_id=contact_id, prev_sort=prev_sort, order=order, sort=sort, page=page, filter=filter, error=error, form=form, search_form=search_form), 'edit-table'))
+            return turbo.stream(turbo.update(render_template("contacts.html",contact_id=contact_id, prev_sort=prev_sort, order=order, sort=sort, page=page, filter=filter, error=error, form=form, search_form=search_form, add_contact=add_contact, num_pages=num_pages), 'edit-table'))
         else:
-            return render_template("contacts.html",contact_id=contact_id,prev_sort=prev_sort, order=order, sort=sort, page=page, filter=filter, error=error, form=form, search_form=search_form)
+            return render_template("contacts.html",contact_id=contact_id,prev_sort=prev_sort, order=order, sort=sort, page=page, filter=filter, error=error, form=form, search_form=search_form, add_contact=add_contact)
     
 
 
