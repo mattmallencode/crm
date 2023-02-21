@@ -52,7 +52,7 @@ def create_app(config_class=Config):
         user_details = Users.query.filter_by(email=g.email).first()
 
         return render_template("home.html", user_details=user_details)
-
+        
     @application.route("/authorize_email/<contact_id>", methods=["GET", "POST"])
     def authorize_email(contact_id):
         """Route for getting oAuth cred's for user's gmail."""
