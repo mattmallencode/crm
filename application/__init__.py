@@ -57,10 +57,10 @@ def create_app(config_class=Config):
     def authorize_email(contact_id):
         """Route for getting oAuth cred's for user's gmail."""
         session["contact_id_redirect"] = contact_id
-        return google.authorize(callback=url_for(f"authorized", _external=True))
+        return google.authorize(callback=url_for("authorized", _external=True))
 
 
-    @application.route("/authorize_email/authorized/")
+    @application.route("/authorize_email/authorized/", methods=["GET", "POST"])
     @google.authorized_handler
     def authorized(resp):
         """Route for handling successful google oAuth."""
@@ -83,6 +83,6 @@ def create_app(config_class=Config):
     def save_timezone():
         time_zone = request.form["time_zone"]
         session["time_zone"] = time_zone
-        return '', 204    
+        return '', 204
 
     return application

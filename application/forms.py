@@ -2,6 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, EmailField, SelectField, BooleanField, DateTimeField, DateTimeLocalField
 from wtforms.validators import InputRequired, EqualTo, Email, Length
 
+
 class SignUpForm(FlaskForm):
     name = StringField("Name", validators=[InputRequired()], render_kw={"placeholder": "FULL NAME"})
     email = EmailField("Email:", 
@@ -62,7 +63,7 @@ class LeaveTeamForm(FlaskForm):
     submit = SubmitField("Leave Team")
 
 class SearchForm(FlaskForm):
-    search_bar = StringField("Search Contacts...")
+    search_bar = StringField("Search...")
     submit = SubmitField("Search")
 
 class NoteForm(FlaskForm):
@@ -72,10 +73,19 @@ class NoteForm(FlaskForm):
 class DealForm(FlaskForm):
     deal_id = StringField()
     name = StringField("Deal Name", validators=[InputRequired()])
-    stage = SelectField("Deal Stage", choices=[("Appointment Scheduled", "Appointment Scheduled"), ("Qualified To Buy", "Qualified To Buy"), ("Presentation Scheduled", "Presentation Scheduled"), ("Decision Maker Brought-In", "Decision Maker Brought-In"), ("Contract Sent", "Contract Sent"), ("Closed Won", "Closed Won"), ("Closed Lost", "Closed Lost")])
+    stage = SelectField("Deal Stage", choices=[("Appointment Scheduled", "Appointment Scheduled"), 
+    ("Qualified To Buy", "Qualified To Buy"), ("Presentation Scheduled", "Presentation Scheduled"), 
+    ("Decision Maker Brought-In", "Decision Maker Brought-In"), ("Contract Sent", "Contract Sent"), 
+    ("Closed Won", "Closed Won"), ("Closed Lost", "Closed Lost")])
     date = DateTimeLocalField("Close Date",format='%Y-%m-%dT%H:%M')
     owner = StringField("Deal Owner")
     amount = StringField("Amount")
     associated_contact = StringField("Associated Contact")
     associated_company = StringField("Associated Company")
     submit = SubmitField()
+
+class DealsSearchForm(FlaskForm):
+    search_bar = StringField("Search Deals...")
+    submit = SubmitField("Search")
+
+
