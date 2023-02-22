@@ -2,6 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, EmailField, SelectField, BooleanField, DateTimeField, DateTimeLocalField
 from wtforms.validators import InputRequired, EqualTo, Email, Length
 
+
 class SignUpForm(FlaskForm):
     name = StringField("Name", validators=[InputRequired()], render_kw={"placeholder": "FULL NAME"})
     email = EmailField("Email:", 
@@ -62,7 +63,7 @@ class LeaveTeamForm(FlaskForm):
     submit = SubmitField("Leave Team")
 
 class SearchForm(FlaskForm):
-    search_bar = StringField("Search Contacts...")
+    search_bar = StringField("Search...")
     submit = SubmitField("Search")
 
 class NoteForm(FlaskForm):
@@ -86,3 +87,5 @@ class DealForm(FlaskForm):
 class DealsSearchForm(FlaskForm):
     search_bar = StringField("Search Deals...")
     submit = SubmitField("Search")
+
+

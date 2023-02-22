@@ -1064,10 +1064,11 @@ def create_app(config_class=Config):
 
         # Search bar.
         search_form = DealsSearchForm()
-        
+        global deals
+        #deals = None
         if search_form.validate_on_submit():
             user_search = search_form.search_bar.data
-            global deals
+            #global deals
             # Before using the user's search let's optimize for it.
             optimization = optimize_deals_search(user_search)
             # If the user is looking for an name, only search the name column.
@@ -1077,11 +1078,11 @@ def create_app(config_class=Config):
             elif optimization == "deal_id":
                 deals = deals.filter(Deals.deal_id.like(f"%{user_search}%"))
             # If the user is looking for an email, only search the email column.
-            elif optimization == "email":
+            elif optimization == "associated_contact":
                 deals = deals.filter(Deals.associated_contact.like(f"%{user_search}%"))
             # If the user isn't looking for an email or number definitively then search all relevant columns.
             else:
-                deals = deals.filter(Deals.email.like(f"%{user_search}%") | Deals.name.like(f"%{user_search}%") | Deals.company.like(f"%{user_search}%"))
+                deals = deals.filter(Deals.associated_contact.like(f"%{user_search}%") | Deals.name.like(f"%{user_search}%") | Deals.deal_id.like(f"%{user_search}%"))
                 
         # Add deal form.
         add_deal = DealForm()
@@ -1097,12 +1098,12 @@ def create_app(config_class=Config):
         # Pageing functionality.
         deals = deals.limit(25).offset(page_offset)
         num_pages = deals.count() // 25
+
         # Count the number of pages.
         if (deals.count() % 25) > 0:
             num_pages += 1
 
-
-
+        
         # Create an editable form for each contact. Will only ever 25 at a time.
         forms = []
         for deal in deals:
