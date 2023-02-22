@@ -458,27 +458,32 @@ color: white;
 /* Login page*/
 #login_box {
   display: flex;
+  width: auto;
   justify-content: center;
-  align-items: center;
-  height: 100vh;
+  align-items: left;
+  height: 100%;
 }
 
 .login_container {
-  max-width: 400px;
   margin-right: auto;
   margin-left: 0;
 }
 
 #login_form {
-  display: flex;
-  flex-direction: column;
-  left: 0;
+  position: relative;
+  top: 0;
+  bottom: 0;
+  left: 0%;
+  top: 50%;
+  margin: auto;
+  color: black;
 }
 
 #login_form  input  {
   padding: 10px;
   border: None;
   size: 100%;
+  border: #111;
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
@@ -510,4 +515,5 @@ i#password_symbol {
 div#login_box {
   float: left;
   justify-content: left;
+  color: coral;
 }
