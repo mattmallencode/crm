@@ -1,25 +1,18 @@
 *{
     font-family: sans-serif;
 }
-
 body{
     background-color: white;
-    /*
-    background-image: url("../static/login_bg.jpg"); /*https://www.vecteezy.com/vector-art/2742352-group-of-men-and-women-happy-with-business-up-on-a-mountain-with-sunset-background, https://gratisography.com/?s=mountains */
     
-    animation: gradient-animation 5s ease infinite;
-    background: transparent;
-    /*background-image: linear-gradient(to bottom, #00a8e8, #007f8e);*/
-
-    background-color: white;
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
     margin-top: 5% ;
-    overflow-x: hidden;
 }
+
+/* contacts page /*
 /* Header */
-h1{
+#contacts_heading {
     color:black;
     animation: fadeIn;
     animation-duration: 2s; 
@@ -37,6 +30,7 @@ h1{
     /*background-color:;*/
     /*background-color:;*/
     border-radius: 30px;
+    position: fixed;
 }
 
 .box{
@@ -63,10 +57,7 @@ h1{
     text-align: center;
     
 }
-.loginSubmitP{
-    color: white;
-    text-align: center;
-}
+
 p{
     color: white;
 }
@@ -79,15 +70,11 @@ i{
 }
 ::placeholder{
     padding-left: 20px;
-    /*overflow: visible;*/
+    overflow: visible;
 }
 
 .loginRegisterSubmit{
     padding-right: 65%;
-}
-
-.loginRegisterLink{
-    color:red;
 }
 
 nav{
@@ -96,13 +83,14 @@ nav{
     left: 0%;
     right: 0%;
     width: 100%;
+    
 }
 ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #333;
+    background-color: #2C001E;
   }
   
   li {
@@ -145,22 +133,31 @@ li a {
   }
  #search_bar{
   margin-left: 0;
+  
+ }
+ #search_bar input#search_bar{
+  height: 100%;
+  width: 100%;
+  border: none;
+  outline: none;
  }
 table {
   border: black;
+  background-color: white;
   border-collapse: collapse;
   width: auto;
   height: 100%;
   
 }
 th, td {
-  border: 1px solid #f2f2f2;
+  border: 1px solid black;
   padding: 8px;
   text-align: left;
   transition: transform 0.3s ease;
 }
 th, td:hover{
-  transform: scale(1.01);
+  transform: scale(1.02);
+  background-color: #f5f5f5;
 }
 table input{
   column-fill: auto;
@@ -170,125 +167,138 @@ table input{
 th {
   background-color: #f2f2f2;
 }
-tr:hover {
-  background-color: #f5f5f5;
+input#name_input_contact{
+  height: 100%;
+  width: 100%;
+  border: none;
+  outline: none;
 }
-
-/* the search botton */
-#search_icon_contacts {
-  margin-right: 50px;
+input#phone_number{
+  height: 100%;
+  width: 100%;
+  border: none;
+  outline: none;
 }
-#contacts_search_button{
+input#email {
+  height: 100%;
+  width: 100%;
+  border: none;
+  outline: none;
+  
 }
-
+input#contact_owner {
+  height: 100%;
+  width: 100%;
+  border: none;
+  outline: none;
+}
+input#company {
+  height: 100%;
+  width: 100%;
+  border: none;
+  outline: none;
+}
+#team_table{
+  width: 100%;
+  border: black;
+  background-color: white;
+  border-collapse: collapse;
+  height: 100%;
+}
 #contacts_search_button:hover{
 color: white;
+  background-color: #E95420;
+}
+
+#search_icon_contacts {
+  position:relative;
+  left: 20px;
+}
+#contacts {
+  display: flex;
+}
+  
+#contact_filter_buttons {
+  width: 10%;
+  display: flex;
+  flex-direction: column;
+  background-color: gainsboro;
+}
+#remove_contact{
+  color: white;
+  padding: 5% 5%;
+  text-indent: 0%;
+  background-color:#E95420;
+  border-radius: 0%;
+}
+#remove_contact:hover{
+  color: white;
+}
+
+.contact_save_add_button{
+  width:100%;
+  text-indent: 4px;
+  padding-right: 10%;
+  padding-top: 3100%;
+  padding-bottom: 3%;
+  text-align: center;
+  position: relative;
+  margin-top: 10%;
+}
+.contact_save_add_button:hover{
+ color: white;
   background-color: #111;
 }
 
-  #search_icon_contacts {
-    margin-left: px;
-  }
-  #contacts {
-    display: flex;
-  }
-  
-  #contact_filter_buttons {
-    width: 10%;
-    display: flex;
-    flex-direction: column;
-    background-color: gainsboro;
+#dashboard {
+  display: grid;
+  grid-template-columns: auto auto;
+}
 
-  }
-  
-  #contact_filter_buttons a {
-    margin-bottom: 10px;
-  }
-  #search_icon_contacts {
-    margin-left: auto;
-  }
+#dashboard section{
+  background-color: #FFF8DC;
+  margin: 20px;
+  padding: 25px;
+  box-shadow: 3px 3px #606060;
+}
 
+#dashboard *{
+  color: black;
+}
 
-  #remove_contact{
-    color: black;
-    padding: 1% 2%;
-    text-indent: 0%;
-    background-color:#e5d07b;
-    border-radius: 0%;
-    box-shadow: 0px 0px 10px #111;
-  }
-  #remove_contact:hover{
-    color: white;
-  }
+#dashboard section:hover{
+  box-shadow: 0px 0px 20px #606060;
+}
 
-  .contact_save_add_button{
-    width:100%;
-    text-indent: 4px;
-    padding-right: 10%;
-    padding-top: 3100%;
-    padding-bottom: 3%;
-    text-align: center;
-    position: relative;
-    margin-top: 10%;
-  }
-  .contact_save_add_button:hover{
-    color: white;
-    background-color: #111;
-  }
+#contact {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  background-color: gainsboro;
+  padding: 2.5%;
+  box-shadow: 0px 0px 10px #111;
+}
 
-  #dashboard {
-    display: grid;
-    grid-template-columns: auto auto;
-  }
+#contact *{
+  color: black;
+  text-align: left;
+}
 
-  #dashboard section{
-    background-color: #FFF8DC;
-    margin: 20px;
-    padding: 25px;
-    box-shadow: 3px 3px #606060;
-  }
+#contact li *{
+  color: white;
+}
 
-  #dashboard *{
-    color: black;
-  }
+#contact h1{
+  font-size: 50px;
+  color: black;
+}
 
-  #dashboard section:hover{
-    box-shadow: 0px 0px 20px #606060;
-  }
+#contact h2{
+  font-size: 16px;
+  color: #575757;
+}
 
-  #contact {
-    display: grid;
-    grid-template-columns: 1fr 3fr;
-    background-color: gainsboro;
-    padding: 2.5%;
-    box-shadow: 0px 0px 10px #111;
-  }
-
-  #contact *{
-    color: black;
-    text-align: left;
-  }
-
-  #contact li *{
-    color: white;
-  }
-
-  #contact h1{
-    font-size: 50px;
-    color: black;
-  }
-
-  #contact section h1 + *{
-    border-bottom: 2px solid #575757;
-  }
-
-  #contact h2{
-    font-size: 16px;
-    color: #575757;
-  }
-
-  #contact h1, #contact h2, #contact p{
-    margin: 0%;
+#contact h1, #contact h2, #contact p{
+  margin: 0%;
   }
 
   #contact section{
@@ -340,23 +350,15 @@ color: white;
     margin: 1% 0%;
   }
 
-  #contact input#note, input#message, input#subject{
-    height: 100px;
-    border-radius: 0%;
-    text-indent: 0%;
-    text-align: start;
-    justify-content: start;
-    background-color: #FFF8DC;
-  }
-
   #activity_box input#subject{
     height: 25px;
   }
 
   #contact input#submit, input#submit{
-    padding: 1% 2%;
+    color: white;
+    padding: 5% 5%;
     text-indent: 0%;
-    background-color:#e5d07b;
+    background-color:#E95420;
     border-radius: 0%;
   }
 
@@ -416,15 +418,7 @@ color: white;
   #cancel_reply{
     padding: 1%;
   }
-  
 
-  #create_team, #team_page section, #invite, #logout{
-    background-color: #b7aeae;
-    box-shadow: 0px 0px 5px #333;
-    padding: 2% 2%;
-    margin: 0% 40% 0% 5%;
-    border-radius: 20px;
-  }
 
   #create_team h1, #invite h1, #logout h1{
     font-size: 30px;
@@ -432,54 +426,88 @@ color: white;
     padding: 0%;
   }
 
-  #create_team input, #invite input{
-    padding: 0% 2%;
-    text-indent: 0%;
-  }
-
-  #team_page{
-    margin-top: 5%;
-    display: grid;
-    grid-template-rows: 1fr 1fr;
-    row-gap: 10%;
-  }
-
-  #team_page section{
-    padding: 1% 2% 2% 2%;
-  }
 
   #team_page h1{
-    border-bottom: 2px solid #575757;
+    border-bottom: 2px solid black;
     margin: 0%;
     padding: 0%;
   }
-
-  #team_page #invite_button{
-    border-top: 2px solid #575757;
-    padding-top: 2.5%;
-  }
-
-  #team_page a{
-    margin: 0%;
-  }
-
-  #team_page form{
-    display: grid;
-    grid-template-rows: 1fr 1fr;
-    row-gap: 10%;
-    align-items: start;
-  }
-  
   #team_page #sure_checkbox{
     width: 20px;
-  }
-
-  #invite input#submit, #create_team input#submit{
-    background-color: #e5d07b;
-    border-radius: 30px;
-    margin-top: 1%;
   }
 
   #logout section + section{
     border-top: 2px solid #575757;
   }
+
+
+  /* the team */
+
+#invite_person{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+#team_name{
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Login page*/
+#login_box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login_container {
+  max-width: 400px;
+  margin-right: auto;
+  margin-left: 0;
+}
+
+#login_form {
+  display: flex;
+  flex-direction: column;
+  left: 0;
+}
+
+#login_form  input  {
+  padding: 10px;
+  border: None;
+  size: 100%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.loginRegisterSubmit input[type="submit"] {
+  background-color:#E95420 ;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  text-align: left;
+}
+
+#register_link {
+  text-align: left;
+}
+
+i#email_symbol{
+  position: relative;
+  right: 20%;
+  transform: translateY(90%);
+}
+i#password_symbol {
+  position: relative;
+  right: 20%;
+  transform: translateY(90%);
+}
+div#login_box {
+  float: left;
+  justify-content: left;
+}

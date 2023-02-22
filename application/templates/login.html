@@ -1,24 +1,19 @@
-<!DOCTYPE html>
-<html lang="en-US">
-<head>
-    <meta charset="UTF-8" />
-    <title>Sherpa</title>
-    <link rel="stylesheet" type="text/css" href="{{url_for("static", filename="redemptionArc.css")}}" >
-    <script src="https://kit.fontawesome.com/13ea2b7ad4.js" crossorigin="anonymous"></script>
-</head>
-    <body>
+{% extends "base_no_turbo.html" %}
+
+{% block main_content %}
+    <body id="login_body">
         
-        <div class="box">
-            <div class="container">
+        <div id="login_box" class="box">
+            <div class="login_container">
                 <!--<img src="../static/sherpa_logo.png" height="50px" width="50px" alt="Sherpa's logo">-->
-                <h1 class="Heading">Login</h1>
-                <form method="POST" novalidate>
+                <h1 id="login_heading" class="Heading">Login</h1>
+                <form id="login_form" method="POST" novalidate>
                     {{ form.hidden_tag() }}
                     {% for error in form.email.errors %}
                     <div>{{ error }}</div>
                     {% endfor %}
                     
-                    <i class="fa-solid fa-envelope"></i>
+                    <i id="email_symbol"class="fa-solid fa-envelope"></i>
                     {{ form.email() }}
                     <br>
                     
@@ -27,14 +22,14 @@
                     {% endfor %}
                     
                     <br>
-                    <i class="fa-solid fa-lock"></i>
+                    <i id="password_symbol" class="fa-solid fa-lock"></i>
                     <div>{{ form.password() }}</div>
                     <br>
                     <div class="loginRegisterSubmit">{{ form.submit(id="login") }}</div>
                     <br>
                 </form>
-                <p class="loginSubmitP">Have you created an account yet? To register please click <a class = "loginRegisterLink" href="/signup">here</a>.</p>
+                <p id="register_link" class="loginSubmitP">Register Here <a class = "loginRegisterLink" href="/signup">here</a>.</p>
             </div>
         </div>
     </body>
-</html>
+{% endblock %}
