@@ -1,3 +1,4 @@
+"""
 from test import client
 #import mock
 #import pytest
@@ -165,4 +166,4 @@ def test_add_contact(client):
     #assert contact.phone_number == form['phone_number']
     #assert contact.company == form['company']
     #assert contact.status == form['status']
-
+"""
