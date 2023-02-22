@@ -3,21 +3,14 @@
 }
 body{
     background-color: white;
-    /*
-    background-image: url("../static/login_bg.jpg"); /*https://www.vecteezy.com/vector-art/2742352-group-of-men-and-women-happy-with-business-up-on-a-mountain-with-sunset-background, https://gratisography.com/?s=mountains */
     
-    animation: gradient-animation 5s ease infinite;
-    background: transparent;
-    /*background-image: linear-gradient(to bottom, #00a8e8, #007f8e);*/
-
-    background-color: white;
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
     margin-top: 5% ;
 }
 /* Header */
-h1{
+#contacts_heading {
     color:black;
     animation: fadeIn;
     animation-duration: 2s; 
@@ -95,13 +88,14 @@ nav{
     left: 0%;
     right: 0%;
     width: 100%;
+    
 }
 ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #333;
+    background-color: #2C001E;
   }
   
   li {
@@ -144,22 +138,31 @@ li a {
   }
  #search_bar{
   margin-left: 0;
+  
+ }
+ #search_bar input#search_bar{
+  height: 100%;
+  width: 100%;
+  border: none;
+  outline: none;
  }
 table {
   border: black;
+  background-color: white;
   border-collapse: collapse;
   width: auto;
   height: 100%;
   
 }
 th, td {
-  border: 1px solid #f2f2f2;
+  border: 1px solid black;
   padding: 8px;
   text-align: left;
   transition: transform 0.3s ease;
 }
 th, td:hover{
-  transform: scale(1.01);
+  transform: scale(1.02);
+  background-color: #f5f5f5;
 }
 table input{
   column-fill: auto;
@@ -169,25 +172,53 @@ table input{
 th {
   background-color: #f2f2f2;
 }
-tr:hover {
-  background-color: #f5f5f5;
+input#name_input_contact{
+  height: 100%;
+  width: 100%;
+  border: none;
+  outline: none;
 }
-
-/* the search botton */
-#search_icon_contacts {
-  margin-right: 50px;
+input#phone_number{
+  height: 100%;
+  width: 100%;
+  border: none;
+  outline: none;
 }
-#contacts_search_button{
+input#email {
+  height: 100%;
+  width: 100%;
+  border: none;
+  outline: none;
+  
 }
-
+input#contact_owner {
+  height: 100%;
+  width: 100%;
+  border: none;
+  outline: none;
+}
+input#company {
+  height: 100%;
+  width: 100%;
+  border: none;
+  outline: none;
+}
+#team_table{
+  width: 100%;
+  border: black;
+  background-color: white;
+  border-collapse: collapse;
+  height: 100%;
+}
 #contacts_search_button:hover{
 color: white;
-  background-color: #111;
+  background-color: #E95420;
 }
 
-  #search_icon_contacts {
-    margin-left: px;
-  }
+#search_icon_contacts {
+  position:relative;
+  left: 20px;
+}
   #contacts {
     display: flex;
   }
@@ -199,22 +230,12 @@ color: white;
     background-color: gainsboro;
 
   }
-  
-  #contact_filter_buttons a {
-    margin-bottom: 10px;
-  }
-  #search_icon_contacts {
-    margin-left: auto;
-  }
-
-
   #remove_contact{
-    color: black;
-    padding: 1% 2%;
+    color: white;
+    padding: 5% 5%;
     text-indent: 0%;
-    background-color:#e5d07b;
+    background-color:#E95420;
     border-radius: 0%;
-    box-shadow: 0px 0px 10px #111;
   }
   #remove_contact:hover{
     color: white;
@@ -277,10 +298,6 @@ color: white;
     color: black;
   }
 
-  #contact section h1 + *{
-    border-bottom: 2px solid #575757;
-  }
-
   #contact h2{
     font-size: 16px;
     color: #575757;
@@ -339,23 +356,15 @@ color: white;
     margin: 1% 0%;
   }
 
-  #contact input#note, input#message, input#subject{
-    height: 100px;
-    border-radius: 0%;
-    text-indent: 0%;
-    text-align: start;
-    justify-content: start;
-    background-color: #FFF8DC;
-  }
-
   #activity_box input#subject{
     height: 25px;
   }
 
   #contact input#submit, input#submit{
-    padding: 1% 2%;
+    color: white;
+    padding: 5% 5%;
     text-indent: 0%;
-    background-color:#e5d07b;
+    background-color:#E95420;
     border-radius: 0%;
   }
 
@@ -415,15 +424,7 @@ color: white;
   #cancel_reply{
     padding: 1%;
   }
-  
 
-  #create_team, #team_page section, #invite, #logout{
-    background-color: #b7aeae;
-    box-shadow: 0px 0px 5px #333;
-    padding: 2% 2%;
-    margin: 0% 40% 0% 5%;
-    border-radius: 20px;
-  }
 
   #create_team h1, #invite h1, #logout h1{
     font-size: 30px;
@@ -431,56 +432,31 @@ color: white;
     padding: 0%;
   }
 
-  #create_team input, #invite input{
-    padding: 0% 2%;
-    text-indent: 0%;
-  }
-
-  #team_page{
-    margin-top: 5%;
-    display: grid;
-    grid-template-rows: 1fr 1fr;
-    row-gap: 10%;
-  }
-
-  #team_page section{
-    padding: 1% 2% 2% 2%;
-  }
 
   #team_page h1{
-    border-bottom: 2px solid #575757;
+    border-bottom: 2px solid black;
     margin: 0%;
     padding: 0%;
   }
-
-  #team_page #invite_button{
-    border-top: 2px solid #575757;
-    padding-top: 2.5%;
-  }
-
-  #team_page a{
-    margin: 0%;
-  }
-
-  #team_page form{
-    display: grid;
-    grid-template-rows: 1fr 1fr;
-    row-gap: 10%;
-    align-items: start;
-  }
-  
   #team_page #sure_checkbox{
     width: 20px;
-  }
-
-  #invite input#submit, #create_team input#submit{
-    background-color: #e5d07b;
-    border-radius: 30px;
-    margin-top: 1%;
   }
 
   #logout section + section{
     border-top: 2px solid #575757;
   }
 
+  /* the team */
+
+#invite_person{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+#team_name{
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
 

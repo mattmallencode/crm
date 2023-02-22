@@ -42,7 +42,7 @@
             {% endif %}
         </section>
     {% elif activity == 'notes' %}
-        <section>
+        <section id="notes">
             <h2>Make A Note</h2>
             <form action = "{{url_for('contact', contact_id=contact.contact_id, activity='notes')}}" method = "POST">
                 {{noteForm.hidden_tag()}}
