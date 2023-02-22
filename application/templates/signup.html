@@ -17,28 +17,29 @@
         <form method="POST", novalidate>
         {{ form.hidden_tag() }}
         {% for error in form.name.errors %}
-                <div>{{ error }}</div>
+                <div class="signup_error">{{ error }}</div>
         {% endfor %}
         <i class="fa-solid fa-user"></i>
         {{ form.name() }}
-        {% for error in form.name.errors %}
-                <div>{{ error }}</div>
-        {% endfor %}
         <br>
+        {% for error in form.email.errors %}
+                <div class="signup_error">{{ error }}</div>
+        {% endfor %}
         <i class="fa-solid fa-envelope"></i>
         {{ form.email() }}
         <br>
-        <i class="fa-solid fa-lock"></i>
         {% for error in form.password.errors %}
-                <div>{{ error }}</div>
+                <div class="signup_error">{{ error }}</div>
         {% endfor %}
-        
+        <i class="fa-solid fa-lock"></i>
         {{ form.password() }}
         <br>
         {% for error in form.password2.errors %}
-               <div>{{ error }}</div>            {% endfor %}
+               <div class="signup_error">{{ error }}</div>            
+        {% endfor %}
         <i class="fa-solid fa-lock"></i>
         {{ form.password2() }}
+        <br>
         <br>
         <div class="loginRegisterSubmit">{{ form.submit(id="register") }}</div>
         <br>

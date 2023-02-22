@@ -15,7 +15,7 @@
                     {{form.submit()}}
 
                     {% if reply is not none %}
-                        <a id = "cancel_reply" href="{{url_for('contact', contact_id=contact.contact_id, activity='emails')}}">Cancel Reply</a>
+                        <a id = "cancel_reply" href="{{url_for('contact_bp.contact', contact_id=contact.contact_id, activity='emails')}}">Cancel Reply</a>
                     {% endif %}
                 </section>
             </form>
@@ -35,7 +35,7 @@
                 </section>
                 {% endfor %} 
                 <section id="reply">
-                    <a href="{{url_for('reply_email', message_id=thread[-1]['id'], subject=thread[0]['subject'], thread_id=thread[-1]['threadId'], contact_id=contact.contact_id)}}">Reply</a>
+                    <a href="{{url_for('contact_bp.reply_email', message_id=thread[-1]['id'], subject=thread[0]['subject'], thread_id=thread[-1]['threadId'], contact_id=contact.contact_id)}}">Reply</a>
                 </section>
             </article>
             {% endfor %}
@@ -44,7 +44,7 @@
     {% elif activity == 'notes' %}
         <section>
             <h2>Make A Note</h2>
-            <form action = "{{url_for('contact', contact_id=contact.contact_id, activity='notes')}}" method = "POST">
+            <form action = "{{url_for('contact_bp.contact', contact_id=contact.contact_id, activity='notes')}}" method = "POST">
                 {{noteForm.hidden_tag()}}
                 <section>
                     {% for error in noteForm.note.errors %}
@@ -77,7 +77,7 @@
                        
                         <section>
                             {% set contact_id = contact.contact_id + "r" %}
-                            <p><a href = "{{url_for('remove_note', note_id=note.note_id, contact_id=contact.contact_id)}}">Remove</a></p>
+                            <p><a href = "{{url_for('contact_bp.remove_note', note_id=note.note_id, contact_id=contact.contact_id)}}">Remove</a></p>
                         </section>
                         </section>        
                 {% endfor %}

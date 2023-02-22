@@ -3,10 +3,8 @@
 }
 body{
     background-color: white;
-    background-image: url("../static/login_bg.jpg"); /*https://www.vecteezy.com/vector-art/2742352-group-of-men-and-women-happy-with-business-up-on-a-mountain-with-sunset-background, https://gratisography.com/?s=mountains */
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+    /*background-image: url("../static/login_bg.jpg"); /*https://www.vecteezy.com/vector-art/2742352-group-of-men-and-women-happy-with-business-up-on-a-mountain-with-sunset-background, https://gratisography.com/?s=mountains */
+    background-color: #b7aeae;
 }
 
 .box{
@@ -52,7 +50,6 @@ i{
     position:absolute;
     margin-top: 10px;
     margin-left: 10px;
-    
 }
 ::placeholder{
     padding-left: 20px;
@@ -65,4 +62,30 @@ i{
 
 .loginRegisterLink{
     color:red;
+}
+#register{
+    cursor: pointer;
+}
+
+#register:hover{
+    background-color: black;
+    cursor: pointer;
+    color: white;
+}
+
+#login{
+    cursor: pointer;
+}
+#login:hover{
+    background-color: black;
+    cursor: pointer;
+    color: white;
+}
+
+.signup_error{
+    color: #F40009;
+}
+
+#signup_error_lock{
+    
 }

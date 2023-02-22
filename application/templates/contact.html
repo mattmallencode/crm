@@ -4,10 +4,10 @@
     <nav>
         <ul>
           <li><a href="{{ url_for('home') }}">Home</a></li>
-          <li><a href="{{ url_for('contacts') }}">Contacts</a></li>
-          <li><a href ="{{url_for('deals')}}">Deals</a></li>
-          <li><a href="{{ url_for('team') }}">Team</a></li>
-          <li><a href="{{ url_for('profile') }}">Profile</a></li>
+          <li><a href="{{ url_for('contacts_bp.contacts') }}">Contacts</a></li>
+          <li><a href ="{{url_for('deals_bp.deals')}}">Deals</a></li>
+          <li><a href="{{ url_for('teams.team') }}">Team</a></li>
+          <li><a href="{{ url_for('auth.profile') }}">Profile</a></li>
         </ul>
     </nav>
 
@@ -38,12 +38,12 @@
 
         <section id="contact_activity">
             <ul>
-                <li><a href ="{{url_for('contact', contact_id=contact.contact_id, activity='activity')}}">Activity</a></li>
-                <li><a href ="{{url_for('contact', contact_id=contact.contact_id, activity='notes')}}">Notes</a></li>
+                <li><a href ="{{url_for('contact_bp.contact', contact_id=contact.contact_id, activity='activity')}}">Activity</a></li>
+                <li><a href ="{{url_for('contact_bp.contact', contact_id=contact.contact_id, activity='notes')}}">Notes</a></li>
                 {% if google_token %}
-                    <li><a href ="{{url_for('contact', contact_id=contact.contact_id, activity='emails')}}">Emails</a></li>
-                    <li><a href ="{{url_for('contact', contact_id=contact.contact_id, activity='tasks')}}">Tasks</a></li>
-                    <li><a onclick="save_timezone();" href ="{{url_for('contact', contact_id=contact.contact_id, activity='meetings')}}">Meetings</a></li>
+                    <li><a href ="{{url_for('contact_bp.contact', contact_id=contact.contact_id, activity='emails')}}">Emails</a></li>
+                    <li><a href ="{{url_for('contact_bp.contact', contact_id=contact.contact_id, activity='tasks')}}">Tasks</a></li>
+                    <li><a onclick="save_timezone();" href ="{{url_for('contact_bp.contact', contact_id=contact.contact_id, activity='meetings')}}">Meetings</a></li>
                 {% else %}
                     <li><a href ="{{ url_for('authorize_email', contact_id=contact.contact_id) }}">Emails</a></li>
                     <li><a href ="{{ url_for('authorize_email', contact_id=contact.contact_id) }}">Tasks</a></li>
