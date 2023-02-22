@@ -34,7 +34,7 @@
       <section id="invite_person">
         <h1>Invite New Contact</h1>
         {% if user_details.admin_status == True %}
-            <p id="invite_button"><a href="{{ url_for('invite') }}">Invite Member</a></p>
+            <p id="invite_button"><a href="{{ url_for('teams.invite') }}">Invite Member</a></p>
           {% endif %}
       </section>
 
