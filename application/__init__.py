@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, g
 from flask_sqlalchemy import SQLAlchemy as sa
+from flask_mail import Mail
+from application.forms import CreateTeamForm, ContactForm, LogoutForm, LeaveTeamForm, SearchForm, DealForm
 from flask_oauthlib.client import OAuth
 from turbo_flask import Turbo
 from config import Config
@@ -55,10 +57,10 @@ def create_app(config_class=Config):
     def authorize_email(contact_id):
         """Route for getting oAuth cred's for user's gmail."""
         session["contact_id_redirect"] = contact_id
-        return google.authorize(callback=url_for(f"authorized", _external=True))
+        return google.authorize(callback=url_for("authorized", _external=True))
 
 
-    @application.route("/authorize_email/authorized/")
+    @application.route("/authorize_email/authorized/", methods=["GET", "POST"])
     @google.authorized_handler
     def authorized(resp):
         """Route for handling successful google oAuth."""

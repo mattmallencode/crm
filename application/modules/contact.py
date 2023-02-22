@@ -239,9 +239,6 @@ def get_emails(contact_email):
         url = f"https://gmail.googleapis.com/gmail/v1/users/{user_google}/threads/{thread['id']}"
         # Fetch all the emails in that thread.
         emails = google.get(url).data
-        f = open("test.json", "w")
-        f.write(json.dumps(emails, indent=4))
-        f.close()
         # Add the parsed emails to the threads list.
         threads.append(parse_thread(emails))
     # Sort the threads by the thread with the most recent reply.
