@@ -15,9 +15,9 @@
   <section id="team_page">
     
       <section>
-          <h1>My Team: {{ team["name"] }}</h1>
+          <h1 id="team_name">My Team: {{ team["name"] }}</h1>
           
-          <table>
+          <table id="team_table">
             <tr>
               <th>Name</th>
               <th>Email</th>
@@ -27,16 +27,16 @@
             <tr>
               <td>{{ team_member.name }}</td>
               <td>{{ team_member.email }}</td>
-            </tr>
             {% endfor %}
           </table>
-          
-          {% if user_details.admin_status == True %}
-            <p id="invite_button"><a href="{{ url_for('teams.invite') }}">Invite a new team mate.</a></p>
-          {% endif %}
             
       </section>
-      
+      <section id="invite_person">
+        <h1>Invite New Contact</h1>
+        {% if user_details.admin_status == True %}
+            <p id="invite_button"><a href="{{ url_for('teams.invite') }}">Invite Member</a></p>
+          {% endif %}
+      </section>
 
       <section>
           <h1>Leave Your Team</h1>

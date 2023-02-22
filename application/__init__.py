@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, g
 from flask_sqlalchemy import SQLAlchemy as sa
 from flask_mail import Mail
+from application.forms import CreateTeamForm, ContactForm, LogoutForm, LeaveTeamForm, SearchForm, DealForm
 from flask_oauthlib.client import OAuth
 from turbo_flask import Turbo
 from config import Config
@@ -82,6 +83,6 @@ def create_app(config_class=Config):
     def save_timezone():
         time_zone = request.form["time_zone"]
         session["time_zone"] = time_zone
-        return '', 204    
+        return '', 204
 
     return application
