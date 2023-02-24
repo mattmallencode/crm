@@ -22,6 +22,7 @@ class Config:
     MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
     GOOGLE_ID = os.environ.get("GOOGLE_ID")
     GOOGLE_SECRET = os.environ.get("GOOGLE_SECRET")
+    WTF_CSRF_ENABLED = False
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
     # Set up SQLAlchemy with the above credentials.
