@@ -12,7 +12,21 @@
         </ul>
     </nav>
     <div class="contacts_background">
-    <h1 id="contacts_heading"class="contactH1">Contacts</h1>
+        <svg viewBox="0 0 960 300">
+            <symbol id="s-text">
+              <text text-anchor="middle" x="50%" y="80%">CONTACTS </text>
+              <text text-anchor="middle" x="52%" y="80%">CONTACTS </text>
+              
+            </symbol>
+          
+            <g class = "g-ants">
+              <use xlink:href="#s-text" class="text-copy"></use>
+              <use xlink:href="#s-text" class="text-copy"></use>
+              <use xlink:href="#s-text" class="text-copy"></use>
+              <use xlink:href="#s-text" class="text-copy"></use>
+              <use xlink:href="#s-text" class="text-copy"></use>
+            </g>
+          </svg>
     
     <section id="contacts">
         <section id="contact_filter_buttons">
@@ -120,8 +134,6 @@
 <section>
     {% set next_page = page + 1 %}
     {% set previous_page = page - 1 %}
-
-    <p>Showing Page {{page}} of {{num_pages}}</p>
     <br>
     {% if page > 1 %}
         <p><a href = "{{url_for('contacts_bp.contacts',error=error, filter=filter, order=order, prev_sort=prev_sort, sort=sort, page=previous_page)}}">Previous Page</a></p>

@@ -4,10 +4,10 @@
         <nav>
             <ul>
               <li><a href="{{ url_for('home') }}">Home</a></li>
-              <li><a href="{{ url_for('contacts_bp.contacts') }}">Contacts</a></li>
-              <li><a href ="{{url_for('deals_bp.deals')}}">Deals</a></li>
-              <li><a href="{{ url_for('teams.team') }}">Team</a></li>
-              <li><a href="{{ url_for('auth.profile') }}">Profile</a></li>
+              <li><a href="{{ url_for('contacts') }}">Contacts</a></li>
+              <li><a href ="{{url_for('deals')}}">Deals</a></li>
+              <li><a href="{{ url_for('team') }}">Team</a></li>
+              <li><a href="{{ url_for('profile') }}">Profile</a></li>
             </ul>
           </nav>
         
@@ -17,7 +17,8 @@
                 <p>Email: {{ user["email"] }}</p>
                 <p>Team: {{ team["name"] }}</p>
             </section>
-            <img src="{{ url_for('static', filename='defaultpp.png' )}}">
+            <!--Default Profile Picture-->
+            <!--<img src="{{ url_for('static', filename='defaultpp.png' )}}">-->366
             <section>
                 <h2>Logout</h2>
                 <form action = "" method = "POST">
