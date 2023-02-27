@@ -5,9 +5,10 @@ from application.forms import *
 from application.data_models import *
 import json
 import base64
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from dateutil import parser
 from email.mime.text import MIMEText
+import pytz
 
 contact_bp = Blueprint('contact_bp', __name__, template_folder="templates")
 turbo = current_app.extensions.get("turbo")
@@ -42,6 +43,8 @@ def contact(contact_id, activity, reply):
         return notes_activity(contact_id, google_token, contact)
     elif activity == "meetings":
         return meetings_activity(contact_id, google_token, contact)
+    elif activity == "tasks":
+        return tasks_activity(contact_id, google_token, contact)
     else:
         return render_template("contact.html", contact=contact, activity=activity, form=form, noteForm=noteForm, google_token=google_token, google_email=google_email)
 
@@ -132,6 +135,77 @@ def parse_meetings(meetings):
         meetings_parsed.append(meeting)
     return meetings_parsed
 
+def tasks_activity(contact_id, google_token, contact):
+    form = TaskForm()
+    tasks = None
+    if google_token != None:
+        task_list = get_task_list(contact)
+        if form.validate_on_submit():
+            add_task(form, task_list, contact)
+            form.title.data = ""
+            form.due.data = None
+            if task_list == None:
+                task_list = get_task_list(contact)
+        tasks = get_tasks(task_list, contact.contact_id)
+    # User isn't authenticated, redirect them so they can oAuth their email.
+    else:
+        return redirect(url_for('authorize_email', contact_id=contact_id))
+    # If we can, just update the part of the page that's changed i.e. the activity box.
+    if turbo.can_stream():
+        return turbo.stream(turbo.update(render_template("contact_interactions.html", contact=contact, google_token=google_token, activity="tasks", form=form, tasks=tasks), 'activity_box'))
+    else:
+        return render_template("contact.html", contact=contact, google_token=google_token, activity="tasks", form=form, tasks=tasks)
+
+def get_task_list(contact):
+    url = "https://tasks.googleapis.com/tasks/v1/users/@me/lists"
+    response = google.get(url)
+    for task_list in response.data["items"]:
+        try:
+            if task_list["title"].split(": ")[1] == contact.email:
+                return task_list["id"]
+        except:
+            pass
+    return None
+
+def create_task_list(contact):
+    url = "https://tasks.googleapis.com/tasks/v1/users/@me/lists"
+    # Get all the threads for this google account that match our query.
+    response = google.post(url, data={"title": f"Sherpa CRM: {contact.email}"}, format="json")
+    return response.data["id"]
+
+def add_task(form, task_list, contact):
+    if task_list == None:
+        task_list = create_task_list(contact)
+    url = f"https://tasks.googleapis.com/tasks/v1/lists/{task_list}/tasks"
+    title = form.title.data
+    due = form.due.data
+    # Need to get rid of timezone info from timestamps.
+    gmt = pytz.timezone('GMT')
+    due = gmt.localize(due)
+    due = due.strftime('%Y-%m-%dT%H:%M:%S.%f%z')
+    response = google.post(url, data={"title": title, "due": due}, format="json")
+    if response.status != 200:
+        return redirect(url_for('authorize_email', contact_id=contact.contact_id))
+
+def get_tasks(task_list, contact_id):
+    if task_list == None:
+        return None
+    url = f"https://tasks.googleapis.com/tasks/v1/lists/{task_list}/tasks"
+    response = google.get(url)
+    tasks_output = []
+    try:
+        tasks = response.data["items"]
+        for task in tasks:
+            if "due" in task:
+                if task["due"] != "":
+                    if "due" in task:
+                        task["due"] = parser.parse(task["due"]).strftime("%Y-%m-%d")
+            tasks_output.append(task)
+    except Exception as e:
+        tasks_output = Nones
+    if response.status != 200:
+        return redirect(url_for('authorize_email', contact_id=contact_id))
+    return tasks_output
 
 
 def notes_activity(contact_id, google_token, contact):
