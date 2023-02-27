@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session, g
 from flask_sqlalchemy import SQLAlchemy as sa
+from flask_mail import Mail
 from flask_oauthlib.client import OAuth
 from turbo_flask import Turbo
 from config import Config
