@@ -674,3 +674,7 @@ div#login_box {
     background-position: 200% center;
   }
 }
+
+#errors{
+  color: white
+}

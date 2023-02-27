@@ -92,10 +92,11 @@ class Deals(db.Model):
     close_date = db.Column(db.DateTime)
     owner = db.Column(db.String)
     amount = db.Column(db.Integer)
+    goal = db.Column(db.Integer)
     associated_contact = db.Column(db.String)
     associated_company = db.Column(db.String)
 
-    def __init__ (self, deal_id=None, team_id=None, name=None, stage=None, close_date=None, owner=None, amount=None, associated_contact=None, associated_company=None):
+    def __init__ (self, deal_id=None, team_id=None, name=None, stage=None, close_date=None, owner=None, amount=None, goal=None, associated_contact=None, associated_company=None):
         self.deal_id = deal_id
         self.team_id = team_id
         self.name = name
@@ -103,5 +104,6 @@ class Deals(db.Model):
         self.close_date = close_date
         self.owner = owner
         self.amount = amount
+        self.goal = goal
         self.associated_contact = associated_contact
         self.associated_company = associated_company
