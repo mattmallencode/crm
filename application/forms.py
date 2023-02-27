@@ -87,5 +87,3 @@ class DealForm(FlaskForm):
 class DealsSearchForm(FlaskForm):
     search_bar = StringField("Search Deals...")
     submit = SubmitField("Search")
-
-

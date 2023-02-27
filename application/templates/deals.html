@@ -30,18 +30,18 @@
                 </form>
             </tr>
             <tr>
-                <th>Deal Name</th>
+                <th><a href="{{url_for('deals_bp.deals', prev_sort=prev_sort, order=order, sort='name', page=page, filter=filter, error='None')}}">Deal Name</a></th>
                 <th>Deal Stage</th>
                 <th>Close Date</th>
                 <th>Deal Owner</th>
                 <th>Amount</th>
-                <th>Associated Contacts</th>
+                <th><a href="{{url_for('deals_bp.deals', prev_sort=prev_sort, order=order, sort='name', page=page, filter=filter, error='None')}}">Associated Contacts</a></th>
                 <th>Associated Companies</th>
             </tr>
             
             {% for form in forms %}
                 <tr>
-                    <form action="{{url_for('deals_bp.edit_deal', deal_id=form.deal_id.data, page=page, error=error)}}" method = "POST">
+                    <form action="{{url_for('deals_bp.deals', deal_id=form.deal_id.data, page=page, error=error)}}" method = "POST">
                         {{form.hidden_tag()}}
 
                         <td>{{form.name()}}
