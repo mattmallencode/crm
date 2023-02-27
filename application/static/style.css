@@ -3,11 +3,13 @@
 }
 body{
     background-color: white;
-    
+    height: 100%;
+    width: 100%;
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    margin-top: 5% ;
+    padding-bottom: 60%;
+    border:#111
 }
 
 /* contacts page /*
@@ -16,6 +18,9 @@ body{
     color:black;
     animation: fadeIn;
     animation-duration: 2s; 
+
+}
+.contacts_background {
 }
 @keyframes fadeIn {
   0% { opacity: 0; }
@@ -30,14 +35,13 @@ body{
     /*background-color:;*/
     /*background-color:;*/
     border-radius: 30px;
-    position: fixed;
 }
 
 .box{
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 90%;
+    min-height: 100%;
     margin-top: 15%;
     /*background: rgb(0, 8, 8, 0.5);*/
     border-radius: 30px;
@@ -83,6 +87,7 @@ nav{
     left: 0%;
     right: 0%;
     width: 100%;
+    z-index: 999;
     
 }
 ul {
@@ -106,19 +111,19 @@ li a {
 }
   
  
-  /* All Contacts My assigned contacts Unassigned contacts*/
-  #contact_filter_buttons a{
-    list-style-type: none;
-    margin: 10%;
-    padding: 5%;
-    width: 25%;
-    position: relative;
-    top: 0;
-    left: 0;
-    animation-duration: 2s;
-    animation-iteration-count: infinite;
-    transform-origin: bottom;
-  }
+/* All Contacts My assigned contacts Unassigned contacts*/
+#contact_filter_buttons a{
+  list-style-type: none;
+  margin: 10%;
+  padding: 5%;
+  width: 25%;
+  position: relative;
+  top: 0;
+  left: 0;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  transform-origin: bottom;
+}
 
   #contact_filter_buttons  a:hover{
     background-color: gainsboro;
@@ -133,7 +138,6 @@ li a {
   }
  #search_bar{
   margin-left: 0;
-  
  }
  #search_bar input#search_bar{
   height: 100%;
@@ -159,13 +163,14 @@ th, td:hover{
   transform: scale(1.02);
   background-color: #f5f5f5;
 }
+th {
+  background-color: #f2f2f2;
+}
+
 table input{
   column-fill: auto;
   border: white;
   border-color: white;
-}
-th {
-  background-color: #f2f2f2;
 }
 input#name_input_contact{
   height: 100%;
@@ -239,7 +244,6 @@ color: white;
   width:100%;
   text-indent: 4px;
   padding-right: 10%;
-  padding-top: 3100%;
   padding-bottom: 3%;
   text-align: center;
   position: relative;
@@ -456,34 +460,64 @@ color: white;
 }
 
 /* Login page*/
-#login_box {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+#login_body {
+  background: linear-gradient( 70deg, white, black, #E95420,  white);
+  background-repeat: no-repeat;
+  background-size: 200% 200%;
+  animation: gradient 30s ease infinite;
+}
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 50% 100%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+  #login_box {
+    
+    
+    display: flex;
+    width: auto;
+    justify-content: center;
+    align-items: left;
+    left: 0%;
+    height: 100%;
+    transform: translateY(-20%) scale(1.5);
+  }
+
+body#login_body .login_container {
+  background-color:	#F0F0F0;
+  display: inline-block ;
+  height: 200%;
+  left: 0%;
+  padding-left: 20%;
+  padding-right: 20%;
+  border-radius: 10%;
 }
 
-.login_container {
-  max-width: 400px;
-  margin-right: auto;
-  margin-left: 0;
-}
 
 #login_form {
-  display: flex;
-  flex-direction: column;
-  left: 0;
+  size: 100%;
+  position: relative;
+  top: 0;
+  left: 0%;
+  color: black;
 }
 
 #login_form  input  {
   padding: 10px;
   border: None;
   size: 100%;
+  border: #111;
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 .loginRegisterSubmit input[type="submit"] {
-  background-color:#E95420 ;
+  background-color:#E95420;
   color: white;
   border: none;
   border-radius: 5px;
@@ -494,15 +528,26 @@ color: white;
 }
 
 #register_link {
-  text-align: left;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color:#772953;
+  text-align: center;
+  border: none;
+  width: 40%;
+}
+#register_link a {
+  color: white;
 }
 
+
 i#email_symbol{
+  color: #772953;
   position: relative;
   right: 20%;
   transform: translateY(90%);
 }
 i#password_symbol {
+  color: #772953;
   position: relative;
   right: 20%;
   transform: translateY(90%);
@@ -510,4 +555,57 @@ i#password_symbol {
 div#login_box {
   float: left;
   justify-content: left;
+  color: coral;
+}
+
+#login_heading {
+  color: black;
+}
+
+.animated_logo{
+   text-transform: uppercase;
+  background-image: linear-gradient(
+    -225deg,
+    #BFB2BB 0%,
+    #B5A5B0 5%,
+    #AA99A5 10%,
+    #A08C99 15%,
+    #957F8E 20%,
+    #806678 25%,
+    #6B4C61 30%,
+    #56334B 35%, 
+    #411934 40%,
+    #56334B 45%, 
+    #6B4C61 50%,
+    #806678 55%,
+    #957F8E 60%, 
+    #CABFC6 65%,
+    #E6E4E2 70%,
+    #E2E0DD 75%,
+    #DEDBD8 80%,
+    #DAD7D3 85%,
+    #D6D3CF 90%,
+    #CECAC5 92%,
+    #C6C1BB 95%,
+    #BEB8B2 97%,
+    #B6AFA8 98%,
+    #AEA79F 100%
+  );
+  background-size: auto auto;
+  background-clip: border-box;
+  background-size: 200% auto;
+  color: #fff;
+  background-clip: text;
+  text-fill-color: transparent;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textclip 15s linear infinite;
+  display: inline-block;
+      font-size: 190px;
+}
+
+@keyframes textclip {
+  to {
+    background-position: 200% center;
+  }
 }

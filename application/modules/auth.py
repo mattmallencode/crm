@@ -36,15 +36,13 @@ def login(invite_id):
     # Initialize the form
     form = LoginForm()
     email = form.email.data
-
     # If the user submitted the form and it passed validation
     if form.validate_on_submit():
         user = Users.query.filter_by(email=email).first()
         # If the user does not exist take them to signup page
         if user is None:
             form.email.errors.append("Incorrect email / password!")
-            return redirect(url_for("login"))
-
+            return redirect(url_for("auth.login"))
         elif user is not None and check_password_hash(user.password_hash, form.password.data):
             session.clear()
             session["email"] = email
