@@ -1,9 +1,13 @@
 ﻿﻿# Sherpa: A Free and Open-Source CRM
-![Sherpa logo: a picture of a Yak beneath a mountain range with the text "Sherpa".`enter code here](https://raw.githubusercontent.com/mattmallencode/crm/application/static/sherpa_logo.png)
+﻿
+![Sherpa logo: a picture of a Yak beneath a mountain range with the text "Sherpa"](https://raw.githubusercontent.com/mattmallencode/crm/report_images/sherpa_logo.png)
 <br>
-Oliver Linger, 120444372<br>
-Matt Mallen, 120355103<br>
-Eimantas Pusinskas, 120312336<br>
+Oliver Linger, 120444372
+
+Matt Mallen, 120355103
+
+Eimantas Pusinskas, 120312336
+
 Aria Shahi, 119522223
 
 ## Table of Contents
@@ -81,6 +85,9 @@ Aria Shahi, 119522223
   - [Test Invites](#test-invites)
   - [Test Contacts](#test-contacts)
   - [Test Teams](#test-teams)
+ - [Project Reflection](#project-reflection)
+	 - [Diffculties](#difficulties)
+	 - [Engineering Tradeoffs](#engineering-tradeoffs)
 
 ## Introduction
 
@@ -427,7 +434,7 @@ The following table describes the data model used for "note" objects i.e. notes 
 *Table 4: Notes Data Model*
 
 | note_id | contact_id | note | author | date |
-| :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
+| :-: | :-: | :-: | :-: | :-: |
 | Primary Key, Integer | String | String | String | String |
 
 + note_id - auto-incremented integer which is used as the primary key to uniquely identify a note
@@ -474,6 +481,12 @@ The following details our team's technology stack and gives context to the imple
 - **Cloud Orchestration**: Amazon Web Services (AWS) Elastic Beanstalk
 - **Application Server Hosting**: AWS EC2
 - **Database Server Hosting**: AWS RDS
+
+#### Operation of AWS Server
+
+The diagram below depicts the operation of the application with the AWS server
+
+![Chart detailing the operation of the application with AWS ](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/aws.png)
 
 ### App Structure
 
@@ -708,5 +721,31 @@ The following details the implementation of the deals page where users are serve
 
 - Using Pytest a fake instance of  a team was created using the Teams class. Parameters for a team creation were passed and the behavior was checked using an assert statement.
 
+## Project Reflection
+
+This chapter will serve as a reflection on the 12 weeks we as a team spent working on our project, highlighting the difficulties we experienced and the engineering tradeoffs we had to consider while developing Sherpa CRM.
+
+### Difficulties
+
+This section outlines the difficulties and challenges we individually and as a team encountered in the process of developing Sherpa CRM.  
+
++ __Turbo__
+	+ Implementing Turbo in our application proved to be difficult. Our goal was to have our whole application using Turbo to increase the performance of our web application and to ensure a smooth user experience while using Sherpa. Due to a lack of documentation online regarding Turbo, we had to go through a lot of trial and error when implementing Turbo. Therefore, this was time consuming and proved frustrating at times when encountering unexpected behaviours. But once completed the benefit of Turbo was evident with the smooth performance of our web application.
++ __Modularization__
+	+ 
++ __Google Feature Integration__
+	+ 
++ __Testing__
+	+ Writing the test cases for our code was challenging initially due to having little experience with testing web application. Also, the structure of our code caused problems with writing test cases. But once modularization was implemented within our code then test cases were much easier to write.
++ __Security__
+Security was something that was of utmost importance for our application in order to ensure the security of user data and preventing any potential threats. 
+	+ _Hashing_ -  We managed to implement security features where user data is stored securely by hashing is before storing it in the database.
+	+ _Cross-Site Scripting_ - Our use of Flask SQL Alchemy as an ORM made sure to prevent any potential XSS attacks
+	+ _Session Cookies_ - Our implementation of session cookies within our application ensured that users are authenticated when making requests and prevent unauthorized users accessing forbidden data.
+
+
+
+### Engineering Tradeoffs
+This section lays out the engineering trade
 
 
