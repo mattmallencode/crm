@@ -674,8 +674,8 @@ div#login_box {
   }
 }
 
-#errors{
-  color: white
+#errors p{
+  color: black;
 }
 
 #team_body {
