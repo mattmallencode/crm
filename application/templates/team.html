@@ -1,6 +1,6 @@
 {% extends "base_no_turbo.html" %}
 {% block main_content %}
-<body>  
+<body id="team_body">  
   <nav>
     <ul>
       <li><a href="{{ url_for('home') }}">Home</a></li>
@@ -21,7 +21,21 @@
   <section id="team_page">
     
       <section>
-          <h1 id="team_name">My Team: {{ team["name"] }}</h1>
+        <svg viewBox="0 0 960 300">
+          <symbol id="s-text">
+            <text text-anchor="middle" x="50%" y="80%"> TEAM</text>
+            <text text-anchor="middle" x="52%" y="80%">TEAM </text>
+            
+          </symbol>
+        
+          <g class = "g-ants">
+            <use xlink:href="#s-text" class="text-copy"></use>
+            <use xlink:href="#s-text" class="text-copy"></use>
+            <use xlink:href="#s-text" class="text-copy"></use>
+            <use xlink:href="#s-text" class="text-copy"></use>
+            <use xlink:href="#s-text" class="text-copy"></use>
+          </g>
+        </svg>
           
           <table id="team_table">
             <tr>
