@@ -43,8 +43,7 @@ def contact(contact_id, activity, reply):
     elif activity == "meetings":
         return meetings_activity(contact_id, google_token, contact)
     else:
-        return render_template("contact.html", contact=contact, activity=activity, form=form, noteForm=noteForm, google_token=google_token, google_email=google_email)
-
+        return view_activity(contact_id, google_token, contact)
 
 def meetings_activity(contact_id, google_token, contact):
     form = MeetingForm()
@@ -57,6 +56,10 @@ def meetings_activity(contact_id, google_token, contact):
             form.description.data = ""
             form.date_time_start.data = None
             form.date_time_end.data = None
+
+            # Log activity with log table
+            timestamp = datetime.now().strftime("%d/%m/%Y %H:%M")
+            log_activity("meeting", g.email, timestamp, contact_id)
         try:
             response_status, meetings = get_meetings(contact.email)
             if response_status != 200:
@@ -145,11 +148,15 @@ def notes_activity(contact_id, google_token, contact):
         note.note = noteForm.note.data
         note.author = g.email
         # Timestamp the note.
-        note.date = datetime.now().strftime("%d/%m/%Y %H:%M")
+        timestamp = datetime.now().strftime("%d/%m/%Y %H:%M")
+        note.date = timestamp
         db.session.add(note)
         db.session.commit()
         noteForm.note.data = None
         response = "Note Added"
+        
+        # Log Activity with log table
+        log_activity("note", g.email, timestamp, contact_id)
     # If we can, just update the part of the page that's changed i.e. the activity box.
     if turbo.can_stream():
         return turbo.stream(turbo.update(render_template("contact_interactions.html", notes=notes, google_token=google_token, contact=contact, activity="notes", noteForm=noteForm, response=response), 'activity_box'))
@@ -174,6 +181,10 @@ def email_activity(google_token, form, google_email, contact_id, contact, reply)
                 reply = None
                 form.subject.data = ""
                 form.message.data = ""
+
+                # Log activity with log table
+                timestamp = datetime.now().strftime("%d/%m/%Y %H:%M")
+                log_activity("email", g.email, timestamp, contact_id)
             try:
                 # Fetch this user's emails.
                 response_status, threads = get_emails(
@@ -321,3 +332,31 @@ def remove_note(note_id, contact_id):
         db.session.delete(note)
         db.session.commit()
     return redirect(url_for('contact_bp.contact', contact_id=contact_id, activity="notes"))
+
+def log_activity(activity_type, actor, timestamp, contact_id):
+    activity = ActivityLog()
+    activity.activity_type = activity_type
+    activity.actor = actor
+    activity.timestamp = timestamp
+    activity.contact_id = contact_id
+
+    if activity_type == "note":
+        activity.description = f"{actor} created a note on {timestamp}"
+    elif activity_type == "email":
+        activity_type.description = f"{actor} sent an email on {timestamp}"
+    elif activity_type.description == "task":
+        activity_type.description = f"{actor} created a task on {timestamp}"
+    else:
+        activity_type.description = f"{actor} scheduled a meeting {timestamp}"
+
+    db.session.add(activity)
+    db.session.commit()
+    
+def view_activity(contact_id, google_token, contact):
+    log = ActivityLog.query.filter_by(contact_id=contact_id)
+    
+    # If we can, just update the part of the page that's changed i.e. the activity box.
+    if turbo.can_stream():
+        return turbo.stream(turbo.update(render_template("contact_interactions.html", google_token=google_token, contact=contact, activity="activity", log=log), 'activity_box'))
+    else:
+        return render_template("contact.html", contact=contact, google_token=google_token, activity="activity", log=log)

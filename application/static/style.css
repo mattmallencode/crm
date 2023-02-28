@@ -674,7 +674,10 @@ div#login_box {
   }
 }
 
-/* team page */
+#errors p{
+  color: black;
+}
+
 #team_body {
   padding-top: 2%;
   background: linear-gradient( 70deg, white, black, #E95420,  white);

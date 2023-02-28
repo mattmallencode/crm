@@ -34,14 +34,16 @@
                 <th>Deal Stage</th>
                 <th>Close Date</th>
                 <th>Deal Owner</th>
-                <th>Amount</th>
+                <th>Close Amount</th>
+                <th>Goal</th>
                 <th><a href="{{url_for('deals_bp.deals', prev_sort=prev_sort, order=order, sort='name', page=page, filter=filter, error='None')}}">Associated Contacts</a></th>
                 <th>Associated Companies</th>
+                <th></th>
             </tr>
             
             {% for form in forms %}
                 <tr>
-                    <form action="{{url_for('deals_bp.deals', deal_id=form.deal_id.data, page=page, error=error)}}" method = "POST">
+                    <form action="{{url_for('deals_bp.edit_deal', deal_id=form.deal_id.data, filter=filter, prev_sort=prev_sort, sort=sort, page=page, order=order, error=error)}}" method = "POST">
                         {{form.hidden_tag()}}
 
                         <td>{{form.name()}}
@@ -59,6 +61,7 @@
                         <td>{{form.date()}}</td>
                         <td>{{form.owner()}}</td>
                         <td>{{form.amount()}}</td>
+                        <td>{{form.goal()}}</td>
                         <td>{{form.associated_contact()}}</td>
                         <td>{{form.associated_company()}}</td>
                         <td>{{form.submit(value = "Edit Deal")}}</td>
@@ -67,7 +70,7 @@
             {% endfor %}
 
             <tr>
-                <form action = "{{url_for('deals_bp.add_deal', page=page, error=error)}}" method="POST">
+                <form action = "{{url_for('deals_bp.add_deal', filter=filter, prev_sort=prev_sort, sort=sort, page=page, order=order, error=error)}}" method="POST">
                     {{add_deal.hidden_tag()}}
 
                     <td>{{add_deal.name()}}
@@ -85,6 +88,7 @@
                     <td>{{add_deal.date()}}</td>
                     <td>{{add_deal.owner()}}</td>
                     <td>{{add_deal.amount()}}</td>
+                    <td>{{add_deal.goal()}}</td>
                     <td>{{add_deal.associated_contact()}}</td>
                     <td>{{add_deal.associated_company()}}</td>
                     <td>{{add_deal.submit(value="Add Deal")}}</td>
@@ -93,7 +97,7 @@
         </table>
     </section>
 
-    <section>
+    <section id="errors">
         {% if error != 'None' %} 
             <p>{{error}}</p>
         {% endif %}
