@@ -1,7 +1,7 @@
 from flask import Blueprint, g, render_template, current_app, redirect, url_for
 import re
 from application.modules.auth import login_required, team_required
-from application.forms import SearchForm, ContactForm
+from application.forms import SearchForm, ContactForm, LogoutForm
 from application.data_models import *
 
 contacts_bp = Blueprint('contacts_bp', __name__, template_folder="templates")
@@ -27,6 +27,7 @@ def contacts(filter, page, prev_sort, sort, order, error):
     search_form = SearchForm()
     # Add contact form.
     add_contact = ContactForm()
+    logout_form = LogoutForm()
     # The page the user wishes to view.
     page = int(page)
     # Must offset results from DB query to fetch the page the user is interested in.
@@ -90,6 +91,7 @@ def contacts(filter, page, prev_sort, sort, order, error):
         form.company.data = contact.company
         form.status.data = contact.status
         forms.append(form)
+        
     return render_template("contacts.html", forms=forms, add_contact=add_contact, search_form=search_form, contacts=contacts, num_pages=num_pages, filter=filter, page=page, prev_sort=prev_sort, sort=sort, order=order, error=error, activity="editing")
 
 
