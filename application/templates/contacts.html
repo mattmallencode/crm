@@ -8,11 +8,31 @@
           <li><a href="{{ url_for('contacts_bp.contacts') }}">Contacts</a></li>
           <li><a href ="{{url_for('deals_bp.deals')}}">Deals</a></li>
           <li><a href="{{ url_for('teams.team') }}">Team</a></li>
-          <li><a href="{{ url_for('auth.profile') }}">Profile</a></li>
+          <li class="dropdown">
+            <a href="#">Profile</a>
+            <ul class="dropdown-menu">
+                <li><a onclick="logout();" href="{{ url_for('auth.profile') }}">Logout</a></li>
+            </ul>
+          </li>
         </ul>
+
     </nav>
     <div class="contacts_background">
-    <h1 id="contacts_heading"class="contactH1">Contacts</h1>
+        <svg viewBox="0 0 960 300">
+            <symbol id="s-text">
+              <text text-anchor="middle" x="50%" y="80%">CONTACTS </text>
+              <text text-anchor="middle" x="52%" y="80%">CONTACTS </text>
+              
+            </symbol>
+          
+            <g class = "g-ants">
+              <use xlink:href="#s-text" class="text-copy"></use>
+              <use xlink:href="#s-text" class="text-copy"></use>
+              <use xlink:href="#s-text" class="text-copy"></use>
+              <use xlink:href="#s-text" class="text-copy"></use>
+              <use xlink:href="#s-text" class="text-copy"></use>
+            </g>
+          </svg>
     
     <section id="contacts">
         <section id="contact_filter_buttons">
@@ -84,32 +104,32 @@
             </section>
             <tr>
                 <form action = "{{url_for('contacts_bp.add_contact', prev_sort=prev_sort, order=order, sort=sort, filter=filter, page=page, error=error)}}" method = "POST">
-                {{add_contact.hidden_tag()}}
-            
-                <td>{{add_contact.name()}}
-                    {% for error in add_contact.name.errors %}
-                        <div>{{ error }}</div>
-                    {% endfor %}
-                </td>
-            
-                <td>{{add_contact.email()}}
-                    {% for error in add_contact.email.errors %}
-                        <div>{{ error }}</div>
-                    {% endfor %}
-                </td>
-            
-                <td>{{add_contact.phone_number()}}</td>
-            
-                <td>{{add_contact.contact_owner()}}</td>
-            
-                <td>{{add_contact.company()}}</td>
-            
-                <td>{{add_contact.status(class="contacts_status")}}</td>
-            
-                <td>{{add_contact.submit(value='Add Contact', class="contact_save_add_button")}}</td>
+                    {{add_contact.hidden_tag()}}
+                
+                    <td>{{add_contact.name()}}
+                        {% for error in add_contact.name.errors %}
+                            <div>{{ error }}</div>
+                        {% endfor %}
+                    </td>
+                
+                    <td>{{add_contact.email()}}
+                        {% for error in add_contact.email.errors %}
+                            <div>{{ error }}</div>
+                        {% endfor %}
+                    </td>
+                
+                    <td>{{add_contact.phone_number()}}</td>
+                
+                    <td>{{add_contact.contact_owner()}}</td>
+                
+                    <td>{{add_contact.company()}}</td>
+                
+                    <td>{{add_contact.status(class="contacts_status")}}</td>
+                
+                    <td>{{add_contact.submit(value='Add Contact', class="contact_save_add_button")}}</td>
             
                 </form>
-                </tr>
+            </tr>
         </table>
  <section>
     {% if error != 'None' %} 
@@ -120,8 +140,6 @@
 <section>
     {% set next_page = page + 1 %}
     {% set previous_page = page - 1 %}
-
-    <p>Showing Page {{page}} of {{num_pages}}</p>
     <br>
     {% if page > 1 %}
         <p><a href = "{{url_for('contacts_bp.contacts',error=error, filter=filter, order=order, prev_sort=prev_sort, sort=sort, page=previous_page)}}">Previous Page</a></p>
