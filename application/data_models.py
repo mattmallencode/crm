@@ -107,3 +107,11 @@ class Deals(db.Model):
         self.goal = goal
         self.associated_contact = associated_contact
         self.associated_company = associated_company
+
+class ActivityLog(db.Model):
+    activity_id = db.Column(db.Integer, primary_key=True)
+    activity_type = db.Column(db.String)
+    actor = db.Column(db.String)
+    timestamp = db.Column(db.String)
+    contact_id = db.Column(db.String)
+    description = db.Column(db.String)

@@ -1,4 +1,4 @@
-from flask import Blueprint, g, render_template, url_for, redirect, flash
+from flask import Blueprint, g, render_template, url_for, redirect
 from application.modules.auth import login_required, team_required
 from application.data_models import *
 from application.forms import *
