@@ -1,6 +1,16 @@
 <section id = "activity_box" class = "activity_box">
     {% if activity == 'activity' %}
-        <p>Activity.....</p>
+        <section>
+            <h2>Recent Activity</h2>
+
+            <table>
+                {% for activity in log %}
+                    <tr>
+                        <td>{{activity.description}}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </section>
     {% elif activity == 'emails' %}
         <section>
             <h2>Send Email to {{contact.name}}</h2>

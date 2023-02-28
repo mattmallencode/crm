@@ -2,6 +2,7 @@ from flask import Blueprint, g, render_template, url_for, redirect
 from application.modules.auth import login_required, team_required
 from application.data_models import *
 from application.forms import *
+from wtforms.validators import ValidationError
 
 deals_bp = Blueprint('deals_bp', __name__, template_folder="templates")
 
@@ -17,7 +18,7 @@ def deals(filter, page, error, prev_sort, sort, order):
     deals = Deals.query
     #global deals
 
-
+    """
     if search_form.validate_on_submit():
         user_search = search_form.search_bar.data
         # Before using the user's search let's optimize for it.
@@ -34,7 +35,8 @@ def deals(filter, page, error, prev_sort, sort, order):
         # If the user isn't looking for an email or number definitively then search all relevant columns.
         else:
             deals = deals.filter(Deals.associated_contact.like(f"%{user_search}%") | Deals.name.like(f"%{user_search}%") | Deals.deal_id.like(f"%{user_search}%"))
-            
+    """
+                  
     # Add deal form.
     add_deal = DealForm()
     # The page the user wishes to view.
@@ -70,6 +72,7 @@ def deals(filter, page, error, prev_sort, sort, order):
         form.date.data = deal.close_date
         form.owner.data = deal.owner
         form.amount.data = deal.amount
+        form.goal.data = deal.goal
         form.associated_contact.data = deal.associated_contact
         form.associated_company.data = deal.associated_company
         forms.append(form)
@@ -99,52 +102,76 @@ def order_deals(sort, order, deals):
     return deals
 
 
-@deals_bp.route("/add_deal", defaults={"page": 1, "error": "None"}, methods=["GET", "POST"])
-@deals_bp.route("/add_deal/<page>/<error>", methods=["GET", "POST"])
+@deals_bp.route("/add_deal", defaults={"filter": "all", "page": 1, "prev_sort": "None", "sort": "None", "order": "DESC", "error": "None"}, methods=["GET", "POST"])
+@deals_bp.route("/add_deal/<filter>/<prev_sort>/<sort>/<page>/<order>/<error>", methods=["GET", "POST"])
 @login_required
 @team_required
-def add_deal(page, error):
+def add_deal(filter, page, error, prev_sort, sort, order):
     form = DealForm()
     user = Users.query.filter_by(email=g.email).first()
     deals = Deals.query.filter_by(team_id=user.team_id)
     error = "None"
     
-    deal = Deals()
-    deal.team_id = user.team_id
-    deal.name = form.name.data
-    deal.stage = dict(form.stage.choices).get(form.stage.data)
-    deal.close_date = form.date.data
-    deal.owner = form.owner.data 
-    deal.amount = form.amount.data 
-    deal.associated_contact = form.associated_contact.data
-    deal.associated_company = form.associated_company.data
-
-    db.session.add(deal)     
-    db.session.commit()
-
-    return redirect(url_for("deals_bp.deals", page=page, error=error))
-
-
-@deals_bp.route("/edit_deal", defaults={"deal_id": "None", "page": 1, "error": "None"}, methods=["GET", "POST"])
-@deals_bp.route("/edit_deal/<deal_id>/<page>/<error>", methods=["GET", "POST"])
-@login_required
-@team_required
-def edit_deal(deal_id, page, error):
-    form = DealForm()
-    deal = Deals.query.filter_by(deal_id=deal_id).first()       
-    if deal is not None:
-        user = Users.query.filter_by(email=g.email).first()
-        
+    if "Closed" in form.stage.data:
+        if form.amount.data == "":
+            error = "Close Amount must be inputted when closing an amount"
+        elif int(form.amount.data) == 0:
+            error = "Close Amount must be inputted when closing an amount"
+        elif form.date.data == None:
+            error = "Close Date must be inputted when closing a deal"
+       
+    if error == "None":
+        deal = Deals()
         deal.team_id = user.team_id
         deal.name = form.name.data
         deal.stage = dict(form.stage.choices).get(form.stage.data)
         deal.close_date = form.date.data
         deal.owner = form.owner.data 
         deal.amount = form.amount.data 
+        deal.goal = form.goal.data
         deal.associated_contact = form.associated_contact.data
         deal.associated_company = form.associated_company.data
-
-        print(form.date.data)
-
+        db.session.add(deal)     
         db.session.commit()
-    return redirect(url_for("deals_bp.deals", page=page, error=error))
+
+    return redirect(url_for("deals_bp.deals", filter=filter, prev_sort=prev_sort, sort=sort, page=page, order=order, error=error))
+
+
+@deals_bp.route("/edit_deal", defaults={"deal_id":"None", "filter":"all", "page":1, "prev_sort":"None", "sort":"None", "order":"DESC", "error":"None"}, methods=["GET", "POST"])
+@deals_bp.route("/edit_deal/<deal_id>/<filter>/<prev_sort>/<sort>/<page>/<order>/<error>", methods=["GET", "POST"])
+@login_required
+@team_required
+def edit_deal(deal_id, filter, page, error, prev_sort, sort, order):
+    form = DealForm()
+    deal = Deals.query.filter_by(deal_id=deal_id).first()       
+    if deal is not None:
+        # checks if deal has already been closed
+        if "Closed" in deal.stage:
+            error = "Closed Deals cannot be modified"
+        else:
+            # checks if deal has been closed now
+            if "Closed" in form.stage.data:
+                if int(form.amount.data) == 0:
+                    error = "Close Amount must be inputted when closing an amount"
+                if form.date.data == None:
+                    error = "Close Date must be inputted when closing a deal"
+
+                if error == "None":
+                    deal.name = form.name.data
+                    deal.close_date = form.date.data
+                    deal.owner = form.owner.data 
+                    deal.amount = form.amount.data
+                    deal.associated_contact = form.associated_contact.data
+                    deal.associated_company = form.associated_company.data
+                    db.session.commit()
+            else:
+                deal.name = form.name.data
+                deal.stage = dict(form.stage.choices).get(form.stage.data)
+                deal.close_date = form.date.data
+                deal.owner = form.owner.data 
+                deal.amount = form.amount.data 
+                deal.associated_contact = form.associated_contact.data
+                deal.associated_company = form.associated_company.data
+                db.session.commit()
+    
+    return redirect(url_for("deals_bp.deals", filter=filter, prev_sort=prev_sort, sort=sort, page=page, order=order, error=error))
