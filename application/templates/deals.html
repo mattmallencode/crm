@@ -42,7 +42,16 @@
                 <th><a href="{{url_for('deals_bp.deals', prev_sort=prev_sort, order=order, sort='amount', page=page, filter=filter, error='None')}}">Amount</a></th>
                 <th><a href="{{url_for('deals_bp.deals', prev_sort=prev_sort, order=order, sort='associated_contact', page=page, filter=filter, error='None')}}">Associated Contacts</a></th>
                 <th><a href="{{url_for('deals_bp.deals', prev_sort=prev_sort, order=order, sort='associated_company', page=page, filter=filter, error='None')}}">associated_company</a></th>
-            </tr>
+
+                <th>Deal Stage</th>
+                <th>Close Date</th>
+                <th>Deal Owner</th>
+                <th>Close Amount</th>
+                <th>Goal</th>
+                <th><a href="{{url_for('deals_bp.deals', prev_sort=prev_sort, order=order, sort='name', page=page, filter=filter, error='None')}}">Associated Contacts</a></th>
+                <th>Associated Companies</th>
+                <th></th>
+           </tr>
             
             {% for form in forms %}
                 <tr>
@@ -73,8 +82,8 @@
             {% endfor %}
 
             <tr>
-                <form action = "{{url_for('deals_bp.add_deal', filter=filter, prev_sort=prev_sort, sort=sort, page=page, order=order, error=error)}}" method="POST">
 
+               <form action = "{{url_for('deals_bp.add_deal', filter=filter, prev_sort=prev_sort, sort=sort, page=page, order=order, error=error)}}" method="POST">
                     {{add_deal.hidden_tag()}}
 
                     <td>{{add_deal.name()}}

@@ -16,6 +16,21 @@ def deals(filter, page, error, prev_sort, sort, order):
     search_form = DealsSearchForm()
     #deals = None
     deals = Deals.query
+    
+    # Gets all contacts of user that is logged in and passes it to html template
+    user = Users.query.filter_by(email=g.email).first()
+    deals = Deals.query.filter_by(team_id=user.team_id)
+
+
+    # Filters contact results
+    if filter == "assigned":
+        deals = Deals.query.filter_by(
+            team_id=user.team_id, owner=user.email)
+    elif filter == "unassigned":
+        deals = Deals.query.filter_by(
+            team_id=user.team_id, owner="")
+    else:
+        deals = Deals.query.filter_by(team_id=user.team_id)
 
     if search_form.validate_on_submit():
         user_search = search_form.search_bar.data
@@ -33,7 +48,7 @@ def deals(filter, page, error, prev_sort, sort, order):
         # If the user isn't looking for an email or number definitively then search all relevant columns.
         else:
             deals = deals.filter(Deals.associated_contact.like(f"%{user_search}%") | Deals.name.like(f"%{user_search}%") | Deals.deal_id.like(f"%{user_search}%"))
-    
+ 
                   
     # Add deal form.
     add_deal = DealForm()
@@ -142,19 +157,49 @@ def order_deals(sort, order, deals):
     print(sort)
     return deals
 
-#@deals_bp.route("/add_deal", defaults={"page": 1, "error": "None"}, methods=["GET", "POST"])
-#@deals_bp.route("/add_deal/<page>/<error>", methods=["GET", "POST"])
+<<<<<<<<< Temporary merge branch 1
 
 @deals_bp.route("/add_deal", defaults={"filter": "all", "page": 1, "prev_sort": "None", "sort": "None", "order": "DESC", "error": "None"}, methods=["GET", "POST"])
 @deals_bp.route("/add_deal/<filter>/<prev_sort>/<sort>/<page>/<order>/<error>", methods=["GET", "POST"])
 @login_required
 @team_required
-def add_deal(page, error):
+def add_deal(filter, page, error, prev_sort, sort, order):
     form = DealForm()
     user = Users.query.filter_by(email=g.email).first()
     deals = Deals.query.filter_by(team_id=user.team_id)
     error = "None"
     
+    deal = Deals()
+    deal.team_id = user.team_id
+    deal.name = form.name.data
+    deal.stage = dict(form.stage.choices).get(form.stage.data)
+    deal.close_date = form.date.data
+    deal.owner = form.owner.data 
+    deal.amount = form.amount.data 
+    deal.associated_contact = form.associated_contact.data
+    deal.associated_company = form.associated_company.data
+
+    db.session.add(deal)     
+    db.session.commit()
+
+    if form.owner.data != "" and Users.query.filter_by(email=form.owner.data, team_id=user.team_id).first() is None:
+                error = "Invalid deal owner"
+
+    #return redirect(url_for("deals_bp.deals", page=page, error=error))
+    return redirect(url_for("deals_bp.deals", page=page, filter="all", prev_sort="None", sort="None", order="DESC", error=error))
+    #return redirect(url_for("deals_bp.deals",prev_sort=prev_sort, order=order, sort=sort, filter=filter, page=page, error=error))
+
+
+@deals_bp.route("/edit_deal", defaults={"deal_id": "None", "page": 1, "error": "None"}, methods=["GET", "POST"])
+@deals_bp.route("/edit_deal/<deal_id>/<page>/<error>", methods=["GET", "POST"])
+@login_required
+@team_required
+def edit_deal(deal_id, page, error):
+    form = DealForm()
+    deal = Deals.query.filter_by(deal_id=deal_id).first()       
+    if deal is not None:
+        user = Users.query.filter_by(email=g.email).first()
+        
     if "Closed" in form.stage.data:
         if form.amount.data == "":
             error = "Close Amount must be inputted when closing an amount"
