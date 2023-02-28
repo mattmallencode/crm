@@ -10,13 +10,25 @@ deals_bp = Blueprint('deals_bp', __name__, template_folder="templates")
 @login_required
 @team_required
 def deals(filter, page, error, prev_sort, sort, order):
-
+    
     # Search bar.
     search_form = DealsSearchForm()
     #deals = None
     deals = Deals.query
-    #global deals
+    
+    # Gets all contacts of user that is logged in and passes it to html template
+    user = Users.query.filter_by(email=g.email).first()
+    deals = Deals.query.filter_by(team_id=user.team_id)
 
+    # Filters contact results
+    if filter == "assigned":
+        deals = Deals.query.filter_by(
+            team_id=user.team_id, owner=user.email)
+    elif filter == "unassigned":
+        deals = Deals.query.filter_by(
+            team_id=user.team_id, owner="")
+    else:
+        deals = Deals.query.filter_by(team_id=user.team_id)
 
     if search_form.validate_on_submit():
         user_search = search_form.search_bar.data
@@ -41,18 +53,29 @@ def deals(filter, page, error, prev_sort, sort, order):
     page = int(page)
     # Must offset results from DB query to fetch the page the user is interested in.
     page_offset = (page - 1) * 25
-
+    '''
     # Gets all contacts of user that is logged in and passes it to html template
     user = Users.query.filter_by(email=g.email).first()
     deals = Deals.query.filter_by(team_id=user.team_id)
-
+    '''
+    # Toggle feature of sort buttons, if the user is sorting a different column to last sort, order is ascending.
+    if sort != prev_sort:
+        order = "ASC"
+    
+    else:
+        # User is toggling a sort they already did e.g. their second or third time clicking to sort name.
+        if order == "ASC":
+            order = "DESC"
+        else:
+            order = "ASC"
+    # Only sort if the user asks us to.
+    if sort != "None":
+        deals = order_deals(sort, order, deals)
+    
     # Pageing functionality.
     deals = deals.limit(25).offset(page_offset)
     num_pages = deals.count() // 25
 
-    # Only sort if the user asks us to.
-    if sort != "None":
-        contacts = order_deals(sort, order, deals)
 
     # Count the number of pages.
     if (deals.count() % 25) > 0:
@@ -73,37 +96,70 @@ def deals(filter, page, error, prev_sort, sort, order):
         form.associated_contact.data = deal.associated_contact
         form.associated_company.data = deal.associated_company
         forms.append(form)
-
+        
     return render_template("deals.html", forms=forms, add_deal=add_deal, num_pages=num_pages, page=page, error=error, search_form=search_form, filter=filter, prev_sort=prev_sort, sort=sort, order=order)
 
     
 def optimize_deals_search(search):
         """Report back to the caller whether the search term is likely an email or otherwise."""
-        if "@" in search or "." in search:
+        if "@" in search and "." in search:
             return "email"
         else:
             return "name/company/email"
 
 def order_deals(sort, order, deals):
-    """Sort the results of a contacts query based on the sort (column name) and order (ASC/DESC) paramaters."""
+    """Sort the results of a Deals query based on the sort (column name) and order (ASC/DESC) paramaters."""
     if sort == "name":
         if order == "ASC":
             deals = deals.order_by(Deals.name)
         else:
             deals = deals.order_by(Deals.name.desc())
-    elif sort == "email":
+    
+    elif sort == "associated_contact":
         if order == "ASC":
-            deals = deals.order_by(Deals.email)
+            deals = deals.order_by(Deals.associated_contact)
         else:
-            deals = deals.order_by(Deals.email.desc())
+            deals = deals.order_by(Deals.associated_contact.desc())
+    
+    elif sort == "associated_company":
+        if order == "ASC":
+            deals = deals.order_by(Deals.associated_company)
+        else:
+            deals = deals.order_by(Deals.associated_company.desc())
+
+    elif sort == "amount":
+        if order == "ASC":
+            deals = deals.order_by(Deals.amount)
+        else:
+            deals = deals.order_by(Deals.amount.desc())
+
+    elif sort == "owner":
+        if order == "ASC":
+            deals = deals.order_by(Deals.owner)
+        else:
+            deals = deals.order_by(Deals.owner.desc())
+
+    elif sort == "stage" :
+        if order == "ASC":
+            deals = deals.order_by(Deals.stage)
+        else:
+            deals = deals.order_by(Deals.stage.desc())
+
+    else :
+        if order == "ASC":
+            deals = deals.order_by(Deals.close_date)
+        else:
+            deals = deals.order_by(Deals.close_date.desc())
+    print(sort)
     return deals
 
-
-@deals_bp.route("/add_deal", defaults={"page": 1, "error": "None"}, methods=["GET", "POST"])
-@deals_bp.route("/add_deal/<page>/<error>", methods=["GET", "POST"])
+#@deals_bp.route("/add_deal", defaults={"page": 1, "error": "None"}, methods=["GET", "POST"])
+#@deals_bp.route("/add_deal/<page>/<error>", methods=["GET", "POST"])
+@deals_bp.route("/add_deal", defaults={"page": 1, "prev_sort": "None", "sort": "None", "order": "DESC", "error": "None"}, methods=["GET", "POST"])
+@deals_bp.route("/add_deal/<filter>/<prev_sort>/<sort>/<page>/<order>/<error>", methods=["GET", "POST"])
 @login_required
 @team_required
-def add_deal(page, error):
+def add_deal(page, error, filter="all", prev_sort="None", sort="None", order="DESC"):
     form = DealForm()
     user = Users.query.filter_by(email=g.email).first()
     deals = Deals.query.filter_by(team_id=user.team_id)
@@ -122,8 +178,12 @@ def add_deal(page, error):
     db.session.add(deal)     
     db.session.commit()
 
-    return redirect(url_for("deals_bp.deals", page=page, error=error))
+    if form.owner.data != "" and Users.query.filter_by(email=form.owner.data, team_id=user.team_id).first() is None:
+                error = "Invalid deal owner"
 
+    #return redirect(url_for("deals_bp.deals", page=page, error=error))
+    return redirect(url_for("deals_bp.deals", page=page, filter="all", prev_sort="None", sort="None", order="DESC", error=error))
+    #return redirect(url_for("deals_bp.deals",prev_sort=prev_sort, order=order, sort=sort, filter=filter, page=page, error=error))
 
 @deals_bp.route("/edit_deal", defaults={"deal_id": "None", "page": 1, "error": "None"}, methods=["GET", "POST"])
 @deals_bp.route("/edit_deal/<deal_id>/<page>/<error>", methods=["GET", "POST"])

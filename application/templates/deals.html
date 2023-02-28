@@ -23,14 +23,19 @@
                     <td>{{search_form.submit(id="deals_search_button")}}</td>
                 </form>
             </tr>
+            <section id="deals_filter_buttons">
+                <a href = "{{url_for('deals_bp.deals', prev_sort='None', order='ASC', sort='None', filter='all', page=1 , error='None')}}">All Deals</a>
+                <a href = "{{url_for('deals_bp.deals', prev_sort='None', order='ASC', sort='None', filter='assigned', page=1 , error='None')}}">My Assigned Deals</a>
+            </section>
+            {% set prev_sort = sort %}
             <tr>
                 <th><a href="{{url_for('deals_bp.deals', prev_sort=prev_sort, order=order, sort='name', page=page, filter=filter, error='None')}}">Deal Name</a></th>
-                <th>Deal Stage</th>
-                <th>Close Date</th>
-                <th>Deal Owner</th>
-                <th>Amount</th>
-                <th><a href="{{url_for('deals_bp.deals', prev_sort=prev_sort, order=order, sort='name', page=page, filter=filter, error='None')}}">Associated Contacts</a></th>
-                <th>Associated Companies</th>
+                <th><a href="{{url_for('deals_bp.deals', prev_sort=prev_sort, order=order, sort='stage', page=page, filter=filter, error='None')}}">Deal Stage</a></th>
+                <th><a href="{{url_for('deals_bp.deals', prev_sort=prev_sort, order=order, sort='close_date', page=page, filter=filter, error='None')}}">Close Date</a></th>
+                <th><a href="{{url_for('deals_bp.deals', prev_sort=prev_sort, order=order, sort='owner', page=page, filter=filter, error='None')}}">Deal Owner</a></th>
+                <th><a href="{{url_for('deals_bp.deals', prev_sort=prev_sort, order=order, sort='amount', page=page, filter=filter, error='None')}}">Amount</a></th>
+                <th><a href="{{url_for('deals_bp.deals', prev_sort=prev_sort, order=order, sort='associated_contact', page=page, filter=filter, error='None')}}">Associated Contacts</a></th>
+                <th><a href="{{url_for('deals_bp.deals', prev_sort=prev_sort, order=order, sort='associated_company', page=page, filter=filter, error='None')}}">associated_company</a></th>
             </tr>
             
             {% for form in forms %}
@@ -61,7 +66,7 @@
             {% endfor %}
 
             <tr>
-                <form action = "{{url_for('deals_bp.add_deal', page=page, error=error)}}" method="POST">
+                <form action = "{{url_for('deals_bp.deals', page=page, filter='all', prev_sort='None', sort='None', order='DESC', error=error)}}" method="POST">
                     {{add_deal.hidden_tag()}}
 
                     <td>{{add_deal.name()}}
