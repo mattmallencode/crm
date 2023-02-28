@@ -51,6 +51,11 @@ class MeetingForm(FlaskForm):
     date_time_end = DateTimeField("End: ", render_kw={"type": "datetime-local"}, validators=[InputRequired()], format="%Y-%m-%dT%H:%M")
     schedule = SubmitField("Schedule")
 
+class TaskForm(FlaskForm):
+    title = StringField("Title")
+    due = DateTimeField("Due: ", render_kw={"type": "datetime-local"}, validators=[InputRequired()], format="%Y-%m-%dT%H:%M")
+    create = SubmitField("Create")
+
 class removeContactForm(FlaskForm):
     email = EmailField("Email", validators=[InputRequired(), Email()])
     submit = SubmitField("Remove Contact")
