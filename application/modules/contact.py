@@ -5,9 +5,10 @@ from application.forms import *
 from application.data_models import *
 import json
 import base64
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from dateutil import parser
 from email.mime.text import MIMEText
+import pytz
 
 contact_bp = Blueprint('contact_bp', __name__, template_folder="templates")
 turbo = current_app.extensions.get("turbo")
@@ -42,6 +43,8 @@ def contact(contact_id, activity, reply):
         return notes_activity(contact_id, google_token, contact)
     elif activity == "meetings":
         return meetings_activity(contact_id, google_token, contact)
+    elif activity == "tasks":
+        return tasks_activity(contact_id, google_token, contact)
     else:
         return view_activity(contact_id, google_token, contact)
 
@@ -135,6 +138,101 @@ def parse_meetings(meetings):
         meetings_parsed.append(meeting)
     return meetings_parsed
 
+def tasks_activity(contact_id, google_token, contact):
+    form = TaskForm()
+    tasks = None
+    if google_token != None:
+        task_list = get_task_list(contact)
+        if type(task_list) != str:
+            return redirect(url_for('authorize_email', contact_id=contact_id))
+        if form.validate_on_submit():
+            add_task(form, task_list, contact)
+            form.title.data = ""
+            form.due.data = None
+            if task_list == None:
+                task_list = get_task_list(contact)
+        tasks = get_tasks(task_list, contact.contact_id)
+    # User isn't authenticated, redirect them so they can oAuth their email.
+    else:
+        return redirect(url_for('authorize_email', contact_id=contact_id))
+    # If we can, just update the part of the page that's changed i.e. the activity box.
+    if turbo.can_stream():
+        return turbo.stream(turbo.update(render_template("contact_interactions.html", contact=contact, google_token=google_token, activity="tasks", form=form, tasks=tasks), 'activity_box'))
+    else:
+        return render_template("contact.html", contact=contact, google_token=google_token, activity="tasks", form=form, tasks=tasks)
+
+def get_task_list(contact):
+    url = "https://tasks.googleapis.com/tasks/v1/users/@me/lists"
+    response = google.get(url)
+    try:
+        for task_list in response.data["items"]:
+            try:
+                if task_list["title"].split(": ")[1] == contact.email:
+                    return task_list["id"]
+            except:
+                pass
+    except:
+        return redirect(url_for('authorize_email', contact_id=contact.contact_id))
+    return None
+
+def create_task_list(contact):
+    url = "https://tasks.googleapis.com/tasks/v1/users/@me/lists"
+    # Get all the threads for this google account that match our query.
+    response = google.post(url, data={"title": f"Sherpa CRM: {contact.email}"}, format="json")
+    return response.data["id"]
+
+def add_task(form, task_list, contact):
+    if task_list == None:
+        task_list = create_task_list(contact)
+    url = f"https://tasks.googleapis.com/tasks/v1/lists/{task_list}/tasks"
+    title = form.title.data
+    due = form.due.data
+    # Need to get rid of timezone info from timestamps.
+    gmt = pytz.timezone('GMT')
+    due = gmt.localize(due)
+    due = due.strftime('%Y-%m-%dT%H:%M:%S.%f%z')
+    response = google.post(url, data={"title": title, "due": due}, format="json")
+    if response.status != 200:
+        return redirect(url_for('authorize_email', contact_id=contact.contact_id))
+    timestamp = datetime.now().strftime("%d/%m/%Y %H:%M")
+    log_activity("task", g.email, timestamp, contact.contact_id)
+
+@contact_bp.route("/complete_task/<contact_id>/<task_id>", methods=["GET", "POST"])
+def complete_task(contact_id, task_id):
+    contact = Contacts.query.filter_by(contact_id=contact_id, team_id=g.team_id).first()
+    form = TaskForm()
+    task_list = get_task_list(contact)
+    tasks = get_tasks(task_list, contact.contact_id)
+    print(tasks)
+    google_token = session.get("google_token")
+    response = google.put(url=f"https://tasks.googleapis.com/tasks/v1/lists/{task_list}/tasks/{task_id}", data={"id":task_id, "status": "completed"}, format="json")
+    if turbo.can_stream():
+        return turbo.stream(turbo.update(render_template("contact_interactions.html", contact=contact, google_token=google_token, activity="tasks", form=form, tasks=tasks), 'activity_box'))
+    else:
+        return render_template("contact.html", contact=contact, google_token=google_token, activity="tasks", form=form, tasks=tasks)
+
+def get_tasks(task_list, contact_id):
+    if task_list == None:
+        return None
+    url = f"https://tasks.googleapis.com/tasks/v1/lists/{task_list}/tasks"
+    try:
+        response = google.get(url)
+    except:
+        return redirect(url_for('authorize_email', contact_id=contact_id))
+    tasks_output = []
+    try:
+        tasks = response.data["items"]
+        for task in tasks:
+            if "due" in task:
+                if task["due"] != "":
+                    if "due" in task:
+                        task["due"] = parser.parse(task["due"]).strftime("%Y-%m-%d")
+            tasks_output.append(task)
+    except Exception as e:
+        tasks_output = None
+    if response.status != 200:
+        return redirect(url_for('authorize_email', contact_id=contact_id))
+    return tasks_output
 
 
 def notes_activity(contact_id, google_token, contact):
@@ -343,11 +441,11 @@ def log_activity(activity_type, actor, timestamp, contact_id):
     if activity_type == "note":
         activity.description = f"{actor} created a note on {timestamp}"
     elif activity_type == "email":
-        activity_type.description = f"{actor} sent an email on {timestamp}"
-    elif activity_type.description == "task":
-        activity_type.description = f"{actor} created a task on {timestamp}"
+        activity.description = f"{actor} sent an email on {timestamp}"
+    elif activity_type == "task":
+        activity.description = f"{actor} created a task on {timestamp}"
     else:
-        activity_type.description = f"{actor} scheduled a meeting {timestamp}"
+        activity.description = f"{actor} scheduled a meeting {timestamp}"
 
     db.session.add(activity)
     db.session.commit()
