@@ -51,6 +51,11 @@ class MeetingForm(FlaskForm):
     date_time_end = DateTimeField("End: ", render_kw={"type": "datetime-local"}, validators=[InputRequired()], format="%Y-%m-%dT%H:%M")
     schedule = SubmitField("Schedule")
 
+class TaskForm(FlaskForm):
+    title = StringField("Title")
+    due = DateTimeField("Due: ", render_kw={"type": "datetime-local"}, validators=[InputRequired()], format="%Y-%m-%dT%H:%M")
+    create = SubmitField("Create")
+
 class removeContactForm(FlaskForm):
     email = EmailField("Email", validators=[InputRequired(), Email()])
     submit = SubmitField("Remove Contact")
@@ -74,12 +79,13 @@ class DealForm(FlaskForm):
     deal_id = StringField()
     name = StringField("Deal Name", validators=[InputRequired()])
     stage = SelectField("Deal Stage", choices=[("Appointment Scheduled", "Appointment Scheduled"), 
-    ("Qualified To Buy", "Qualified To Buy"), ("Presentation Scheduled", "Presentation Scheduled"), 
-    ("Decision Maker Brought-In", "Decision Maker Brought-In"), ("Contract Sent", "Contract Sent"), 
+    ("Qualified To Buy", "Qualified To Buy"), ("Contract Sent", "Contract Sent"), 
     ("Closed Won", "Closed Won"), ("Closed Lost", "Closed Lost")])
     date = DateTimeLocalField("Close Date",format='%Y-%m-%dT%H:%M')
-    owner = StringField("Deal Owner")
+
+    owner = StringField("Deal Owner", validators=[Email()])
     amount = StringField("Amount")
+    goal = StringField("Goal", validators=[InputRequired()])
     associated_contact = StringField("Associated Contact")
     associated_company = StringField("Associated Company")
     submit = SubmitField()

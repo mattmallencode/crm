@@ -1,6 +1,16 @@
 <section id = "activity_box" class = "activity_box">
     {% if activity == 'activity' %}
-        <p>Activity.....</p>
+        <section>
+            <h2>Recent Activity</h2>
+
+            <table>
+                {% for activity in log %}
+                    <tr>
+                        <td>{{activity.description}}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </section>
     {% elif activity == 'emails' %}
         <section>
             <h2>Send Email to {{contact.name}}</h2>
@@ -121,6 +131,41 @@
                 <br>
                 <br>
                 <a href="{{meeting['link']}}">Join google meet</a>
+                <br>
+                <br>
+            </section>
+        {% endfor %}
+        {% endif %}
+    </section>
+    {% elif activity == "tasks" %}
+    <section>
+        <h2>Add A Task For {{contact.name}}</h2>
+        <form action = "" method = "POST">
+            {{form.hidden_tag()}}
+            <section>
+                {{form.title(placeholder="Title")}}
+                <br>
+                {% for error in form.due.errors %}
+                    <div>{{ error }}</div>
+                {% endfor %}
+                {{form.due.label}}
+                {{form.due(placeholder="Date & Time")}}
+            </section>
+            <section>
+                {{form.create()}}
+            </section>
+        </form>
+    </section>    
+    <section id="tasks">
+        <h2>Your Tasks For {{contact.name}}</h2>
+        {% if tasks is not none %}
+        {% for task in tasks %}
+            <section class="task">
+                <p><b>Title:</b> {{ task["title"] }}</p>
+                <p><b>Due:</b> {{ task["due"] }}</p>    
+                <br>
+                <a id="complete_task", href = "{{url_for('contact_bp.complete_task', contact_id=contact.contact_id, task_id=task['id'])}}">Complete</a></td>
+                <br>
                 <br>
                 <br>
             </section>
