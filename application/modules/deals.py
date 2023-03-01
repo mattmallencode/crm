@@ -157,8 +157,6 @@ def order_deals(sort, order, deals):
     print(sort)
     return deals
 
-<<<<<<<<< Temporary merge branch 1
-
 @deals_bp.route("/add_deal", defaults={"filter": "all", "page": 1, "prev_sort": "None", "sort": "None", "order": "DESC", "error": "None"}, methods=["GET", "POST"])
 @deals_bp.route("/add_deal/<filter>/<prev_sort>/<sort>/<page>/<order>/<error>", methods=["GET", "POST"])
 @login_required
@@ -228,7 +226,7 @@ def edit_deal(deal_id, page, error):
     #return redirect(url_for("deals_bp.deals", page=page, error=error))
     return redirect(url_for("deals_bp.deals", page=page, filter="all", prev_sort="None", sort="None", order="DESC", error=error))
     #return redirect(url_for("deals_bp.deals",prev_sort=prev_sort, order=order, sort=sort, filter=filter, page=page, error=error))
-
+'''
 @deals_bp.route("/edit_deal", defaults={"deal_id":"None", "filter":"all", "page":1, "prev_sort":"None", "sort":"None", "order":"DESC", "error":"None"}, methods=["GET", "POST"])
 @deals_bp.route("/edit_deal/<deal_id>/<filter>/<prev_sort>/<sort>/<page>/<order>/<error>", methods=["GET", "POST"])
 @login_required
@@ -267,3 +265,4 @@ def edit_deal(deal_id, filter, page, error, prev_sort, sort, order):
                 db.session.commit()
     
     return redirect(url_for("deals_bp.deals", filter=filter, prev_sort=prev_sort, sort=sort, page=page, order=order, error=error))
+'''
