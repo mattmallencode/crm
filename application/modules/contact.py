@@ -143,6 +143,8 @@ def tasks_activity(contact_id, google_token, contact):
     tasks = None
     if google_token != None:
         task_list = get_task_list(contact)
+        if type(task_list) != str:
+            return redirect(url_for('authorize_email', contact_id=contact_id))
         if form.validate_on_submit():
             add_task(form, task_list, contact)
             form.title.data = ""
@@ -162,12 +164,15 @@ def tasks_activity(contact_id, google_token, contact):
 def get_task_list(contact):
     url = "https://tasks.googleapis.com/tasks/v1/users/@me/lists"
     response = google.get(url)
-    for task_list in response.data["items"]:
-        try:
-            if task_list["title"].split(": ")[1] == contact.email:
-                return task_list["id"]
-        except:
-            pass
+    try:
+        for task_list in response.data["items"]:
+            try:
+                if task_list["title"].split(": ")[1] == contact.email:
+                    return task_list["id"]
+            except:
+                pass
+    except:
+        return redirect(url_for('authorize_email', contact_id=contact.contact_id))
     return None
 
 def create_task_list(contact):
@@ -189,12 +194,31 @@ def add_task(form, task_list, contact):
     response = google.post(url, data={"title": title, "due": due}, format="json")
     if response.status != 200:
         return redirect(url_for('authorize_email', contact_id=contact.contact_id))
+    timestamp = datetime.now().strftime("%d/%m/%Y %H:%M")
+    log_activity("task", g.email, timestamp, contact.contact_id)
+
+@contact_bp.route("/complete_task/<contact_id>/<task_id>", methods=["GET", "POST"])
+def complete_task(contact_id, task_id):
+    contact = Contacts.query.filter_by(contact_id=contact_id, team_id=g.team_id).first()
+    form = TaskForm()
+    task_list = get_task_list(contact)
+    tasks = get_tasks(task_list, contact.contact_id)
+    print(tasks)
+    google_token = session.get("google_token")
+    response = google.put(url=f"https://tasks.googleapis.com/tasks/v1/lists/{task_list}/tasks/{task_id}", data={"id":task_id, "status": "completed"}, format="json")
+    if turbo.can_stream():
+        return turbo.stream(turbo.update(render_template("contact_interactions.html", contact=contact, google_token=google_token, activity="tasks", form=form, tasks=tasks), 'activity_box'))
+    else:
+        return render_template("contact.html", contact=contact, google_token=google_token, activity="tasks", form=form, tasks=tasks)
 
 def get_tasks(task_list, contact_id):
     if task_list == None:
         return None
     url = f"https://tasks.googleapis.com/tasks/v1/lists/{task_list}/tasks"
-    response = google.get(url)
+    try:
+        response = google.get(url)
+    except:
+        return redirect(url_for('authorize_email', contact_id=contact_id))
     tasks_output = []
     try:
         tasks = response.data["items"]
@@ -205,7 +229,7 @@ def get_tasks(task_list, contact_id):
                         task["due"] = parser.parse(task["due"]).strftime("%Y-%m-%d")
             tasks_output.append(task)
     except Exception as e:
-        tasks_output = Nones
+        tasks_output = None
     if response.status != 200:
         return redirect(url_for('authorize_email', contact_id=contact_id))
     return tasks_output
@@ -417,11 +441,11 @@ def log_activity(activity_type, actor, timestamp, contact_id):
     if activity_type == "note":
         activity.description = f"{actor} created a note on {timestamp}"
     elif activity_type == "email":
-        activity_type.description = f"{actor} sent an email on {timestamp}"
-    elif activity_type.description == "task":
-        activity_type.description = f"{actor} created a task on {timestamp}"
+        activity.description = f"{actor} sent an email on {timestamp}"
+    elif activity_type == "task":
+        activity.description = f"{actor} created a task on {timestamp}"
     else:
-        activity_type.description = f"{actor} scheduled a meeting {timestamp}"
+        activity.description = f"{actor} scheduled a meeting {timestamp}"
 
     db.session.add(activity)
     db.session.commit()

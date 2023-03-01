@@ -45,7 +45,6 @@ def contacts(filter, page, prev_sort, sort, order, error):
             team_id=user.team_id, contact_owner="")
     else:
         contacts = Contacts.query.filter_by(team_id=user.team_id)
-
     if search_form.validate_on_submit():
         user_search = search_form.search_bar.data
         # Before using the user's search let's optimize for it.
