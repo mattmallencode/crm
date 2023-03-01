@@ -683,19 +683,98 @@ div#login_box {
   margin-top: 2%;
 }
 #team_table {
-  padding-top: 20%;
-  width: 50%;
+  font-family: Arial, sans-serif;
   border-collapse: collapse;
+  width: 100%;
+  margin-top: 20px;
+}
+
+#team_table th {
+  background-color: #CECAC5;
+  color: black;
+  text-align: left;
+  padding: 8px;
+}
+
+#team_table td, #team_table th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#team_table tr:nth-child(even){
+  background-color: #f2f2f2;
+}
+
+#team_table tr:hover {background-color: #ddd;}
+
+#remove_team form {
+  display: inline-block;
+  margin: 0;
+}
+
+#remove_team form div {
+  margin: 5px 0;
+}
+
+#remove_team form label {
+  display: block;
+}
+
+#remove_team form input[type="checkbox"] {
+  margin-right: 5px;
 }
 #team_invite {
-color: white;
-  padding: 5% 5%;
-  text-indent: 0%;
-  background-color:#E95420;
-  border-radius: 0%;
+  background-color: #E95420;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  text-align: center;
   text-decoration: none;
+  display: inline-block;
+  font-weight: 100;
+  font-size: 14px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+#remove_team form input[type="submit"] {
+  background-color: #E95420;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin: 4px 2px;
+  cursor: pointer;
 }
 #team_name {
+  display: flex;
+  max-width: 100%; 
+  font-size: 250%;
+  text-decoration: none;
+  color: white;
+}
+/* Styling the invites page*/
+  #invite_page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2%;
+  }
+
+  #send_invite {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 20px;
+    width: 30%;
+  }
+input#email {
+  padding: 2%;
+  margin-bottom: 5%;
+}
+#invite_page section h1 {
   max-width: 100%; 
   font-size: 250%;
   text-decoration: none;

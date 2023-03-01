@@ -21,14 +21,15 @@
   <section id="team_page">
     
       <section>
-          <h1 id="team_name">My Team: {{ team["name"] }}</h1>
+          <h1 id="team_name">Team: {{ team["name"] }}</h1>
+      </section>
           
           <table id="team_table">
             <tr>
               <th>Name</th>
               <th>Email</th>
-              <th>Leave Team</th>
               <th>Invite</th>
+              <th>Leave Team</th>
             </tr>
 
             {% for team_member in team_members %}
