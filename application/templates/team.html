@@ -1,6 +1,6 @@
 {% extends "base_no_turbo.html" %}
 {% block main_content %}
-<body id="team_body">  
+<body>  
   <nav>
     <ul>
       <li><a href="{{ url_for('home') }}">Home</a></li>
@@ -21,62 +21,45 @@
   <section id="team_page">
     
       <section>
-        <svg viewBox="0 0 960 300">
-          <symbol id="s-text">
-            <text text-anchor="middle" x="50%" y="80%"> TEAM</text>
-            <text text-anchor="middle" x="52%" y="80%">TEAM </text>
-            
-          </symbol>
-        
-          <g class = "g-ants">
-            <use xlink:href="#s-text" class="text-copy"></use>
-            <use xlink:href="#s-text" class="text-copy"></use>
-            <use xlink:href="#s-text" class="text-copy"></use>
-            <use xlink:href="#s-text" class="text-copy"></use>
-            <use xlink:href="#s-text" class="text-copy"></use>
-          </g>
-        </svg>
+          <h1 id="team_name">Team: {{ team["name"] }}</h1>
+      </section>
           
           <table id="team_table">
             <tr>
               <th>Name</th>
               <th>Email</th>
+              <th>Invite</th>
+              <th>Leave Team</th>
             </tr>
 
             {% for team_member in team_members %}
-            <tr>
               <td>{{ team_member.name }}</td>
               <td>{{ team_member.email }}</td>
+              <td> {% if user_details.admin_status == True %}
+                    <a  id="team_invite" href="{{ url_for('teams.invite') }}">Invite Member</a>
+                  {% endif %} 
+              </td>
+              <td id="remove_team"><form action = "" method = "POST">
+                {{ form.hidden_tag() }}
+                <div>
+                  {{ form.sure_checkbox() }}
+                  {{ form.sure_checkbox.label }}
+                
+                  {% for error in form.sure_checkbox.errors %}
+                  <div>{{ error }}</div>
+                  {% endfor %}
+                </div>
+               
+                <div>
+                  {{ form.submit() }}
+                </div>  
+                
+              </form></td>
             {% endfor %}
+
           </table>
             
       </section>
-      <section id="invite_person">
-        <h1>Invite New Contact</h1>
-        {% if user_details.admin_status == True %}
-            <p id="invite_button"><a href="{{ url_for('teams.invite') }}">Invite Member</a></p>
-          {% endif %}
-      </section>
-
-      <section>
-          <h1>Leave Your Team</h1>
-          <form action = "" method = "POST">
-              {{ form.hidden_tag() }}
-              <div>
-                {{ form.sure_checkbox() }}
-                {{ form.sure_checkbox.label }}
-              
-                {% for error in form.sure_checkbox.errors %}
-                <div>{{ error }}</div>
-                {% endfor %}
-              </div>
-             
-              <div>
-                {{ form.submit() }}
-              </div>  
-              
-            </form>
-        </section>
   </section>
     
   {% else %}
