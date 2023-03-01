@@ -9,6 +9,7 @@ from datetime import datetime, timedelta, timezone
 from dateutil import parser
 from email.mime.text import MIMEText
 import pytz
+from sqlalchemy import func, Integer
 
 contact_bp = Blueprint('contact_bp', __name__, template_folder="templates")
 turbo = current_app.extensions.get("turbo")
@@ -29,7 +30,6 @@ def contact(contact_id, activity, reply, complete):
     emails -- Sending and viewing emails to and from the contact.
     notes -- Add and view notes related to the contact.
     """
-    print(activity)
     form = EmailForm()
     if reply != None:
         reply = reply.split(",")
@@ -147,6 +147,8 @@ def tasks_activity(contact_id, google_token, contact, complete="false"):
     if google_token != None:
         if complete != "false":
             complete_task(contact_id, complete)
+            timestamp = datetime.now().strftime("%d/%m/%Y %H:%M")
+            log_activity("complete_task", g.email, timestamp, contact_id)
         task_list = get_task_list(contact)
         if type(task_list) != str:
             return redirect(url_for('authorize_email', contact_id=contact_id))
@@ -202,7 +204,7 @@ def add_task(form, task_list, contact):
         return redirect(url_for('authorize_email', contact_id=contact.contact_id))
     timestamp = datetime.now().strftime("%d/%m/%Y %H:%M")
     log_activity("task", g.email, timestamp, contact.contact_id)
-    
+
 def complete_task(contact_id, task_id):
     form = TaskForm()
     contact = Contacts.query.filter_by(contact_id=contact_id, team_id=g.team_id).first()
@@ -472,6 +474,8 @@ def log_activity(activity_type, actor, timestamp, contact_id):
         activity.description = f"{actor} sent an email on {timestamp}"
     elif activity_type == "task":
         activity.description = f"{actor} created a task on {timestamp}"
+    elif activity_type == "complete_task":
+        activity.description = f"{actor} completed a task on {timestamp}"
     else:
         activity.description = f"{actor} scheduled a meeting {timestamp}"
 
@@ -480,7 +484,16 @@ def log_activity(activity_type, actor, timestamp, contact_id):
     
 def view_activity(contact_id, google_token, contact):
     log = ActivityLog.query.filter_by(contact_id=contact_id)
-    
+
+    # Convert the timestamp strings to datetime objects
+    log = log.all()
+    for entry in log:
+        entry.timestamp = datetime.strptime(entry.timestamp, "%d/%m/%Y %H:%M")
+
+    # Sort the log by the datetime objects
+    log = sorted(log, key=lambda x: x.timestamp, reverse=True)
+
+
     # If we can, just update the part of the page that's changed i.e. the activity box.
     if turbo.can_stream():
         return turbo.stream(turbo.update(render_template("contact_interactions.html", google_token=google_token, contact=contact, activity="activity", log=log), 'activity_box'))
