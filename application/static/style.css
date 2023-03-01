@@ -2,13 +2,11 @@
     font-family: sans-serif;
 }
 body{
-    
   padding-top: 2%;
   background: linear-gradient( 70deg, white, black, #E95420,  white);
   background-repeat: no-repeat;
   background-size: 200% 200%;
   animation: gradient 30s ease infinite;
-    
 }
 
 /* contacts page /*
@@ -66,15 +64,6 @@ svg {
 
 @keyframes stroke-offset{
   100% {stroke-dashoffset: -35%;}
-}
-.contacts_background{
-    /*background: rgb(15, 8, 8, 0.5);*/
-    /*background-color: #b7aeae;*/
-    /*FFbackground-color:rgb(0, 27, 142, 0.5);
-    /*background-color:;*/
-    /*background-color:;*/
-    /*background-color:;*/
-    /*background-color:;*/
 }
 
 .box{
@@ -515,12 +504,7 @@ color: white;
 }
 
 /* Login page*/
-#login_body {
-  background: linear-gradient( 70deg, white, black, #E95420,  white);
-  background-repeat: no-repeat;
-  background-size: 200% 200%;
-  animation: gradient 30s ease infinite;
-}
+
 @keyframes gradient {
 	0% {
 		background-position: 0% 50%;
@@ -679,6 +663,7 @@ div#login_box {
 
 /* styling the team page */
 /* Styling the table */
+
 #team_page {
   position: relative;
   margin-top: 2%;
