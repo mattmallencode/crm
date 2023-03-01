@@ -27,42 +27,38 @@
             <tr>
               <th>Name</th>
               <th>Email</th>
+              <th>Leave Team</th>
+              <th>Invite</th>
             </tr>
 
             {% for team_member in team_members %}
-            <tr>
               <td>{{ team_member.name }}</td>
               <td>{{ team_member.email }}</td>
+              <td><form action = "" method = "POST">
+                {{ form.hidden_tag() }}
+                <div>
+                  {{ form.sure_checkbox() }}
+                  {{ form.sure_checkbox.label }}
+                
+                  {% for error in form.sure_checkbox.errors %}
+                  <div>{{ error }}</div>
+                  {% endfor %}
+                </div>
+               
+                <div>
+                  {{ form.submit() }}
+                </div>  
+                
+              </form></td>
+              <td> {% if user_details.admin_status == True %}
+                    <a href="{{ url_for('teams.invite') }}">Invite Member</a>
+                  {% endif %} 
+              </td>
             {% endfor %}
+
           </table>
             
       </section>
-      <section id="invite_person">
-        <h1>Invite New Contact</h1>
-        {% if user_details.admin_status == True %}
-            <p id="invite_button"><a href="{{ url_for('teams.invite') }}">Invite Member</a></p>
-          {% endif %}
-      </section>
-
-      <section>
-          <h1>Leave Your Team</h1>
-          <form action = "" method = "POST">
-              {{ form.hidden_tag() }}
-              <div>
-                {{ form.sure_checkbox() }}
-                {{ form.sure_checkbox.label }}
-              
-                {% for error in form.sure_checkbox.errors %}
-                <div>{{ error }}</div>
-                {% endfor %}
-              </div>
-             
-              <div>
-                {{ form.submit() }}
-              </div>  
-              
-            </form>
-        </section>
   </section>
     
   {% else %}
