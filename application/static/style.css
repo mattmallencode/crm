@@ -764,8 +764,20 @@ div#login_box {
     align-items: center;
     margin-top: 2%;
   }
-
+  #invite_page form input[type="submit"] {
+    background-color: #E95420;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin: 4px 2px;
+  cursor: pointer;
+  }
   #send_invite {
+    
     border-collapse: collapse;
     width: 100%;
     margin-top: 20px;
@@ -781,3 +793,4 @@ input#email {
   text-decoration: none;
   color: white;
 }
+/* Deals page */
