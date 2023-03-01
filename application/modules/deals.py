@@ -2,7 +2,6 @@ from flask import Blueprint, g, render_template, url_for, redirect
 from application.modules.auth import login_required, team_required
 from application.data_models import *
 from application.forms import *
-from wtforms.validators import ValidationError
 
 deals_bp = Blueprint('deals_bp', __name__, template_folder="templates")
 

@@ -5,6 +5,16 @@ from application.forms import CreateTeamForm, ContactForm, LogoutForm, LeaveTeam
 from flask_oauthlib.client import OAuth
 from turbo_flask import Turbo
 from config import Config
+
+import pandas as pd
+import base64
+from io import BytesIO
+import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
+import mplcyberpunk
+from dateutil.relativedelta import relativedelta
+from datetime import datetime
+
 turbo = Turbo()
 
 # Set up an SQLAlchemy session for our application.
@@ -53,7 +63,40 @@ def create_app(config_class=Config):
         # Query the db for the team_id using the cokies email.
         user_details = Users.query.filter_by(email=g.email).first()
 
-        return render_template("home.html", user_details=user_details)
+        # Deals in the last year
+        year_month_minus_one = (datetime.now() - relativedelta(years=1)).strftime("%Y-%m")
+        deals = Deals.query.\
+            filter(Deals.team_id == user_details.team_id, Deals.close_date > Deals.close_date.like(f"{year_month_minus_one}%"))
+
+        closed = {"x":[], "y":[]}
+        goal= {"x":[], "y":[]}
+
+        for deal in deals:
+            if (deal.amount is not None) and (deal.goal is not None):
+                close_date = deal.close_date.strftime("%Y-%m")
+                closed["x"].append(close_date)
+                closed["y"].append(deal.amount)
+                goal["x"].append(close_date)
+                goal["y"].append(deal.goal)
+            
+        plt.style.use("cyberpunk")
+        fig, ax = plt.subplots()
+
+        plt.plot(closed["x"], closed["y"], marker="o")
+        plt.plot(goal["x"], goal["y"], marker="o")
+        
+        mplcyberpunk.add_glow_effects()
+        
+        # saves figure to memory buffer      
+        buf = BytesIO()
+        plt.savefig(buf, format="png")
+        # encodes figure for output
+        data = base64.b64encode(buf.getbuffer()).decode("ascii")
+        goal_closed_diagram = f"<img src='data:image/png;base64,{data}'/>"
+        #goal_closed_diagram = draw_diagram(data, '#08F7FE', '#FE53BB', '#F5D300', '#F5D300')
+        
+
+        return render_template("home.html", user_details=user_details, goal_closed_diagram=goal_closed_diagram)
         
     @application.route("/authorize_email/<contact_id>", methods=["GET", "POST"])
     def authorize_email(contact_id):
@@ -89,5 +132,32 @@ def create_app(config_class=Config):
         time_zone = request.form["time_zone"]
         session["time_zone"] = time_zone
         return '', 204
+    
+    def draw_diagram(data, c1, c2, c3, c4):
+
+        #df = pd.DataFrame(data)
+        plt.style.use("cyberpunk")
+        fig, ax = plt.subplots()
+        """colors = [
+            '#08F7FE',  # teal/cyan
+            '#FE53BB',  # pink
+            '#F5D300',  # yellow
+            '#00ff41', # matrix green
+        ]"""
+        colors = [c1, c2, c3, c4]
+        
+        #df.plot(marker='o', ax=ax, color=colors)
+        for subplot in list(data.keys()):
+            plt.plot(data[subplot][0], data[subplot][1], marker="o")
+        
+        mplcyberpunk.add_glow_effects()
+        
+        # saves figure to memory buffer      
+        buf = BytesIO()
+        plt.savefig(buf, format="png")
+        # encodes figure for output
+        data = base64.b64encode(buf.getbuffer()).decode("ascii")
+        result = f"<img src='data:image/png;base64,{data}'/>"
+        return result
 
     return application
