@@ -162,8 +162,9 @@
         {% for task in tasks %}
             <section class="task">
                 <p><b>Title:</b> {{ task["title"] }}</p>
-                <p><b>Due:</b> {{ task["due"] }}</p>
+                <p><b>Due:</b> {{ task["due"] }}</p>    
                 <br>
+                <a id="complete_task", href = "{{url_for('contact_bp.complete_task', contact_id=contact.contact_id, task_id=task['id'])}}">Complete</a></td>
                 <br>
                 <br>
                 <br>
