@@ -34,7 +34,11 @@
             {% for team_member in team_members %}
               <td>{{ team_member.name }}</td>
               <td>{{ team_member.email }}</td>
-              <td><form action = "" method = "POST">
+              <td> {% if user_details.admin_status == True %}
+                    <a  id="team_invite" href="{{ url_for('teams.invite') }}">Invite Member</a>
+                  {% endif %} 
+              </td>
+              <td id="remove_team"><form action = "" method = "POST">
                 {{ form.hidden_tag() }}
                 <div>
                   {{ form.sure_checkbox() }}
@@ -50,10 +54,6 @@
                 </div>  
                 
               </form></td>
-              <td> {% if user_details.admin_status == True %}
-                    <a href="{{ url_for('teams.invite') }}">Invite Member</a>
-                  {% endif %} 
-              </td>
             {% endfor %}
 
           </table>
