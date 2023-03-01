@@ -82,8 +82,9 @@ class DealForm(FlaskForm):
     ("Qualified To Buy", "Qualified To Buy"), ("Contract Sent", "Contract Sent"), 
     ("Closed Won", "Closed Won"), ("Closed Lost", "Closed Lost")])
     date = DateTimeLocalField("Close Date",format='%Y-%m-%dT%H:%M')
-    owner = StringField("Deal Owner")
-    amount = StringField("Close Amount")
+
+    owner = StringField("Deal Owner", validators=[Email()])
+    amount = StringField("Amount")
     goal = StringField("Goal", validators=[InputRequired()])
     associated_contact = StringField("Associated Contact")
     associated_company = StringField("Associated Company")
