@@ -14,11 +14,12 @@ contact_bp = Blueprint('contact_bp', __name__, template_folder="templates")
 turbo = current_app.extensions.get("turbo")
 google = current_app.extensions.get("oauthlib.client").google
 
-@contact_bp.route("/contact/<contact_id>/<activity>", defaults={"reply": None}, methods=["GET", "POST"])
-@contact_bp.route("/contact/<contact_id>/<activity>/<reply>", methods=["GET", "POST"])
+@contact_bp.route("/contact/<contact_id>/<activity>", defaults={"reply": None, "complete": "false"}, methods=["GET", "POST"])
+@contact_bp.route("/contact/<contact_id>/<activity>/<reply>", methods=["GET", "POST"], defaults={"complete": "false"})
+@contact_bp.route("/contact/<contact_id>/<activity>/<complete>", defaults={"reply": None}, methods=["GET", "POST"])
 @login_required
 @team_required
-def contact(contact_id, activity, reply):
+def contact(contact_id, activity, reply, complete):
     """contact =
     This is the route for the contact page i.e. an individual contact, not the list.
     Calls the relevant function depending on user selection.
@@ -28,6 +29,7 @@ def contact(contact_id, activity, reply):
     emails -- Sending and viewing emails to and from the contact.
     notes -- Add and view notes related to the contact.
     """
+    print(activity)
     form = EmailForm()
     if reply != None:
         reply = reply.split(",")
@@ -44,7 +46,7 @@ def contact(contact_id, activity, reply):
     elif activity == "meetings":
         return meetings_activity(contact_id, google_token, contact)
     elif activity == "tasks":
-        return tasks_activity(contact_id, google_token, contact)
+        return tasks_activity(contact_id, google_token, contact, complete)
     else:
         return view_activity(contact_id, google_token, contact)
 
@@ -138,10 +140,13 @@ def parse_meetings(meetings):
         meetings_parsed.append(meeting)
     return meetings_parsed
 
-def tasks_activity(contact_id, google_token, contact):
+def tasks_activity(contact_id, google_token, contact, complete="false"):
     form = TaskForm()
+    upcoming_tasks, past_due_tasks, completed_tasks = None, None, None
     tasks = None
     if google_token != None:
+        if complete != "false":
+            complete_task(contact_id, complete)
         task_list = get_task_list(contact)
         if type(task_list) != str:
             return redirect(url_for('authorize_email', contact_id=contact_id))
@@ -151,15 +156,16 @@ def tasks_activity(contact_id, google_token, contact):
             form.due.data = None
             if task_list == None:
                 task_list = get_task_list(contact)
-        tasks = get_tasks(task_list, contact.contact_id)
+        upcoming_tasks, past_due_tasks, completed_tasks = get_tasks(task_list, contact.contact_id)
+        tasks = "Not None"
     # User isn't authenticated, redirect them so they can oAuth their email.
     else:
         return redirect(url_for('authorize_email', contact_id=contact_id))
     # If we can, just update the part of the page that's changed i.e. the activity box.
     if turbo.can_stream():
-        return turbo.stream(turbo.update(render_template("contact_interactions.html", contact=contact, google_token=google_token, activity="tasks", form=form, tasks=tasks), 'activity_box'))
+        return turbo.stream(turbo.update(render_template("contact_interactions.html", contact=contact, google_token=google_token, activity="tasks", form=form, tasks=tasks, upcoming_tasks=upcoming_tasks, past_due_tasks=past_due_tasks, completed_tasks=completed_tasks), 'activity_box'))
     else:
-        return render_template("contact.html", contact=contact, google_token=google_token, activity="tasks", form=form, tasks=tasks)
+        return render_template("contact.html", contact=contact, google_token=google_token, activity="tasks", form=form, tasks=tasks, upcoming_tasks=upcoming_tasks, past_due_tasks=past_due_tasks, completed_tasks=completed_tasks)
 
 def get_task_list(contact):
     url = "https://tasks.googleapis.com/tasks/v1/users/@me/lists"
@@ -196,20 +202,20 @@ def add_task(form, task_list, contact):
         return redirect(url_for('authorize_email', contact_id=contact.contact_id))
     timestamp = datetime.now().strftime("%d/%m/%Y %H:%M")
     log_activity("task", g.email, timestamp, contact.contact_id)
-
-@contact_bp.route("/complete_task/<contact_id>/<task_id>", methods=["GET", "POST"])
+    
 def complete_task(contact_id, task_id):
-    contact = Contacts.query.filter_by(contact_id=contact_id, team_id=g.team_id).first()
     form = TaskForm()
-    task_list = get_task_list(contact)
-    tasks = get_tasks(task_list, contact.contact_id)
-    print(tasks)
+    contact = Contacts.query.filter_by(contact_id=contact_id, team_id=g.team_id).first()
+    tasks = "Not None"
     google_token = session.get("google_token")
-    response = google.put(url=f"https://tasks.googleapis.com/tasks/v1/lists/{task_list}/tasks/{task_id}", data={"id":task_id, "status": "completed"}, format="json")
-    if turbo.can_stream():
-        return turbo.stream(turbo.update(render_template("contact_interactions.html", contact=contact, google_token=google_token, activity="tasks", form=form, tasks=tasks), 'activity_box'))
-    else:
-        return render_template("contact.html", contact=contact, google_token=google_token, activity="tasks", form=form, tasks=tasks)
+    task_list = get_task_list(contact)
+    task = google.get(url=f"https://tasks.googleapis.com/tasks/v1/lists/{task_list}/tasks/{task_id}").data
+    response = google.put(url=f"https://tasks.googleapis.com/tasks/v1/lists/{task_list}/tasks/{task_id}", data={"id":task_id, "status": "completed", "title": task["title"], "due": task["due"]}, format="json")
+    if response.status != 200:
+        return redirect(url_for('authorize_email', contact_id=contact.contact_id))
+    upcoming_tasks, past_due_tasks, completed_tasks = get_tasks(task_list, contact_id)
+    turbo.push(turbo.replace(render_template("contact_interactions.html", contact=contact, google_token=google_token, activity="tasks", form=form, tasks=tasks, upcoming_tasks=upcoming_tasks, past_due_tasks=past_due_tasks, completed_tasks=completed_tasks), 'activity_box'))
+    return '', 205
 
 def get_tasks(task_list, contact_id):
     if task_list == None:
@@ -232,7 +238,29 @@ def get_tasks(task_list, contact_id):
         tasks_output = None
     if response.status != 200:
         return redirect(url_for('authorize_email', contact_id=contact_id))
-    return tasks_output
+    upcoming_tasks, past_due_tasks, completed_tasks = split_tasks(tasks_output)
+    return upcoming_tasks, past_due_tasks, completed_tasks
+
+def split_tasks(tasks):
+    upcoming_tasks = []
+    past_due_tasks = []
+    completed_tasks = []
+
+    for task in tasks:
+        if task.get('status') == 'completed':
+            completed_tasks.append(task)
+        elif task.get('status') == 'needsAction':
+            due_date = task.get('due')
+            if due_date:
+                due_date = datetime.strptime(due_date, '%Y-%m-%d')
+                if due_date.date() < datetime.today().date():
+                    past_due_tasks.append(task)
+                else:
+                    upcoming_tasks.append(task)
+            else:
+                upcoming_tasks.append(task)
+
+    return upcoming_tasks, past_due_tasks, completed_tasks
 
 
 def notes_activity(contact_id, google_token, contact):
