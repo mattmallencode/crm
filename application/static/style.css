@@ -1,15 +1,27 @@
 *{
     font-family: sans-serif;
 }
+body{
+    
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    max-height: 100%;
+}
 
 /* contacts page /*
 /* Header */
 @import url(https://fonts.googleapis.com/css?family=Montserrat);
 
 html, body{
-  
+  height: 100%;
   font-weight: 800;
-  min-height: 100%;
+}
+
+body{
+  background: black;
 }
 
 svg {
@@ -168,11 +180,6 @@ li a {
     text-decoration: none;
 }
   
-#remove_contact{
-  text-decoration: None;
-  font-size: 16px;
-  font-weight: 100;
-}
  
 /* All Contacts My assigned contacts Unassigned contacts*/
 #contact_filter_buttons a{
@@ -524,21 +531,31 @@ color: white;
 
 /* Login page*/
 #login_body {
-  padding-top: 2%;
   background: linear-gradient( 70deg, white, black, #E95420,  white);
   background-repeat: no-repeat;
-  background-size: 100%;
+  background-size: 200% 200%;
   animation: gradient 30s ease infinite;
 }
-#login_box {
-  display: flex;
-  width: auto;
-  justify-content: center;
-  align-items: left;
-  left: 0%;
-  height: 100%;
-  transform: translateY(-20%) scale(1.5);
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 50% 100%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
 }
+  #login_box {
+    display: flex;
+    width: auto;
+    justify-content: center;
+    align-items: left;
+    left: 0%;
+    height: 100%;
+    transform: translateY(-20%) scale(1.5);
+  }
 
 body#login_body .login_container {
   background-color:	#F0F0F0;
@@ -655,9 +672,9 @@ div#login_box {
     #B6AFA8 98%,
     #AEA79F 100%
   );
-    background-size: auto auto;
-    background-clip: border-box;
-    background-size: 200% auto;
+  background-size: auto auto;
+  background-clip: border-box;
+  background-size: 200% auto;
   color: #fff;
   background-clip: text;
   text-fill-color: transparent;
@@ -665,32 +682,11 @@ div#login_box {
   -webkit-text-fill-color: transparent;
   animation: textclip 15s linear infinite;
   display: inline-block;
-      font-size: 100px;
+      font-size: 190px;
 }
 
 @keyframes textclip {
   to {
     background-position: 200% center;
   }
-}
-
-/* team page */
-#team_body {
-  padding-top: 2%;
-  background: linear-gradient( 70deg, white, black, #E95420,  white);
-  background-repeat: no-repeat;
-  background-size: 100%;
-  animation: gradient 30s ease infinite;
-  padding-bottom: 20%;
-}
-@keyframes gradient {
-	0% {
-		background-position: 0% 50%;
-	}
-	50% {
-		background-position: 50% 100%;
-	}
-	100% {
-		background-position: 0% 50%;
-	}
 }
