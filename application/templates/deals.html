@@ -17,8 +17,6 @@
         </ul>
 
     </nav>
-
-    <section>
         <svg viewBox="0 0 960 300">
             <symbol id="s-text">
               <text text-anchor="middle" x="50%" y="80%">DEALS </text>
@@ -34,7 +32,11 @@
               <use xlink:href="#s-text" class="text-copy"></use>
             </g>
           </svg>
-
+          <section id="deals">
+          <section id="deals_filter_buttons">
+            <a href = "{{url_for('deals_bp.deals', prev_sort='None', order='ASC', sort='None', filter='all', page=1 , error='None')}}">All Deals</a>
+            <a href = "{{url_for('deals_bp.deals', prev_sort='None', order='ASC', sort='None', filter='assigned', page=1 , error='None')}}">My Assigned Deals</a>
+        </section>
         <table id="deals_table">
             <tr>
                 <form action = "" method = "POST" novalidate>
@@ -43,10 +45,6 @@
                     <td>{{search_form.submit(id="deals_search_button")}}</td>
                 </form>
             </tr>
-            <section id="deals_filter_buttons">
-                <a href = "{{url_for('deals_bp.deals', prev_sort='None', order='ASC', sort='None', filter='all', page=1 , error='None')}}">All Deals</a>
-                <a href = "{{url_for('deals_bp.deals', prev_sort='None', order='ASC', sort='None', filter='assigned', page=1 , error='None')}}">My Assigned Deals</a>
-            </section>
             {% set prev_sort = sort %}
             <tr>
                 <th><a href="{{url_for('deals_bp.deals', prev_sort=prev_sort, order=order, sort='name', page=page, filter=filter, error='None')}}">Deal Name</a></th>
