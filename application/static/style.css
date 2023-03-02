@@ -770,7 +770,7 @@ div#login_box {
     margin-top: 20px;
     width: 30%;
   }
-#team_table input#email {
+#invite_page input#email {
   padding: 2%;
   margin-bottom: 5%;
 }
@@ -780,4 +780,5 @@ div#login_box {
   text-decoration: none;
   color: white;
 }
+
 /* Deals page */
