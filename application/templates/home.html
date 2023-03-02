@@ -1,7 +1,7 @@
 {% extends "base_no_turbo.html" %}
 {% block main_content %}
 <body> 
-    {% if user_details.team_id %} 
+    {% if user.team_id %} 
     <nav>
       <ul>
         <li><a href="{{ url_for('home') }}">Home</a></li>
