@@ -2,24 +2,18 @@
     font-family: sans-serif;
 }
 body{
-    
   padding-top: 2%;
   background: linear-gradient( 70deg, white, black, #E95420,  white);
   background-repeat: no-repeat;
-  background-size: 200% 200%;
-  animation: gradient 30s ease infinite;
-    
+  background-size: cover;
+  min-height: 100%;
+  min-width: 100%;
+  padding-bottom: 100%;
 }
 
 /* contacts page /*
 /* Header */
 @import url(https://fonts.googleapis.com/css?family=Montserrat);
-
-html, body{
-  height: 100%;
-  font-weight: 800;
-}
-
 svg {
     display: block;
     font: 10.5em 'Montserrat';
@@ -66,15 +60,6 @@ svg {
 
 @keyframes stroke-offset{
   100% {stroke-dashoffset: -35%;}
-}
-.contacts_background{
-    /*background: rgb(15, 8, 8, 0.5);*/
-    /*background-color: #b7aeae;*/
-    /*FFbackground-color:rgb(0, 27, 142, 0.5);
-    /*background-color:;*/
-    /*background-color:;*/
-    /*background-color:;*/
-    /*background-color:;*/
 }
 
 .box{
@@ -173,16 +158,16 @@ li a {
  
 /* All Contacts My assigned contacts Unassigned contacts*/
 #contact_filter_buttons a{
-  list-style-type: none;
-  margin: 10%;
-  padding: 5%;
-  width: 25%;
-  position: relative;
-  top: 0;
-  left: 0;
-  animation-duration: 2s;
-  animation-iteration-count: infinite;
-  transform-origin: bottom;
+    list-style-type: none;
+    margin: 10%;
+    padding: 5%;
+    width: 25%;
+    position: relative;
+    top: 0;
+    left: 0;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    transform-origin: bottom;
 }
 
   #contact_filter_buttons  a:hover{
@@ -250,6 +235,7 @@ input#email {
   width: 100%;
   border: none;
   outline: none;
+  
   
 }
 input#contact_owner {
@@ -515,12 +501,7 @@ color: white;
 }
 
 /* Login page*/
-#login_body {
-  background: linear-gradient( 70deg, white, black, #E95420,  white);
-  background-repeat: no-repeat;
-  background-size: 200% 200%;
-  animation: gradient 30s ease infinite;
-}
+
 @keyframes gradient {
 	0% {
 		background-position: 0% 50%;
@@ -667,7 +648,7 @@ div#login_box {
   -webkit-text-fill-color: transparent;
   animation: textclip 15s linear infinite;
   display: inline-block;
-      font-size: 190px;
+      font-size: 100px;
 }
 
 @keyframes textclip {
@@ -679,6 +660,7 @@ div#login_box {
 
 /* styling the team page */
 /* Styling the table */
+
 #team_page {
   position: relative;
   margin-top: 2%;
@@ -764,14 +746,26 @@ div#login_box {
     align-items: center;
     margin-top: 2%;
   }
-
+  #invite_page form input[type="submit"] {
+    background-color: #E95420;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin: 4px 2px;
+  cursor: pointer;
+  }
   #send_invite {
+    
     border-collapse: collapse;
     width: 100%;
     margin-top: 20px;
     width: 30%;
   }
-input#email {
+#invite_page input#email {
   padding: 2%;
   margin-bottom: 5%;
 }
@@ -780,4 +774,18 @@ input#email {
   font-size: 250%;
   text-decoration: none;
   color: white;
+}
+
+/* Deals page */
+#deals_table {
+  position: relative;
+  border: black;
+  background-color: white;
+  border-collapse: collapse;
+  border: 1px solid black;
+  padding: 10px;
+}
+#deals_filter_buttons {
+
+  left: 0;
 }
