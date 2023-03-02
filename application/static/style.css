@@ -7,6 +7,7 @@ body{
   background-repeat: no-repeat;
   background-size: 200% 200%;
   animation: gradient 30s ease infinite;
+  min-width: 100%;
 }
 
 /* contacts page /*
@@ -239,6 +240,7 @@ input#email {
   width: 100%;
   border: none;
   outline: none;
+  
   
 }
 input#contact_owner {
@@ -768,7 +770,7 @@ div#login_box {
     margin-top: 20px;
     width: 30%;
   }
-input#email {
+#team_table input#email {
   padding: 2%;
   margin-bottom: 5%;
 }
