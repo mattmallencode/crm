@@ -2,6 +2,7 @@ from flask import Blueprint, g, render_template, url_for, redirect
 from application.modules.auth import login_required, team_required
 from application.data_models import *
 from application.forms import *
+from datetime import datetime
 
 deals_bp = Blueprint('deals_bp', __name__, template_folder="templates")
 
@@ -178,6 +179,7 @@ def add_deal(filter, page, error, prev_sort, sort, order):
     deal.goal = form.goal.data
     deal.associated_contact = form.associated_contact.data
     deal.associated_company = form.associated_company.data
+    deal.date_created = datetime.now()
 
     db.session.add(deal)     
     db.session.commit()
