@@ -795,9 +795,24 @@ div#login_box {
   align-items: flex-start;
   width: 25%;
   padding: 5%;
-  height: 100vh;
+}
+#deals_filter_buttons  a:hover{
+  background-color: gainsboro;
+  animation-name: bounce1;
+  animation-timing-function: ease;
+}
+
+@keyframes bounce1 {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-5px); }
+  100% { transform: translateY(0); }
 }
 #deals_table {
   float: right;
   width: 75%;
+}
+
+#dashboard section{
+  margin: 0%;
+  padding: 0%;
 }
