@@ -8,7 +8,7 @@ body{
   background-size: cover;
   min-height: 100%;
   min-width: 100%;
-  padding-bottom: 100%;
+  margin-bottom: 50%;
 }
 
 /* contacts page /*
@@ -656,11 +656,12 @@ div#login_box {
     background-position: 200% center;
   }
 }
+
 @media only screen and (max-width: 1000px) {
-  .animated_logo {
-    font-size: 2em;
-  }
-}
+    .animated_logo {
+      font-size: 2em;
+    }
+  
 
 
 /* styling the team page */
@@ -782,6 +783,7 @@ div#login_box {
 }
 
 /* Deals page */
+/* Deals page */
 #deals_filter_buttons {
   flex-direction: column;
   justify-content: flex-start;
@@ -791,7 +793,8 @@ div#login_box {
   height: 100%;
   background-color: gainsboro;
   padding-right: 1%;
-  height: 100vh;
+  width: 25%;
+  height: 100%;
 }
 #deals_filter_buttons a{
   display: flex;
