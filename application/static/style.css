@@ -507,6 +507,7 @@ color: white;
     left: 0%;
     height: 100%;
     transform: translateY(-20%) scale(1.5);
+    
   }
 
 body#login_body .login_container {
@@ -787,6 +788,30 @@ div#login_box {
   float: right;
   width: 75%;
 }
+  left: 0;
+}
+
+@media (max-width: 1400px) {
+/*login page*/
+#login_box {
+  display: flex;
+  width: auto;
+  justify-content: center;
+  align-items: left;
+  left: 0%;
+  height: 100%;
+  transform: translateY(-20%) scale(1.5);
+  margin-left: 15%;
+}
+
+#contacts_search_button:hover{
+  color: white;
+    background-color: #E95420;
+  }
+
+  contacts_search_button{
+    
+  }
 
 #dashboard section{
   margin: 0%;
