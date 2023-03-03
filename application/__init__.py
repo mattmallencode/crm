@@ -6,11 +6,9 @@ from flask_oauthlib.client import OAuth
 from turbo_flask import Turbo
 from config import Config
 
-import pandas as pd
 import base64
 from io import BytesIO
 import matplotlib.pyplot as plt
-from matplotlib.figure import Figure
 import mplcyberpunk
 from dateutil.relativedelta import relativedelta
 from datetime import datetime
@@ -61,53 +59,12 @@ def create_app(config_class=Config):
     @team_required
     def home():
         # Query the db for the team_id using the cokies email.
-        user_details = Users.query.filter_by(email=g.email).first()
+        user = Users.query.filter_by(email=g.email).first()
 
-        # Deals in the last year
-        year_month_minus_one = (datetime.now() - relativedelta(years=1)).strftime("%Y-%m")
-        deals = Deals.query.\
-            filter(Deals.team_id == user_details.team_id, Deals.close_date > Deals.close_date.like(f"{year_month_minus_one}%"))
-        
-        buckets=[]
-        for i in range(12):
-            buckets.append([])
-        for deal in deals:
-            if (deal.amount is not None) and (deal.goal is not None):
-                buckets[int(deal.close_date.strftime("%m"))].append(deal)
+        goal_closed_diagram = draw_goal_closed_diagram(user)
+        deals_forecast_diagram = draw_deals_forecast_diagram(user)
 
-        closed = {"x":[], "y":[]}
-        goal= {"x":[], "y":[]}
-
-        """for bucket in buckets:
-            closed_sum = 0
-            closed_goal = 0
-            for deal in bucket:
-        """
-            
-
-        for deal in deals:
-            close_date = deal.close_date.strftime("%Y-%m")
-            closed["x"].append(close_date)
-            closed["y"].append(deal.amount)
-            goal["x"].append(close_date)
-            goal["y"].append(deal.goal)
-            
-        plt.style.use("cyberpunk")
-        fig, ax = plt.subplots()
-
-        plt.plot(closed["x"], closed["y"], marker="o")
-        plt.plot(goal["x"], goal["y"], marker="o")
-        
-        mplcyberpunk.add_glow_effects()
-        
-        # saves figure to memory buffer      
-        buf = BytesIO()
-        plt.savefig(buf, format="png")
-        # encodes figure for output
-        data = base64.b64encode(buf.getbuffer()).decode("ascii")
-        goal_closed_diagram = f"<img src='data:image/png;base64,{data}'/>"
-
-        return render_template("home.html", user_details=user_details, goal_closed_diagram=goal_closed_diagram)
+        return render_template("home.html", user=user, goal_closed_diagram=goal_closed_diagram, deals_forecast_diagram=deals_forecast_diagram)
         
     @application.route("/authorize_email/<contact_id>", methods=["GET", "POST"])
     def authorize_email(contact_id):
@@ -143,5 +100,91 @@ def create_app(config_class=Config):
         time_zone = request.form["time_zone"]
         session["time_zone"] = time_zone
         return '', 204
+
+    def draw_goal_closed_diagram(user):
+        # Deals in the last year
+        year_month_minus_one = (datetime.now() - relativedelta(years=1)).strftime("%Y-%m")
+        deals = Deals.query.\
+            filter(Deals.team_id == user.team_id, Deals.close_date > Deals.close_date.like(f"{year_month_minus_one}%"))
+        
+        buckets=[]
+        for i in range(12):
+            buckets.append([])
+        for deal in deals:
+            buckets[int(deal.close_date.strftime("%m"))].append(deal)
+
+        closed = {"x":[], "y":[]}
+        goal= {"x":[], "y":[]}
+
+        for bucket in buckets:
+            closed_sum = 0
+            goal_sum = 0
+            close_date = ""
+            if len(bucket) != 0:
+                for deal in bucket:
+                    if (deal.amount is not None) and (deal.stage == "Closed Won"):
+                        closed_sum += deal.amount
+                    if deal.goal is not None:
+                        goal_sum += deal.goal
+                    close_date = deal.close_date.strftime("%Y-%m")
+            
+                closed["x"].append(close_date)
+                closed["y"].append(closed_sum)
+                goal["x"].append(close_date)
+                goal["y"].append(goal_sum)
+                
+        
+        plt.style.use("cyberpunk")
+        fig, ax = plt.subplots()
+        plt.xlabel("Close Date", fontsize=14)
+        plt.ylabel("Closed Amount v Revenue Goal in (€) euros ", fontsize=14)
+        plt.plot(closed["x"], closed["y"], marker="o", label = "Closed Amount")
+        plt.plot(goal["x"], goal["y"], marker="o", label="Revenue Goal")
+        plt.legend()
+        
+        mplcyberpunk.add_glow_effects()
+           
+        result = encode_diagram(plt)
+        return result
+    
+    def draw_deals_forecast_diagram(user):
+        date = datetime.now().strftime("%Y-%m")
+        deals = Deals.query.\
+            filter(Deals.team_id == user.team_id)
+        
+        data = [0,0,0,0]
+        for deal in deals:
+            if (deal.amount is not None) and (deal.date_created is not None):
+                if deal.date_created.strftime("%Y-%m") == datetime.now().strftime("%Y-%m"):
+                    if deal.stage == "Closed Won":
+                        data[0] += deal.amount
+                    elif deal.stage == "Appointment Scheduled":
+                        data[1] += deal.amount
+                    elif deal.stage == "Contract Sent":
+                        data[2] += deal.amount
+                    elif deal.stage == "Qualified To Buy":
+                        data[3] += deal.amount
+
+        fig, ax = plt.subplots()
+
+        pie_labels = [f"€{value}" for value in data]
+        legend_labels = ["Closed Won", "Appointment Scheduled", "Contract Sent", "Qualified To Buy"]
+        explode = (0.01, 0.01, 0.01, 0.01)
+        colors = ["#47B39C", "#EC6B56", "#772953", "#FFC154"]
+        plt.pie(data, explode=explode, labels=pie_labels, startangle=90, colors=colors, shadow=True, autopct = "%1.1f%%", textprops={"color":"w"})
+        plt.title(f"Forecasted Revenue for this month: €{sum(data)}", fontsize = 14)
+        plt.legend(labels=legend_labels, loc=2)
+        result = encode_diagram(plt)
+    
+        return result
+    
+    def encode_diagram(plt):
+        buf = BytesIO()
+        plt.savefig(buf, format="png")
+        # encodes figure for output
+        data = base64.b64encode(buf.getbuffer()).decode("ascii")
+        result = f"<img src='data:image/png;base64,{data}'/>"
+        return result
+
 
     return application

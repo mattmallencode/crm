@@ -307,20 +307,6 @@ color: white;
   grid-template-columns: auto auto;
 }
 
-#dashboard section{
-  background-color: #FFF8DC;
-  margin: 20px;
-  padding: 25px;
-  box-shadow: 3px 3px #606060;
-}
-
-#dashboard *{
-  color: black;
-}
-
-#dashboard section:hover{
-  box-shadow: 0px 0px 20px #606060;
-}
 
 #contact {
   display: grid;
@@ -649,7 +635,7 @@ div#login_box {
   -webkit-text-fill-color: transparent;
   animation: textclip 15s linear infinite;
   display: inline-block;
-      font-size: 100px;
+      font-size: 5em;
 }
 
 @keyframes textclip {
@@ -778,16 +764,30 @@ div#login_box {
 }
 
 /* Deals page */
-#deals_table {
-  position: relative;
-  border: black;
-  background-color: white;
-  border-collapse: collapse;
-  border: 1px solid black;
-  padding: 10px;
-}
 #deals_filter_buttons {
-
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  float: left;
+  margin: 0%;
+  height: 100%;
+  background-color: gainsboro;
+  padding-right: 1%;
+  height: 100vh;
+}
+#deals_filter_buttons a{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 25%;
+  padding: 5%;
+  height: 100vh;
+}
+#deals_table {
+  float: right;
+  width: 75%;
+}
   left: 0;
 }
 
@@ -813,4 +813,7 @@ div#login_box {
     
   }
 
+#dashboard section{
+  margin: 0%;
+  padding: 0%;
 }
