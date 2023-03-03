@@ -1,4 +1,4 @@
-﻿﻿# Sherpa: A Free and Open-Source CRM
+﻿# Sherpa: A Free and Open-Source CRM
 ﻿
 ![Sherpa logo: a picture of a Yak beneath a mountain range with the text "Sherpa"](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/sherpa_logo.png)
 <br>
