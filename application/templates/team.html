@@ -33,6 +33,7 @@
             </tr>
 
             {% for team_member in team_members %}
+            <tr>
               <td>{{ team_member.name }}</td>
               <td>{{ team_member.email }}</td>
               <td> {% if user_details.admin_status == True %}
@@ -55,6 +56,7 @@
                 </div>  
                 
               </form></td>
+            </tr>
             {% endfor %}
 
           </table>
