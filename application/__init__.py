@@ -149,30 +149,33 @@ def create_app(config_class=Config):
     
     def draw_deals_forecast_diagram(user):
         date = datetime.now().strftime("%Y-%m")
-        #>= Deals.close_date.like(f"{date}%
         deals = Deals.query.\
             filter(Deals.team_id == user.team_id)
         
-        data = []
-        labels = ["Closed Won", "Appointment Scheduled", "Contract Sent", "Qualified To Buy"]
+        data = [0,0,0,0]
         for deal in deals:
             if (deal.amount is not None) and (deal.date_created is not None):
                 if deal.date_created.strftime("%Y-%m") == datetime.now().strftime("%Y-%m"):
                     if deal.stage == "Closed Won":
-                        data.append(deal.amount)
+                        data[0] += deal.amount
                     elif deal.stage == "Appointment Scheduled":
-                        data.append(deal.amount)
+                        data[1] += deal.amount
                     elif deal.stage == "Contract Sent":
-                        data.append(deal.amount)
+                        data[2] += deal.amount
                     elif deal.stage == "Qualified To Buy":
-                        data.append(deal.amount)
+                        data[3] += deal.amount
 
         fig, ax = plt.subplots()
-        plt.pie(data, labels=labels)
-        plt.style.use("cyberpunk")
-        mplcyberpunk.add_glow_effects()
 
+        pie_labels = [f"€{value}" for value in data]
+        legend_labels = ["Closed Won", "Appointment Scheduled", "Contract Sent", "Qualified To Buy"]
+        explode = (0.01, 0.01, 0.01, 0.01)
+        colors = ["#47B39C", "#EC6B56", "#772953", "#FFC154"]
+        plt.pie(data, explode=explode, labels=pie_labels, startangle=90, colors=colors, shadow=True, autopct = "%1.1f%%", textprops={"color":"w"})
+        plt.title(f"Forecasted Revenue for this month: €{sum(data)}", fontsize = 14)
+        plt.legend(labels=legend_labels, loc=2)
         result = encode_diagram(plt)
+    
         return result
     
     def encode_diagram(plt):
