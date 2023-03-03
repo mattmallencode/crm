@@ -656,6 +656,11 @@ div#login_box {
     background-position: 200% center;
   }
 }
+@media only screen and (max-width: 1000px) {
+  .animated_logo {
+    font-size: 2em;
+  }
+}
 
 
 /* styling the team page */
@@ -795,17 +800,6 @@ div#login_box {
   align-items: flex-start;
   width: 25%;
   padding: 5%;
-}
-#deals_filter_buttons  a:hover{
-  background-color: gainsboro;
-  animation-name: bounce1;
-  animation-timing-function: ease;
-}
-
-@keyframes bounce1 {
-  0%   { transform: translateY(0); }
-  50%  { transform: translateY(-5px); }
-  100% { transform: translateY(0); }
 }
 #deals_table {
   float: right;
