@@ -36,7 +36,7 @@ def create_app(config_class=Config):
         db.init_app(application)
         application.extensions["turbo"] = turbo
         from application.modules.auth import login_required, team_required
-        from application.data_models import Invites, Deals, Users, Teams, Contacts, Notes
+        from application.data_models import Invites, Deals, Users, Teams, Contacts, Notes, ActivityLog
         from application.modules.auth import auth
         from application.modules.contacts import contacts_bp
         from application.modules.contact import contact_bp
@@ -63,8 +63,9 @@ def create_app(config_class=Config):
 
         goal_closed_diagram = draw_goal_closed_diagram(user)
         deals_forecast_diagram = draw_deals_forecast_diagram(user)
+        activity_diagram = draw_activity_diagram(user)
 
-        return render_template("home.html", user=user, goal_closed_diagram=goal_closed_diagram, deals_forecast_diagram=deals_forecast_diagram)
+        return render_template("home.html", user=user, goal_closed_diagram=goal_closed_diagram, deals_forecast_diagram=deals_forecast_diagram, activity_diagram=activity_diagram)
         
     @application.route("/authorize_email/<contact_id>", methods=["GET", "POST"])
     def authorize_email(contact_id):
@@ -177,6 +178,13 @@ def create_app(config_class=Config):
         result = encode_diagram(plt)
     
         return result
+    
+    def draw_activity_diagram(user):
+        activity = ActivityLog.query.filter_by(team_id=user.team_id)
+        for activity in activity:
+            if (activity.timestamp is not None) and (type(activity.timestamp) == datetime):
+                if activity.timestamp.strftime("%Y-%m") == ((datetime.now() - relativedelta(months=1)).strftime("%Y-%m")):
+                    print(activity.timestamp)
     
     def encode_diagram(plt):
         buf = BytesIO()
