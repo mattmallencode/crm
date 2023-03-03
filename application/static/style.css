@@ -507,6 +507,7 @@ color: white;
     left: 0%;
     height: 100%;
     transform: translateY(-20%) scale(1.5);
+    
   }
 
 body#login_body .login_container {
@@ -781,12 +782,47 @@ div#login_box {
   align-items: flex-start;
   width: 25%;
   padding: 5%;
-  height: 100vh;
+}
+#deals_filter_buttons  a:hover{
+  background-color: gainsboro;
+  animation-name: bounce1;
+  animation-timing-function: ease;
+}
+
+@keyframes bounce1 {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-5px); }
+  100% { transform: translateY(0); }
 }
 #deals_table {
   float: right;
   width: 75%;
 }
+
+  left: 0;
+}
+
+@media (max-width: 1400px) {
+/*login page*/
+#login_box {
+  display: flex;
+  width: auto;
+  justify-content: center;
+  align-items: left;
+  left: 0%;
+  height: 100%;
+  transform: translateY(-20%) scale(1.5);
+  margin-left: 15%;
+}
+
+#contacts_search_button:hover{
+  color: white;
+    background-color: #E95420;
+  }
+
+  contacts_search_button{
+    
+  }
 
 #dashboard section{
   margin: 0%;

@@ -159,12 +159,36 @@
     <section id="tasks">
         <h2>Your Tasks For {{contact.name}}</h2>
         {% if tasks is not none %}
-        {% for task in tasks %}
+        <h3>Upcoming Tasks</h3>
+        {% for task in upcoming_tasks %}
             <section class="task">
                 <p><b>Title:</b> {{ task["title"] }}</p>
                 <p><b>Due:</b> {{ task["due"] }}</p>    
                 <br>
-                <a id="complete_task", href = "{{url_for('contact_bp.complete_task', contact_id=contact.contact_id, task_id=task['id'])}}">Complete</a></td>
+                <a id="complete_task", href = "{{url_for('contact_bp.contact', contact_id=contact.contact_id, activity='tasks', complete=task['id'])}}">Complete</a></td>
+                <br>
+                <br>
+                <br>
+            </section>
+        {% endfor %}
+        <h3>Past Due Tasks</h3>
+        {% for task in past_due_tasks %}
+            <section class="task">
+                <p><b>Title:</b> {{ task["title"] }}</p>
+                <p><b>Due:</b> {{ task["due"] }}</p>    
+                <br>
+                <a id="complete_task", href = "{{url_for('contact_bp.contact', contact_id=contact.contact_id, activity='tasks', complete=task['id'])}}">Complete</a></td>
+                <br>
+                <br>
+                <br>
+            </section>
+        {% endfor %}
+        <h3>Completed Tasks</h3>
+        {% for task in completed_tasks %}
+            <section class="task">
+                <p><b>Title:</b> {{ task["title"] }}</p>
+                <p><b>Due:</b> {{ task["due"] }}</p>    
+                <br>
                 <br>
                 <br>
                 <br>
