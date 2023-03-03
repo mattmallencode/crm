@@ -26,18 +26,8 @@
           
           <table id="team_table">
             <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Invite</th>
-              <th>Leave Team</th>
-            </tr>
-
-            {% for team_member in team_members %}
-            <tr>
-              <td>{{ team_member.name }}</td>
-              <td>{{ team_member.email }}</td>
               <td> {% if user_details.admin_status == True %}
-                    <a  id="team_invite" href="{{ url_for('teams.invite') }}">Invite Member</a>
+                <a  id="team_invite" href="{{ url_for('teams.invite') }}">Invite Member</a>
                   {% endif %} 
               </td>
               <td id="remove_team"><form action = "" method = "POST">
@@ -56,6 +46,14 @@
                 </div>  
                 
               </form></td>
+            </tr>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+            </tr>
+            {% for team_member in team_members %}
+              <td>{{ team_member.name }}</td>
+              <td>{{ team_member.email }}</td>
             </tr>
             {% endfor %}
 

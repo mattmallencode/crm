@@ -95,8 +95,9 @@ class Deals(db.Model):
     goal = db.Column(db.Integer)
     associated_contact = db.Column(db.String)
     associated_company = db.Column(db.String)
+    date_created = db.Column(db.String)
 
-    def __init__ (self, deal_id=None, team_id=None, name=None, stage=None, close_date=None, owner=None, amount=None, goal=None, associated_contact=None, associated_company=None):
+    def __init__ (self, deal_id=None, team_id=None, name=None, stage=None, close_date=None, owner=None, amount=None, goal=None, associated_contact=None, associated_company=None, date_created=None):
         self.deal_id = deal_id
         self.team_id = team_id
         self.name = name
@@ -107,6 +108,7 @@ class Deals(db.Model):
         self.goal = goal
         self.associated_contact = associated_contact
         self.associated_company = associated_company
+        self.date_added = date_created
 
 class ActivityLog(db.Model):
     activity_id = db.Column(db.Integer, primary_key=True)
