@@ -734,6 +734,7 @@ div#login_box {
   text-decoration: none;
   color: white;
 }
+
 /* Styling the invites page*/
   #invite_page {
     display: flex;
@@ -778,8 +779,18 @@ table #deals_table {
 }
 #deals_filter_buttons {
 }
-
-
+#deals_filter_buttons a{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 25%;
+  padding: 5%;
+}
+#deals_table {
+  float: right;
+  width: 75%;
+}
 /*login page*/
 #login_box {
   display: flex;
