@@ -18,5 +18,9 @@ table {
     background-image: linear-gradient(to right, #E95420, #F4AA90,#E2E0DD, #C6C1BB, black);
     background-repeat: no-repeat;
     background-size: cover;
-    background-position: center center;
+    position: fixed;
+    top: -50%; 
+    left: -50%; 
+    width: 200%; 
+    height: 200%;
 }
