@@ -9,7 +9,8 @@ body{
   min-height: 100%;
   min-width: 90%;
   margin-bottom: 100%;
-  margin-right: 10%;
+}
+#login_body {
   overflow: hidden;
 }
 
@@ -86,7 +87,6 @@ svg {
 .Heading{
     color: white;
     text-align: center;
-    
 }
 
 p{
@@ -608,16 +608,16 @@ div#login_box {
     #A08C99 15%,
     #957F8E 20%,
     #806678 25%,
-    #6B4C61 30%,
-    #56334B 35%, 
-    #411934 40%,
-    #56334B 45%, 
-    #6B4C61 50%,
-    #806678 55%,
-    #957F8E 60%, 
-    #CABFC6 65%,
-    #E6E4E2 70%,
-    #E2E0DD 75%,
+    #C19BBE 30%,
+    #BB90B7 35%, 
+    #AD79A8 40%,
+    #9F639A 45%, 
+    #924D8B 50%,
+    #9F639A 55%,
+    #AD79A8 60%, 
+    #BB90B7 65%,
+    #C19BBE 70%,
+    #C8A6C5 75%,
     #DEDBD8 80%,
     #DAD7D3 85%,
     #D6D3CF 90%,
@@ -638,6 +638,7 @@ div#login_box {
   animation: textclip 15s linear infinite;
   display: inline-block;
       font-size: 5em;
+  margin-right: 3%;
 }
 
 @keyframes textclip {
@@ -650,7 +651,7 @@ div#login_box {
     .animated_logo {
       font-size: 2em;
     }
-  
+  }  
 
 
 /* styling the team page */
@@ -772,31 +773,12 @@ div#login_box {
 }
 
 /* Deals page */
-/* Deals page */
+table #deals_table {
+  max-width: 100%;
+}
 #deals_filter_buttons {
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  float: left;
-  margin: 0%;
-  height: 100%;
-  background-color: gainsboro;
-  padding-right: 1%;
-  width: 25%;
-  height: 100%;
 }
-#deals_filter_buttons a{
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  width: 25%;
-  padding: 5%;
-}
-#deals_table {
-  float: right;
-  width: 75%;
-}
+
 
 /*login page*/
 #login_box {

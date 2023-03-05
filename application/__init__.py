@@ -62,9 +62,9 @@ def create_app(config_class=Config):
         user = Users.query.filter_by(email=g.email).first()
 
         goal_closed_diagram = draw_goal_closed_diagram(user)
-        deals_forecast_diagram = draw_deals_forecast_diagram(user)
+        #deals_forecast_diagram = draw_deals_forecast_diagram(user)
 
-        return render_template("home.html", user=user, goal_closed_diagram=goal_closed_diagram, deals_forecast_diagram=deals_forecast_diagram)
+        return render_template("home.html", user=user, goal_closed_diagram=goal_closed_diagram, deals_forecast_diagram=None)
         
     @application.route("/authorize_email/<contact_id>", methods=["GET", "POST"])
     def authorize_email(contact_id):
