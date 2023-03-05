@@ -64,8 +64,9 @@ def create_app(config_class=Config):
         goal_closed_diagram = draw_goal_closed_diagram(user)
         deals_forecast_diagram = draw_deals_forecast_diagram(user)
         activity_diagram = draw_activity_diagram(user)
+        deal_stage_diagram = draw_deal_stage_diagram(user)
 
-        return render_template("home.html", user=user, goal_closed_diagram=goal_closed_diagram, deals_forecast_diagram=deals_forecast_diagram, activity_diagram=activity_diagram)
+        return render_template("home.html", user=user, goal_closed_diagram=goal_closed_diagram, deals_forecast_diagram=deals_forecast_diagram, activity_diagram=activity_diagram, deal_stage_diagram=deal_stage_diagram)
         
     @application.route("/authorize_email/<contact_id>", methods=["GET", "POST"])
     def authorize_email(contact_id):
@@ -174,18 +175,98 @@ def create_app(config_class=Config):
         colors = ["#47B39C", "#EC6B56", "#772953", "#FFC154"]
         plt.pie(data, explode=explode, labels=pie_labels, startangle=90, colors=colors, shadow=True, autopct = "%1.1f%%", textprops={"color":"w"})
         plt.title(f"Forecasted Revenue for this month: €{sum(data)}", fontsize = 14)
-        plt.legend(labels=legend_labels, loc=2)
+        plt.legend(labels=legend_labels, loc=2, bbox_to_anchor=(-0.3, 1))
         result = encode_diagram(plt)
     
         return result
     
     def draw_activity_diagram(user):
         activity = ActivityLog.query.filter_by(team_id=user.team_id)
+        member_activity_count={}
         for activity in activity:
-            if (activity.timestamp is not None) and (type(activity.timestamp) == datetime):
+            if (activity.timestamp is not None) and (type(activity.timestamp) == datetime) and (activity.activity_type != "note"):
                 if activity.timestamp.strftime("%Y-%m") == ((datetime.now() - relativedelta(months=1)).strftime("%Y-%m")):
-                    print(activity.timestamp)
-    
+                    if activity.actor not in member_activity_count:
+                        member_activity_count[activity.actor] = 1
+                    else:
+                        member_activity_count[activity.actor] += 1
+
+        # gets the top 5 most active team members
+        top_team_members = sorted(member_activity_count)[:5]
+
+        activity_count={"email":[], "task":[], "meeting":[]}
+        for i in range(5):
+            member_activity = ActivityLog.query.filter_by(actor = top_team_members[i])
+            emails=0
+            tasks=0
+            meetings=0
+            for activity in member_activity:
+                if activity.activity_type == "email":
+                    emails += 1
+                elif activity.activity_type == "task":
+                    tasks += 1
+                elif activity.activity_type == "meeting":
+                    meetings += 1
+            
+            user = Users.query.filter_by(email=top_team_members[i]).first()
+            if user.name not in top_team_members:
+                top_team_members[i] = user.name
+            else:
+                top_team_members[i] = user.name + (" " * i)
+            activity_count["email"].append(emails)
+            activity_count["task"].append(tasks)
+            activity_count["meeting"].append(meetings)
+
+
+        fig, ax = plt.subplots()
+        plt.xlabel("Activity By", fontsize=14)
+        plt.ylabel("Count Of Activities", fontsize=14)
+
+        colors = ["#47B39C", "#EC6B56", "#772953", "#FFC154"]
+        bar_width=0.6
+        plt.bar(top_team_members, activity_count["email"], color=colors[3], width=bar_width)
+        plt.bar(top_team_members, activity_count["task"], bottom = activity_count["email"], color = colors[1], width=bar_width)
+        meeting_plot = []
+        for i in range(5):
+            meeting_plot.append(activity_count["email"][i] + activity_count["task"][i])
+        plt.bar(top_team_members, activity_count["meeting"], bottom = meeting_plot, color = colors[0], width=bar_width)
+        plt.legend(labels=["Emails", "Tasks", "Meetings"], loc=1, bbox_to_anchor=(1.1,1))
+        result = encode_diagram(plt)
+        return result
+                    
+    def draw_deal_stage_diagram(user):
+        deals = Deals.query.filter_by(team_id = user.team_id)
+        
+        labels = ["Created", "Qualified To Buy", "Appointment Scheduled", "Contract Sent", "Closed Won"]
+        deal_count=[0,0,0,0,0]
+
+        for deal in deals:
+            if deal.date_created is not None:
+                print(deal.date_created)
+                #if deal.date_created.strftime("%Y-%m") == ((datetime.now() - relativedelta(months=1)).strftime("%Y-%m")):
+                if deal.date_created.strftime("%Y-%m") == ((datetime.now()).strftime("%Y-%m")):    
+                    deal_count[0] += 1
+
+                    if deal.stage == "Qualified To Buy":
+                        deal_count[1] += 1
+                    elif deal.stage == "Appointment Scheduled":
+                        deal_count[2] += 1
+                    elif deal.stage == "Contract Sent":
+                        deal_count[3] += 1
+                    elif deal.stage == "Closed Won":
+                        deal_count[4] += 1
+                
+
+        fig, ax = plt.subplots()
+        plt.barh(labels, deal_count)
+        plt.xlabel("Number of Deals", fontsize=14)
+        plt.tight_layout()
+        ax.invert_yaxis()
+        ax.invert_xaxis()
+
+        result = encode_diagram(plt)
+        return result
+
     def encode_diagram(plt):
         buf = BytesIO()
         plt.savefig(buf, format="png")
