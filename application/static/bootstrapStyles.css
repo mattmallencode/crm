@@ -16,11 +16,17 @@ table {
 /* Creating the gradient backgorund */
 .gradient-bg {
     background-image: linear-gradient(to right, #E95420, #F4AA90,#E2E0DD, #C6C1BB, black);
-    background-repeat: no-repeat;
-    background-size: cover;
-    position: fixed;
-    top: -50%; 
-    left: -50%; 
-    width: 200%; 
-    height: 200%;
+     /* Set rules to fill background */
+  min-height: 100%;
+  min-width: 1024px;
+	
+  /* Set up proportionate scaling */
+  width: 100%;
+  height: auto;
+	
+  /* Set up positioning */
+  position: fixed;
+  top: 0;
+  left: 0;
+    
 }
