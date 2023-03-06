@@ -1,6 +1,6 @@
 {% extends "base_no_turbo.html" %}
 {% block main_content %}
-<body> 
+<body class="gradient-bg" style="overflow-x: hidden;"> 
     {% if user.team_id %} 
     <nav>
       <ul>
@@ -13,28 +13,39 @@
   </nav>
   {% endif %}
 
-    <section id="dashboard">
-        <section>
-          <h2>Deals Closed vs Goal</h2>
-          <section>
-
-            {{goal_closed_diagram|safe}}
-          </section>
-        </section>
-
-        <section>
-          <h2>Deals Forecast</h2>
-          <section>
-            {{deals_forecast_diagram|safe}}
-          </section>
-        </section>
-
-        <section>
-          <h2>Deal Stage Funnel</h2>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non massa vel orci egestas consequat ac eu ligula. In posuere nec orci in vestibulum. Curabitur pharetra hendrerit dui sagittis cursus. Vestibulum sagittis euismod lacus in venenatis. Mauris eu metus id nulla rhoncus dapibus eget vel lacus. Proin urna eros, semper eu nisl sed, fermentum euismod urna. Fusce consequat risus et malesuada posuere. Mauris fringilla orci ut nibh tincidunt, eu varius enim volutpat. Praesent eu odio ut eros laoreet tempus. Maecenas vitae dictum nunc.
-          </p>
-        </section>
+  <section id="dashboard">
+    <div class="row">
+  
+      <div class="col-md-6">
+        <h2>Deals Closed vs Goal</h2>
+        <div class="mt-4 mb-4">
+          {{goal_closed_diagram|safe}}
+        </div>
+      </div>
+  
+      <div class="col-md-6">
+        <h2>Deals Forecast</h2>
+        <div class="mt-4 mb-4">
+          {{deals_forecast_diagram|safe}}
+        </div>
+      </div>
+  
+      <div class="col-md-6">
+        <h2>Deal Stage Funnel</h2>
+        <p>
+          Insert activity 
+        </p>
+      </div>
+  
+      <div class="col-md-6">
+        <h2>Activity this month</h2>
+        <p>
+          Insert activity 
+        </p>
+      </div>
+  
+    </div>
+  </section>
 
         <section>
           <h2>Activity this month</h2>
@@ -43,6 +54,5 @@
           </p>
         </section>
     </section>
-
 </body>
 {% endblock %}

@@ -1,6 +1,6 @@
-﻿﻿# Sherpa: A Free and Open-Source CRM
+﻿# Sherpa: A Free and Open-Source CRM
 ﻿
-![Sherpa logo: a picture of a Yak beneath a mountain range with the text "Sherpa"](https://raw.githubusercontent.com/mattmallencode/crm/report_images/sherpa_logo.png)
+![Sherpa logo: a picture of a Yak beneath a mountain range with the text "Sherpa"](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/sherpa_logo.png)
 <br>
 Oliver Linger, 120444372
 
@@ -14,54 +14,57 @@ Aria Shahi, 119522223
 
 - [Table of Contents](#table-of-contents)
 - [Introduction](#introduction)
-- [Why Choose Sherpa CRM](#why-choose-sherpa-crm)
+- [Some CRM Terms](#some-crm-terms)
+- [What Sherpa Can Do](#what-sherpa-can-do)
+- [How Sherpa Adds Value](#how-sherpa-adds-value)
 - [Project Specification](#project-specification)
   - [User Stories](#user-stories)
     - [Team Invitation Creation](#team-invitation-creation)
     - [Team Invitation Acceptance](#team-invitation-acceptance)
-    - [View contacts](#view-contacts)
-    - [Add contacts](#add-contacts)
-    - [Edit contacts](#edit-contacts)
-    - [Remove contacts](#remove-contacts)
+    - [View Contacts](#view-contacts)
+    - [Add Contacts](#add-contacts)
+    - [Edit Contacts](#edit-contacts)
+    - [Remove Contacts](#remove-contacts)
+    - [View User Profile](#view-user-profile)
     - [User Logout](#user-logout)
-    - [View user profile](#view-user-profile)
-    - [Leave Team](#leave-a-team)
-    - [Assign Contact](#assign-a-contact)
-    - [View Team](#view-a-team)
+    - [View Team](#view-team)
+    - [Leave Team](#leave-team)
+    - [Assign Contact](#assign-contact)
     - [View Assigned Contacts](#view-assigned-contacts)
     - [View Unassigned Contacts](#view-unassigned-contacts)
-    - [ View 25 Contacts per page](#view-25-contacts-per-page)
+    - [ View Contacts In Pages](#view-contacts-in-pages)
     - [Search For Contacts](#search-for-contacts)
     - [Sort Contacts](#sort-contacts)
-    - [Filter Contacts](#filter-contacts)
     - [View Contact Activity](#view-contact-activity)
-    - [Post notes](#post-notes)
+    - [Post Notes](#post-notes)
     - [Remove Notes](#remove-notes)
     - [Send Email](#send-email)
-    - [Reply to Email](#reply-to-email)
     - [View Emails](#view-emails)
+    - [Reply to Email](#reply-to-email)
     - [Set a Task](#set-a-task)
     - [View Tasks](#view-tasks)
     - [Schedule Meeting](#schedule-meeting)
     - [View Meetings](#view-meetings)
-    - [Use Google Features](#use-google-features)
     - [Create Deal](#create-deal)
     - [View Deals](#view-deals)
     - [Edit Deal](#edit-deal)
     - [Close Deal](#close-deal)
     - [Search Deals](#search-deals)
     - [Sort Deals](#sort-deals)
-    - [Filter Deals](#filter-deals)
+     - [Assign Deal](#assign-deal)
+    - [View Assigned Deals](#view-assigned-deals)
   - [Requirements](#requirements)
     - [User Registration](#user-registration)
     - [User Authentication](#user-authentication)
     - [Team Creation](#team-creation)
     - [Team Invitation Generation and Delivery](#team-invitation-generation-and-delivery)
-    - [Accepting team invitation](#accepting-team-invitation)
-    - [Contact Information Management](#contact-information-management)
-    - [Google Account Integration](#google-account-integration)
-    - [Contact Relationship Management](#contact-relationship-management)
-    - [Deal Management](#deal-management)
+    - [Accepting Team Invitation](#accepting-team-invitation)
+    - [Database Create Read Update and Delete CRUD](#database-create-read-update-and-delete-crud)
+    - [User Profile and Logout](#user-profile-and-logout)
+    - [Database Viewing](#database-viewing)
+    - [Database Filtering](#database-filtering)
+    - [Database Searching](#database-searching)
+    - [Database Sorting](#database-sorting)
 - [Design](#design)
   - [Data Models](#data-models)
     - [Users](#users)
@@ -95,18 +98,39 @@ This document outlines the design and implementation of Sherpa, a free and open-
 
 This implementation can be used by multiple businesses i.e. users create "teams" and invite other users to join their team. However, it could easily be modified to be used by a single business by removing the team creation endpoint.
 
+## Some CRM Terms
 
-## Why Choose Sherpa CRM
+The following are definitions of important terms in CRM software. Please familiarise yourself with them to ease your understanding of this document.
 
-Sherpa CRM is a powerful tool for businesses to manage and enhance their customer relations. As an Open-Source web-application, Sherpa aims to provide CRM resources to all businesses ranging from small scale start-ups to large scale corporations. 
++ __Contacts__: are potential or existing customers of a business.
++ __Deals__: are potential or existing sales contract between a business and  a customer. Deals can be:
+	+  **open** i.e. no contract has been signed / no money has been exchanged, or
+	+ **closed** i.e. the business has made the sale / money has been credited to it.
++ **Deal Goal**: The amount of money a business aims to earn when initially pursuing a deal with a customer.
++ **Deal Closed Amount**: The actual amount of money a business earned after closing a deal with a customer.
 
-Choosing Sherpa as your CRM of choice will provide the following
+## What Sherpa Can Do
 
-+ __User-Friendly Interface__ - Sherpa CRM has a modern and intuitive interface that is easy to use. Our interface is friendly and accessible due its simple nature which will easily allow every member of your organization to quickly pick up Sherpa CRM in their daily workflow, leading to increased productivity and enhanced client satisfaction.
-+ __Contact Information Management__ - Sherpa CRM provides an easy to use dashboard for managing company contact information where team members can add, view and edit information. Contact information may be sorted and filtered efficiently to find the contacts that you need instantaneously
-+ __Contact Relationship Management__ - A contact relationship dashboard is provided for you to manage and foster your relationships with your organizations contacts. Users can communicate with contacts using our integrated Email and Meeting features where you may send/receive emails and schedule online meetings with your contacts. Additionally you may create and assign a task to one of your team members to follow up with one of your contacts while also being able to write notes to keep track of any minor details that may need to be remembered regarding your contacts
-+ __Deal Management__ - Sherpa CRM also provides a dashboard for managing your organizations deals and deal information with other contacts and companies. Team members can create and edit deals for keeping track of any previous business transactions or if pursuing potential opportunities. Information can be searched and filtered when needed in order to retrieve any deal information as quickly as possible
-+ __Data Analysis__ - Sherpa CRM provides an analytics dashboard where you can get an insight into your organization's performance. Analytics regarding your companies recent open/closed deals are displayed, along with a forecast for future deals and other data.
+Sherpa has the following features:
+
++ __User-Friendly Interface__ - Sherpa has friendly and accessible interface, meaning any member of an organisation can quickly pick up Sherpa in their daily workflow, leading to increased productivity and enhanced client satisfaction.
++ __Contact Information Management__ - Sherpa provides an easy to use dashboard for managing contact information where team members can add, view, and edit information e.g. email addresses, phone numbers, statuses etc. Contact information can also be searched, sorted, and filtered so that one can easily find data of interest.
++ __Contact Relationship Management__ - Users can communicate with contacts using our integrated Google API features where you may send/receive emails, set tasks in your calendar, and schedule online meetings with your contacts all from within the application. Tasks and meetings also appear in your Google calendar as well as that of the contact's. Furthermore, Sherpa allows one to leave "notes" for colleagues and informs one of the "activity" between team members and contacts to facilitate collaboration.
++ __Deal Management__ - Sherpa provides an easy to use dashboard for managing deal information where team members can add, view and edit deals e.g. marking them as closed, setting the goal of the deal, etc. Deal information can also be searched, sorted, and filtered so that one can easily find data of interest.
++ __Data Analysis__ - Sherpa provides an analytics dashboard where you can get an insight into your organisation's sale performance. Analytics regarding your companies recent open/closed deals are displayed, along with a forecast for future deals and other data.
+
+## How Sherpa Adds Value
+
+One may wonder if rather than using a CRM like Sherpa if they could instead manage their relationships with customers in a more ad hoc manner e.g. just use an email service like Google on its own in conjunction with conferencing software.  However, the real value in a system like this is how all of the pieces link up together. 
+
+Firstly, with Sherpa, **your sales team always has a cohesive view**. For example, if contact's email changes, it changes for everyone on your team.
+    
+Secondly, Sherpa **makes management easier**. A manager can assign a member of their sales team to chase down a specific customer, and that sales person knows immediately after logging into the application which contacts they are supposed to be handling (rather than having to keep up with endless Email/MS Teams / Slack threads to keep pace with management).
+    
+
+Lastly, **everything is traceable** with Sherpa. Not just in terms of analytics but also in terms of customer interactions. Everyone on a team can see which customers have been “left on the back burner” so to speak based on when the last time they were emailed for example.
+
+To put it simply, it would be very painful to set up a cohesive flow in terms of managing your relationship with customers if you were to bootstrap this yourself with several unconnected applications. Sherpa makes it easy.
 
 ## Project Specification
 
@@ -134,7 +158,7 @@ As a Sherpa user, I want to view all my team's contacts.
 
 *User Story ID: 4*
 
-As a Sherpa user, I want to add contacts to my contact list.
+As a Sherpa user, I want to add a contact to my team's contacts list.
 
 #### Edit Contacts
 
@@ -148,153 +172,164 @@ As a Sherpa user, I want to edit one of my team's contacts i.e. change various d
 
 As a Sherpa user, I want to remove one of my team's contacts.
 
-#### User Logout
+#### View User Profile
 
 *User Story ID: 7*
 
-As a Sherpa user, I want to log out of my account.
+As a Sherpa user, I want to view my profile.
 
-#### View User Profile
+#### User Logout
 
 *User Story ID: 8*
 
-As a Sherpa user, I want to view my personal profile.
-
-#### Leave Team
-
-*User Story ID:  9*
-
-As a Sherpa user, I want to leave my team.
-
-#### Assign Contact
-
-*User Story ID:  10*
-
-As a Sherpa team owner/admin I want to assign a contact to a member of my team.
+As a Sherpa user, I want to log out of my account.
 
 #### View Team
 
-*User Story ID:  11*
+*User Story ID:  9*
 
 As a Sherpa user I want to view my team i.e. the list of team members.
 
+#### Leave Team
+
+*User Story ID:  10*
+
+As a Sherpa user, I want to leave my team.
+
+#### View Contacts
+
+*User Story ID:  11*
+
+As a Sherpa user I want to view my team's contacts.
+
+#### Assign Contact
+
+*User Story ID:  12
+
+As a Sherpa team owner/admin I want to assign a contact to a member of my team.
+
 #### View Assigned Contacts
 
-*User Story ID:  12*
+*User Story ID:  13*
 
 As a Sherpa user I want to view the contacts that have been assigned to me.
 
 #### View Unassigned Contacts
 
-*User Story ID:  13*
+*User Story ID:  14*
 
 As a Sherpa user I want to view the contacts that have yet to be assigned to a member of my team.
 
 #### Search For Contacts
 
-*User Story ID:  14*
+*User Story ID:  15*
 
-As a Sherpa user I want to search for a specific contact using a search bar.
+As a Sherpa user I want to search for a specific contact(s) using a search bar.
 
 #### Sort Contacts
 
-*User Story ID:  15*
+*User Story ID:  16*
 
 As a Sherpa user I want to sort my team's contacts by email, phone number, etc.
 
 #### View Contact Activity
-*User Story ID:  16*
 
-As a Sherpa user I want to view all recent activity for a contact e.g. notes, emails, meetings etc.
+*User Story ID:  17*
+
+As a Sherpa user I want to view all team activity for a contact e.g. notes, emails, meetings etc.
 
 #### Post Notes
 
-*User Story ID:  17*
+*User Story ID:  18*
 
 As a Sherpa user, I want to add a note to a contact's page.
 
 #### Remove notes
 
-*User Story ID:  18*
+*User Story ID:  19*
 
 As a Sherpa user, I want to remove a note on a contact's page.
 
 #### Send Email 
 
-*User Story ID: 19*
-
-As a Sherpa user, I want to send an email to a contact
-
-#### Reply to Email 
 *User Story ID: 20*
 
-As a Sherpa user, I want to reply to an email from a contact
+As a Sherpa user, I want to send an email to a contact.
 
 #### View Emails 
+
 *User Story ID: 21*
 
-As a Sherpa user, I want to view my emails sent and received to/from a contact
+As a Sherpa user, I want to view my emails sent and received to/from a contact.
 
-#### Set a Task
+#### Reply to Email 
+
 *User Story ID: 22*
 
-As a Sherpa user, I want to create a task in relation to a contact
+As a Sherpa user, I want to reply to an email from a contact.
 
-#### View Tasks
+#### Set a Task
+
 *User Story ID: 23*
 
-As a Sherpa user, I want to view all tasks in relation to a contact
+As a Sherpa user, I want to create a task in relation to a contact.
 
-#### Schedule Meeting
+#### View Tasks
 *User Story ID: 24*
 
-As a Sherpa user, I want to schedule a meeting with a contact which is integrated with my Google calendar
+As a Sherpa user, I want to view all tasks in relation to a contact.
 
-#### View Meetings
+#### Schedule Meeting
 *User Story ID: 25*
 
-As a Sherpa user, I want to view my scheduled meetings with a contact
+As a Sherpa user, I want to schedule a meeting with a contact which is integrated with my Google calendar.
 
-#### Use Google Features
+#### View Meetings
 *User Story ID: 26*
 
-As a Sherpa user, I want to use Sherpa's integrated Google features to manage my customers
+As a Sherpa user, I want to view my scheduled meetings with a contact.
 
 #### Create Deal
 *User Story ID: 27*
 
-As a Sherpa user, I want to create a deal 
+As a Sherpa user, I want to create a deal .
 
 #### View Deals
 *User Story ID: 28*
 
-As a Sherpa user, I want to view my team's deals
+As a Sherpa user, I want to view my team's deals.
 
 #### Edit Deal
 *User Story ID: 29*
 
-As a Sherpa user, I want to edit a deal
+As a Sherpa user, I want to edit a deal.
 
 #### Close Deal
 *User Story ID: 30*
 
-As a Sherpa user, I want to close a deal
+As a Sherpa user, I want to close a deal.
 
 #### Search Deals
 *User Story ID: 31*
 
-As a Sherpa user, I want to search my team's deals
+As a Sherpa user, I want to search my team's deals.
 
 #### Sort Deals
 *User Story ID: 32*
 
-As a Sherpa user, I want to sort my team's deals
+As a Sherpa user, I want to sort my team's deals.
 
-#### Filter Deals
-*User Story ID: 33*
+#### Assign Deal
 
-As a Sherpa user, I want to filter my team's deals
+*User Story ID:  33
 
+As a Sherpa team owner/admin I want to assign a deal to a member of my team.
+
+#### View Assigned Deals
+
+*User Story ID:  34*
+
+As a Sherpa user I want to view the deals that have been assigned to me.
 
 ### Requirements
 
@@ -335,55 +370,111 @@ An owner or administrator of a team must be able to invite another user to join 
 *Requirement ID: 5*
 
 *Satisfies User Story: 2*
+
 A user must be able to accept an invitation to a team. They can achieve this by clicking the invitation link they received in their email and then logging in. A user may only accept the invitation if they're not already a member of a team and log in using the same email the invitation was sent to.
 
-#### Contact Information Management
+#### Database Create, Read, Update, and Delete (CRUD)
 
 *Requirement ID: 6*
 
-*Satisfies User Stories: 3 - 6, 10, 12 - 18*
-A user must be able to manage and organize their contact information by being able to create, edit, view, delete, search, sort and filter deals.
+*Satisfies User Stories: 3 - 6
 
+"Database" in this context refers to the set of records belong to a team, either its contacts or deals.
 
-#### Google Account Integration
+A user must be able to interface with their team's databases and achieve all of the basic CRUD operations with their team's records by interacting with the web app i.e. forms and buttons, not SQL.
+
+**For Contacts**
+
+For create operations users must provide at least an email for the new contact (all other data is optional). For create and update operations user must provide a unique email address i.e. they can not update the email of an existing contact to match the email of another contact.
+
+**For Deals**
+
+For create operations users must provide at least a name and goal for the new deal (all other data is optional). For update operations, a user can not update a goal of a deal. If the user changes the deal stage to "closed" they must provide a closed amount, thereafter the deal stage and closed amount will not be able to be updated for that record.
+
+#### User Profile and Logout
+
 *Requirement ID: 7*
 
-*Satisfies User Story: 26*
-A user must integrate their Google account with their Sherpa account in order to avail of Sherpa's integrated Google features for contact relationship management.
+*Satisfies User Story: 7, 8*
 
-#### Contact Relationship Management
+A user must be able to view a profile page with their account information. Furthermore, they must be able to logout of their account, meaning their session (authentication cookies etc) will be cleared and they will have to use their username and password again if they wish to resume using the application.
+
+#### View and Leave Teams
+
+*Requirement ID: 7*
+
+*Satisfies User Story: 9, 10*
+
+A user must be able to view a page that lists all of the members of their team. On this page, they will be given the option to leave their team (this will also feature a "are you sure?" (or similar) checkbox.
+
+#### Database Viewing
+
 *Requirement ID: 8*
 
-*Satisfies User Stories: 16 - 25*
-A user must be able to manage their relationship with a customer using a dedicated page per customer where they are able to use the Notes, Email, Tasks and Meeting features.
+*Satisfies User Story: 11, 28*
 
-#### Deal Management
+"Database" in this context refers to the set of records belong to a team, either its contacts or deals.
+
+Users must be able to view their team's contacts or deals. Since a business may have an enumerable number of customers and sales contracts, Sherpa can not serve all records on one page without hindering the user experience therefore records must be "chunked up" into "pages" (each page being a group of 25 records), with the user able to navigate records using the "next page" and "previous page" buttons.
+
+#### Database Filtering
+
 *Requirement ID: 9*
 
-*Satisfies User Stories: 27 - 33*
-A user must be able to manage and organize all of their team's deals by being able to create, view, edit, close, sort, filter and search deals
+*Satisfies User Story: 12 - 14, 33-34*
 
+"Database" in this context refers to the set of records belong to a team, either its contacts or deals.
+
+Admins of a team must be able to assign a member of their team as an "owner" of a contact or deal. This will update the record's owner_id to the email of the new contact owner.
+
+Users must then be able to filter for "my contacts", "my deals" etc, i.e. just display the records that have an owner_id equal to the user's email. Users should also be able to view "unassigned contacts" i.e. the contacts that have a NULL owner_id. There won't be an "unassigned deals" view.
+
+#### Database Searching
+
+*Requirement ID: 10*
+
+*Satisfies User Story: 15, 31*
+
+"Database" in this context refers to the set of records belong to a team, either its contacts or deals.
+
+Users must be able to search their team's contacts or deals. Users should be able to search for a specific name, email, phone number etc and be served the records that match their search term.
+
+#### Database Sorting
+
+*Requirement ID: 11, 32*
+
+*Satisfies User Story: 16*
+
+"Database" in this context refers to the set of records belong to a team, either its contacts or deals.
+
+User must be able to sort their team's contacts or deals by email, phone number, etc. The app must support both ascending and descending sorting and for improved user experience this should behave as a "toggle" feature i.e. click a column header once and it'll be sorted in ascending order, click that same column header again and the order will be flipped.
 
 ## Design
 
 ### Data Models
 
+This section describes the app's "data models". These represent the relational data of various entities in Sherpa e.g. users, and can ultimately be viewed as descriptions of SQL tables.
+
 #### Users
+
 The following table describes the data model used for "user" entities i.e. user accounts.
 
 *Table 1: Users Data Model*
-| email | password_hash | team_id | owner_status | admin_status |
-| :-: | :-: | :-: | :-: | :-: |
-| Primary Key, String | String | Integer | Boolean | Boolean |
+
+| email | password_hash | team_id | owner_status | admin_status | name |
+| :-: | :-: | :-: | :-: | :-: | :-: |
+| Primary Key, String | String | Integer | Boolean | Boolean | String |
 
 + email - email address of the user
 + password_hash - the users password stored as a hash value
 + team_id - the team associated with the user to which the user will have CRM access to
 + owner_status - indicates if user is an owner of their team
 + admin_status - indicates if user is an admin within their team
++ name - the real name of the user
 
 
 #### Teams
+
 The following table describes the data model used for "team" entities i.e. groups of users with access to the same CRM resources.
 
 *Table 2: Teams Data Model*
@@ -405,12 +496,12 @@ The following table describes the data model used for "invite" entities i.e. inv
 | :-: | :-: |
 | Primary Key, String | Integer |
 
-+ invite_id - email of the user being invited
++ invite_id - "{invitee_email}_{team_id}_{secure_token}", used to uniquely identify invite.
 + team_id - the team to which the invitation applies for
 
 
 #### Contacts
-The following table describes the data model used for "contact" entities i.e. a contact for a given team
+The following table describes the data model used for "contact" entities i.e. a contact of a given team.
 
 *Table 4: Contacts Data Model*
 
@@ -418,20 +509,21 @@ The following table describes the data model used for "contact" entities i.e. a 
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
 | Primary Key, String | Integer | String | String | Integer | String | String | String |
 
-+ contact_id - auto-incremented integer which is used as the primary key to uniquely identify a contact
++ contact_id - "{email}_{team_id}", used to uniquely identify contact
 + team_id - secondary key used to associate a contact with a team
 + name - name of the contact
 + email - email address of the contact
 + phone_number - phone number of the contact
-+ contact_owner - owner (user) assigned to the contact
++ contact_owner - owner (team member) assigned to the contact
 + company - the company associated with the contact
-+ status - the status in relation to the contact, used to track relationship with contact
++ status - the status of the relationship with the contact e.g. "New"
 
 
 #### Notes
+
 The following table describes the data model used for "note" objects i.e. notes added to a specific contact by a Sherpa user.
 
-*Table 4: Notes Data Model*
+*Table 5: Notes Data Model*
 
 | note_id | contact_id | note | author | date |
 | :-: | :-: | :-: | :-: | :-: |
@@ -447,10 +539,10 @@ The following table describes the data model used for "note" objects i.e. notes 
 #### Deals
 The following table describes the data model used for "deal" objects i.e. deals with a contact which are assigned to a user.
 
-*Table 5: Deals Data Model*
+*Table 6 : Deals Data Model*
 
 | deal_id | team_id | name | stage | close_date | owner | amount | associated_contact | associated_company
-| :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
+| :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
 |Primary Key, Integer | Integer | String | String | Datetime | String | Integer | String | String |
 
 + deal_id - auto-incremented integer which is used as the primary key to uniquely identify a deal
@@ -612,7 +704,7 @@ Google accounts are authenticated using OAuth 2.0. More information about OAuth 
 ###  Contact Relationship Management
 *Implementation of Requirement: 8*
 
-The following details the operation and implementation of the features that allow teams to manage relationships with their contacts within the Sherpa CRM. 
+The following details the operation and implementation of the features that allow teams to manage relationships with their contacts within Sherpa. 
 
 *Endpoint: /contact/\<contact_id>/\<activity>*
 
@@ -723,11 +815,11 @@ The following details the implementation of the deals page where users are serve
 
 ## Project Reflection
 
-This chapter will serve as a reflection on the 12 weeks we as a team spent working on our project, highlighting the difficulties we experienced and the engineering tradeoffs we had to consider while developing Sherpa CRM.
+This chapter will serve as a reflection on the 12 weeks we as a team spent working on our project, highlighting the difficulties we experienced and the engineering trade offs we had to consider while developing Sherpa.
 
 ### Difficulties
 
-This section outlines the difficulties and challenges we individually and as a team encountered in the process of developing Sherpa CRM.  
+This section outlines the difficulties and challenges we individually and as a team encountered in the process of developing Sherpa.  
 
 + __Turbo__
 	+ Implementing Turbo in our application proved to be difficult. Our goal was to have our whole application using Turbo to increase the performance of our web application and to ensure a smooth user experience while using Sherpa. Due to a lack of documentation online regarding Turbo, we had to go through a lot of trial and error when implementing Turbo. Therefore, this was time consuming and proved frustrating at times when encountering unexpected behaviours. But once completed the benefit of Turbo was evident with the smooth performance of our web application.

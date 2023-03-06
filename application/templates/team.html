@@ -10,6 +10,33 @@
       <li><a href="{{ url_for('auth.profile') }}">Profile</a></li>
     </ul>
 </nav>
+  <nav class="navbar navbar-expand-lg navbar-light bg-ubuntu">
+    <a class="navbar-brand text-white" href="#">SHERPA</a>
+    <button class="navbar-toggler" type="button" data-target="#navbarNav" data-toggle="collapse"  aria-label="Toggle navigation" aria-controls="navbarNav" aria-expanded="false">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link text-white" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+      <li class="nav-item">
+        <a class="nav-link text-white" href="{{ url_for('contacts_bp.contacts') }}">Contacts</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white" href ="{{url_for('deals_bp.deals')}}">Deals</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white" href="{{ url_for('teams.team') }}">Team</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white" href="#">Profile</a>
+      <li class="nav-item">
+        <a  class="nav-link text-white" onclick="logout();" href="{{ url_for('auth.profile') }}">Logout</a>
+      </li>
+    </ul>
+  </div>
+</nav>
   {% if user_details.team_id %}
   <section id="team_page">
     
