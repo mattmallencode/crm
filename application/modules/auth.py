@@ -100,8 +100,13 @@ def signup():
 
 @auth.route("/profile", methods=["GET", "POST"])
 @login_required
-@team_required
 def profile():
-    session.clear()
-    return redirect(url_for('auth.login'))
-    
+    """Route for viewing profile information and logging out."""
+    form = LogoutForm()
+    # If user clicked log out, then clear their session's cookies and redirect to login.
+    if form.validate_on_submit():
+        session.clear()
+        return redirect(url_for('auth.login'))
+    user = Users.query.filter_by(email=g.email).first()
+    team = Teams.query.filter_by(team_id=user.team_id).first()
+    return render_template("profile.html", form=form, user=user, team=team)

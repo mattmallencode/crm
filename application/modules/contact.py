@@ -83,6 +83,8 @@ def meetings_activity(contact_id, google_token, contact):
 
 def schedule_meeting(form, contact):
     url = "https://www.googleapis.com/calendar/v3/calendars/primary/events?conferenceDataVersion=1"
+    print(form.date_time_start.data)
+    print(form.date_time_end.data)
     start_datetime = form.date_time_start.data.strftime("%Y-%m-%dT%H:%M:%S")
     end_datetime = form.date_time_end.data.strftime("%Y-%m-%dT%H:%M:%S")
     time_zone = session.get("time_zone")
@@ -488,7 +490,10 @@ def view_activity(contact_id, google_token, contact):
     # Convert the timestamp strings to datetime objects
     log = log.all()
     for entry in log:
-        entry.timestamp = datetime.strptime(entry.timestamp, "%d/%m/%Y %H:%M")
+        try:
+            entry.timestamp = datetime.strptime(entry.timestamp, "%d/%m/%Y %H:%M")
+        except:
+            pass
 
     # Sort the log by the datetime objects
     log = sorted(log, key=lambda x: x.timestamp, reverse=True)

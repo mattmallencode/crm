@@ -1,0 +1,27 @@
+<!DOCTYPE html>\n<html lang="en-US">\n
+
+<head>\n
+    <meta charset="UTF-8" />\n <title>Sherpa</title>\n
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n
+    <link rel="stylesheet" type="text/css" href="/static/style.css">\n
+    <script src="https://kit.fontawesome.com/13ea2b7ad4.js" crossorigin="anonymous"></script>\n
+    <script src="/static/script.js"></script>\n
+    <script src="https://cdn.jsdelivr.net/npm/@hotwired/turbo@7.2.2/dist/turbo.es2017-umd.js"></script>\n
+    <script>Turbo.connectStreamSource(new WebSocket(`ws${location.protocol.substring(4)}//${location.host}/turbo-stream`));</script>
+    \n\n
+</head>\n\n \n
+
+<body id="contact_page">\n <nav>\n <ul>\n <li><a href="/">Home</a></li>\n <li><a href="/contacts">Contacts</a></li>\n
+            <li><a href="/deals">Deals</a></li>\n <li><a href="/team">Team</a></li>\n <li><a href="/profile">Profile</a>
+            </li>\n </ul>\n </nav>\n\n <section id="contact">\n <section>\n <section>\n <h1></h1>\n <p></p>\n </section>
+            \n \n <section>\n <h2>Email</h2>\n <p></p>\n </section>\n <section>\n <h2>Phone Number</h2>\n <p></p>\n
+            </section>\n <section>\n <h2>Contact Owner</h2>\n <p></p>\n </section>\n <section>\n <h2>Status</h2>\n <p>
+                </p>\n </section>\n </section>\n\n <section id="contact_activity">\n <ul>\n <li><a
+                        href="/contact//activity">Activity</a></li>\n <li><a href="/contact//notes">Notes</a></li>\n \n
+                <li><a href="/contact//emails">Emails</a></li>\n <li><a onclick="save_timezone()"
+                        href="/contact//tasks">Tasks</a></li>\n <li><a onclick="save_timezone();"
+                        href="/contact//meetings">Meetings</a></li>\n \n </ul>\n \n <section id="activity_box"
+                class="activity_box">\n \n <section>\n <h2>Recent Activity</h2>\n\n <table>\n \n </table>\n </section>\n
+                \n</section>\n \n </section>\n </section>\n \n</body>\n\n\n\n \n
+
+</html>'
