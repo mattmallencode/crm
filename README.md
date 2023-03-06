@@ -460,6 +460,7 @@ This section describes the app's "data models". These represent the relational d
 The following table describes the data model used for "user" entities i.e. user accounts.
 
 *Table 1: Users Data Model*
+
 | email | password_hash | team_id | owner_status | admin_status | name |
 | :-: | :-: | :-: | :-: | :-: | :-: |
 | Primary Key, String | String | Integer | Boolean | Boolean | String |
@@ -541,7 +542,7 @@ The following table describes the data model used for "deal" objects i.e. deals 
 *Table 6 : Deals Data Model*
 
 | deal_id | team_id | name | stage | close_date | owner | amount | associated_contact | associated_company
-| :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
+| :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
 |Primary Key, Integer | Integer | String | String | Datetime | String | Integer | String | String |
 
 + deal_id - auto-incremented integer which is used as the primary key to uniquely identify a deal
