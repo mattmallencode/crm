@@ -1,0 +1,32 @@
+/* CSS for the nav bar */
+.bg-ubuntu {
+    background-color:  #333333;
+    /* add any other custom styles for the Ubuntu color palette */
+  }
+  /* On hover the text will change color */
+a.nav-link:hover {
+  background-color: #AEA79F;
+  transition: ease 0.5s;
+}
+/* Changing the background color of the table */
+table {
+    background-color: #E2E0DD;
+}
+
+/* Creating the gradient backgorund */
+.gradient-bg {
+    background-image: linear-gradient(to right, #E95420, #F4AA90,#E2E0DD, #C6C1BB, black);
+     /* Set rules to fill background */
+  min-height: 100%;
+  min-width: 1024px;
+	
+  /* Set up proportionate scaling */
+  width: 100%;
+  height: auto;
+	
+  /* Set up positioning */
+  position: fixed;
+  top: 0;
+  left: 0;
+    
+}
