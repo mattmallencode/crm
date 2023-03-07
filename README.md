@@ -16,15 +16,15 @@ Aria Shahi, 119522223
 - [Introduction](#introduction)
 - [Some CRM Terms](#some-crm-terms)
 - [What Sherpa Can Do](#what-sherpa-can-do)
-- [Why Sherpa Adds Unique Value](#why-sherpa-adds-unique-value)
+- [How Sherpa Adds Value](#how-sherpa-adds-value)
 - [Project Specification](#project-specification)
   - [User Stories](#user-stories)
     - [Team Invitation Creation](#team-invitation-creation)
     - [Team Invitation Acceptance](#team-invitation-acceptance)
-    - [View contacts](#view-contacts)
-    - [Add contacts](#add-contacts)
-    - [Edit contacts](#edit-contacts)
-    - [Remove contacts](#remove-contacts)
+    - [View Contacts](#view-contacts)
+    - [Add Contacts](#add-contacts)
+    - [Edit Contacts](#edit-contacts)
+    - [Remove Contacts](#remove-contacts)
     - [View User Profile](#view-user-profile)
     - [User Logout](#user-logout)
     - [View Team](#view-team)
@@ -35,15 +35,15 @@ Aria Shahi, 119522223
     - [ View Contacts In Pages](#view-contacts-in-pages)
     - [Search For Contacts](#search-for-contacts)
     - [Sort Contacts](#sort-contacts)
-    - [Filter Contacts](#filter-contacts)
     - [View Contact Activity](#view-contact-activity)
-    - [Post notes](#post-notes)
+    - [Post Notes](#post-notes)
     - [Remove Notes](#remove-notes)
     - [Send Email](#send-email)
     - [View Emails](#view-emails)
     - [Reply to Email](#reply-to-email)
     - [Set a Task](#set-a-task)
     - [View Tasks](#view-tasks)
+    - [Complete Tasks](#complete-tasks)
     - [Schedule Meeting](#schedule-meeting)
     - [View Meetings](#view-meetings)
     - [Create Deal](#create-deal)
@@ -52,19 +52,27 @@ Aria Shahi, 119522223
     - [Close Deal](#close-deal)
     - [Search Deals](#search-deals)
     - [Sort Deals](#sort-deals)
+    - [Assign Deal](#assign-deal)
     - [View Assigned Deals](#view-assigned-deals)
+    - [View Assigned Deals](#view-assigned-deals) 
+    - [Close Deal](#close-deal)
+    - [Closed Vs Goal](#closed-vs-goal)
+    - [Forecast](#forecast)
+    - [Deal Stage Funnel](#deal-stage-funnel)
+    - [Activity Statistics](#activity-statistics)
   - [Requirements](#requirements)
     - [User Registration](#user-registration)
     - [User Authentication](#user-authentication)
     - [Team Creation](#team-creation)
     - [Team Invitation Generation and Delivery](#team-invitation-generation-and-delivery)
-    - [Accepting team invitation](#accepting-team-invitation)
-    - [Contact Information Management](#contact-information-management)
-    - [Google Account Integration](#google-account-integration)
-    - [Contact Relationship Management](#contact-relationship-management)
-    - [Deal Management](#deal-management)
-- [Design](#design)
-  - [Data Models](#data-models)
+    - [Accepting Team Invitation](#accepting-team-invitation)
+    - [Database Create Read Update and Delete CRUD](#database-create-read-update-and-delete-crud)
+    - [User Profile and Logout](#user-profile-and-logout)
+    - [Database Viewing](#database-viewing)
+    - [Database Filtering](#database-filtering)
+    - [Database Searching](#database-searching)
+    - [Database Sorting](#database-sorting)
+ - [Data Models](#data-models)
     - [Users](#users)
     - [Teams](#teams)
     - [Invites](#invites)
@@ -117,7 +125,7 @@ Sherpa has the following features:
 + __Deal Management__ - Sherpa provides an easy to use dashboard for managing deal information where team members can add, view and edit deals e.g. marking them as closed, setting the goal of the deal, etc. Deal information can also be searched, sorted, and filtered so that one can easily find data of interest.
 + __Data Analysis__ - Sherpa provides an analytics dashboard where you can get an insight into your organisation's sale performance. Analytics regarding your companies recent open/closed deals are displayed, along with a forecast for future deals and other data.
 
-## Why Sherpa Adds Unique Value
+## How Sherpa Adds Value
 
 One may wonder if rather than using a CRM like Sherpa if they could instead manage their relationships with customers in a more ad hoc manner e.g. just use an email service like Google on its own in conjunction with conferencing software.  However, the real value in a system like this is how all of the pieces link up together. 
 
@@ -194,41 +202,41 @@ As a Sherpa user I want to view my team i.e. the list of team members.
 
 As a Sherpa user, I want to leave my team.
 
-#### Assign Contact
+#### View Contacts
 
 *User Story ID:  11*
+
+As a Sherpa user I want to view my team's contacts.
+
+#### Assign Contact
+
+*User Story ID:  12
 
 As a Sherpa team owner/admin I want to assign a contact to a member of my team.
 
 #### View Assigned Contacts
 
-*User Story ID:  12*
+*User Story ID:  13*
 
 As a Sherpa user I want to view the contacts that have been assigned to me.
 
 #### View Unassigned Contacts
 
-*User Story ID:  13*
+*User Story ID:  14*
 
 As a Sherpa user I want to view the contacts that have yet to be assigned to a member of my team.
 
 #### Search For Contacts
 
-*User Story ID:  14*
+*User Story ID:  15*
 
 As a Sherpa user I want to search for a specific contact(s) using a search bar.
 
 #### Sort Contacts
 
-*User Story ID:  15*
-
-As a Sherpa user I want to sort my team's contacts by email, phone number, etc.
-
-#### View Contacts in Pages
-
 *User Story ID:  16*
 
-As a Sherpa user I want to	 see my contacts split up into "pages" which I can navigate rather than all records being listed on a single page.
+As a Sherpa user I want to sort my team's contacts by email, phone number, etc.
 
 #### View Contact Activity
 
@@ -317,11 +325,47 @@ As a Sherpa user, I want to search my team's deals.
 
 As a Sherpa user, I want to sort my team's deals.
 
+#### Assign Deal
+
+*User Story ID:  33
+
+As a Sherpa team owner/admin I want to assign a deal to a member of my team.
+
 #### View Assigned Deals
 
-*User Story ID:  33*
+*User Story ID:  34*
 
 As a Sherpa user I want to view the deals that have been assigned to me.
+
+#### Close Deal
+
+*User Story ID:  35*
+
+As a Sherpa user I want to set a deal's status to "closed".
+
+#### Closed Vs Goal
+
+*User Story ID:  36*
+
+As a Sherpa user I want to view a graph illustrating how my team is performing in terms of the "goals" of our deals and how much they are actually "closed" for.
+
+#### Forecast
+
+*User Story ID:  37*
+
+As a Sherpa user I want to view a graph illustrating my team's forecasted deal  earnings for the month.
+
+#### Deal Stage Funnel
+
+*User Story ID:  38*
+
+As a Sherpa user I want to view a graph illustrating the how successful my team is at progressing deals from stage to stage.
+
+#### Activity Statistics
+
+*User Story ID:  39*
+
+As a Sherpa user I want to view a graph illustrating the breakdown of customer interaction statistics of the top 5 sales people on my team (top being the team members with the most interactions e.g. emails, meetings etc).
 
 ### Requirements
 
@@ -365,15 +409,23 @@ An owner or administrator of a team must be able to invite another user to join 
 
 A user must be able to accept an invitation to a team. They can achieve this by clicking the invitation link they received in their email and then logging in. A user may only accept the invitation if they're not already a member of a team and log in using the same email the invitation was sent to.
 
-#### Contacts: Create, Read, Update, and Delete (CRUD)
+#### Database Create, Read, Update, and Delete (CRUD)
 
 *Requirement ID: 6*
 
 *Satisfies User Stories: 3 - 6
 
-A user must be able to interface with Sherpa's contacts database and achieve all of the basic CRUD operations with their team's contact data by interacting with the web app i.e. forms and buttons, not SQL.
+"Database" in this context refers to the set of records belong to a team, either its contacts or deals.
 
-For create operations users must provide at least an email for the new contact (all other data is optional). For create and update operations user must provide a unique email address e.g. they can not update the email of an existing contact to match the email of another contact.
+A user must be able to interface with their team's databases and achieve all of the basic CRUD operations with their team's records by interacting with the web app i.e. forms and buttons, not SQL.
+
+**For Contacts**
+
+For create operations users must provide at least an email for the new contact (all other data is optional). For create and update operations user must provide a unique email address i.e. they can not update the email of an existing contact to match the email of another contact.
+
+**For Deals**
+
+For create operations users must provide at least a name and goal for the new deal (all other data is optional). For update operations, a user can not update a goal of a deal. If the user changes the deal stage to "closed" they must provide a closed amount, thereafter the deal stage and closed amount will not be able to be updated for that record.
 
 #### User Profile and Logout
 
@@ -391,29 +443,89 @@ A user must be able to view a profile page with their account information. Furth
 
 A user must be able to view a page that lists all of the members of their team. On this page, they will be given the option to leave their team (this will also feature a "are you sure?" (or similar) checkbox.
 
+#### Database Viewing
 
-## Design
+*Requirement ID: 8*
 
-### Data Models
+*Satisfies User Story: 11, 28*
 
-This section will describe "data models" which represent the relational data of various entities in Sherpa e.g. users, and can ultimately be viewed as descriptions of SQL tables.
+"Database" in this context refers to the set of records belong to a team, either its contacts or deals.
+
+Users must be able to view their team's contacts or deals. Since a business may have an enumerable number of customers and sales contracts, Sherpa can not serve all records on one page without hindering the user experience therefore records must be "chunked up" into "pages" (each page being a group of 25 records), with the user able to navigate records using the "next page" and "previous page" buttons.
+
+#### Database Filtering
+
+*Requirement ID: 9*
+
+*Satisfies User Story: 12 - 14, 33-34*
+
+"Database" in this context refers to the set of records belong to a team, either its contacts or deals.
+
+Admins of a team must be able to assign a member of their team as an "owner" of a contact or deal. This will update the record's owner_id to the email of the new contact owner.
+
+Users must then be able to filter for "my contacts", "my deals" etc, i.e. just display the records that have an owner_id equal to the user's email. Users should also be able to view "unassigned contacts" i.e. the contacts that have a NULL owner_id. There won't be an "unassigned deals" view.
+
+#### Database Searching
+
+*Requirement ID: 10*
+
+*Satisfies User Story: 15, 31*
+
+"Database" in this context refers to the set of records belong to a team, either its contacts or deals.
+
+Users must be able to search their team's contacts or deals. Users should be able to search for a specific name, email, phone number etc and be served the records that match their search term.
+
+#### Database Sorting
+
+*Requirement ID: 11*
+
+*Satisfies User Story: 16, 32*
+
+"Database" in this context refers to the set of records belong to a team, either its contacts or deals.
+
+User must be able to sort their team's contacts or deals by email, phone number, etc. The app must support both ascending and descending sorting and for improved user experience this should behave as a "toggle" feature i.e. click a column header once and it'll be sorted in ascending order, click that same column header again and the order will be flipped.
+
+#### Activity Logging and Viewing
+
+*Requirement ID:  12*
+
+*Satisfies User Story:  17*
+
+#### Note Management
+
+*Requirement ID:  13*
+
+*Satisfies User Story:  18, 19*
+
+#### Google oAuth
+
+*Requirement ID:  14*
+*Satisfies User Story:  18, 19*
+
+## Data Models
+
+This section describes the app's "data models". These represent the relational data of various entities in Sherpa e.g. users, and can ultimately be viewed as descriptions of SQL tables.
 
 #### Users
+
 The following table describes the data model used for "user" entities i.e. user accounts.
 
 *Table 1: Users Data Model*
-| email | password_hash | team_id | owner_status | admin_status |
-| :-: | :-: | :-: | :-: | :-: |
-| Primary Key, String | String | Integer | Boolean | Boolean |
+
+| email | password_hash | team_id | owner_status | admin_status | name |
+| :-: | :-: | :-: | :-: | :-: | :-: |
+| Primary Key, String | String | Integer | Boolean | Boolean | String |
 
 + email - email address of the user
 + password_hash - the users password stored as a hash value
 + team_id - the team associated with the user to which the user will have CRM access to
 + owner_status - indicates if user is an owner of their team
 + admin_status - indicates if user is an admin within their team
++ name - the real name of the user
 
 
 #### Teams
+
 The following table describes the data model used for "team" entities i.e. groups of users with access to the same CRM resources.
 
 *Table 2: Teams Data Model*
@@ -435,12 +547,12 @@ The following table describes the data model used for "invite" entities i.e. inv
 | :-: | :-: |
 | Primary Key, String | Integer |
 
-+ invite_id - email of the user being invited
++ invite_id - "{invitee_email}\_{team_id}\_{secure_token}", used to uniquely identify invite.
 + team_id - the team to which the invitation applies for
 
 
 #### Contacts
-The following table describes the data model used for "contact" entities i.e. a contact for a given team
+The following table describes the data model used for "contact" entities i.e. a contact of a given team.
 
 *Table 4: Contacts Data Model*
 
@@ -448,20 +560,21 @@ The following table describes the data model used for "contact" entities i.e. a 
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
 | Primary Key, String | Integer | String | String | Integer | String | String | String |
 
-+ contact_id - auto-incremented integer which is used as the primary key to uniquely identify a contact
++ contact_id - "{email}_{team_id}", used to uniquely identify contact
 + team_id - secondary key used to associate a contact with a team
 + name - name of the contact
 + email - email address of the contact
 + phone_number - phone number of the contact
-+ contact_owner - owner (user) assigned to the contact
++ contact_owner - owner (team member) assigned to the contact
 + company - the company associated with the contact
-+ status - the status in relation to the contact, used to track relationship with contact
++ status - the status of the relationship with the contact e.g. "New"
 
 
 #### Notes
+
 The following table describes the data model used for "note" objects i.e. notes added to a specific contact by a Sherpa user.
 
-*Table 4: Notes Data Model*
+*Table 5: Notes Data Model*
 
 | note_id | contact_id | note | author | date |
 | :-: | :-: | :-: | :-: | :-: |
@@ -475,21 +588,21 @@ The following table describes the data model used for "note" objects i.e. notes 
 
 
 #### Deals
-The following table describes the data model used for "deal" objects i.e. deals with a contact which are assigned to a user.
+The following table describes the data model used for "deal" objects i.e. a deal of a given team.
 
-*Table 5: Deals Data Model*
+*Table 6 : Deals Data Model*
 
 | deal_id | team_id | name | stage | close_date | owner | amount | associated_contact | associated_company
-| :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
+| :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
 |Primary Key, Integer | Integer | String | String | Datetime | String | Integer | String | String |
 
 + deal_id - auto-incremented integer which is used as the primary key to uniquely identify a deal
 + team_id - secondary key which is used to correlate a deal with a specific team
 + name - the name given to the deal 
 + stage - the deal stage, used to track the progression of the deal 
-+ close_date - the date the deal was closed, if it was closed. [Optional]
-+ owner - the owner of the deal [Optional]
-+ amount - value of the deal [Optional]
++ close_date - the date the deal was closed, if it was closed
++ owner - the owner of the deal
++ amount - value of the deal
 + associated_contact - contact associated with this deal
 + associated_company - company associated with this deal
 
@@ -522,6 +635,7 @@ The diagram below depicts the operation of the application with the AWS server
 
 - Sherpa is a Flask application and is made up of various "endpoints" / routes that users can send  requests to.
 - All Sherpa endpoints (except /login and /signup) are protected by an "@login_required" wrapper. This is just a Python decorator that calls a function to reject the user's request if they haven't been authenticated. They're redirected to the login page and once they're authenticated they're redirected back to the protected endpoint.
+- Most Sherpa endpoints (except /, /login etc) are protected by a "@team_required"w rapper. This is another decorator that calls a function to reject the user's request if they are not a member of a team. The user is redirected to the "create_team" endpoint.
 - Database and SMTP access is facilitated by environment variables specified in a .env file.
 - All database interactions occur through the use of SQLAlchemy data "models". These are outlined in the Design chapter and are essentially Pythonic descriptions of MySQL tables.
 
@@ -607,7 +721,7 @@ The following flow chart details the process flow for accepting a Sherpa invitat
 *Implementation of requirement: 6*
 
 *Endpoint: /contacts*
-The following details the implementation of the contacts page where users are served with a dashboard from which they can manage all of their teams contacts. The contacts page serves two primary purposes; management and organization.
+The following details the implementation of the contacts page where users are served with a dashboard from which they can manage all of their teams contacts. The contacts page serves two primary purposes; management and organisation.
 
 #### Management
 + Create Contact
@@ -772,10 +886,5 @@ Security was something that was of utmost importance for our application in orde
 	+ _Hashing_ -  We managed to implement security features where user data is stored securely by hashing is before storing it in the database.
 	+ _Cross-Site Scripting_ - Our use of Flask SQL Alchemy as an ORM made sure to prevent any potential XSS attacks
 	+ _Session Cookies_ - Our implementation of session cookies within our application ensured that users are authenticated when making requests and prevent unauthorized users accessing forbidden data.
-
-
-
-### Engineering Tradeoffs
-This section lays out the engineering trade
 
 

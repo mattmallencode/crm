@@ -143,15 +143,12 @@
     
     <br>
     {% if page > 1 %}
-    <div class="page">
-        <p><a href = "{{url_for('contacts_bp.contacts',error=error, filter=filter, order=order, prev_sort=prev_sort, sort=sort, page=previous_page)}}">Previous Page</a></p>
-    </div>
+
+        <p><a href = "{{url_for('contacts_bp.contacts', error=error, filter=filter, order=order, prev_sort=prev_sort, sort=sort, page=previous_page)}}">Previous Page</a></p>
     {% endif %}
 
     {% if page < num_pages %}
-    <div class="page">
-        <p><a href = "{{url_for('contacts_bp.contacts', error=error, filter=filter, order=order, prev_sort=prev_sort, sort=sort, page=next_page)}}">Next Page</a></p>
-    </div>
+        <p><a href = "{{url_for('contacts_bp.contacts',error=error, filter=filter, order=order, prev_sort=prev_sort, sort=sort, page=next_page)}}">Next Page</a></p>
     {% endif %}
     
 </section>
