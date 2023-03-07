@@ -62,6 +62,7 @@ def create_app(config_class=Config):
         user = Users.query.filter_by(email=g.email).first()
 
         goal_closed_diagram = draw_goal_closed_diagram(user)
+
         try:
             deals_forecast_diagram = draw_deals_forecast_diagram(user)
         except:

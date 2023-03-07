@@ -8,14 +8,8 @@
           <li><a href="{{ url_for('contacts_bp.contacts') }}">Contacts</a></li>
           <li><a href ="{{url_for('deals_bp.deals')}}">Deals</a></li>
           <li><a href="{{ url_for('teams.team') }}">Team</a></li>
-          <li class="dropdown">
-            <a href="#">Profile</a>
-            <ul class="dropdown-menu">
-                <li><a onclick="logout();" href="{{ url_for('auth.profile') }}">Logout</a></li>
-            </ul>
-          </li>
+          <li><a href="{{ url_for('auth.profile') }}">Logout</a></li>
         </ul>
-
     </nav>
         <svg viewBox="0 0 960 300">
             <symbol id="s-text">
