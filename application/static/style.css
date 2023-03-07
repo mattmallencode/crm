@@ -855,6 +855,13 @@ div#login_box {
 #next_page{
   position: fixed;
   bottom: 0px;
-  right: 0px;
-  font-size: large;
+  right: 1%;
+  font-size: 500%;
+}
+
+#previous_page{
+  position: fixed;
+  bottom: 0px;
+  right: 5%;
+  font-size: 500%;
 }
