@@ -809,3 +809,29 @@ div#login_box {
   margin: 0%;
   padding: 0%;
 }
+
+/* Paging for contacts */
+.page{
+  text-decoration: none;
+  display: inline-block;
+  /*padding: 8px 16px;*/
+}
+
+.page :link{
+  text-decoration: none;
+  margin-left: 20%;
+}
+
+#next_page{
+  position: fixed;
+  bottom: 0px;
+  right: 1%;
+  font-size: 500%;
+}
+
+#previous_page{
+  position: fixed;
+  bottom: 0px;
+  right: 5%;
+  font-size: 500%;
+}
