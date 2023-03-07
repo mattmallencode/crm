@@ -116,4 +116,27 @@ class ActivityLog(db.Model):
     actor = db.Column(db.String)
     timestamp = db.Column(db.String)
     contact_id = db.Column(db.String)
+    team_id = db.Column(db.Integer)
     description = db.Column(db.String)
+
+    def __init__ (self, activity_id=None, activity_type=None, actor=None, timestamp=None, contact_id=None, team_id=None, description=None):
+        self.activity_id = activity_id
+        self.activity_type = activity_type
+        self.actor = actor
+        self.timestamp = timestamp
+        self.contact_id = contact_id
+        self.team_id = team_id
+        self.description = description
+
+
+class DealStageConversion(db.Model):
+    stage_id = db.Column(db.Integer, primary_key=True)
+    team_id = db.Column(db.Integer)
+    date = db.Column(db.String)
+    stage = db.Column(db.String)
+
+    def __init__ (self, stage_id=None, team_id=None, date=None, stage=None):
+        self.stage_id = stage_id
+        self.team_id = team_id
+        self.date = date
+        self.stage = stage

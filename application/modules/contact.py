@@ -462,11 +462,14 @@ def remove_note(note_id, contact_id):
     return redirect(url_for('contact_bp.contact', contact_id=contact_id, activity="notes"))
 
 def log_activity(activity_type, actor, timestamp, contact_id):
+    user = Users.query.filter_by(email=actor).first()
+
     activity = ActivityLog()
     activity.activity_type = activity_type
     activity.actor = actor
     activity.timestamp = timestamp
     activity.contact_id = contact_id
+    activity.team_id = user.team_id
 
     if activity_type == "note":
         activity.description = f"{actor} created a note on {timestamp}"

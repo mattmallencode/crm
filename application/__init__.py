@@ -36,7 +36,7 @@ def create_app(config_class=Config):
         db.init_app(application)
         application.extensions["turbo"] = turbo
         from application.modules.auth import login_required, team_required
-        from application.data_models import Invites, Deals, Users, Teams, Contacts, Notes
+        from application.data_models import Invites, Deals, Users, Teams, Contacts, Notes, ActivityLog, DealStageConversion
         from application.modules.auth import auth
         from application.modules.contacts import contacts_bp
         from application.modules.contact import contact_bp
@@ -58,13 +58,38 @@ def create_app(config_class=Config):
     @login_required
     @team_required
     def home():
-        # Query the db for the team_id using the cokies email.
+        # Query the db for the team_id using the cookies email.
         user = Users.query.filter_by(email=g.email).first()
 
         goal_closed_diagram = draw_goal_closed_diagram(user)
-        #deals_forecast_diagram = draw_deals_forecast_diagram(user)
 
-        return render_template("home.html", user=user, goal_closed_diagram=goal_closed_diagram, deals_forecast_diagram=None)
+        try:
+            deals_forecast_diagram = draw_deals_forecast_diagram(user)
+        except:
+            fig, ax = plt.subplots()
+            plt.pie([100], colors=["#FFC154"])
+            plt.title("You have no deal data. Create some deals to populate this chart", fontsize=14)
+            deals_forecast_diagram = encode_diagram(plt)
+
+        try:
+            activity_diagram = draw_activity_diagram(user)
+        except:
+            fig, ax = plt.subplots()
+            plt.title("You have no team activity data. Get your team active to populate this chart", fontsize=13)
+            plt.bar("no data", 1, color="#EC6B56")
+            activity_diagram = encode_diagram(plt)
+       
+        try:
+            deal_stage_diagram, conversions = draw_deal_stage_diagram(user)
+        except:
+            fig, ax = plt.subplots()
+            plt.title("You have no deal data. Create some deals to populate this chart")
+            plt.barh("no data", 1, color="#EC6B56")
+            plt.tight_layout()
+            deal_stage_diagram = encode_diagram(plt)
+            conversions=None
+       
+        return render_template("home.html", user=user, goal_closed_diagram=goal_closed_diagram, deals_forecast_diagram=deals_forecast_diagram, activity_diagram=activity_diagram, deal_stage_diagram=deal_stage_diagram, conversions=conversions)
         
     @application.route("/authorize_email/<contact_id>", methods=["GET", "POST"])
     def authorize_email(contact_id):
@@ -173,11 +198,108 @@ def create_app(config_class=Config):
         colors = ["#47B39C", "#EC6B56", "#772953", "#FFC154"]
         plt.pie(data, explode=explode, labels=pie_labels, startangle=90, colors=colors, shadow=True, autopct = "%1.1f%%", textprops={"color":"w"})
         plt.title(f"Forecasted Revenue for this month: €{sum(data)}", fontsize = 14)
-        plt.legend(labels=legend_labels, loc=2)
+        plt.legend(labels=legend_labels, loc=2, bbox_to_anchor=(-0.3, 1))
         result = encode_diagram(plt)
     
         return result
     
+    def draw_activity_diagram(user):
+        activity = ActivityLog.query.filter_by(team_id=user.team_id)
+        member_activity_count={}
+        for activity in activity:
+            if (activity.timestamp is not None) and (type(activity.timestamp) == datetime) and (activity.activity_type != "note"):
+                if activity.timestamp.strftime("%Y-%m") == ((datetime.now() - relativedelta(months=1)).strftime("%Y-%m")):
+                    if activity.actor not in member_activity_count:
+                        member_activity_count[activity.actor] = 1
+                    else:
+                        member_activity_count[activity.actor] += 1
+
+        # gets the top 5 most active team members
+        top_team_members = sorted(member_activity_count)[:5]
+
+        activity_count={"email":[], "task":[], "meeting":[]}
+        for i in range(5):
+            member_activity = ActivityLog.query.filter_by(actor = top_team_members[i])
+            emails=0
+            tasks=0
+            meetings=0
+            for activity in member_activity:
+                if activity.activity_type == "email":
+                    emails += 1
+                elif activity.activity_type == "task":
+                    tasks += 1
+                elif activity.activity_type == "meeting":
+                    meetings += 1
+            
+            user = Users.query.filter_by(email=top_team_members[i]).first()
+            if user.name not in top_team_members:
+                top_team_members[i] = user.name
+            else:
+                top_team_members[i] = user.name + (" " * i)
+            activity_count["email"].append(emails)
+            activity_count["task"].append(tasks)
+            activity_count["meeting"].append(meetings)
+
+
+        fig, ax = plt.subplots()
+        plt.xlabel("Activity By", fontsize=14)
+        plt.ylabel("Count Of Activities", fontsize=14)
+
+        colors = ["#47B39C", "#EC6B56", "#772953", "#FFC154"]
+        bar_width=0.6
+        plt.bar(top_team_members, activity_count["email"], color=colors[3], width=bar_width)
+        plt.bar(top_team_members, activity_count["task"], bottom = activity_count["email"], color = colors[1], width=bar_width)
+        meeting_plot = []
+        for i in range(5):
+            meeting_plot.append(activity_count["email"][i] + activity_count["task"][i])
+        plt.bar(top_team_members, activity_count["meeting"], bottom = meeting_plot, color = colors[0], width=bar_width)
+        plt.legend(labels=["Emails", "Tasks", "Meetings"], loc=1, bbox_to_anchor=(1.1,1))
+        result = encode_diagram(plt)
+        return result
+                    
+    def draw_deal_stage_diagram(user):
+        stages = DealStageConversion.query.filter_by(team_id = user.team_id)
+        
+        stage_count = {"Created":0, "Qualified To Buy":0, "Appointment Scheduled":0, "Contract Sent":0, "Closed Won":0}
+
+        for stage in stages:
+            if isinstance(stage.date, datetime):
+                if stage.date.strftime("%Y-%m") == ((datetime.now() - relativedelta(months=1)).strftime("%Y-%m")):
+                    if stage.stage == "Created":
+                        stage_count["Created"] += 1
+                    if stage.stage == "Qualified To Buy":
+                        stage_count["Qualified To Buy"] += 1
+                    elif stage.stage == "Appointment Scheduled":
+                        stage_count["Appointment Scheduled"] += 1
+                    elif stage.stage == "Contract Sent":
+                        stage_count["Contract Sent"] += 1
+                    elif stage.stage == "Closed Won":
+                        stage_count["Closed Won"] += 1
+                
+
+        fig, ax = plt.subplots()
+        plt.barh(list(stage_count.keys()), list(stage_count.values()), color = ["#FFC154", "#EC6B56", "#DC8449", "#539165", "#47B39C"])
+        plt.xlabel("Number of Deals", fontsize=14)
+        plt.tight_layout()
+        ax.invert_yaxis()
+        ax.invert_xaxis()
+        diagram = encode_diagram(plt)
+ 
+        conversions = {"Created":[0,0], "Qualified To Buy":[0,0], "Appointment Scheduled":[0,0], "Contract Sent":[0,0]}
+        stage_count_values = list(stage_count.values())
+        for stage in conversions:
+            current_stage_index = list(stage_count).index(stage) 
+            next_stage_index = current_stage_index + 1
+
+            # calculates next step conversion
+            next_step_conversion = stage_count_values[next_stage_index] / stage_count_values[current_stage_index]
+            conversions[stage][0] = round(next_step_conversion * 100, 2)
+            # calculated cumulative conversion
+            cumulative_conversion = stage_count_values[next_stage_index] / stage_count_values[0]
+            conversions[stage][1] = round(cumulative_conversion * 100, 2)
+        
+        return diagram, conversions
+
     def encode_diagram(plt):
         buf = BytesIO()
         plt.savefig(buf, format="png")
@@ -185,6 +307,5 @@ def create_app(config_class=Config):
         data = base64.b64encode(buf.getbuffer()).decode("ascii")
         result = f"<img src='data:image/png;base64,{data}'/>"
         return result
-
 
     return application

@@ -304,26 +304,6 @@ color: white;
   background-color: #111;
 }
 
-#dashboard {
-  display: grid;
-  grid-template-columns: auto auto;
-}
-
-#dashboard section{
-  background-color: #FFF8DC;
-  margin: 20px;
-  padding: 25px;
-  box-shadow: 3px 3px #606060;
-}
-
-#dashboard *{
-  color: black;
-}
-
-#dashboard section:hover{
-  box-shadow: 0px 0px 20px #606060;
-}
-
 #contact {
   display: grid;
   grid-template-columns: 1fr 3fr;
@@ -847,8 +827,13 @@ div#login_box {
 }
 
 
-#dashboard section{
+#dashboard{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+#dashboard *{
   margin: 0%;
   padding: 0%;
 }
-}
+

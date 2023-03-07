@@ -181,8 +181,20 @@ def add_deal(filter, page, error, prev_sort, sort, order):
     deal.associated_contact = form.associated_contact.data
     deal.associated_company = form.associated_company.data
     deal.date_created = datetime.now()
-
     db.session.add(deal)
+
+    stage_created = DealStageConversion()
+    stage_created.team_id = user.team_id
+    stage_created.date = datetime.now()
+    stage_created.stage = "Created"
+    db.session.add(stage_created)
+
+    stage_new = DealStageConversion()
+    stage_new.team_id = user.team_id
+    stage_new.date = datetime.now()
+    stage_created.stage = dict(form.stage.choices).get(form.stage.data)
+    db.session.add(stage_new)
+
     db.session.commit()
 
     if form.owner.data != "" and Users.query.filter_by(email=form.owner.data, team_id=user.team_id).first() is None:
@@ -208,6 +220,13 @@ def edit_deal(deal_id, page, error):
         elif form.date.data == None:
             error = "Close Date must be inputted when closing a deal"
     if error == "None":
+        if deal.stage != dict(form.stage.choices).get(form.stage.data):
+            stage = DealStageConversion()
+            stage.team_id = user.team_id
+            stage.date = datetime.now()
+            stage.stage = dict(form.stage.choices).get(form.stage.data)
+            db.session.add(stage)
+
         deal.team_id = user.team_id
         deal.name = form.name.data
         deal.stage = dict(form.stage.choices).get(form.stage.data)
