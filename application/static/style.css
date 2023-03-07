@@ -158,7 +158,7 @@ li a {
 
 #contacts_table {
   float: right;
-  width: 80%; /* adjust as needed */
+  width: 85%; /* adjust as needed */
 }
 .contacts-box {
   display: block;
@@ -478,7 +478,6 @@ color: white;
   position: relative;
 }
 /* Sign up page*/
-
 
 
 /* Login page*/
@@ -810,4 +809,3 @@ div#login_box {
   margin: 0%;
   padding: 0%;
 }
-
