@@ -45,6 +45,7 @@ def contacts(filter, page, prev_sort, sort, order, error):
             team_id=user.team_id, contact_owner="")
     else:
         contacts = Contacts.query.filter_by(team_id=user.team_id)
+
     if search_form.validate_on_submit():
         user_search = search_form.search_bar.data
         # Before using the user's search let's optimize for it.
@@ -60,7 +61,8 @@ def contacts(filter, page, prev_sort, sort, order, error):
         else:
             contacts = contacts.filter(Contacts.email.like(f"%{user_search}%") | Contacts.name.like(
                 f"%{user_search}%") | Contacts.company.like(f"%{user_search}%"))
-    # Toggle feature of sort buttons, if the user is sorting a different column to last sort, order is ascending.
+            
+    # Toggle feature of sort buttons, if the user is sorting a different column to last sort, order is ascending
     if sort != prev_sort:
         order = "ASC"
     else:
@@ -72,13 +74,15 @@ def contacts(filter, page, prev_sort, sort, order, error):
     # Only sort if the user asks us to.
     if sort != "None":
         contacts = order_contacts(sort, order, contacts)
-    num_pages = contacts.count() // 25
 
+    num_pages = contacts.count() // 25
     # Count the number of pages.
     if (contacts.count() % 25) > 0:
         num_pages += 1
 
-    # Create an editable form for each contact. Will only ever 25 at a time.
+    contacts = contacts.limit(25).offset(page_offset)
+
+    # Create an editable form for each contact. Will only ever display 25 at a time.
     forms = []
     for contact in contacts:
         form = ContactForm()
@@ -90,7 +94,7 @@ def contacts(filter, page, prev_sort, sort, order, error):
         form.company.data = contact.company
         form.status.data = contact.status
         forms.append(form)
-        
+
     return render_template("contacts.html", forms=forms, add_contact=add_contact, search_form=search_form, contacts=contacts, num_pages=num_pages, filter=filter, page=page, prev_sort=prev_sort, sort=sort, order=order, error=error, activity="editing")
 
 
