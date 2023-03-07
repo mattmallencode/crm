@@ -302,11 +302,6 @@ color: white;
   background-color: #111;
 }
 
-#dashboard {
-  display: grid;
-  grid-template-columns: auto auto;
-}
-
 
 #contact {
   display: grid;
@@ -823,8 +818,14 @@ div#login_box {
   contacts_search_button{
     
   }
+}
 
-#dashboard section{
+#dashboard{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+#dashboard *{
   margin: 0%;
   padding: 0%;
 }

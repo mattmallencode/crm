@@ -127,3 +127,16 @@ class ActivityLog(db.Model):
         self.contact_id = contact_id
         self.team_id = team_id
         self.description = description
+
+
+class DealStageConversion(db.Model):
+    stage_id = db.Column(db.Integer, primary_key=True)
+    team_id = db.Column(db.Integer)
+    date = db.Column(db.String)
+    stage = db.Column(db.String)
+
+    def __init__ (self, stage_id=None, team_id=None, date=None, stage=None):
+        self.stage_id = stage_id
+        self.team_id = team_id
+        self.date = date
+        self.stage = stage

@@ -36,7 +36,7 @@ def create_app(config_class=Config):
         db.init_app(application)
         application.extensions["turbo"] = turbo
         from application.modules.auth import login_required, team_required
-        from application.data_models import Invites, Deals, Users, Teams, Contacts, Notes, ActivityLog
+        from application.data_models import Invites, Deals, Users, Teams, Contacts, Notes, ActivityLog, DealStageConversion
         from application.modules.auth import auth
         from application.modules.contacts import contacts_bp
         from application.modules.contact import contact_bp
@@ -58,15 +58,37 @@ def create_app(config_class=Config):
     @login_required
     @team_required
     def home():
-        # Query the db for the team_id using the cokies email.
+        # Query the db for the team_id using the cookies email.
         user = Users.query.filter_by(email=g.email).first()
 
         goal_closed_diagram = draw_goal_closed_diagram(user)
-        deals_forecast_diagram = draw_deals_forecast_diagram(user)
-        activity_diagram = draw_activity_diagram(user)
-        deal_stage_diagram = draw_deal_stage_diagram(user)
+        try:
+            deals_forecast_diagram = draw_deals_forecast_diagram(user)
+        except:
+            fig, ax = plt.subplots()
+            plt.pie([100], colors=["#FFC154"])
+            plt.title("You have no deal data. Create some deals to populate this chart", fontsize=14)
+            deals_forecast_diagram = encode_diagram(plt)
 
-        return render_template("home.html", user=user, goal_closed_diagram=goal_closed_diagram, deals_forecast_diagram=deals_forecast_diagram, activity_diagram=activity_diagram, deal_stage_diagram=deal_stage_diagram)
+        try:
+            activity_diagram = draw_activity_diagram(user)
+        except:
+            fig, ax = plt.subplots()
+            plt.title("You have no team activity data. Get your team active to populate this chart", fontsize=13)
+            plt.bar("no data", 1, color="#EC6B56")
+            activity_diagram = encode_diagram(plt)
+       
+        try:
+            deal_stage_diagram, conversions = draw_deal_stage_diagram(user)
+        except:
+            fig, ax = plt.subplots()
+            plt.title("You have no deal data. Create some deals to populate this chart")
+            plt.barh("no data", 1, color="#EC6B56")
+            plt.tight_layout()
+            deal_stage_diagram = encode_diagram(plt)
+            conversions=None
+       
+        return render_template("home.html", user=user, goal_closed_diagram=goal_closed_diagram, deals_forecast_diagram=deals_forecast_diagram, activity_diagram=activity_diagram, deal_stage_diagram=deal_stage_diagram, conversions=conversions)
         
     @application.route("/authorize_email/<contact_id>", methods=["GET", "POST"])
     def authorize_email(contact_id):
@@ -235,37 +257,47 @@ def create_app(config_class=Config):
         return result
                     
     def draw_deal_stage_diagram(user):
-        deals = Deals.query.filter_by(team_id = user.team_id)
+        stages = DealStageConversion.query.filter_by(team_id = user.team_id)
         
-        labels = ["Created", "Qualified To Buy", "Appointment Scheduled", "Contract Sent", "Closed Won"]
-        deal_count=[0,0,0,0,0]
+        stage_count = {"Created":0, "Qualified To Buy":0, "Appointment Scheduled":0, "Contract Sent":0, "Closed Won":0}
 
-        for deal in deals:
-            if deal.date_created is not None:
-                print(deal.date_created)
-                #if deal.date_created.strftime("%Y-%m") == ((datetime.now() - relativedelta(months=1)).strftime("%Y-%m")):
-                if deal.date_created.strftime("%Y-%m") == ((datetime.now()).strftime("%Y-%m")):    
-                    deal_count[0] += 1
-
-                    if deal.stage == "Qualified To Buy":
-                        deal_count[1] += 1
-                    elif deal.stage == "Appointment Scheduled":
-                        deal_count[2] += 1
-                    elif deal.stage == "Contract Sent":
-                        deal_count[3] += 1
-                    elif deal.stage == "Closed Won":
-                        deal_count[4] += 1
+        for stage in stages:
+            if isinstance(stage.date, datetime):
+                if stage.date.strftime("%Y-%m") == ((datetime.now() - relativedelta(months=1)).strftime("%Y-%m")):
+                    if stage.stage == "Created":
+                        stage_count["Created"] += 1
+                    if stage.stage == "Qualified To Buy":
+                        stage_count["Qualified To Buy"] += 1
+                    elif stage.stage == "Appointment Scheduled":
+                        stage_count["Appointment Scheduled"] += 1
+                    elif stage.stage == "Contract Sent":
+                        stage_count["Contract Sent"] += 1
+                    elif stage.stage == "Closed Won":
+                        stage_count["Closed Won"] += 1
                 
 
         fig, ax = plt.subplots()
-        plt.barh(labels, deal_count)
+        plt.barh(list(stage_count.keys()), list(stage_count.values()), color = ["#FFC154", "#EC6B56", "#DC8449", "#539165", "#47B39C"])
         plt.xlabel("Number of Deals", fontsize=14)
         plt.tight_layout()
         ax.invert_yaxis()
         ax.invert_xaxis()
+        diagram = encode_diagram(plt)
+ 
+        conversions = {"Created":[0,0], "Qualified To Buy":[0,0], "Appointment Scheduled":[0,0], "Contract Sent":[0,0]}
+        stage_count_values = list(stage_count.values())
+        for stage in conversions:
+            current_stage_index = list(stage_count).index(stage) 
+            next_stage_index = current_stage_index + 1
 
-        result = encode_diagram(plt)
-        return result
+            # calculates next step conversion
+            next_step_conversion = stage_count_values[next_stage_index] / stage_count_values[current_stage_index]
+            conversions[stage][0] = round(next_step_conversion * 100, 2)
+            # calculated cumulative conversion
+            cumulative_conversion = stage_count_values[next_stage_index] / stage_count_values[0]
+            conversions[stage][1] = round(cumulative_conversion * 100, 2)
+        
+        return diagram, conversions
 
     def encode_diagram(plt):
         buf = BytesIO()
@@ -274,6 +306,5 @@ def create_app(config_class=Config):
         data = base64.b64encode(buf.getbuffer()).decode("ascii")
         result = f"<img src='data:image/png;base64,{data}'/>"
         return result
-
 
     return application

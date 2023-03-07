@@ -37,9 +37,29 @@
 
         <section>
           <h2>Deal Stage Funnel</h2>
-          <section>
-            {{deal_stage_diagram|safe}}
-          </section>
+          {% if conversions != None %}
+          <table>
+            <tr>
+              <th>Deal Stage Funnel</th>
+              <th>Next Step Conversion</th>
+              <th>Cumulative Conversion</th>
+            </tr>
+
+            
+              <tr>
+                <td rowspan="6">{{deal_stage_diagram|safe}}</td>
+                    {% for conversion in conversions %} 
+                        <tr>
+                          <td>{{conversions[conversion][0]}}&#37</td>
+                          <td>{{conversions[conversion][1]}}&#37</td>
+                        </tr>
+                    {% endfor %}                 
+              </tr>
+            
+          </table>
+          {% else %} 
+            <section>{{deal_stage_diagram|safe}}</section>
+          {% endif %}
         </section>
 
         <section>
