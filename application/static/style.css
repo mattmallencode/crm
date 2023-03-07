@@ -13,6 +13,11 @@ body{
   /*overflow: hidden;*/
 }
 
+.paging{
+  color:red;
+  background-color: red;
+}
+
 /* contacts page /*
 /* Header */
 @import url(https://fonts.googleapis.com/css?family=Montserrat);
@@ -22,7 +27,6 @@ svg {
     width: 30%;
     height: 30%;
 }
-
 .text-copy {
     fill: none;
     stroke: white;
@@ -647,7 +651,7 @@ div#login_box {
     .animated_logo {
       font-size: 2em;
     }
-  
+}
 
 
 /* styling the team page */
@@ -836,4 +840,10 @@ div#login_box {
   margin: 0%;
   padding: 0%;
 }
-
+/* Paging for contacts */
+.page :link{
+  background-color: gainsboro;
+  border-radius: 30px;
+  margin-left: 3%;
+  text-decoration: none;
+}
