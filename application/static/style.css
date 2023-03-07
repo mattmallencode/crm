@@ -7,8 +7,10 @@ body{
   background-repeat: no-repeat;
   background-size: cover;
   min-height: 100%;
-  min-width: 100%;
-  padding-bottom: 100%;
+  min-width: 90%;
+  margin-bottom: 100%;
+  margin-right: 10%;
+  /*overflow: hidden;*/
 }
 
 /* contacts page /*
@@ -499,6 +501,9 @@ color: white;
   flex-direction: column;
   position: relative;
 }
+/* Sign up page*/
+
+
 
 /* Login page*/
 
@@ -658,6 +663,12 @@ div#login_box {
   }
 }
 
+@media only screen and (max-width: 1000px) {
+    .animated_logo {
+      font-size: 2em;
+    }
+  
+
 
 /* styling the team page */
 /* Styling the table */
@@ -759,13 +770,13 @@ div#login_box {
   margin: 4px 2px;
   cursor: pointer;
   }
-  #send_invite {
+#send_invite {
     
     border-collapse: collapse;
     width: 100%;
     margin-top: 20px;
     width: 30%;
-  }
+}
 #invite_page input#email {
   padding: 2%;
   margin-bottom: 5%;
@@ -778,6 +789,37 @@ div#login_box {
 }
 
 /* Deals page */
+/* Deals page */
+#deals_filter_buttons {
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  float: left;
+  margin: 0%;
+  height: 100%;
+  background-color: gainsboro;
+  padding-right: 1%;
+  height: 100vh;
+}
+#deals_filter_buttons a{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 25%;
+  padding: 5%;
+}
+#deals_filter_buttons  a:hover{
+  background-color: gainsboro;
+  animation-name: bounce1;
+  animation-timing-function: ease;
+}
+
+@keyframes bounce1 {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-5px); }
+  100% { transform: translateY(0); }
+}
 #deals_table {
   position: relative;
   border: black;
@@ -786,12 +828,7 @@ div#login_box {
   border: 1px solid black;
   padding: 10px;
 }
-#deals_filter_buttons {
 
-  left: 0;
-}
-
-@media (max-width: 1400px) {
 /*login page*/
 #login_box {
   display: flex;
@@ -806,11 +843,12 @@ div#login_box {
 
 #contacts_search_button:hover{
   color: white;
-    background-color: #E95420;
-  }
+  background-color: #E95420;
+}
 
-#contacts_search_button{
-    
-  }
 
+#dashboard section{
+  margin: 0%;
+  padding: 0%;
+}
 }
