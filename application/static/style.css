@@ -841,9 +841,20 @@ div#login_box {
   padding: 0%;
 }
 /* Paging for contacts */
-.page :link{
-  background-color: gainsboro;
-  border-radius: 30px;
-  margin-left: 3%;
+.page{
   text-decoration: none;
+  display: inline-block;
+  /*padding: 8px 16px;*/
+}
+
+.page :link{
+  text-decoration: none;
+  margin-left: 20%;
+}
+
+#next_page{
+  position: fixed;
+  bottom: 0px;
+  right: 0px;
+  font-size: large;
 }
