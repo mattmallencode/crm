@@ -73,21 +73,23 @@ def create_app(config_class=Config):
 
         try:
             activity_diagram = draw_activity_diagram(user)
-        except:
+        except Exception as e:
             fig, ax = plt.subplots()
             plt.title("You have no team activity data. Get your team active to populate this chart", fontsize=13)
             plt.bar("no data", 1, color="#EC6B56")
             activity_diagram = encode_diagram(plt)
        
-        try:
-            deal_stage_diagram, conversions = draw_deal_stage_diagram(user)
-        except:
-            fig, ax = plt.subplots()
-            plt.title("You have no deal data. Create some deals to populate this chart")
-            plt.barh("no data", 1, color="#EC6B56")
-            plt.tight_layout()
-            deal_stage_diagram = encode_diagram(plt)
-            conversions=None
+        #try:
+        deal_stage_diagram, conversions = draw_deal_stage_diagram(user)
+        #except:
+        """
+        fig, ax = plt.subplots()
+        plt.title("You have no deal data. Create some deals to populate this chart")
+        plt.barh("no data", 1, color="#EC6B56")
+        plt.tight_layout()
+        deal_stage_diagram = encode_diagram(plt)
+        conversions=None
+        """
        
         return render_template("home.html", user=user, goal_closed_diagram=goal_closed_diagram, deals_forecast_diagram=deals_forecast_diagram, activity_diagram=activity_diagram, deal_stage_diagram=deal_stage_diagram, conversions=conversions)
         
@@ -217,8 +219,13 @@ def create_app(config_class=Config):
         # gets the top 5 most active team members
         top_team_members = sorted(member_activity_count)[:5]
 
+        if len(top_team_members) >= 5:
+            activity_range = 5
+        else:
+            activity_range = len(top_team_members)
+
         activity_count={"email":[], "task":[], "meeting":[]}
-        for i in range(5):
+        for i in range(activity_range):
             member_activity = ActivityLog.query.filter_by(actor = top_team_members[i])
             emails=0
             tasks=0
@@ -250,7 +257,7 @@ def create_app(config_class=Config):
         plt.bar(top_team_members, activity_count["email"], color=colors[3], width=bar_width)
         plt.bar(top_team_members, activity_count["task"], bottom = activity_count["email"], color = colors[1], width=bar_width)
         meeting_plot = []
-        for i in range(5):
+        for i in range(activity_range):
             meeting_plot.append(activity_count["email"][i] + activity_count["task"][i])
         plt.bar(top_team_members, activity_count["meeting"], bottom = meeting_plot, color = colors[0], width=bar_width)
         plt.legend(labels=["Emails", "Tasks", "Meetings"], loc=1, bbox_to_anchor=(1.1,1))
@@ -283,7 +290,6 @@ def create_app(config_class=Config):
         plt.tight_layout()
         ax.invert_yaxis()
         ax.invert_xaxis()
-        diagram = encode_diagram(plt)
  
         conversions = {"Created":[0,0], "Qualified To Buy":[0,0], "Appointment Scheduled":[0,0], "Contract Sent":[0,0]}
         stage_count_values = list(stage_count.values())
@@ -297,7 +303,18 @@ def create_app(config_class=Config):
             # calculated cumulative conversion
             cumulative_conversion = stage_count_values[next_stage_index] / stage_count_values[0]
             conversions[stage][1] = round(cumulative_conversion * 100, 2)
-        
+        last_v = list(stage_count.values())[-1]
+        for i, v in enumerate(list(stage_count.values())):
+            try:
+                stage = list(stage_count.keys())[i]
+                next_conversion = conversions[stage][0]
+                cumulative_conversion = conversions[stage][1]
+                plt.text(last_v * 0.9, i, f'Next Step Conversion: {next_conversion:.2f}%. \n Cumulative Conversion: {cumulative_conversion:.2f}%', color='black', ha='left', va='center', fontweight='bold')
+            except:
+                pass
+
+        diagram = encode_diagram(plt)
+
         return diagram, conversions
 
     def encode_diagram(plt):

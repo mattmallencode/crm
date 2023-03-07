@@ -202,7 +202,7 @@ def add_task(form, task_list, contact):
     response = google.post(url, data={"title": title, "due": due}, format="json")
     if response.status != 200:
         return redirect(url_for('authorize_email', contact_id=contact.contact_id))
-    timestamp = datetime.now().strftime("%d/%m/%Y %H:%M")
+    timestamp = datetime.now()
     log_activity("task", g.email, timestamp, contact.contact_id)
 
 def complete_task(contact_id, task_id):
@@ -491,7 +491,10 @@ def view_activity(contact_id, google_token, contact):
     # Convert the timestamp strings to datetime objects
     log = log.all()
     for entry in log:
-        entry.timestamp = datetime.strptime(entry.timestamp, "%d/%m/%Y %H:%M")
+        try:
+            entry.timestamp = datetime.strptime(entry.timestamp, "%d/%m/%Y %H:%M")
+        except:
+            pass
 
     # Sort the log by the datetime objects
     log = sorted(log, key=lambda x: x.timestamp, reverse=True)
