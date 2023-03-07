@@ -1,71 +1,67 @@
 {% extends "base_no_turbo.html" %}
 {% block main_content %}
-<body>  
+
+<body>
   <nav>
     <ul>
       <li><a href="{{ url_for('home') }}">Home</a></li>
       <li><a href="{{ url_for('contacts_bp.contacts') }}">Contacts</a></li>
-      <li><a href ="{{url_for('deals_bp.deals')}}">Deals</a></li>
+      <li><a href="{{url_for('deals_bp.deals')}}">Deals</a></li>
       <li><a href="{{ url_for('teams.team') }}">Team</a></li>
-      <li class="dropdown">
-        <a href="#">Profile</a>
-        <ul class="dropdown-menu">
-            <li><a onclick="logout();" href="{{ url_for('auth.profile') }}">Logout</a></li>
-        </ul>
-      </li>
+      <li><a href="{{ url_for('auth.profile') }}">Logout</a></li>
     </ul>
-
   </nav>
-
   {% if user_details.team_id %}
   <section id="team_page">
-    
-      <section>
-          <h1 id="team_name">Team: {{ team["name"] }}</h1>
-      </section>
-          
-          <table id="team_table">
-            <tr>
-              <td> {% if user_details.admin_status == True %}
-                <a  id="team_invite" href="{{ url_for('teams.invite') }}">Invite Member</a>
-                  {% endif %} 
-              </td>
-              <td id="remove_team"><form action = "" method = "POST">
-                {{ form.hidden_tag() }}
-                <div>
-                  {{ form.sure_checkbox() }}
-                  {{ form.sure_checkbox.label }}
-                
-                  {% for error in form.sure_checkbox.errors %}
-                  <div>{{ error }}</div>
-                  {% endfor %}
-                </div>
-               
-                <div>
-                  {{ form.submit() }}
-                </div>  
-                
-              </form></td>
-            </tr>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-            </tr>
-            {% for team_member in team_members %}
-              <td>{{ team_member.name }}</td>
-              <td>{{ team_member.email }}</td>
-            </tr>
-            {% endfor %}
 
-          </table>
-            
-      </section>
+    <section>
+      <h1 id="team_name">Team: {{ team["name"] }}</h1>
+    </section>
+
+    <table id="team_table">
+      <tr>
+        <td> {% if user_details.admin_status == True %}
+          <a id="team_invite" href="{{ url_for('teams.invite') }}">Invite Member</a>
+          {% endif %}
+        </td>
+        <td id="remove_team">
+          <form action="" method="POST">
+            {{ form.hidden_tag() }}
+            <div>
+              {{ form.sure_checkbox() }}
+              {{ form.sure_checkbox.label }}
+
+              {% for error in form.sure_checkbox.errors %}
+              <div>{{ error }}</div>
+              {% endfor %}
+            </div>
+
+            <div>
+              {{ form.submit() }}
+            </div>
+
+          </form>
+        </td>
+      </tr>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+      </tr>
+      {% for team_member in team_members %}
+      <td>{{ team_member.name }}</td>
+      <td>{{ team_member.email }}</td>
+      </tr>
+      {% endfor %}
+
+    </table>
+
   </section>
-    
+  </section>
+
   {% else %}
   <section>
-      <p>You are not a member of a team. Either accept an invite or create your own to be a member of an team.</p>
-      <a href="create_team">Create A Team</a>
+    <p>You are not a member of a team. Either accept an invite or create your own to be a member of an team.</p>
+    <a href="create_team">Create A Team</a>
   </section>
   {% endif %}
 </body>
