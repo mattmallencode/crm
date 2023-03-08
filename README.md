@@ -105,7 +105,7 @@ This document outlines the design and implementation of Sherpa, a free and open-
 
 This implementation can be used by multiple businesses i.e. users create "teams" and invite other users to join their team. However, it could easily be modified to be used by a single business by removing the team creation endpoint.
 
-TODO: GITHUB LINK
+Sherpa's GitHub repository is available [here](https://github.com/mattmallencode/crm).
 
 ## Some CRM Terms
 
@@ -979,6 +979,8 @@ TODO
 
 *Implementation of requirement: 15*
 
+*endpoint: /authorize_email*
+
 Users must integrate their Google accounts with Sherpa to obtain a Google session token in order to avail of Sherpa's Google services such as Emails, Tasks and Meetings.
 
 The following diagram details the process of integrating Google with a Sherpa account.
@@ -992,31 +994,106 @@ Google accounts are authenticated using OAuth 2.0. For brevity, we won't go into
 
 *Implementation of requirements: 16-18*
 
-TODO (FLOW)
+Sherpa integrates several Google products, each with their own API, namely: Gmail, Google Tasks, and Google Calendar. These APIs had their own nuances (for example dealing with threads with Gmail) and this could have justified having a parsing implementation section for each product. However, we found it prudent instead to discuss our general overall approach to parsing these responses.
+
+The following is a flow chart detailing the process flow in Sherpa of dealing with an API response from request to return.
+
+![sss](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/Parsing.png)
+
+ - First a GET request is send to the relevant Google API endpoint. This request is accompanied by a "query" which is a parameter that specifies to the server which data exactly it return to us. For example the query for the GET request for emails is "from: {contact_email} OR to: {contact_email}" - meaning we want to fetch any email the user sent to the contact AND any email the user received from the contact.
+ - The server will then return the data we requested as a JSON dump. This can then be interacted with as a collection of python data structures, mainly lists and dictionaries.
+ - Sherpa initialises an empty list to which all the parsed objects will be appended e.g. an empty list for all the parsed task objects. It then iterates over the JSON dump. Each loop, it initialises an empty dictionary with relevant keys e.g. for an email "timestamp", "subject", etc and maps these keys to the relevant data. This parsed version of the object is then appended to the list of objects.
+ - Imporantly for the above, often timestamps won't be in a very human readable format so this required working with functions like "strftime" to convert the timestamps to a more readable format.
+ - Finally, the parsed list is returned to the endpoint that called the given parsing function and is templated into the HTTP response using Jinja2. As an example, this is how this templating works for meetings:
+
+```
+{% if meetings is not none %}
+        {% for meeting in meetings %}
+            <section class="meeting">
+                <p><b>Summary:</b> {{ meeting["summary"] }}</p>
+                <p><b>Description:</b> {{ meeting["description"] }}</p>
+                <p><b>Starts:</b> {{ meeting["starts"] }}</p>
+                <p><b>Ends:</b> {{ meeting["ends"] }}</p>
+                <a href="{{meeting['link']}}">Join google meet</a>
+            </section>
+{% endfor %}
+{% endif %}
+``` 
 
 ### Sending and Receiving Emails
 
 *Implementation of requirement: 16*
 
-TODO
+*endpoint: /contact/<contact_id>/emails*
+
+
+#### Sending Emails
+
+* Sherpa initialises a MIMEText object (object representing an email as part of python's email package), called "message". 
+* The message's subject and body are fetched from the email form. 
+* The sender is set to the user's google account email (that they OAuth'd). The recipient is set to the contact's email.
+* Sherpa then sends a POST request to the Gmail API with the message encoded as JSON (the user's OAuth token is included in the request, see the google account integration implementation section).
+* The email will then be send from the user's Google account.
+
+#### Receiving Emails
+
+* Sherpa sends a GET request to the Gmail API to fetch the IDs of all the user's email threads (the threads fetched are limited to those between the user and the contact).
+* Sherpa then loops through each thread ID, sending a separate GET request to actually fetch the emails specific to each thread.
+* These emails are then parsed (see parsing API responses) and included in the HTTP response.
 
 ### Creating, Viewing, and Completing Tasks
 
 *Implementation of requirement: 17*
 
-TODO
+*endpoint: /contact/<contact_id>/tasks*
+
+#### Creating Tasks
+
+* Each task in Google Calendar must be part of a "task list". If its the user's first time creating a task associated with a particular contact then Sherpa sends a POST request to the Google Calendar API to create a task list with the following title "Sherpa CRM: {contact.email}".
+* Sherpa sends a POST request to the Google Calendar API with the due date and title fetched from the task form to create a new task to the task list Sherpa created for this user.
+* The task will then appear in the user's Google Calendar on the "due" date.
+
+#### Viewing Tasks
+
+* Sherpa sends a GET request to the Google Calendar API to fetch all of the user's task lists. It then iterates over these task lists until it finds one with the correct title i.e. "Sherpa CRM: {contact.email}".
+* It then parses each of the tasks in this list (see parsing API responses).
+* Before serving the parsed tasks as part of the HTTP response, they are split up into "past due", "due", and "completed" tasks. Any tasks in the "past due" and "due" lists are templated with a "complete" button, this complete button has a href button that targets the /contact/<contact_id>/tasks/<complete> endpoint with "complete" set to the id of the task.
+
+#### Completing Tasks
+
+* If a user sends a request to the endpoint /contact/<contact_id>/tasks/<complete> then a PUT request is sent to the Google Calendar API to mark the task in the user's task list for the contact with that task_id as completed.
+* The task will then appear as "completed" on the "due" date in the user's Google Calendar.
 
 ### Scheduling and Joining Meetings
 
 *Implementation of requirement: 18*
 
-TODO
+*Implementation of requirement: 18*
+
+*endpoint: /contact/<contact_id>/meetings*
+
+* To schedule a meeting, Sherpa fetches the title, description, start date-time, and end date-time from the meeting form data and sends a POST request including the data to the Google Calendar API. The contact's email is included as an "attendee" for the conference, they'll receive an email invite and it will appear in their Google Calendar (as well as that of the Sherpa user).
+* To have Google Calendar automatically create a Google Meet Conference and return the link to it as part of the request response, the following must be included in the body of the request (uuid is used to generate a unique requestId):
+	```
+	"conferenceDataVersion": 1,
+	"conferenceData": = {
+        "createRequest": {
+            "conferenceSolutionKey": {
+                "type": "hangoutsMeet"
+            },
+            "requestId": str(uuid.uuid4())
+        }
+    }
+	```
+* To join meetings, Sherpa fetches all events from the user's calendar that has the contact's email as an "attendee" using a GET request to the Google Calendar API. These events are parsed (see parsing API responses) and returned as part of the HTTP response - each meeting is accompanied by a "join meeting" button with the href set to the google meet link returned in the API response for that specific event.
 
 ### Closing Deals
 
 *Implementation of requirement: 19*
 
-TODO
+When a user sets the stage of a deal to "closed won" (not "closed lost"), they must specify the closed amount, this is done by validating the form data submitted with the POST request on the */edit_contact* endpoint. 
+
+If no closed amount is included, the user will be informed of their mistake with an error message. After marking a deal as "closed" successfully, the user is no longer be able to edit it.
 
 ### Tracking Deal Conversions
 
@@ -1049,7 +1126,37 @@ The following chart details the process of creating the data analytics plots for
 
 ## Testing
 
-TODO
+Sherpa's test suite achieves extensive testing code coverage using the Pytest testing framework. Rather than going through each test case (pytest uses asserts just like most testing frameworks), this section instead deals with the more interesting parts of Sherpa's test suite i.e. how it overcomes the challenges unique to testing a complex web application i.e. simulating requests, dealing with user sessions, and simulating third party API responses.
+
+### Test Client Set Up
+
+Flask already has a "test_client()" method which simulates HTTP requests for tests without needing to run a web server. However, this test client needs access to the application context.
+
+In Flask, the "application context" is a container that holds information related to the current application: configuration settings, database connections etc. So, before we create a test client, we need to be able to pass the application context to it.
+
+This is achieved with an "application factory" or the "create_app()" function in Sherpa's case which creates an application instance, loads the application's configuration (database credentials etc) and returns the instance.
+
+Sherpa's application factory and test_client are both called as part of Pytest fixtures. Fixtures in Pytest are just reusable setup and tear-down code that can be passed as arguments in test functions i.e. the above set up is run before each test is carried out.
+
+With all this in place, Sherpa's test suite is set up and configured.
+
+### Dealing With User Sessions
+
+Sherpa makes extensive use of user sessions and cookies e.g. to authenticate users, so this had to be emulated in the test suite. Flask's test client provides a useful session_transaction() method which allows one to make updates to the test client's session. For example, to set the user's email and team_id in their session:
+
+```
+with client.session_transaction() as session:
+        session["email"] = "matt@sherpa.com"
+        session["team_id"] = 10 
+```
+
+### Simulating API Responses
+
+Since Sherpa has several third party API integrations, this proved problematic for the test suite. It would be infeasible (and likely against Google's terms of service) to send the many "junk" requests to the API servers that testing requires. The use of pytest's "monkeypatch" fixture was necessary.  Monkeypatch allows one to "patch" the response from a third party API by forcing it to return a predefined test response (in reality no real request is sent over the Internet, this is all happening in the test environment). For example, Sherpa patches the "get" response for google oAuth authentication (when we try to fetch the user's google account information) as follows:
+
+```
+user = MockResponse({"email": "test@test.com"})
+monkeypatch.setattr("flask_oauthlib.client.OAuthRemoteApp.get", lambda  self, userinfo: user)
 
 ## Project Reflection
 
