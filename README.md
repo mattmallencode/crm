@@ -1112,7 +1112,7 @@ Then for every stage, the conversion values are calculated as follows;
 
 The following chart details the process of creating the data analytics plots for the analytics dashboard
 
-![Diagram the process of create a plot diagram](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/plot.png)
+![Diagram the process of create a plot diagram](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/plots.png)
 
 ### Serving Plots
 
@@ -1157,6 +1157,7 @@ Since Sherpa has several third party API integrations, this proved problematic f
 ```
 user = MockResponse({"email": "test@test.com"})
 monkeypatch.setattr("flask_oauthlib.client.OAuthRemoteApp.get", lambda  self, userinfo: user)
+```
 
 ## Project Reflection
 
