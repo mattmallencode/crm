@@ -33,15 +33,24 @@
               <use xlink:href="#s-text" class="text-copy"></use>
             </g>
           </svg>
-    
-    <section id="contacts">
-        <section id="contact_filter_buttons">
-            <a href = "{{url_for('contacts_bp.contacts', prev_sort='None', order='ASC', sort='None', filter='all', page=1 , error='None')}}">All Contacts</a>
-            <a href = "{{url_for('contacts_bp.contacts', prev_sort='None', order='ASC', sort='None', filter='assigned', page=1 , error='None')}}">My Assigned Contacts</a>
-            <a href = "{{url_for('contacts_bp.contacts', prev_sort='None', order='ASC', sort='None', filter='unassigned', page=1 , error='None')}}">Unassigned Contacts</a>
+    <div class="left-col">
+        <div class="contacts-box">
+            <section id="contact_filter_buttons">
+                <a href = "{{url_for('contacts_bp.contacts', prev_sort='None', order='ASC', sort='None', filter='all', page=1 , error='None')}}">All Contacts</a>
+            </div>
         </section>
-        <i id="search_icon_contacts"class="fa-solid fa-magnifying-glass"></i>
-        <table>
+        <div class="contacts-box">
+            <section id="contact_filter_buttons">
+                <a href = "{{url_for('contacts_bp.contacts', prev_sort='None', order='ASC', sort='None', filter='assigned', page=1 , error='None')}}">My Assigned Contacts</a>
+            </div>
+        </section>
+        <div class="contacts-box">
+            <section id="contact_filter_buttons">
+                <a href = "{{url_for('contacts_bp.contacts', prev_sort='None', order='ASC', sort='None', filter='unassigned', page=1 , error='None')}}">Unassigned Contacts</a>
+            </div>
+        </section>
+    </div>
+        <table id="contacts_table">
             <tr>
                 <form action = "" method = "POST" novalidate>
                     {{search_form.hidden_tag()}}
@@ -140,13 +149,28 @@
 <section>
     {% set next_page = page + 1 %}
     {% set previous_page = page - 1 %}
+    
     <br>
     {% if page > 1 %}
-        <p><a href = "{{url_for('contacts_bp.contacts', error=error, filter=filter, order=order, prev_sort=prev_sort, sort=sort, page=previous_page)}}">Previous Page</a></p>
+    <!--
+    <div class="page">
+        <p><a href = "{{url_for('contacts_bp.contacts',error=error, filter=filter, order=order, prev_sort=prev_sort, sort=sort, page=previous_page)}}">Previous Page</a></p>
+    </div>
+    -->
+    <div class="page">
+    <a href="{{url_for('contacts_bp.contacts',error=error, filter=filter, order=order, prev_sort=prev_sort, sort=sort, page=previous_page)}}" id="previous_page">&laquo;</a>
+    </div>
     {% endif %}
 
     {% if page < num_pages %}
-        <p><a href = "{{url_for('contacts_bp.contacts',error=error, filter=filter, order=order, prev_sort=prev_sort, sort=sort, page=next_page)}}">Next Page</a></p>
+    <div class="page">
+    <a href="{{url_for('contacts_bp.contacts', error=error, filter=filter, order=order, prev_sort=prev_sort, sort=sort, page=next_page)}}" id="next_page"> &raquo;</a>
+    </div>
+    <!--
+    <div class="page">
+        <p><a href = "{{url_for('contacts_bp.contacts', error=error, filter=filter, order=order, prev_sort=prev_sort, sort=sort, page=next_page)}}">Next Page</a></p>
+    </div>
+    -->
     {% endif %}
     
 </section>

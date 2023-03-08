@@ -26,11 +26,18 @@
               <use xlink:href="#s-text" class="text-copy"></use>
             </g>
           </svg>
-          <section id="deals">
+          <div class="left-col">
+          <div class="deals-box">
           <section id="deals_filter_buttons">
             <a href = "{{url_for('deals_bp.deals', prev_sort='None', order='ASC', sort='None', filter='all', page=1 , error='None')}}">All Deals</a>
+          </section>
+          </div>
+          <div class="deals-box">
+            <section id="deals_filter_buttons">
             <a href = "{{url_for('deals_bp.deals', prev_sort='None', order='ASC', sort='None', filter='assigned', page=1 , error='None')}}">My Assigned Deals</a>
         </section>
+        </div>
+        </div>
         <table id="deals_table">
             <tr>
                 <form action = "" method = "POST" novalidate>
@@ -48,7 +55,7 @@
                 <th><a href="{{url_for('deals_bp.deals', prev_sort=prev_sort, order=order, sort='amount', page=page, filter=filter, error='None')}}">Closed Amount</a></th>
                 <th><a href="{{url_for('deals_bp.deals', prev_sort=prev_sort, order=order, sort='goal', page=page, filter=filter, error='None')}}">Goal</a></th>
                 <th><a href="{{url_for('deals_bp.deals', prev_sort=prev_sort, order=order, sort='associated_contact', page=page, filter=filter, error='None')}}">Associated Contacts</a></th>
-                <th><a href="{{url_for('deals_bp.deals', prev_sort=prev_sort, order=order, sort='associated_company', page=page, filter=filter, error='None')}}">associated_company</a></th>
+                <th><a href="{{url_for('deals_bp.deals', prev_sort=prev_sort, order=order, sort='associated_company', page=page, filter=filter, error='None')}}">Associated Company</a></th>
                 <th>Edit Deal</th>
                 <th></th>
            </tr>

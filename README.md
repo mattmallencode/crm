@@ -415,7 +415,7 @@ A user must be able to accept an invitation to a team. They can achieve this by 
 
 *Satisfies User Stories: 3 - 6
 
-"Database" in this context refers to the set of records that belong to a team, either its contacts or deals.
+"Database" in this context refers to the set of records belong to a team, either its contacts or deals.
 
 A user must be able to interface with their team's databases and achieve all of the basic CRUD operations with their team's records by interacting with the web app i.e. forms and buttons, not SQL.
 
