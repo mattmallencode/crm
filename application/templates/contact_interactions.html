@@ -54,7 +54,7 @@
     {% elif activity == 'notes' %}
         <section id="notes">
             <h2>Make A Note</h2>
-            <form action = "{{url_for('contact_bp.contact', contact_id=contact.contact_id, activity='notes')}}" method = "POST">
+            <form class="make-note-form" action = "{{url_for('contact_bp.contact', contact_id=contact.contact_id, activity='notes')}}" method = "POST">
                 {{noteForm.hidden_tag()}}
                 <section>
                     {% for error in noteForm.note.errors %}
@@ -68,7 +68,7 @@
                         {{response}}
                     {% endif %}
                 </section>
-                <section>
+                <section class="notes_submit_button">
                     {{noteForm.submit()}}
                 </section>
                 

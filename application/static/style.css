@@ -358,7 +358,6 @@ color: white;
   #contact_activity ul li a{
     padding: 0%;
     margin: 0%;
-    
   }
 
   /* View a contact button */
@@ -851,4 +850,43 @@ div#login_box {
 #dashboard {
   margin-left: 10%;
   margin-right: 10%;
+}
+
+/* activities page */
+/* make notes */
+input#note {
+  padding: 10px;
+  border: None;
+  size: 100%;
+  width: 40%;
+  height: 100%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  transition: 1s;
+}
+input#submit{
+  color: white;
+  padding: 1%;
+  text-indent: 0%;
+  background-color:#E95420;
+  border-radius: 0%;
+  text-decoration: none;
+}
+input#submit.contact_save_add_button{
+  color: white;
+  padding: 4%;
+  text-indent: 0%;
+  background-color:#E95420;
+  border-radius: 0%;
+  text-decoration: none;
+}
+input#submit:hover{
+  color: white;
+}
+section#note p a {
+  color: white;
+  background-color: #E95420;
+  padding: 1%;
+  text-indent: 0%;
+  border-radius: 0%;
+  text-decoration: none;
 }
