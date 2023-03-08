@@ -520,7 +520,6 @@ body#login_body .login_container {
   top: 0;
   left: 0%;
 }
-
 #login_form  input  {
   padding: 10px;
   border: None;
@@ -800,15 +799,7 @@ div#login_box {
 }
 
 
-#dashboard{
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
 
-#dashboard *{
-  margin: 0%;
-  padding: 0%;
-}
 
 /* Paging for contacts */
 .page{
@@ -836,6 +827,12 @@ div#login_box {
   font-size: 500%;
 }
 /* fixing the home page */
+#dashboard{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 5%;
+  margin-left: 10%;
+}
 #dashboard section h2 {
   background-color: #f2f2f2;
   color: black;
@@ -843,14 +840,12 @@ div#login_box {
   text-align: center;
   padding-top: 2%;
   padding-bottom: 2%;
+  margin-right: 2%;
   margin-top: 2%;
   margin-bottom: 0%;
   font-size: 2.3em;
 }
-#dashboard {
-  margin-left: 10%;
-  margin-right: 10%;
-}
+
 
 /* activities page */
 /* make notes */
@@ -882,11 +877,15 @@ input#submit.contact_save_add_button{
 input#submit:hover{
   color: white;
 }
-section#note p a {
-  color: white;
-  background-color: #E95420;
-  padding: 1%;
-  text-indent: 0%;
-  border-radius: 0%;
+
+#view-notes p a.note-remove {
   text-decoration: none;
+  background-color: #E95420;
+  color: white;
+  padding: 4px;
+  
+}
+#view-notes p {
+  margin-top: 1%;
+  margin-bottom: 2%;
 }
