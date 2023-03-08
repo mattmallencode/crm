@@ -845,7 +845,14 @@ div#login_box {
   margin-bottom: 0%;
   font-size: 2.3em;
 }
-
+@media only screen and (max-width: 1500px) {
+  #dashboard{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 5%;
+    margin-left: 2%;
+  }
+}
 
 /* activities page */
 /* make notes */

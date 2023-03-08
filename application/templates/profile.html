@@ -7,12 +7,26 @@
               <li><a href="{{ url_for('contacts_bp.contacts') }}">Contacts</a></li>
               <li><a href ="{{url_for('deals_bp.deals')}}">Deals</a></li>
               <li><a href="{{ url_for('teams.team') }}">Team</a></li>
-              <li><a href="{{ url_for('auth.profile') }}">Logout</a></li>
+              <li><a href="{{ url_for('auth.profile') }}">Profile</a></li>
             </ul>
         </nav>
         <section id="logout">
             <section>
-                <h1>Your Profile</h1>
+                <svg viewBox="0 0 960 300">
+                    <symbol id="s-text">
+                      <text text-anchor="middle" x="50%" y="80%">PROFILE </text>
+                      <text text-anchor="middle" x="52%" y="80%">PROFILE </text>
+                      
+                    </symbol>
+                  
+                    <g class = "g-ants">
+                      <use xlink:href="#s-text" class="text-copy"></use>
+                      <use xlink:href="#s-text" class="text-copy"></use>
+                      <use xlink:href="#s-text" class="text-copy"></use>
+                      <use xlink:href="#s-text" class="text-copy"></use>
+                      <use xlink:href="#s-text" class="text-copy"></use>
+                    </g>
+                  </svg>
                 <p>Email: {{ user["email"] }}</p>
                 <p>Team: {{ team["name"] }}</p>
             </section>
@@ -26,6 +40,5 @@
 
             </section>
         </section>
-
     </body>
 {% endblock %}
