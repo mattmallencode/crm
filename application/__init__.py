@@ -81,17 +81,16 @@ def create_app(config_class=Config):
             plt.bar("no data", 1, color="#EC6B56")
             activity_diagram = encode_diagram(plt)
        
-        #try:
-        deal_stage_diagram, conversions = draw_deal_stage_diagram(user)
-        #except:
-        """
-        fig, ax = plt.subplots()
-        plt.title("You have no deal data. Create some deals to populate this chart")
-        plt.barh("no data", 1, color="#EC6B56")
-        plt.tight_layout()
-        deal_stage_diagram = encode_diagram(plt)
-        conversions=None
-        """
+        try:
+            deal_stage_diagram, conversions = draw_deal_stage_diagram(user)
+        except:
+            fig, ax = plt.subplots()
+            plt.title("You have no deal data. Create some deals to populate this chart")
+            plt.barh("no data", 1, color="#EC6B56")
+            plt.tight_layout()
+            deal_stage_diagram = encode_diagram(plt)
+            conversions=None
+        
        
         return render_template("home.html", user=user, goal_closed_diagram=goal_closed_diagram, deals_forecast_diagram=deals_forecast_diagram, activity_diagram=activity_diagram, deal_stage_diagram=deal_stage_diagram, conversions=conversions)
         
