@@ -1,43 +1,48 @@
-<!DOCTYPE html>
-<html lang="en-US">
-<head>
-    <meta charset="UTF-8" />
-    <title>Sherpa</title>
-    <link rel="stylesheet" type="text/css" href="{{url_for("static", filename="style.css")}}" >
-    <script src="https://kit.fontawesome.com/13ea2b7ad4.js" crossorigin="anonymous"></script>
-</head>
-    <body>
-        <div  class="box">
-        <div class="container">
+{% extends "base_no_turbo.html" %}
+
+{% block main_content %}
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    <body id="signup_body">
+        <div  class="signup_box">
+        <div class="signup_container">
                 <h1 class="Heading">Sign up</h1>
                 <p class="loginSubmitP">
                         Welcome to Sherpa. To register please fill out all the forms below 
                         and then press the register button to continue.
                 </p>
-        <form method="POST", novalidate>
+        <form id="signup_form" method="POST", novalidate>
         {{ form.hidden_tag() }}
         {% for error in form.name.errors %}
                 <div class="signup_error">{{ error }}</div>
         {% endfor %}
-        <i class="fa-solid fa-user"></i>
+        <div class="signup_icon">
+                <i class="fa-solid fa-user"></i>
+        </div>
         {{ form.name() }}
         <br>
         {% for error in form.email.errors %}
                 <div class="signup_error">{{ error }}</div>
         {% endfor %}
-        <i class="fa-solid fa-envelope"></i>
-        {{ form.email() }}
+        <div class="signup_icon">
+                <i class="fa-solid fa-envelope"></i>
+        </div>
+        {{ form.email(id="signup_email") }}
+        
         <br>
         {% for error in form.password.errors %}
                 <div class="signup_error">{{ error }}</div>
         {% endfor %}
-        <i class="fa-solid fa-lock"></i>
+        <div class="signup_icon">
+                <i class="fa-solid fa-lock"></i>
+        </div>        
         {{ form.password() }}
         <br>
         {% for error in form.password2.errors %}
                <div class="signup_error">{{ error }}</div>            
         {% endfor %}
-        <i class="fa-solid fa-lock"></i>
+        <div class="signup_icon">
+                <i class="fa-solid fa-lock"></i>
+        </div>
         {{ form.password2() }}
         <br>
         <br>
@@ -50,4 +55,4 @@
 </div>
 </div>
     </body>
-</html>
+{% endblock %}

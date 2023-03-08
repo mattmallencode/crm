@@ -108,12 +108,14 @@ i{
 nav{
     position: fixed;
     font-size: 20px;
+    font-size: 20px;
     top: 0%;
     left: 0%;
     right: 0%;
     width: 100%;
     z-index: 999;
 }
+
 
 /* Dropdown menu for the nav bar*/
 .dropdown-menu {
@@ -159,6 +161,7 @@ li a {
 
 #contacts_table {
   float: right;
+  width: 85%; /* adjust as needed */
   width: 85%; /* adjust as needed */
 }
 .contacts-box {
@@ -479,6 +482,48 @@ color: white;
 }
 /* Sign up page*/
 
+
+#signup_form{
+  size: 100%;
+  position: relative;
+  top: 0;
+  left: 0%;
+}
+
+#signup_form input{
+  padding: 10px;
+  border: None;
+  size: 100%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  transition: 1s;
+}
+
+#signup_form  input:hover {
+  transform: scale(1.04);
+}
+
+#signup_box{
+  display: flex;
+  width: auto;
+  justify-content: center;
+  align-items: left;
+  left: 0%;
+  height: 100%;
+  transform: translateY(-20%) scale(1.5);  
+}
+
+#signup_container{
+  padding-left: 50%;
+}
+#signup_body .signup_box .signup_container{
+    background-color: #F0F0F0;
+    height: 40%;
+    left: 0%;
+    padding-left: 20%;
+    padding-right: 20%;
+    border-radius: 10%;
+
+}
 
 /* Login page*/
 
