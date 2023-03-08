@@ -150,16 +150,17 @@ def tasks_activity(contact_id, google_token, contact, complete="false"):
             timestamp = datetime.now().strftime("%d/%m/%Y %H:%M")
             log_activity("complete_task", g.email, timestamp, contact_id)
         task_list = get_task_list(contact)
-        if type(task_list) != str:
-            return redirect(url_for('authorize_email', contact_id=contact_id))
         if form.validate_on_submit():
             add_task(form, task_list, contact)
             form.title.data = ""
             form.due.data = None
             if task_list == None:
                 task_list = get_task_list(contact)
-        upcoming_tasks, past_due_tasks, completed_tasks = get_tasks(task_list, contact.contact_id)
-        tasks = "Not None"
+        if type(task_list) != str:
+            tasks, upcoming_tasks, past_due_tasks, completed_tasks = None, None, None, None
+        else:
+            upcoming_tasks, past_due_tasks, completed_tasks = get_tasks(task_list, contact.contact_id)
+            tasks = "Not None"
     # User isn't authenticated, redirect them so they can oAuth their email.
     else:
         return redirect(url_for('authorize_email', contact_id=contact_id))
@@ -202,7 +203,7 @@ def add_task(form, task_list, contact):
     response = google.post(url, data={"title": title, "due": due}, format="json")
     if response.status != 200:
         return redirect(url_for('authorize_email', contact_id=contact.contact_id))
-    timestamp = datetime.now()
+    timestamp = datetime.now().strftime("%d/%m/%Y %H:%M")
     log_activity("task", g.email, timestamp, contact.contact_id)
 
 def complete_task(contact_id, task_id):

@@ -5,6 +5,7 @@ from application.forms import CreateTeamForm, ContactForm, LogoutForm, LeaveTeam
 from flask_oauthlib.client import OAuth
 from turbo_flask import Turbo
 from config import Config
+import warnings
 
 import base64
 from io import BytesIO
@@ -32,6 +33,7 @@ def create_app(config_class=Config):
     # creates a Turbo instance
 
     with application.app_context():
+        warnings.filterwarnings("ignore", module="matplotlib")
         turbo.init_app(application)
         db.init_app(application)
         application.extensions["turbo"] = turbo
@@ -298,11 +300,17 @@ def create_app(config_class=Config):
             next_stage_index = current_stage_index + 1
 
             # calculates next step conversion
-            next_step_conversion = stage_count_values[next_stage_index] / stage_count_values[current_stage_index]
-            conversions[stage][0] = round(next_step_conversion * 100, 2)
+            try:
+                next_step_conversion = stage_count_values[next_stage_index] / stage_count_values[current_stage_index]
+                conversions[stage][0] = round(next_step_conversion * 100, 2)
+            except:
+                conversions[stage][0] = 0
             # calculated cumulative conversion
-            cumulative_conversion = stage_count_values[next_stage_index] / stage_count_values[0]
-            conversions[stage][1] = round(cumulative_conversion * 100, 2)
+            try:
+                cumulative_conversion = stage_count_values[next_stage_index] / stage_count_values[0]
+                conversions[stage][1] = round(cumulative_conversion * 100, 2)
+            except:
+                conversions[stage][1] = 0
         last_v = list(stage_count.values())[-1]
         for i, v in enumerate(list(stage_count.values())):
             try:
