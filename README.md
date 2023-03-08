@@ -105,7 +105,7 @@ This document outlines the design and implementation of Sherpa, a free and open-
 
 This implementation can be used by multiple businesses i.e. users create "teams" and invite other users to join their team. However, it could easily be modified to be used by a single business by removing the team creation endpoint.
 
-TODO: GITHUB LINK, TEST ACCOUNT DETAILS, HOSTING LINK (AT END).
+TODO: GITHUB LINK
 
 ## Some CRM Terms
 
@@ -587,7 +587,7 @@ TODO
 
 *Satisfies User Story: 40*
 
-TODO
+TODO: EIMANTAS
 
 #### Serving Plots
 
@@ -837,7 +837,7 @@ The following flow chart details the process flow for accepting a Sherpa invitat
 
 "Database" in this context refers to the set of records belonging to a team, either its contacts or deals. 
 
-Since the CRUD operations for both contacts and deals are very similar, their implementation is described in one section. For additional brevity some disparities in form validation etc between contacts and details are not detailed but one should be able to gather how we interface the user with the MySQL database from what follows.
+Since the CRUD operations for both contacts and deals are very similar, their implementation is described in one section. For additional brevity some disparities in form validation etc between contacts and deals are not detailed but one should be able to gather how we interface the user with the MySQL database from what follows.
 
 Each database's "read" operation displays a series of "live" forms i.e. HTML input elements that have been prepopulated with the records from the database. 
 
@@ -982,7 +982,7 @@ TODO
 
 *Implementation of requirement: 20, 21, 23, 24*
 
-TODO
+TODO (FLOW)
 
 ### Serving Plots
 
@@ -1004,15 +1004,9 @@ This chapter will serve as a reflection on the 12 weeks we as a team spent worki
 
 ### The Team's Process
 
-TODO
-
 ### What Went Well
 
-TODO
-
 ### Mistakes To Learn From
-
-TODO
 
 ### What Was Technically Challenging
 
