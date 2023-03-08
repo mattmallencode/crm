@@ -158,132 +158,131 @@ As a business employee, I want to accept an invitation to join my employer's She
 
 *User Story ID: 3*
 
-As a Sherpa user, I want to view all my team's contacts.
+As a Sherpa user, I want to view all my team's contacts so that I can view the contact information of our customers.
 
 #### Add Contacts
 
 *User Story ID: 4*
 
-As a Sherpa user, I want to add a contact to my team's contacts list.
+As a Sherpa user, I want to add a contact to my team's contacts list so I can record the contact information of a new customer.
 
 #### Edit Contacts
 
 *User Story ID: 5*
 
-As a Sherpa user, I want to edit one of my team's contacts i.e. change various details like a phone number.
+As a Sherpa user, I want to edit one of my team's contacts i.e. change various details like a phone number so I can correct mistakes or update stale information.
 
 #### Remove Contacts
 
 *User Story ID: 6*
 
-As a Sherpa user, I want to remove one of my team's contacts.
+As a Sherpa user, I want to remove one of my team's contacts so I can delete a record for a person who is no longer a customer or delete an erroneous record.
 
 #### View User Profile
 
 *User Story ID: 7*
 
-As a Sherpa user, I want to view my profile.
+As a Sherpa user, I want to view my profile so I can see the information associated with my Sherpa account.
 
 #### User Logout
 
 *User Story ID: 8*
 
-As a Sherpa user, I want to log out of my account.
+As a Sherpa user, I want to log out of my account so that I need to log in, in order to use Sherpa again.
 
 #### View Team
 
 *User Story ID:  9*
 
-As a Sherpa user I want to view my team i.e. the list of team members.
+As a Sherpa user I want to view my team so that I can see the list of the members of my team.
 
 #### Leave Team
 
 *User Story ID:  10*
 
-As a Sherpa user, I want to leave my team.
-
-#### View Contacts
-
-*User Story ID:  11*
-
-As a Sherpa user I want to view my team's contacts.
+As a Sherpa user, I want to leave my team so that I no longer have access to the team's CRM resources and I am free to create / join another team.
 
 #### Assign Contact
 
-*User Story ID:  12
+*User Story ID:  11
 
 As a Sherpa team owner/admin I want to assign a contact to a member of my team.
 
 #### View Assigned Contacts
 
-*User Story ID:  13*
+*User Story ID:  12*
 
 As a Sherpa user I want to view the contacts that have been assigned to me.
 
 #### View Unassigned Contacts
 
-*User Story ID:  14*
+*User Story ID:  13*
 
 As a Sherpa user I want to view the contacts that have yet to be assigned to a member of my team.
 
 #### Search For Contacts
 
-*User Story ID:  15*
+*User Story ID:  14*
 
 As a Sherpa user I want to search for a specific contact(s) using a search bar.
 
 #### Sort Contacts
 
-*User Story ID:  16*
+*User Story ID:  15*
 
 As a Sherpa user I want to sort my team's contacts by email, phone number, etc.
 
 #### View Contact Activity
 
-*User Story ID:  17*
+*User Story ID:  16*
 
 As a Sherpa user I want to view all team activity for a contact e.g. notes, emails, meetings etc.
 
 #### Post Notes
 
-*User Story ID:  18*
+*User Story ID:  17*
 
 As a Sherpa user, I want to add a note to a contact's page.
 
 #### Remove notes
 
-*User Story ID:  19*
+*User Story ID:  18*
 
 As a Sherpa user, I want to remove a note on a contact's page.
 
 #### Send Email 
 
-*User Story ID: 20*
+*User Story ID: 19*
 
 As a Sherpa user, I want to send an email to a contact.
 
 #### View Emails 
 
-*User Story ID: 21*
+*User Story ID: 20*
 
 As a Sherpa user, I want to view my emails sent and received to/from a contact.
 
 #### Reply to Email 
 
-*User Story ID: 22*
+*User Story ID: 21*
 
 As a Sherpa user, I want to reply to an email from a contact.
 
 #### Set a Task
 
-*User Story ID: 23*
+*User Story ID: 22*
 
 As a Sherpa user, I want to create a task in relation to a contact.
 
 #### View Tasks
-*User Story ID: 24*
+*User Story ID: 23*
 
 As a Sherpa user, I want to view all tasks in relation to a contact.
+
+#### Complete Task
+*User Story ID: 24*
+
+As a Sherpa user, I want to mark a task as complete.
 
 #### Schedule Meeting
 *User Story ID: 25*
@@ -327,7 +326,7 @@ As a Sherpa user, I want to sort my team's deals.
 
 #### Assign Deal
 
-*User Story ID:  33
+*User Story ID:  33*
 
 As a Sherpa team owner/admin I want to assign a deal to a member of my team.
 
@@ -413,7 +412,7 @@ A user must be able to accept an invitation to a team. They can achieve this by 
 
 *Requirement ID: 6*
 
-*Satisfies User Stories: 3 - 6
+*Satisfies User Stories: 3 - 6, 28-30
 
 "Database" in this context refers to the set of records belong to a team, either its contacts or deals.
 
@@ -447,17 +446,17 @@ A user must be able to view a page that lists all of the members of their team. 
 
 *Requirement ID: 8*
 
-*Satisfies User Story: 11, 28*
+*Satisfies User Story: 3, 27*
 
 "Database" in this context refers to the set of records belong to a team, either its contacts or deals.
 
-Users must be able to view their team's contacts or deals. Since a business may have an enumerable number of customers and sales contracts, Sherpa can not serve all records on one page without hindering the user experience therefore records must be "chunked up" into "pages" (each page being a group of 25 records), with the user able to navigate records using the "next page" and "previous page" buttons.
+Users must be able to view their team's contacts or deals. Since a business may have an enumerable number of customers and sales contracts, Sherpa can not serve all records on one page without hindering the user experience therefore records must be "chunked up" into "pages" (each page being a group of 25 records), with the user able to navigate records using the "next page" and #### Closing Deals"previous page" buttons.
 
 #### Database Filtering
 
 *Requirement ID: 9*
 
-*Satisfies User Story: 12 - 14, 33-34*
+*Satisfies User Story: 11 - 13, 33-34*
 
 "Database" in this context refers to the set of records belong to a team, either its contacts or deals.
 
@@ -469,7 +468,7 @@ Users must then be able to filter for "my contacts", "my deals" etc, i.e. just d
 
 *Requirement ID: 10*
 
-*Satisfies User Story: 15, 31*
+*Satisfies User Story: 14, 31*
 
 "Database" in this context refers to the set of records belong to a team, either its contacts or deals.
 
@@ -479,7 +478,7 @@ Users must be able to search their team's contacts or deals. Users should be abl
 
 *Requirement ID: 11*
 
-*Satisfies User Story: 16, 32*
+*Satisfies User Story: 15, 32*
 
 "Database" in this context refers to the set of records belong to a team, either its contacts or deals.
 
@@ -489,18 +488,96 @@ User must be able to sort their team's contacts or deals by email, phone number,
 
 *Requirement ID:  12*
 
-*Satisfies User Story:  17*
+*Satisfies User Story:  16*
+
+Users must be able to view a log of all contact activity for all emails, tasks, meetings and notes related to the contact. Every time an activity occurs, this event must be logged detailing the activity type and the datetime it occurred. If activities have been logged then the user must be able to view this log.
 
 #### Note Management
 
 *Requirement ID:  13*
 
-*Satisfies User Story:  18, 19*
+*Satisfies User Story:  17, 18*
 
-#### Google oAuth
+A user must be able to manage their notes on a contact by being able to view notes, add new notes and remove notes. A form must be presented for every contact where users are able to create a note. A table must also be presented where users can view every note for a contact with the option to remove the note
+
+#### Google OAuth (Open Authorisation)
 
 *Requirement ID:  14*
-*Satisfies User Story:  18, 19*
+
+*Satisfies User Story:  20-26*
+
+A user must be able to authenticate their Google Account with OAuth in order to be able to use Sherpa's Google features.
+
+#### Email Management
+
+*Requirement ID: 15*
+
+*Satisfies User Story: 20 - 22*
+
+A user must be able to manage their emails with a contact. A user must be presented with a form for sending an email to a contact containing fields for the email subject and the email body. The user must also be able to view all email threads with the contact and be able to reply to the most recent email in a thread.
+
+#### Task Management
+
+*Requirement ID: 16*
+
+*Satisfies User Story: 23 - 25*
+
+A user must be able to manage their tasks for a customer. A form must be presented where users can set a task in relation to a customer. A table must also be presented displaying all tasks for a given customer.
+
+
+#### Meeting Management
+
+*Requirement ID: 17*
+
+*Satisfies User Story: 25 26*
+
+A user must be able to manage their meetings with a customer. A form must be presented where users can schedule a meeting with a customer. A table must also be displayed where users can view all their scheduled meetings with a customer.
+
+#### Closing Deals
+
+*Requirement ID: 18*
+
+*Satisfies User Story: 30*
+
+A user when presented with the forms for adding/editing deals must have the option to alter the deal "stage" to Closed. When closing a deal the user must provide the "closed amount".
+
+#### Closed Vs Goal Plot Generation
+
+*Requirement ID: 19*
+
+*Satisfies User Story: 37*
+
+#### Deal Forecast Plot Generation
+
+*Requirement ID: 20*
+
+*Satisfies User Story: 38*
+
+#### Deal Conversion Tracking
+
+*Requirement ID: 21*
+
+*Satisfies User Story: 39*
+
+#### Deal Stage Funnel Plot Generation
+
+*Requirement ID: 22*
+
+*Satisfies User Story: 39*
+
+#### Activity Plot Generation
+
+*Requirement ID: 23*
+
+*Satisfies User Story: 40*
+
+#### Serving Plots
+
+*Requirement ID: 24*
+
+*Satisfies User Story: 37-40*
+
+TODO: EIMANTAS
 
 ## Data Models
 
@@ -606,6 +683,26 @@ The following table describes the data model used for "deal" objects i.e. a deal
 + associated_contact - contact associated with this deal
 + associated_company - company associated with this deal
 
+#### Activity Log
+The following table describes the data model used for "activity log" objects i.e. recordings of the metadata of interactions with customers i.e. emails, meetings, tasks, etc.
+
+*Table 7 : Activity Log Data Model*
+
+| activity_id | activity_type | actor | timestamp | contact_id | team_id | description |
+| :-: | :-: | :-: | :-: | :-: | :-: | :-: |
+|Primary Key, Integer | String | String | Datetime | String | Integer | String |
+
++ activity_id - auto-incremented integer which is used as the primary key to uniquely identify an activity
++ activity_type - the type of activity, can be "note", "email", "task", "complete_task", and "meeting
++ actor - the "doer" of the activity i.e. the team member who created the note, sent the email etc
++ timestamp - the date and time at which this activity was logged
++ contact_id - the id of the contact associated with this activity e.g. the recipient of the email, the subject of the note, etc.
++ team_id - secondary key which is used to correlate an activity with a specific team.
++ description - a short string describing the activity e.g. "{actor} created a note on {timestamp}.
+
+#### Deal Stage Conversion
+TODO: EIMANTAS
+
 ## Implementation
 
 ### Underlying Technologies
@@ -618,26 +715,23 @@ The following details our team's technology stack and gives context to the imple
 - **Virtual Environments:** Python-dotenv
 - **Object-Relational Mapper (ORM):** Flask-SQLAlchemy
 - **SMTP Library:** Flask-Mail
+- **JavaScript WebSocket Library**: Flask-Turbo
 - **Form Rendering & Validation:** WTForms
 - **User Authentication:** Werkzeug
 - **URL Token Generation:**  Python's Secrets module
+- **Plotting Library**: Matplotlib
+- **OAuth Library**: Flask-OAuthlib
 - **Cloud Orchestration**: Amazon Web Services (AWS) Elastic Beanstalk
 - **Application Server Hosting**: AWS EC2
 - **Database Server Hosting**: AWS RDS
-
-#### Operation of AWS Server
-
-The diagram below depicts the operation of the application with the AWS server
-
-![Chart detailing the operation of the application with AWS ](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/aws.png)
 
 ### App Structure
 
 - Sherpa is a Flask application and is made up of various "endpoints" / routes that users can send  requests to.
 - All Sherpa endpoints (except /login and /signup) are protected by an "@login_required" wrapper. This is just a Python decorator that calls a function to reject the user's request if they haven't been authenticated. They're redirected to the login page and once they're authenticated they're redirected back to the protected endpoint.
-- Most Sherpa endpoints (except /, /login etc) are protected by a "@team_required"w rapper. This is another decorator that calls a function to reject the user's request if they are not a member of a team. The user is redirected to the "create_team" endpoint.
+- Most Sherpa endpoints (except for example / and /login) are protected by a "@team_required" wrapper. This is another decorator that calls a function to reject the user's request if they are not a member of a team. The user is redirected to the "create_team" endpoint.
 - Database and SMTP access is facilitated by environment variables specified in a .env file.
-- All database interactions occur through the use of SQLAlchemy data "models". These are outlined in the Design chapter and are essentially Pythonic descriptions of MySQL tables.
+- All database interactions occur through the use of SQLAlchemy data "models". These are outlined in the Data Models chapter and are essentially Pythonic descriptions of MySQL tables.
 
 ### User Registration and Authentication
 
@@ -835,41 +929,25 @@ The following details the implementation of the deals page where users are serve
 
 ## Testing
 
-### Test Landing Page
-
-*Test case: 1*<br>
-
-- Using Pytest the landing page was tested. Using client make a get request to the url of the page, "/login".  Store the recieved data from that get request in the html variable. Using pytest "assert" statement, assert that the landing status of the page is "200". It means the page was served without issues.
-
-### Test User
-
-*Test case: 2*<br>
-
-- Using Pytest a fake instance of a user and dummy information was passed into it. Then using assert statements check that the passed information was correctly received by the Users class.
-
-### Test Invites
-
-*Test case: 3*<br>
-
-- Using pytest a fake invite was created by calling the invite class and using the assert statement we can find out whether the class behaves as it should.
-
-### Test Contacts
-
-*Test case: 4*<br>
-
-- Using Pytest create a fake instance of a contact being added. Check that all contact details are received properly.
-
-### Test Teams
-
-*Test case: 5*<br>
-
-- Using Pytest a fake instance of  a team was created using the Teams class. Parameters for a team creation were passed and the behavior was checked using an assert statement.
+TODO
 
 ## Project Reflection
 
 This chapter will serve as a reflection on the 12 weeks we as a team spent working on our project, highlighting the difficulties we experienced and the engineering trade offs we had to consider while developing Sherpa.
 
-### Difficulties
+### The Team's Process
+
+TODO
+
+### What Went Well
+
+TODO
+
+### Mistakes To Learn From
+
+TODO
+
+### What Was Technically Challenging
 
 This section outlines the difficulties and challenges we individually and as a team encountered in the process of developing Sherpa.  
 
