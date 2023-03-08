@@ -876,11 +876,15 @@ input#submit.contact_save_add_button{
 input#submit:hover{
   color: white;
 }
-section#note p a {
-  color: white;
-  background-color: #E95420;
-  padding: 1%;
-  text-indent: 0%;
-  border-radius: 0%;
+
+#view-notes p a.note-remove {
   text-decoration: none;
+  background-color: #E95420;
+  color: white;
+  padding: 4px;
+  
+}
+#view-notes p {
+  margin-top: 1%;
+  margin-bottom: 2%;
 }

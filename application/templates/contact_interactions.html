@@ -75,18 +75,22 @@
             </form>
 
         </section>
-        <section>
+        <section id="view-notes">
             <h2>View Notes</h2>
             {% if notes %}
-            <table id="notes-table">
                 {% for note in notes %}
+                <table id="notes-table">
                 <tr>
-                  <td>{{ note.author }} <br> {{ note.date }}</td>
-                  <td>{{ note.note }}</td>
-                  <td><a href="{{url_for('contact_bp.remove_note', note_id=note.note_id, contact_id=contact.contact_id)}}">Remove</a></td>
+                  <th>{{ note.author }}</th> 
+                  <th>{{ note.date }}</th>
                 </tr>
+                <tr>
+                  <td colspan="2">{{ note.note }}</td>
+                </tr>
+                </table>
+                <p><a class="note-remove"href="{{url_for('contact_bp.remove_note', note_id=note.note_id, contact_id=contact.contact_id)}}">Remove</a></p>
                 {% endfor %}
-              </table>
+              
             {% endif %}
         </section>
     {% elif activity == "meetings" %}
