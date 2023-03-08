@@ -12,6 +12,8 @@ Aria Shahi, 119522223
 
 ## Table of Contents
 
+TODO: TABLE OF CONTENTS AT END (PLUS NEED TO CHECK).
+
 - [Table of Contents](#table-of-contents)
 - [Introduction](#introduction)
 - [Some CRM Terms](#some-crm-terms)
@@ -32,7 +34,6 @@ Aria Shahi, 119522223
     - [Assign Contact](#assign-contact)
     - [View Assigned Contacts](#view-assigned-contacts)
     - [View Unassigned Contacts](#view-unassigned-contacts)
-    - [ View Contacts In Pages](#view-contacts-in-pages)
     - [Search For Contacts](#search-for-contacts)
     - [Sort Contacts](#sort-contacts)
     - [View Contact Activity](#view-contact-activity)
@@ -104,6 +105,8 @@ This document outlines the design and implementation of Sherpa, a free and open-
 
 This implementation can be used by multiple businesses i.e. users create "teams" and invite other users to join their team. However, it could easily be modified to be used by a single business by removing the team creation endpoint.
 
+TODO: GITHUB LINK
+
 ## Some CRM Terms
 
 The following are definitions of important terms in CRM software. Please familiarise yourself with them to ease your understanding of this document.
@@ -141,6 +144,8 @@ To put it simply, it would be very painful to set up a cohesive flow in terms of
 ## Project Specification
 
 ### User Stories
+
+TODO: bit of an intro to the user stories. Also need do add the "in order" part to every user story.
 
 #### Team Invitation Creation
 
@@ -368,6 +373,8 @@ As a Sherpa user I want to view a graph illustrating the breakdown of customer i
 
 ### Requirements
 
+TODO: an intro to the requirements.
+
 #### User Registration
 
 *Requirement ID: 1*
@@ -436,15 +443,15 @@ A user must be able to view a profile page with their account information. Furth
 
 #### View and Leave Teams
 
-*Requirement ID: 7*
+*Requirement ID: 8*
 
 *Satisfies User Story: 9, 10*
 
 A user must be able to view a page that lists all of the members of their team. On this page, they will be given the option to leave their team (this will also feature a "are you sure?" (or similar) checkbox.
 
-#### Database Viewing
+#### Database Viewing in Pages
 
-*Requirement ID: 8*
+*Requirement ID: 9*
 
 *Satisfies User Story: 3, 27*
 
@@ -454,7 +461,7 @@ Users must be able to view their team's contacts or deals. Since a business may 
 
 #### Database Filtering
 
-*Requirement ID: 9*
+*Requirement ID: 10*
 
 *Satisfies User Story: 11 - 13, 33-34*
 
@@ -466,7 +473,7 @@ Users must then be able to filter for "my contacts", "my deals" etc, i.e. just d
 
 #### Database Searching
 
-*Requirement ID: 10*
+*Requirement ID: 11*
 
 *Satisfies User Story: 14, 31*
 
@@ -476,7 +483,7 @@ Users must be able to search their team's contacts or deals. Users should be abl
 
 #### Database Sorting
 
-*Requirement ID: 11*
+*Requirement ID: 12*
 
 *Satisfies User Story: 15, 32*
 
@@ -486,7 +493,7 @@ User must be able to sort their team's contacts or deals by email, phone number,
 
 #### Activity Logging and Viewing
 
-*Requirement ID:  12*
+*Requirement ID:  13*
 
 *Satisfies User Story:  16*
 
@@ -494,7 +501,7 @@ Users must be able to view a log of all contact activity for all emails, tasks, 
 
 #### Note Management
 
-*Requirement ID:  13*
+*Requirement ID:  14*
 
 *Satisfies User Story:  17, 18*
 
@@ -502,7 +509,7 @@ A user must be able to manage their notes on a contact by being able to view not
 
 #### Google OAuth (Open Authorisation)
 
-*Requirement ID:  14*
+*Requirement ID:  15*
 
 *Satisfies User Story:  20-26*
 
@@ -510,7 +517,7 @@ A user must be able to authenticate their Google Account with OAuth in order to 
 
 #### Email Management
 
-*Requirement ID: 15*
+*Requirement ID: 16*
 
 *Satisfies User Story: 20 - 22*
 
@@ -518,7 +525,7 @@ A user must be able to manage their emails with a contact. A user must be presen
 
 #### Task Management
 
-*Requirement ID: 16*
+*Requirement ID: 17*
 
 *Satisfies User Story: 23 - 25*
 
@@ -527,7 +534,7 @@ A user must be able to manage their tasks for a customer. A form must be present
 
 #### Meeting Management
 
-*Requirement ID: 17*
+*Requirement ID: 18*
 
 *Satisfies User Story: 25 26*
 
@@ -535,45 +542,56 @@ A user must be able to manage their meetings with a customer. A form must be pre
 
 #### Closing Deals
 
-*Requirement ID: 18*
+*Requirement ID: 19*
 
 *Satisfies User Story: 30*
+
 
 A user when presented with the forms for adding/editing deals must have the option to alter the deal "stage" to Closed. When closing a deal the user must provide the "closed amount".
 
 #### Closed Vs Goal Plot Generation
 
-*Requirement ID: 19*
+*Requirement ID: 20*
 
 *Satisfies User Story: 37*
 
+TODO
+
 #### Deal Forecast Plot Generation
-
-*Requirement ID: 20*
-
-*Satisfies User Story: 38*
-
-#### Deal Conversion Tracking
 
 *Requirement ID: 21*
 
-*Satisfies User Story: 39*
+*Satisfies User Story: 38*
 
-#### Deal Stage Funnel Plot Generation
+TODO
+
+#### Deal Conversion Tracking
 
 *Requirement ID: 22*
 
 *Satisfies User Story: 39*
 
-#### Activity Plot Generation
+TODO
+
+#### Deal Stage Funnel Plot Generation
 
 *Requirement ID: 23*
 
+*Satisfies User Story: 39*
+
+TODO
+
+#### Activity Plot Generation
+
+*Requirement ID: 24*
+
 *Satisfies User Story: 40*
+
+TODO: EIMANTAS
 
 #### Serving Plots
 
-*Requirement ID: 24*
+*Requirement ID: 25*
 
 *Satisfies User Story: 37-40*
 
@@ -705,6 +723,8 @@ TODO: EIMANTAS
 
 ## Implementation
 
+This chapter outlines the implementation of Sherpa. It outlines the technology stack as well as the structure of the application overall. It then details the implementation of Sherpa's requirements, some of these requirement implementations are accompanied by flow charts which are an abstraction of the underlying logic - some requirements not as we did not believe they necessitated a visual aid.
+
 ### Underlying Technologies
 
 The following details our team's technology stack and gives context to the implementation chapter i.e. please assume that all implementation details rely on the use of the relevant technologies listed here.
@@ -732,6 +752,7 @@ The following details our team's technology stack and gives context to the imple
 - Most Sherpa endpoints (except for example / and /login) are protected by a "@team_required" wrapper. This is another decorator that calls a function to reject the user's request if they are not a member of a team. The user is redirected to the "create_team" endpoint.
 - Database and SMTP access is facilitated by environment variables specified in a .env file.
 - All database interactions occur through the use of SQLAlchemy data "models". These are outlined in the Data Models chapter and are essentially Pythonic descriptions of MySQL tables.
+- Sherpa has a monolithic database but each team has two - what we have come to call - "virtual" databases; one for contacts and one for deals. The databases are "virtual" because in reality they're part of a single structure but to prevent teams from being able to access or edit each other's records, data is segregated using team_ids i.e. anytime we issue a query for "team sensitive" data that only members of your team ought to have permissions for, we limit the query to just read, update or delete records that have a "team_id" matching that of your team.
 
 ### User Registration and Authentication
 
@@ -810,122 +831,168 @@ The following flow chart details the process flow for accepting a Sherpa invitat
 - If an invite_id is passed, it must be validated. First a lookup is done on the invites table to see if that invitation exists, if it does then the user's data is checked to see if they're in fact not a member of a team (a user can't accept an invitation until they've left their current team). Finally, the login email is compared to the email specified in the id, the user can't accept an invitation unless they authenticate themselves using the email specified.
 - If the invitation and user details are validated as above, the user's team id is set to the team_id specified in the invitation and the invitation is removed from the table. Then the normal login flow resumes and concludes.
 
-### Contact Information Management
+### Basic Database Operations (CRUD)
 
 *Implementation of requirement: 6*
 
-*Endpoint: /contacts*
-The following details the implementation of the contacts page where users are served with a dashboard from which they can manage all of their teams contacts. The contacts page serves two primary purposes; management and organisation.
+"Database" in this context refers to the set of records belonging to a team, either its contacts or deals. 
 
-#### Management
-+ Create Contact
-	+ Users are served with a form to create a contact containing information regarding name, email, phone number, contact owner, company and status. Once the form is submitted a contact is created
-+ View Contacts
-	+ If there are existing contacts, all existing contacts with their respective information are displayed to the user as an interactive table
-+ Edit Contacts
-	+ Contacts are displayed as an interactive table where users can click on current contact information and replace with new information. Once "Edit" is clicked for a specific contact, then the edited info is updated in the database and the table is refreshed for the user to see the new updated version of their contacts list
-+ Remove Contacts
-	+ Users can remove a specific contact by clicking on "Remove" which will remove the contact from the team's database and update the users view of the contacts list
+Since the CRUD operations for both contacts and deals are very similar, their implementation is described in one section. For additional brevity some disparities in form validation etc between contacts and deals are not detailed but one should be able to gather how we interface the user with the MySQL database from what follows.
 
-#### Organization
-+ Search
-	+ Users can use the search bar to search for a contact or specific data of a contact
-+ Sort 
-	+ Users can click on the column heading to sort the contacts according to the column heading e.g. sort by Company
-+ Filter
-	+ Users can filter the view of contacts using the filter tabs. e.g. user can filter view to only see the user's assigned contacts 
+Each database's "read" operation displays a series of "live" forms i.e. HTML input elements that have been prepopulated with the records from the database. 
+
+Each form represents a record and each form comprises a row in a larger table representing the database. This allows the user to view and edit records using the same elements - they then can save any changes by clicking the appropriate button or remove a specific record by clicking its individual remove button.
+
+#### Create
+*Endpoints: /add_contact and /add_deal*
+
+* Initialise an instance of the Contacts or Deals data models.
+* Set the instance variables to the values fetched from the add record form.
+* Commit the new record to MySQL after some validation checks e.g. "does this contact already exist in this team's records?".
+
+#### Read
+*Endpoints: /contacts and /deals*
+
+* Fetch relevant records from the database i.e. all contacts or deals with the correct team_id. 
+* Then iterate over the list of records, making each record into a HTML form.
+* Each form is then added to a list of forms that is iterated over when templating using Jinja2, associated each form with an "edit" button in the HTML that has its href attribute set to the appropriate edit endpoint with the relevant id (see update for more).
+* This results in all contacts or deals being rendered as an "editable" table that the user can now read.
+* Each form is also associated with its own "remove" button in the HTML that has its href attribute set to the appropriate remove endpoint with the relevant id (see delete for more).
 
 
-### Google Account Integration
+#### Update
+
+*Endpoints: /edit_contact/<contact_id> and /edit_deal/<deal_id>*
+
+* As described in read, each record in the contacts or deals database is rendered as an individual editable HTML form element and associated with its own edit button. 
+* When a user clicks this button, the form is submitted to the relevant edit endpoint and crucially includes the relevant id for example the href attribute might be "/edit_contact/X" with X being the ID of the contact the user wishes to edit.
+* This way the back end can update the relevant record that matches that ID with the data POSTed by the form (after validation) and commit these changes to MySQL.
+
+#### Delete
+
+*Endpoints: /remove_contact/<contact_id> and /remove_deal/<deal_id>*
+
+* As described in read, each record in contacts or deals database is rendered as an individual row of a HTML table (inside this row is an editable form but this is more relevant to the edit section).
+* Each row is associated with its own "remove" button.
+* When a user clicks this button, the form is submitted to the relevant remove endpoint and crucially includes the relevant id for example the href attribute might be "/remove_contact/X" with X being the ID of the contact the user wishes to remove.
+* This way the back end can remove the relevant record that matches that ID and commit these changes to MySQL.
+
+### Reseting a User's Authenticated Session
 
 *Implementation of requirement: 7*
 
+*endpoint: /profile*
+
+* If a user sends a GET request to this endpoint they will be served a page with basic account information, email address etc.
+* If however, they submit a POST request, their flask session will be cleared this means they will be redirected to the login page for all subsequent requests by the *@login_required* decorator since they no longer have a signed login cookie in their session.
+
+### Viewing Teams and Leaving Them
+
+*Implementation of requirement: 8*
+
+TODO
+
+### Viewing Databases in Pages
+
+*Implementation of requirement: 9*
+
+TODO (FLOW)
+
+### Showing the User the Records they Own
+
+*Implementation of requirement: 10*
+
+TODO
+
+### Searching a Database
+
+*Implementation of requirement: 11*
+
+TODO (FLOW)
+
+
+### Sorting a Database
+
+*Implementation of requirement: 12*
+
+TODO (FLOW)
+
+### Activity Feature
+
+*Implementation of requirement: 13*
+
+TODO
+
+### Notes Feature
+
+*Implementation of requirement: 14*
+
+TODO
+
+### Integrating Google Accounts
+
+*Implementation of requirement: 15*
+
 Users must integrate their Google accounts with Sherpa to obtain a Google session token in order to avail of Sherpa's Google services such as Emails, Tasks and Meetings.
+
 The following diagram details the process of integrating Google with a Sherpa account.
 
 ![Diagram detailing the retrieval of a Google session token. Image is sourced from  "https://developers.google.com/identity/protocols/oauth2"](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/google_auth.png)
+<br>*TODO: FIGURE*
 
-Google accounts are authenticated using OAuth 2.0. More information about OAuth 2.0 can be found [here](https://developers.google.com/identity/protocols/oauth2).
+Google accounts are authenticated using OAuth 2.0. For brevity, we won't go into more detail than this over concerns over word count. If you'd like to learn more about OAuth 2.0 please click [here](https://developers.google.com/identity/protocols/oauth2).
 
-###  Contact Relationship Management
-*Implementation of Requirement: 8*
+### Parsing API Responses
 
-The following details the operation and implementation of the features that allow teams to manage relationships with their contacts within Sherpa. 
+*Implementation of requirements: 16-18*
 
-*Endpoint: /contact/\<contact_id>/\<activity>*
+TODO (FLOW)
 
-The parameters passed to the endpoint above determine the view of the contact page where a singular contact can be managed directly by a team member
+### Sending and Receiving Emails
 
-- contact_id - the ID of the contact requested to be viewed more in depth
-- activity - the feature requested e.g. emails, meetings. The default activity is a summary of all previous interactions with the contact in recent history   
+*Implementation of requirement: 16*
 
-If the activity requested is the Email, Meetings or Tasks features, then the user must have a Google session token in order to avail of these services. The following flowchart depicts the logic-flow of rendering these services
+TODO
 
-![Flow Chart detailing the flow of rendering activities on the contact page](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/crm_contact_activity.png)
-<br>
+### Creating, Viewing, and Completing Tasks
 
-*Endpoint: /contact/\<contact_id\>/__activity__*
+*Implementation of requirement: 17*
 
-- View Activity Log
-	-  The user is presented with a log of previous interactions with the contact specified in the contact_id parameter. In this log, a brief overview of all Notes, Emails, Tasks and Meetings that have occurred with this contact is displayed ranging from most recent to oldest.
+TODO
 
+### Scheduling and Joining Meetings
 
-*Endpoint: /contact/\<contact_id\>/__notes__*
+*Implementation of requirement: 18*
 
-- Create Note
-	- User is presented with a form containing a text box for a note. Once the form is submitted, this note is added to the database uniquely correlating the note to the contact specified in the contact_id parameter.
-- View Notes
-	- User is presented with a table of all notes added to the contact's record by the user and any members of the user's team
-- Remove Note
-	- User is able to click "Remove" on any note in order to remove this note from the contact's record
+TODO
 
+### Closing Deals
 
-*Endpoint: /contact/\<contact_id\>/__emails__*
+*Implementation of requirement: 19*
 
- - Sending Emails
-	 - The user is presented with a form containing text boxes for the email subject and the main contents of the email. If the form is submitted and validated, the email is sent to the Sherpa Inbox of the contact specified in the contact_id parameter.
- - Viewing Emails
-	 - A table of previous emails between the user and the contact specified in the contact_id parameter is displayed to the user.
- - Replying to Emails
-	 - User has an option to reply to an email or to the most recent email in a thread of emails from the contact specified in contact_id by clicking on the "Reply" button, which pre-populates the Send Email Form with the subject as the subject of the thread. Once the user submits the form a reply is sent back to the contact in this selected thread.
+TODO
 
+### Tracking Deal Conversions
 
-*Endpoint: /contact/\<contact_id\>/__tasks__*
+*Implementation of requirement: 22*
 
-[To be completed once tasks feature is implemented]
+TODO
 
+### Creating Data Analytics Plots
 
-*Endpoint: /contact/\<contact_id\>/__meetings__*
+*Implementation of requirement: 20, 21, 23, 24*
 
-- Schedule a Meeting 
-	- User is presented a form to schedule a Google meeting with the contact specified in the contact_id parameter. User can input a meeting title, description and start/end date of the meeting. Once the form is submitted, the meeting is scheduled and a meeting event is added to the Google Calendar's of both the user and the contact.
-- View Meetings
-	- User is presented with a table containing all scheduled meetings with the contact.
+TODO (FLOW)
 
+### Serving Plots
 
-### Deal Management
-*Implementation of Requirement: 9*
+*Implementation of requirement: 25*
 
-*Endpoint: /deals*
-The following details the implementation of the deals page where users are served with a dashboard from which they can manage all of their teams deals. The deals page serves two primary purposes; management and organization.
+* When a plot is ready to be served to the user as part of HTTP response, Sherpa first initialises an in-memory bytes buffer.
+* Then the plot figure is saved as a PNG in this new buffer.
+* Then the data in the buffer is encoding using base64 encoding.
+* This encoded data is then included in the HTTP response as part of an "img" element.
 
-#### Management
-+ Create Deal
-	+ Users are served with a form to create a deal containing information regarding deal name, stage, owner, close date, amount, associated contacts and associated companies. Once the form is submitted a deal is created
-+ View Deals
-	+ If there are existing deals, all existing deals with their respective information are displayed to the user as an interactive table
-+ Edit Deals
-	+ Deals are displayed as an interactive table where users can click on current deal information and replace with new information. Once "Edit" is clicked for a specific deal, then the edited info is updated in the database and the table is refreshed for the user to see the new updated version of the deals table
-+ Close Deals
-	+ Users using the "Deal Stage" dropdown menu can close a deal and also select a date for when the deal was closed using the "Close Date" dropdown calendar feature
-
-#### Organization
-+ Search
-	+ Users can use the search bar to search for a deal or specific data within a deal
-+ Sort 
-	+ Users can click on the column heading to sort the deals according to the column heading e.g. sort by Deal Amount
-+ Filter
-	+ Users can filter the view of deals using the filter tabs. e.g. user can filter view to only see the user's deals
 
 ## Testing
 
@@ -933,7 +1000,7 @@ TODO
 
 ## Project Reflection
 
-This chapter will serve as a reflection on the 12 weeks we as a team spent working on our project, highlighting the difficulties we experienced and the engineering trade offs we had to consider while developing Sherpa.
+This chapter will serve as a reflection on the 12 weeks we as a team spent working on our project, highlighting how we worked together and the challenges we faced while developing Sherpa.
 
 ### The Team's Process
 
@@ -964,8 +1031,6 @@ By breaking down tasks into user stories, Our team was able to prioritize work a
 
 Our team's approach included a "polishing" week every second week, which allowed us to review completed work and make necessary improvements. This helped ensure that the final product was of a high quality.
 
-  
-
 #### Efficiency:
 
 Our team was able to complete high-quality work efficiently, thanks to our structured and collaborative approach to task management. This allowed us to make progress on the project and meet our goals within our timeframe.
@@ -980,6 +1045,10 @@ Additionally, we initially did not use Bootstrap for our CSS, which resulted in 
 
 Overall, we learned that standardizing our code, using frameworks and best practices, and prioritizing consistency were essential to the success of our project. These lessons helped us to improve our processes and achieve better results in future projects.
 
+### What Went Well
+
+### Mistakes To Learn From
+
 ### What Was Technically Challenging
 
 This section outlines the difficulties and challenges we individually and as a team encountered in the process of developing Sherpa.  
@@ -987,9 +1056,9 @@ This section outlines the difficulties and challenges we individually and as a t
 + __Turbo__
 	+ Implementing Turbo in our application proved to be difficult. Our goal was to have our whole application using Turbo to increase the performance of our web application and to ensure a smooth user experience while using Sherpa. Due to a lack of documentation online regarding Turbo, we had to go through a lot of trial and error when implementing Turbo. Therefore, this was time consuming and proved frustrating at times when encountering unexpected behaviours. But once completed the benefit of Turbo was evident with the smooth performance of our web application.
 + __Modularization__
-	+ 
-+ __Google Feature Integration__
-	+ 
+	+ TODO
++ __Google Integration__
+	+ TODO
 + __Testing__
 	+ Writing the test cases for our code was challenging initially due to having little experience with testing web application. Also, the structure of our code caused problems with writing test cases. But once modularization was implemented within our code then test cases were much easier to write.
 + __Security__
@@ -997,5 +1066,3 @@ Security was something that was of utmost importance for our application in orde
 	+ _Hashing_ -  We managed to implement security features where user data is stored securely by hashing is before storing it in the database.
 	+ _Cross-Site Scripting_ - Our use of Flask SQL Alchemy as an ORM made sure to prevent any potential XSS attacks
 	+ _Session Cookies_ - Our implementation of session cookies within our application ensured that users are authenticated when making requests and prevent unauthorized users accessing forbidden data.
-
-
