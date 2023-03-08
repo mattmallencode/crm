@@ -555,7 +555,15 @@ A user when presented with the forms for adding/editing deals must have the opti
 
 *Satisfies User Story: 37*
 
-TODO
+A plot must be generated illustrating how a specific team is performing in terms of their "goals" for deals versus the actual "close amount" with each being a separate subplot respectively. The team to which the user belongs must have existing closed deals in the range of the last 12 months in order for there to be data to generate the Closed vs Goal Plot. 
+
+The plot that is generated must abide by the following constraints;
++ x-axis : 
+	+  Subplot 1: Amount the deal was closed at
+	+ Subplot 2: Initial goal for the deal
++ y-axis : Close Date of the deal
++ Range: Last 365 days
++ Frequency: Monthly
 
 #### Deal Forecast Plot Generation
 
@@ -563,7 +571,14 @@ TODO
 
 *Satisfies User Story: 38*
 
-TODO
+A chart must be generated illustrating a team's forecasted deal earnings for the current month. The team to which the user belongs must have existing deals for the current month in order for there to be date to generate the Deals Forecast chart. 
+
+The chart that is generated must be in the form of a pie chart and must abide by the following constraints;
+
++ Data:  a list of the sum of the deal amounts for the following deal stages; Closed Won, Appointment Scheduled, Contract Sent, Qualified To Buy. Each pie slice is a stage
++ Range: This current month
+
+The monthly forecast must be displayed with the forecasted revenue figure being the sum of all stages/slices in the pie chart.
 
 #### Deal Conversion Tracking
 
@@ -571,7 +586,9 @@ TODO
 
 *Satisfies User Story: 39*
 
-TODO
+In order for deal conversion metrics to be calculated for the Deal Stage Funnel graph, all occurrences of a deal moving to a different stage must be tracked.
+
+There must be a table to log any deal stage activity which would for every row specify a specific deal, the deal stage, and a timestamp for when that deal transitioned to that stage. If a new deal is created, its stage must be logged. Also, if an existing deal moves to a different stage this must also be logged
 
 #### Deal Stage Funnel Plot Generation
 
@@ -579,7 +596,20 @@ TODO
 
 *Satisfies User Story: 39*
 
-TODO
+A graph must be generated to illustrate the progression of a team's deals moving from stage to stage. The team to which the user belongs must have existing deals within the last month. 
+
+The graph that is generated must be in the form of a bar chart and must abide by the following constraints;
+
++ x-axis: Number of deals per deal stage
++ y-axis: the following deal stages; Closed Won, Appointment Scheduled, Contract Sent, Qualified To Buy, Created.
++ Range: Last Month
+
+Every bar in the bar chart other than the final stage, "Closed Won" stage, must also have conversion data for Next Step Conversion and Cumulative Conversion 
+ 
+ + Next Step Conversion - percentage of deals that move from the current stage to the next stage
+ + Cumulative Conversion - percentage of deals that move from the first stage to the next stage
+
+The stages follow a hierarchy, therefore moving from the "current" stage to the “next” stage means going to the next stage in the hierarchy. The hierarchy is laid out as follows; Created -> Qualified To Buy -> Contract Sent -> Appointment Scheduled -> Closed Won. This means that deals can move from the Created stage to Qualified To Buy and so on. Deals can skip stages and do not have to move step-by-step in the hierarchy but they must follow the hierarchical structure e.g. a deal cannot be "Closed Won" and then "Created"
 
 #### Activity Plot Generation
 
@@ -587,7 +617,12 @@ TODO
 
 *Satisfies User Story: 40*
 
-TODO: EIMANTAS
+A graph must be generated to illustrate the performance a team with activities regarding contact such as emails, tasks and meetings, detailing how many of each activities occurred within the last month. To simplify the view, only the top 5 performing team members are displayed which is determined by the top 5 sums of all activities performed per team member. For every bar in the bar chart which defines one team member, the bar must be stacked with data for the count of every activity.
+
+The generated graph must be in the form of a stacked bar chart with every bar detailing the count of emails, tasks and meetings per team member. The graph must abide by the following constraints;
++ x-axis: names of top 5 team members
++ y-axis: count of activities
++ Range: last Month
 
 #### Serving Plots
 
@@ -595,7 +630,7 @@ TODO: EIMANTAS
 
 *Satisfies User Story: 37-40*
 
-TODO: EIMANTAS
+In order to serve plots to Flask, the plots must be formatted appropriately. The plots must first be stored in a buffer as a PNG, decoded from ASCII, encoded in base64 and then a reference to the image passed to the HTML
 
 ## Data Models
 
@@ -719,7 +754,18 @@ The following table describes the data model used for "activity log" objects i.e
 + description - a short string describing the activity e.g. "{actor} created a note on {timestamp}.
 
 #### Deal Stage Conversion
-TODO: EIMANTAS
+The following table describes the data model which is used for calculating deal stage conversion. It is used as a log table where every time a deal transitions to a different stage it is is logged.
+
+*Table 8: Deal Stage Conversion Data Model*
+
+| stage_id | team_id | date | stage |
+| :-: | :-: | :-: | :-: |
+|Primary Key, Integer | Integer | String | String |
+
++ stage_id - auto-incremented integer which is used as the primary key to uniquely identify an activity
++ team_id - secondary key which is used to link the deal this stage is associated with to its team 
++ date - the date the deal transitioned to this stage
++ stage - the stage that the deal transitioned to
 
 ## Implementation
 
@@ -976,13 +1022,20 @@ TODO
 
 *Implementation of requirement: 22*
 
-TODO
+The Deal Stage Conversion table which logs the transition of deals from stage to stage is used to retrieve all deal stage data from the previous month. This is then used to count the number of deals that were in every stage and stored as a dictionary with the stage as the key and the number of occurrences of the stage in the retrieved data as the value of the dictionary. 
+
+Then for every stage, the conversion values are calculated as follows;
+ 
+ + Next Step Conversion = Number of deals in next stage / Number of Deals in current stage
+ + Cumulative Conversion = Number of deals in next stage / Number of Deals in first stage
 
 ### Creating Data Analytics Plots
 
 *Implementation of requirement: 20, 21, 23, 24*
 
-TODO (FLOW)
+The following chart details the process of creating the data analytics plots for the analytics dashboard
+
+![Diagram the process of create a plot diagram](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/plot.png)
 
 ### Serving Plots
 
