@@ -830,6 +830,7 @@ div#login_box {
 #dashboard{
   display: grid;
   grid-template-columns: 1fr 1fr;
+  grid-column-gap: 5%;
   margin-left: 10%;
 }
 #dashboard section h2 {
