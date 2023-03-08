@@ -491,16 +491,56 @@ User must be able to sort their team's contacts or deals by email, phone number,
 
 *Satisfies User Story:  17*
 
+Users must be able to view a log of all contact activity for all emails, tasks, meetings and notes related to the contact. Every time an activity occurs, this event must be logged detailing the activity type and the datetime it occurred. If activities have been logged then the user must be able to view this log.
+
 #### Note Management
 
 *Requirement ID:  13*
 
 *Satisfies User Story:  18, 19*
 
-#### Google oAuth
+A user must be able to manage their notes on a contact by being able to view notes, add new notes and remove notes. A form must be presented for every contact where users are able to create a note. A table must also be presented where users can view every note for a contact with the option to remove the note
+
+#### Google OAuth
 
 *Requirement ID:  14*
+
 *Satisfies User Story:  18, 19*
+
+A user must be able to authenticate their Google Account with OAuth in order to be able to use Sherpa's Google features.
+
+#### Email Management
+
+*Requirement ID: 15*
+
+*Satisfies User Story: 20, 21, 22*
+
+A user must be able to manage their emails with a contact. A user must be presented with a form for sending an email to a contact containing fields for the email subject and the email body. The user must also be able to view all email threads with the contact and be able to reply to the most recent email in a thread.
+
+#### Task Management
+
+*Requirement ID: 16*
+
+*Satisfies User Story: 23, 24*
+
+A user must be able to manage their tasks for a customer. A form must be presented where users can set a task in relation to a customer. A table must also be presented displaying all tasks for a given customer.
+
+
+#### Meeting Management
+
+*Requirement ID: 17*
+
+*Satisfies User Story: 25, 26*
+
+A user must be able to manage their meetings with a customer. A form must be presented where users can schedule a meeting with a customer. A table must also be displayed where users can view all their scheduled meetings with a customer.
+
+#### Closing Deals
+
+*Requirement ID: 18*
+
+*Satisfies User Story: 35*
+
+A user when presented with the forms for adding/editing deals must have the option to alter the deal "stage" to Closed
 
 ## Data Models
 
