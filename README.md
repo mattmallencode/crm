@@ -1,12 +1,4 @@
-﻿﻿﻿# Sherpa: A Free and Open-Source CRM
-![Sherpa logo: a picture of a Yak beneath a mountain range with the text "Sherpa".`enter code here](https://raw.githubusercontent.com/mattmallencode/crm/main/static/sherpa_logo.png)
-<br>
-Oliver Linger, 120444372<br>
-Matt Mallen, 120355103<br>
-Eimantas Pusinskas, 120312336<br>
-Aria Shahi, 119522223
-
-# Sherpa: A Free and Open-Source CRM
+﻿# Sherpa: A Free and Open-Source CRM
 
 ﻿
 ![Sherpa logo: a picture of a Yak beneath a mountain range with the text "Sherpa"](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/sherpa_logo.png)
@@ -113,70 +105,70 @@ TODO: TABLE OF CONTENTS AT END (PLUS NEED TO CHECK).
 
 ## Introduction
 
-This document outlines the design and implementation of Sherpa, a free and open-source Customer Relationship Management System (CRMS). A CRMS helps businesses drive sales, track customer interactions, and provide quality service. This is achieved by storing the data of existing and potential customers in a central database that can be accessed and managed by anyone within the organization with appropriate permissions.
+This document outlines the design and implementation of Sherpa, a free and open-source Customer Relationship Management (CRM) System. A CRM helps businesses drive sales, track customer interactions, and provide quality service. This is achieved by storing the data of existing and potential customers in a central database that can be accessed and managed by anyone within the organisation with appropriate permissions.
 
-This implementation can be used by multiple businesses i.e. users create "teams" and invite other users to join their team. However, it could easily be modified to be used by a single business by removing the team creation endpoint.
+Sherpa can be used by multiple businesses i.e. users create "teams" and invite other users to join their team.
 
 Sherpa's GitHub repository is available [here](https://github.com/mattmallencode/crm).
 
 ## Some CRM Terms
 
-The following are definitions of important terms in CRM software. Please familiarise yourself with them to ease your understanding of this document.
 
-+ __Contacts__: are potential or existing customers of a business.
-+ __Deals__: are potential or existing sales contract between a business and  a customer. Deals can be:
+The following are important terms in CRM software:
+
++ __Contacts__: potential or existing customers of a business.
++ __Deals__: potential or existing sales contract between a business and  a customer. Deals can be:
   + **open** i.e. no contract has been signed / no money has been exchanged, or
   + **closed** i.e. the business has made the sale / money has been credited to it.
-+ **Deal Goal**: The amount of money a business aims to earn when initially pursuing a deal with a customer.
-+ **Deal Closed Amount**: The actual amount of money a business earned after closing a deal with a customer.
++ **Deal Goal**: The amount of money a business aims to earn when initially pursuing a deal.
++ **Deal Closed Amount**: The actual amount of money a business earned after closing a deal.
 
 ## What Sherpa Can Do
 
 Sherpa has the following features:
 
-+ __User-Friendly Interface__ - Sherpa has friendly and accessible interface, meaning any member of an organisation can quickly pick up Sherpa in their daily workflow, leading to increased productivity and enhanced client satisfaction.
-+ __Contact Information Management__ - Sherpa provides an easy to use dashboard for managing contact information where team members can add, view, and edit information e.g. email addresses, phone numbers, statuses etc. Contact information can also be searched, sorted, and filtered so that one can easily find data of interest.
-+ __Contact Relationship Management__ - Users can communicate with contacts using our integrated Google API features where you may send/receive emails, set tasks in your calendar, and schedule online meetings with your contacts all from within the application. Tasks and meetings also appear in your Google calendar as well as that of the contact's. Furthermore, Sherpa allows one to leave "notes" for colleagues and informs one of the "activity" between team members and contacts to facilitate collaboration.
-+ __Deal Management__ - Sherpa provides an easy to use dashboard for managing deal information where team members can add, view and edit deals e.g. marking them as closed, setting the goal of the deal, etc. Deal information can also be searched, sorted, and filtered so that one can easily find data of interest.
-+ __Data Analysis__ - Sherpa provides an analytics dashboard where you can get an insight into your organisation's sale performance. Analytics regarding your companies recent open/closed deals are displayed, along with a forecast for future deals and other data.
+
+- Sherpa is a **customer database**. The platform offers a simple user interface to keep track of all customers in one place.
+    
+- Sherpa allows users to **interact with customers using Google API Integrations**. Users can send and receive emails, schedule meetings with Google Meet, set reminders for Google Calendar, and leave notes about customers for colleagues.
+
+- Sherpa helps users make **data driven decisions**. Sherpa provides an analytics dashboard to help track a team's progress. For example, a user might see from the graph tracking team interactions with customers that their top sales person tends to prefer video calls over emails compared to the rest of the team, they might then decide to do the same to try mimic their success - that's a data driven decision.
 
 ## How Sherpa Adds Value
 
-One may wonder if rather than using a CRM like Sherpa if they could instead manage their relationships with customers in a more ad hoc manner e.g. just use an email service like Google on its own in conjunction with conferencing software.  However, the real value in a system like this is how all of the pieces link up together.
-
 Firstly, with Sherpa, **your sales team always has a cohesive view**. For example, if contact's email changes, it changes for everyone on your team.
 
-Secondly, Sherpa **makes management easier**. A manager can assign a member of their sales team to chase down a specific customer, and that sales person knows immediately after logging into the application which contacts they are supposed to be handling (rather than having to keep up with endless Email/MS Teams / Slack threads to keep pace with management).
+Secondly, Sherpa **makes management easier**. A manager can assign a member of their sales team to chase down a specific customer, and that sales person knows immediately after logging into the application which contacts they are supposed to be handling.
 
 Lastly, **everything is traceable** with Sherpa. Not just in terms of analytics but also in terms of customer interactions. Everyone on a team can see which customers have been “left on the back burner” so to speak based on when the last time they were emailed for example.
 
-To put it simply, it would be very painful to set up a cohesive flow in terms of managing your relationship with customers if you were to bootstrap this yourself with several unconnected applications. Sherpa makes it easy.
+It would be painful to set up a cohesive flow in terms of managing relationship with customers if a business bootstrapped it with several unconnected applications. Sherpa makes it easy.
 
 ## Project Specification
 
 ### User Stories
 
-TODO: bit of an intro to the user stories. Also need do add the "in order" part to every user story.
+### User Stories
 
-The following user stories describe various tasks that a user might want to accomplish while using a CRM system. User stories are short descriptions of a user's goals or desires, which are used to guide the development of software applications. In this case, the user stories are focused on the functions of a CRM (Customer Relationship Management) system called Sherpa. The stories cover tasks such as inviting team members, adding and editing customer contacts, creating and viewing deals, scheduling meetings, and more. Each story is identified by a unique ID number, which can be used to track its progress during development. By focusing on the user's needs and objectives, these stories help ensure that the CRM system is designed to be efficient, effective, and easy to use.
+The following user stories describe various tasks that a user might want to accomplish while using a CRM system,  which the our team used to guide our design and implementation.
 
 #### Team Invitation Creation
 
 *User Story ID: 1*
 
-As a business owner / manager, I want to invite other users to join my Sherpa team so that they can get access to our CRM resources.
+As a manager, I want to invite other users to join my Sherpa team so they can access to our CRM resources.
 
 #### Team Invitation Acceptance
 
 *User Story ID: 2*
 
-As a business employee, I want to accept an invitation to join my employer's Sherpa team to get access to their CRM resources.
+As an employee, I want to accept an invitation to join my employer's Sherpa team to get access to their CRM resources.
 
 #### View Contacts
 
 *User Story ID: 3*
 
-As a Sherpa user, I want to view all my team's contacts so that I can view the contact information of our customers.
+As a Sherpa user, I want to view my team's contacts to see the contact information of our customers.
 
 #### Add Contacts
 
@@ -188,13 +180,13 @@ As a Sherpa user, I want to add a contact to my team's contacts list so I can re
 
 *User Story ID: 5*
 
-As a Sherpa user, I want to edit one of my team's contacts i.e. change various details like a phone number so I can correct mistakes or update stale information.
+As a Sherpa user, I want to edit one of my team's contacts so I can correct mistakes or update stale information.
 
 #### Remove Contacts
 
 *User Story ID: 6*
 
-As a Sherpa user, I want to remove one of my team's contacts so I can delete a record for a person who is no longer a customer or delete an erroneous record.
+As a Sherpa user, I want to remove one of my team's contacts so I can delete a contact who is no longer a customer or delete an erroneous record.
 
 #### View User Profile
 
@@ -218,25 +210,25 @@ As a Sherpa user I want to view my team so that I can see the list of the member
 
 *User Story ID:  10*
 
-As a Sherpa user, I want to leave my team so that I no longer have access to the team's CRM resources and I am free to create / join another team.
+As a Sherpa user, I want to leave my team so that I am free to join another team.
 
 #### Assign Contact
 
 *User Story ID:  11
 
-As a Sherpa team owner/admin I want to assign a contact to a member of my team they understand who they have to communicate with to try generate a sale.
+As a Sherpa team admin I want to assign a contact to a member of my team so they know which customers they should deal with.
 
 #### View Assigned Contacts
 
 *User Story ID:  12*
 
-As a Sherpa user I want to view the contacts that have been assigned to me so I can see what data they have to help me generate a sale.
+As a Sherpa user I want to view the contacts that have been assigned to me so I can see which customers my manager wants me to deal with.
 
 #### View Unassigned Contacts
 
 *User Story ID:  13*
 
-As a Sherpa user I want to view the contacts that have yet to be assigned to a member of my team so they dont get left unattend.
+As a Sherpa user I want to view the contacts that have yet to be assigned to a member of my team so they are not left unattended.
 
 #### Search For Contacts
 
@@ -248,25 +240,25 @@ As a Sherpa user I want to search for a specific contact(s) using a search bar t
 
 *User Story ID:  15*
 
-As a Sherpa user I want to sort my team's contacts by email, phone number, etc.
+As a Sherpa user I want to sort my team's contacts by email etc so I can organise the information.
 
 #### View Contact Activity
 
 *User Story ID:  16*
 
-As a Sherpa user I want to view all team activity for a contact e.g. notes, emails, meetings etc so I understand to a greater extend to what way a deals heading.
+As a Sherpa user I want to view all team activity for a contact e.g. emails, meetings etc so I can track interactions with the customer.
 
 #### Post Notes
 
 *User Story ID:  17*
 
-As a Sherpa user, I want to add a note to a contact's page to notify my colleges of anything significant thats happening to that specific contact.
+As a Sherpa user, I want to add a note to a contact's page to notify my colleagues of my dealings with the customer.
 
 #### Remove notes
 
 *User Story ID:  18*
 
-As a Sherpa user, I want to remove a note on a contact's page if it isnt applicable to that contact anymore.
+As a Sherpa user, I want to remove a note on a contact's page if it it's erroneous or not applicable anymore.
 
 #### Send Email
 
@@ -284,31 +276,31 @@ As a Sherpa user, I want to view my emails sent and received to/from a contact t
 
 *User Story ID: 21*
 
-As a Sherpa user, I want to reply to an email from a contact to allow for me to exchange information with them.
+As a Sherpa user, I want to reply to an email from a contact to continue my conversation with them.
 
 #### Set a Task
 
 *User Story ID: 22*
 
-As a Sherpa user, I want to create a task in relation to a contact to remind myself of anything that needs to be done in relation to that customer.
+As a Sherpa user, I want to create a task in relation to a contact to remind myself of tasks I must complete in relation to the customer.
 
 #### View Tasks
 
 *User Story ID: 23*
 
-As a Sherpa user, I want to view all tasks in relation to a contact so I can understand the jobs that need to be done as a whole.
+As a Sherpa user, I want to view all tasks in relation to a contact so I can understand the tasks that need to be done as a whole.
 
 #### Complete Task
 
 *User Story ID: 24*
 
-As a Sherpa user, I want to mark a task as complete to notify myself that it has been completed.
+As a Sherpa user, I want to mark a task as complete to "tick" it off my to-do list.
 
 #### Schedule Meeting
 
 *User Story ID: 25*
 
-As a Sherpa user, I want to schedule a meeting with a contact which is integrated with my Google calendar so I can notify the contact when we are scheduled to talk.
+As a Sherpa user, I want to schedule a meeting with a contact so that I can video conference with them.
 
 #### View Meetings
 
@@ -326,43 +318,43 @@ As a Sherpa user, I want to create a deal to allow for a new sales contract to b
 
 *User Story ID: 28*
 
-As a Sherpa user, I want to view my team's deals to help me understand what direction my teams deals are going.
+As a Sherpa user, I want to view my team's deals to view the information associated with the deals.
 
 #### Edit Deal
 
 *User Story ID: 29*
 
-As a Sherpa user, I want to edit a deal to match the deals current situation.
+As a Sherpa user, I want to edit a deal to fix erroneous information and update stale data.
 
 #### Close Deal
 
 *User Story ID: 30*
 
-As a Sherpa user, I want to close a deal to update the status of a deal to reflect the fact that the sale has be finalized.
+As a Sherpa user, I want to close a deal to update the status of a deal to reflect the fact that the sale has be finalised.
 
 #### Search Deals
 
 *User Story ID: 31*
 
-As a Sherpa user, I want to search my team's deals to check my team's activity.
+As a Sherpa user, I want to search my team's deals to make finding a specific deal faster.
 
 #### Sort Deals
 
 *User Story ID: 32*
 
-As a Sherpa user, I want to sort my team's deals to make it quicker for me to find a deal.
+As a Sherpa user, I want to sort my team's deals to organise the information.
 
 #### Assign Deal
 
 *User Story ID:  33*
 
-As a Sherpa team owner/admin I want to assign a deal to a member of my team to let them know what contacts they have to persue.
+As a Sherpa team admin I want to assign a deal to a member of my team to let them know what deals they should take ownership of.
 
 #### View Assigned Deals
 
 *User Story ID:  34*
 
-As a Sherpa user I want to view the deals that have been assigned to me so I know what I must do to do my job.
+As a Sherpa user I want to view the deals that have been assigned to me so I know which deals my manager wants me to take ownership of.
 
 #### Closed Vs Goal
 
