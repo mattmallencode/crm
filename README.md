@@ -957,6 +957,8 @@ Each page displays 25 records. Once the current page is determined, the code cal
 
 Sherpa then selects the records between the starting and ending indexes and serves these as HTML. The HTML also includes "next" and "previous" page buttons that are encoded with the current page number, allowing the user to navigate the pages.
 
+![Flowchart depicting how Sherpa's paging feature works](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/viewing_database_flowchart.jpeg)
+
 ### Showing the User the Records they Own
 
 *Implementation of requirement: 10*
@@ -972,6 +974,8 @@ Sherpa then selects the records between the starting and ending indexes and serv
 
 * When a user submits a POST 
 
+![Flowchart representing how Sherpa's search feature looks through the database. ](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/searching_database_flowchart.png)
+
 ### Sorting a Database
 
 *Implementation of requirement: 12*
@@ -986,7 +990,8 @@ The sorting is triggered by the contacts()/deals() function, which sets the valu
 
 Overall, this code allows users to sort a list of contacts/deals in a database based on different columns and in ascending or descending order.
 
-TODO (FLOW)
+
+![Flowchart representing how Sherpa's sorting feature sorts the database.](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/sorting_flowchart.png)
 
 ### Activity Feature
 
