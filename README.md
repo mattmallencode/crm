@@ -976,7 +976,7 @@ Finally, the code combines the HTML table and paging links into a single HTML pa
 
 Overall, this approach is relatively efficient because it only retrieves the records needed for the current page, rather than retrieving all records at once. It also allows for easy paging and navigation between pages
 
-TODO (FLOW)
+![Flowchart depicting how Sherpa's paging feature works](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/viewing_database_flowchart.jpeg)
 
 ### Showing the User the Records they Own
 
@@ -1004,7 +1004,7 @@ Next, the .query object is filtered based on the user's search criteria. The var
 Finally, the results of the search are returned to the user in the deals variable. The deals variable is a query object, which means that it represents a set of results from the database. The results are not actually fetched from the database until the query is executed (in this case, by calling .limit() and .offset()).
 
 
-TODO (FLOW)
+![Flowchart representing how Sherpa's search feature looks through the database. ](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/searching_database_flowchart.png)
 
 ### Sorting a Database
 
@@ -1020,7 +1020,8 @@ The sorting is triggered by the contacts()/deals() function, which sets the valu
 
 Overall, this code allows users to sort a list of contacts/deals in a database based on different columns and in ascending or descending order.
 
-TODO (FLOW)
+
+![Flowchart representing how Sherpa's sorting feature sorts the database.](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/sorting_flowchart.png)
 
 ### Activity Feature
 
