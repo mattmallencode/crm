@@ -1227,7 +1227,7 @@ Our team was able to complete high-quality work efficiently, thanks to our struc
 
 ### Mistakes To Learn From
 
-During the course of our project, we made some mistakes and learned some valuable lessons. One mistake we made was not standardizing our HTML, which led to some inconsistencies in our code. To avoid this in the future, we learned to standardize our HTML and use best practices to ensure consistency throughout our project.
+During the course of our project, we made mistakes and learned valuable lessons. One mistake we made was not standardizing our HTML, ledding to some inconsistencies in our code. For the future, we learned to standardize our HTML and use best practices to ensure consistency throughout our project.
 
 Another mistake we made was not using Flask blueprints, which made it more difficult to manage our code as the project grew. We realized the importance of using blueprints to organize our code and make it easier to maintain and update.
 
@@ -1244,10 +1244,10 @@ Overall, we learned that standardizing our code, using frameworks and best pract
 This section outlines the difficulties and challenges we individually and as a team encountered in the process of developing Sherpa.
 
 + __Turbo__
-  + Implementing Turbo in our application proved to be difficult. Our goal was to have our whole application using Turbo to increase the performance of our web application and to ensure a smooth user experience while using Sherpa. Due to a lack of documentation online regarding Turbo, we had to go through a lot of trial and error when implementing Turbo. Therefore, this was time consuming and proved frustrating at times when encountering unexpected behaviours. But once completed the benefit of Turbo was evident with the smooth performance of our web application.
+  + Implementing Turbo in our application proved to be difficult. Our goal was to have our whole application using Turbo to increase the performance of our web application and to ensure a smooth user experience while using Sherpa. Due to a lack of documentation online regarding Turbo, we had to go through a lot of trial and error when implementing Turbo. This was time consuming and frustrating at times when encountering unexpected behaviours. Once completed the benefit of Turbo was evident with the smooth performance of our web application.
 + __Modularization__
   + Modularizing the code presented a technical challenge as we had never used blueprints before to implement an application. We had to break up the monolithic appliction.py code into segments and initialize it with an __init__.py file.
-  + Initially we had some issues getting the application to run. Once we had corrected all the broken links within our pages it worked with blueprints. It ran smoothly and allowed a maintainable code base that made testing and updating the application far easier.
+  + Initially we had some issues getting the application to run. Once we had corrected all the broken links within our pages it worked with blueprints. It ran smoothly and allowed a maintainable code base that made testing and updating the application easier.
 + __Google Integration__
   + Google integration was challenging as the open authorization protocol was challenging in numerous ways due to its complexity and security requirements. The flask oath library did not support emails from our application so it was necessary for us to edit the library itself to facilitate our needs.
 + __Testing__
