@@ -1,4 +1,13 @@
-﻿# Sherpa: A Free and Open-Source CRM
+﻿﻿﻿# Sherpa: A Free and Open-Source CRM
+![Sherpa logo: a picture of a Yak beneath a mountain range with the text "Sherpa".`enter code here](https://raw.githubusercontent.com/mattmallencode/crm/main/static/sherpa_logo.png)
+<br>
+Oliver Linger, 120444372<br>
+Matt Mallen, 120355103<br>
+Eimantas Pusinskas, 120312336<br>
+Aria Shahi, 119522223
+
+# Sherpa: A Free and Open-Source CRM
+
 ﻿
 ![Sherpa logo: a picture of a Yak beneath a mountain range with the text "Sherpa"](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/sherpa_logo.png)
 <br>
@@ -55,7 +64,7 @@ TODO: TABLE OF CONTENTS AT END (PLUS NEED TO CHECK).
     - [Sort Deals](#sort-deals)
     - [Assign Deal](#assign-deal)
     - [View Assigned Deals](#view-assigned-deals)
-    - [View Assigned Deals](#view-assigned-deals) 
+    - [View Assigned Deals](#view-assigned-deals)
     - [Close Deal](#close-deal)
     - [Closed Vs Goal](#closed-vs-goal)
     - [Forecast](#forecast)
@@ -73,12 +82,12 @@ TODO: TABLE OF CONTENTS AT END (PLUS NEED TO CHECK).
     - [Database Filtering](#database-filtering)
     - [Database Searching](#database-searching)
     - [Database Sorting](#database-sorting)
- - [Data Models](#data-models)
-    - [Users](#users)
-    - [Teams](#teams)
-    - [Invites](#invites)
-    - [Contacts](#contacts)
-    - [Notes](#notes)
+- [Data Models](#data-models)
+  - [Users](#users)
+  - [Teams](#teams)
+  - [Invites](#invites)
+  - [Contacts](#contacts)
+  - [Notes](#notes)
 - [Implementation](#implementation)
   - [Underlying Technologies](#underlying-technologies)
   - [App Structure](#app-structure)
@@ -89,15 +98,18 @@ TODO: TABLE OF CONTENTS AT END (PLUS NEED TO CHECK).
   - [Google Account Integration](#google-account-integration)
   - [Contact Relationship Management](#contact-relationship-management)
   - [Deal Management](#deal-management)
+  - [Viewing Teams And Leaving Them](#viewing-teams-and-leaving-them)
+  - [Viewing Databases in Pages](#viewing-datbases-in-pages)
+  - []
 - [Testing](#testing)
   - [Test Landing Page](#test-landing-page)
   - [Test User](#test-user)
   - [Test Invites](#test-invites)
   - [Test Contacts](#test-contacts)
   - [Test Teams](#test-teams)
- - [Project Reflection](#project-reflection)
-	 - [Diffculties](#difficulties)
-	 - [Engineering Tradeoffs](#engineering-tradeoffs)
+- [Project Reflection](#project-reflection)
+  - [Diffculties](#difficulties)
+  - [Engineering Tradeoffs](#engineering-tradeoffs)
 
 ## Introduction
 
@@ -113,8 +125,8 @@ The following are definitions of important terms in CRM software. Please familia
 
 + __Contacts__: are potential or existing customers of a business.
 + __Deals__: are potential or existing sales contract between a business and  a customer. Deals can be:
-	+  **open** i.e. no contract has been signed / no money has been exchanged, or
-	+ **closed** i.e. the business has made the sale / money has been credited to it.
+  + **open** i.e. no contract has been signed / no money has been exchanged, or
+  + **closed** i.e. the business has made the sale / money has been credited to it.
 + **Deal Goal**: The amount of money a business aims to earn when initially pursuing a deal with a customer.
 + **Deal Closed Amount**: The actual amount of money a business earned after closing a deal with a customer.
 
@@ -130,12 +142,11 @@ Sherpa has the following features:
 
 ## How Sherpa Adds Value
 
-One may wonder if rather than using a CRM like Sherpa if they could instead manage their relationships with customers in a more ad hoc manner e.g. just use an email service like Google on its own in conjunction with conferencing software.  However, the real value in a system like this is how all of the pieces link up together. 
+One may wonder if rather than using a CRM like Sherpa if they could instead manage their relationships with customers in a more ad hoc manner e.g. just use an email service like Google on its own in conjunction with conferencing software.  However, the real value in a system like this is how all of the pieces link up together.
 
 Firstly, with Sherpa, **your sales team always has a cohesive view**. For example, if contact's email changes, it changes for everyone on your team.
-    
+
 Secondly, Sherpa **makes management easier**. A manager can assign a member of their sales team to chase down a specific customer, and that sales person knows immediately after logging into the application which contacts they are supposed to be handling (rather than having to keep up with endless Email/MS Teams / Slack threads to keep pace with management).
-    
 
 Lastly, **everything is traceable** with Sherpa. Not just in terms of analytics but also in terms of customer interactions. Everyone on a team can see which customers have been “left on the back burner” so to speak based on when the last time they were emailed for example.
 
@@ -257,19 +268,19 @@ As a Sherpa user, I want to add a note to a contact's page to notify my colleges
 
 As a Sherpa user, I want to remove a note on a contact's page if it isnt applicable to that contact anymore.
 
-#### Send Email 
+#### Send Email
 
 *User Story ID: 19*
 
 As a Sherpa user, I want to send an email to a contact so I can communicate with them.
 
-#### View Emails 
+#### View Emails
 
 *User Story ID: 20*
 
 As a Sherpa user, I want to view my emails sent and received to/from a contact to keep track of our conversations.
 
-#### Reply to Email 
+#### Reply to Email
 
 *User Story ID: 21*
 
@@ -282,51 +293,61 @@ As a Sherpa user, I want to reply to an email from a contact to allow for me to 
 As a Sherpa user, I want to create a task in relation to a contact to remind myself of anything that needs to be done in relation to that customer.
 
 #### View Tasks
+
 *User Story ID: 23*
 
 As a Sherpa user, I want to view all tasks in relation to a contact so I can understand the jobs that need to be done as a whole.
 
 #### Complete Task
+
 *User Story ID: 24*
 
 As a Sherpa user, I want to mark a task as complete to notify myself that it has been completed.
 
 #### Schedule Meeting
+
 *User Story ID: 25*
 
 As a Sherpa user, I want to schedule a meeting with a contact which is integrated with my Google calendar so I can notify the contact when we are scheduled to talk.
 
 #### View Meetings
+
 *User Story ID: 26*
 
 As a Sherpa user, I want to view my scheduled meetings with a contact so I can join the meetings.
 
 #### Create Deal
+
 *User Story ID: 27*
 
 As a Sherpa user, I want to create a deal to allow for a new sales contract to be made.
 
 #### View Deals
+
 *User Story ID: 28*
 
 As a Sherpa user, I want to view my team's deals to help me understand what direction my teams deals are going.
 
 #### Edit Deal
+
 *User Story ID: 29*
 
 As a Sherpa user, I want to edit a deal to match the deals current situation.
 
 #### Close Deal
+
 *User Story ID: 30*
 
 As a Sherpa user, I want to close a deal to update the status of a deal to reflect the fact that the sale has be finalized.
 
 #### Search Deals
+
 *User Story ID: 31*
 
 As a Sherpa user, I want to search my team's deals to check my team's activity.
 
 #### Sort Deals
+
 *User Story ID: 32*
 
 As a Sherpa user, I want to sort my team's deals to make it quicker for me to find a deal.
@@ -529,7 +550,6 @@ A user must be able to manage their emails with a contact. A user must be presen
 
 A user must be able to manage their tasks for a customer. A form must be presented where users can set a task in relation to a customer. A table must also be presented displaying all tasks for a given customer.
 
-
 #### Meeting Management
 
 *Requirement ID: 18*
@@ -543,7 +563,6 @@ A user must be able to manage their meetings with a customer. A form must be pre
 *Requirement ID: 19*
 
 *Satisfies User Story: 30*
-
 
 A user when presented with the forms for adding/editing deals must have the option to alter the deal "stage" to Closed. When closing a deal the user must provide the "closed amount".
 
@@ -640,6 +659,7 @@ The following table describes the data model used for "user" entities i.e. user 
 
 *Table 1: Users Data Model*
 
+
 | email | password_hash | team_id | owner_status | admin_status | name |
 | :-: | :-: | :-: | :-: | :-: | :-: |
 | Primary Key, String | String | Integer | Boolean | Boolean | String |
@@ -651,12 +671,12 @@ The following table describes the data model used for "user" entities i.e. user 
 + admin_status - indicates if user is an admin within their team
 + name - the real name of the user
 
-
 #### Teams
 
 The following table describes the data model used for "team" entities i.e. groups of users with access to the same CRM resources.
 
 *Table 2: Teams Data Model*
+
 
 | team_id | name |
 | :-: | :-: |
@@ -665,11 +685,12 @@ The following table describes the data model used for "team" entities i.e. group
 + team_id - auto-incremented integer which is used as the primary key to uniquely identify a team
 + name - name of the team
 
-
 #### Invites
+
 The following table describes the data model used for "invite" entities i.e. invitations to users to join a given team.
 
 *Table 3: Invites Data Model*
+
 
 | invite_id | team_id |
 | :-: | :-: |
@@ -678,11 +699,12 @@ The following table describes the data model used for "invite" entities i.e. inv
 + invite_id - "{invitee_email}\_{team_id}\_{secure_token}", used to uniquely identify invite.
 + team_id - the team to which the invitation applies for
 
-
 #### Contacts
+
 The following table describes the data model used for "contact" entities i.e. a contact of a given team.
 
 *Table 4: Contacts Data Model*
+
 
 | contact_id | team_id | name | email | phone number | contact owner | company | status |
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
@@ -697,12 +719,12 @@ The following table describes the data model used for "contact" entities i.e. a 
 + company - the company associated with the contact
 + status - the status of the relationship with the contact e.g. "New"
 
-
 #### Notes
 
 The following table describes the data model used for "note" objects i.e. notes added to a specific contact by a Sherpa user.
 
 *Table 5: Notes Data Model*
+
 
 | note_id | contact_id | note | author | date |
 | :-: | :-: | :-: | :-: | :-: |
@@ -714,20 +736,21 @@ The following table describes the data model used for "note" objects i.e. notes 
 + author - author of the note
 + date - the date the note was written
 
-
 #### Deals
+
 The following table describes the data model used for "deal" objects i.e. a deal of a given team.
 
 *Table 6 : Deals Data Model*
 
-| deal_id | team_id | name | stage | close_date | owner | amount | associated_contact | associated_company
+
+| deal_id | team_id | name | stage | close_date | owner | amount | associated_contact | associated_company |
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
-|Primary Key, Integer | Integer | String | String | Datetime | String | Integer | String | String |
+| Primary Key, Integer | Integer | String | String | Datetime | String | Integer | String | String |
 
 + deal_id - auto-incremented integer which is used as the primary key to uniquely identify a deal
 + team_id - secondary key which is used to correlate a deal with a specific team
-+ name - the name given to the deal 
-+ stage - the deal stage, used to track the progression of the deal 
++ name - the name given to the deal
++ stage - the deal stage, used to track the progression of the deal
 + close_date - the date the deal was closed, if it was closed
 + owner - the owner of the deal
 + amount - value of the deal
@@ -735,13 +758,15 @@ The following table describes the data model used for "deal" objects i.e. a deal
 + associated_company - company associated with this deal
 
 #### Activity Log
+
 The following table describes the data model used for "activity log" objects i.e. recordings of the metadata of interactions with customers i.e. emails, meetings, tasks, etc.
 
 *Table 7 : Activity Log Data Model*
 
+
 | activity_id | activity_type | actor | timestamp | contact_id | team_id | description |
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
-|Primary Key, Integer | String | String | Datetime | String | Integer | String |
+| Primary Key, Integer | String | String | Datetime | String | Integer | String |
 
 + activity_id - auto-incremented integer which is used as the primary key to uniquely identify an activity
 + activity_type - the type of activity, can be "note", "email", "task", "complete_task", and "meeting
@@ -752,6 +777,7 @@ The following table describes the data model used for "activity log" objects i.e
 + description - a short string describing the activity e.g. "{actor} created a note on {timestamp}.
 
 #### Deal Stage Conversion
+
 The following table describes the data model which is used for calculating deal stage conversion. It is used as a log table where every time a deal transitions to a different stage it is is logged.
 
 *Table 8: Deal Stage Conversion Data Model*
@@ -879,15 +905,16 @@ The following flow chart details the process flow for accepting a Sherpa invitat
 
 *Implementation of requirement: 6*
 
-"Database" in this context refers to the set of records belonging to a team, either its contacts or deals. 
+"Database" in this context refers to the set of records belonging to a team, either its contacts or deals.
 
 Since the CRUD operations for both contacts and deals are very similar, their implementation is described in one section. For additional brevity some disparities in form validation etc between contacts and deals are not detailed but one should be able to gather how we interface the user with the MySQL database from what follows.
 
-Each database's "read" operation displays a series of "live" forms i.e. HTML input elements that have been prepopulated with the records from the database. 
+Each database's "read" operation displays a series of "live" forms i.e. HTML input elements that have been prepopulated with the records from the database.
 
 Each form represents a record and each form comprises a row in a larger table representing the database. This allows the user to view and edit records using the same elements - they then can save any changes by clicking the appropriate button or remove a specific record by clicking its individual remove button.
 
 #### Create
+
 *Endpoints: /add_contact and /add_deal*
 
 * Initialise an instance of the Contacts or Deals data models.
@@ -895,20 +922,20 @@ Each form represents a record and each form comprises a row in a larger table re
 * Commit the new record to MySQL after some validation checks e.g. "does this contact already exist in this team's records?".
 
 #### Read
+
 *Endpoints: /contacts and /deals*
 
-* Fetch relevant records from the database i.e. all contacts or deals with the correct team_id. 
+* Fetch relevant records from the database i.e. all contacts or deals with the correct team_id.
 * Then iterate over the list of records, making each record into a HTML form.
 * Each form is then added to a list of forms that is iterated over when templating using Jinja2, associated each form with an "edit" button in the HTML that has its href attribute set to the appropriate edit endpoint with the relevant id (see update for more).
 * This results in all contacts or deals being rendered as an "editable" table that the user can now read.
 * Each form is also associated with its own "remove" button in the HTML that has its href attribute set to the appropriate remove endpoint with the relevant id (see delete for more).
 
-
 #### Update
 
 *Endpoints: /edit_contact/<contact_id> and /edit_deal/<deal_id>*
 
-* As described in read, each record in the contacts or deals database is rendered as an individual editable HTML form element and associated with its own edit button. 
+* As described in read, each record in the contacts or deals database is rendered as an individual editable HTML form element and associated with its own edit button.
 * When a user clicks this button, the form is submitted to the relevant edit endpoint and crucially includes the relevant id for example the href attribute might be "/edit_contact/X" with X being the ID of the contact the user wishes to edit.
 * This way the back end can update the relevant record that matches that ID with the data POSTed by the form (after validation) and commit these changes to MySQL.
 
@@ -930,11 +957,14 @@ Each form represents a record and each form comprises a row in a larger table re
 * If a user sends a GET request to this endpoint they will be served a page with basic account information, email address etc.
 * If however, they submit a POST request, their flask session will be cleared this means they will be redirected to the login page for all subsequent requests by the *@login_required* decorator since they no longer have a signed login cookie in their session.
 
-### Viewing Teams and Leaving Them
+### Viewing Team and Leaving Team
 
 *Implementation of requirement: 8*
+*endpoint: /team*
 
-TODO
+* If a user sends a GET request to the team endpoint. The LeaveTeamForm() is allocated to a variable. The database is queried to retrieve the user's information, the team id, and the team members. This data is displayed in the HTML to the user. Enabling them to view see the team members and their team details.
+* If a member wishes to leave a team the user must click the checkbox and press the button for leaving a team. Upon clicking the button the user's owner status is checked. If the user is the owner of the team then a message "Can't leave a team if you own it!" will be presented to you.
+* If however, the user is not an owner, the user team id is set to none and their admin status is set to False. These changes are committed to the database, removing the user from the team.
 
 ### Viewing Databases in Pages
 
@@ -958,9 +988,16 @@ TODO (FLOW)
 
 ### Showing the User the Records they Own
 
-*Implementation of requirement: 10*
+TODO*
 
-TODO
+*Implementation of requirement: 10*
+*endpoint: /contacts and /deals*
+
+* To get assigned a contact you must be set as the contact owner when the contact is being added. The contact owner must be a member of your team.
+* In the contacts function there are three options "Assigned Contacts", "Unassigned Contacts" and "All Contacts".
+* In the contacts function there exists a "filter" parameter which contains the value "assigned" or "unassigned". When the "Assigned Contacts" buttonis clicked the filter variable to "assigned" which display all contacts that have a contact owner. When the "Unassigned Contacts" button is pressed, the filter button is set to "unassigned", and all contacts displayed do not have a contact owner.
+* The display of contacts is done by querying using the contacts "team_id" and "contact_id". For assigned contacts, it searches for the owner of the contact. Alternatively, if you are searching for unassigned contacts the "contact_id" will be an empty string since no owner exists.
+* Deals displays either all deals or assigned deals in a table. The user can toggle between assigned and all deals by clicking "Assigned Deals" or "All Deals". This changes the filter variable to either "assigned" or "None".  If the filter is set to "None" then all deals will be queried from the database. If it is set to "Assigned" then only deals that have an owner will be displayed.
 
 ### Searching a Database
 
@@ -976,7 +1013,6 @@ Finally, the results of the search are returned to the user in the deals variabl
 
 
 TODO (FLOW)
-
 
 ### Sorting a Database
 
@@ -997,8 +1033,14 @@ TODO (FLOW)
 ### Activity Feature
 
 *Implementation of requirement: 13*
+*endpoint:/contact/101010010%40mail.com_123/activity*
 
-TODO
+* There are five activity types on this page.  Schedule a meeting, send an email, make a note, make a task, and mark tasks as complete. All these are logged on the activity page.
+* Once a meeting has been scheduled and the google token exists a time stamp is made using "dateTime.now()" of that event. The log activity function is called which takes four parameters, "activity_type", "actor", "timestamp", and  "contact_id". For meetings, the "activity_type" is set to "meeting",  "actor" is set to our users email, "timestamp" is the time at which the meeting was made, and "contact_id" is the contact id of our user. The inputs are formatted in the log activity function and inserted into the table in the activity section of the page
+* Once an email has been sent to a contact the activity is logged. This is done by the "email_activity" function. The google token must exist and the form must validate on submission. A timestamp of the email is created using the same method as above and the same four parameters are passed to the log activity function however the activity has changed to "email" which formats the activity message differently. All other parameters are handled in the same way as the previous bullet point.
+* Making a note is also logged as an activity. the "notes_activity" function handles the recording of the activity. Once the form validates it creates a timestamp and passes off the same parameters as the previous bullet points to the log activity function. The only difference is that "activity_type" is now "note".
+* The "tasks_activity" function handles activity in the same way as the above bullet points all that changes is the "activity_type" parameter is assigned a new value "complete task". This causes the log activity function to create a different message in the activity table for a completed task.
+* Missing create task
 
 ### Notes Feature
 
@@ -1141,6 +1183,7 @@ Then for every stage, the conversion values are calculated as follows;
 
 *Implementation of requirement: 20, 21, 23, 24*
 
+
 The following chart details the process of creating the data analytics plots for the analytics dashboard
 
 ![Diagram the process of create a plot diagram](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/plots.png)
@@ -1153,7 +1196,6 @@ The following chart details the process of creating the data analytics plots for
 * Then the plot figure is saved as a PNG in this new buffer.
 * Then the data in the buffer is encoding using base64 encoding.
 * This encoded data is then included in the HTTP response as part of an "img" element.
-
 
 ## Testing
 
@@ -1204,20 +1246,15 @@ Our team's approach also included a "polishing" week every second week. This was
 
 Overall, our team's process was highly effective, and our approach to task management was highly structured, ensuring that everyone was working together towards a common goal. This collaborative approach allowed our team to remain focused and prioritize work, resulting in high-quality work that was completed efficiently.
 
-
 ### What Went Well
 
 #### Collaborative approach:
 
 Our team's approach to task management was highly collaborative, with daily work sessions and weekly whiteboarding sessions. This allowed everyone to work together towards a common goal and ensured that everyone was aligned on the project's goals and objectives.
-
   
-
 #### Prioritization:
 
 By breaking down tasks into user stories, Our team was able to prioritize work and ensure that we were working on the most critical tasks. This helped us stay focused and make progress on the most important parts of the project.
-
-  
 
 #### Quality control:
 
@@ -1243,18 +1280,17 @@ Overall, we learned that standardizing our code, using frameworks and best pract
 
 ### What Was Technically Challenging
 
-This section outlines the difficulties and challenges we individually and as a team encountered in the process of developing Sherpa.  
+This section outlines the difficulties and challenges we individually and as a team encountered in the process of developing Sherpa.
 
 + __Turbo__
-	+ Implementing Turbo in our application proved to be difficult. Our goal was to have our whole application using Turbo to increase the performance of our web application and to ensure a smooth user experience while using Sherpa. Due to a lack of documentation online regarding Turbo, we had to go through a lot of trial and error when implementing Turbo. Therefore, this was time consuming and proved frustrating at times when encountering unexpected behaviours. But once completed the benefit of Turbo was evident with the smooth performance of our web application.
+  + Implementing Turbo in our application proved to be difficult. Our goal was to have our whole application using Turbo to increase the performance of our web application and to ensure a smooth user experience while using Sherpa. Due to a lack of documentation online regarding Turbo, we had to go through a lot of trial and error when implementing Turbo. Therefore, this was time consuming and proved frustrating at times when encountering unexpected behaviours. But once completed the benefit of Turbo was evident with the smooth performance of our web application.
 + __Modularization__
-	+ TODO
+  + TODO
 + __Google Integration__
-	+ TODO
+  + TODO
 + __Testing__
-	+ Writing the test cases for our code was challenging initially due to having little experience with testing web application. Also, the structure of our code caused problems with writing test cases. But once modularization was implemented within our code then test cases were much easier to write.
-+ __Security__
-Security was something that was of utmost importance for our application in order to ensure the security of user data and preventing any potential threats. 
+  + Writing the test cases for our code was challenging initially due to having little experience with testing web application. Also, the structure of our code caused problems with writing test cases. But once modularization was implemented within our code then test cases were much easier to write.
++ __Security__  Security was something that was of utmost importance for our application in order to ensure the security of user data and preventing any potential threats. 
 	+ _Hashing_ -  We managed to implement security features where user data is stored securely by hashing is before storing it in the database.
 	+ _Cross-Site Scripting_ - Our use of Flask SQL Alchemy as an ORM made sure to prevent any potential XSS attacks
 	+ _Session Cookies_ - Our implementation of session cookies within our application ensured that users are authenticated when making requests and prevent unauthorized users accessing forbidden data.
