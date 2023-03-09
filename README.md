@@ -147,6 +147,8 @@ To put it simply, it would be very painful to set up a cohesive flow in terms of
 
 TODO: bit of an intro to the user stories. Also need do add the "in order" part to every user story.
 
+The following user stories describe various tasks that a user might want to accomplish while using a CRM system. User stories are short descriptions of a user's goals or desires, which are used to guide the development of software applications. In this case, the user stories are focused on the functions of a CRM (Customer Relationship Management) system called Sherpa. The stories cover tasks such as inviting team members, adding and editing customer contacts, creating and viewing deals, scheduling meetings, and more. Each story is identified by a unique ID number, which can be used to track its progress during development. By focusing on the user's needs and objectives, these stories help ensure that the CRM system is designed to be efficient, effective, and easy to use.
+
 #### Team Invitation Creation
 
 *User Story ID: 1*
@@ -211,25 +213,25 @@ As a Sherpa user, I want to leave my team so that I no longer have access to the
 
 *User Story ID:  11
 
-As a Sherpa team owner/admin I want to assign a contact to a member of my team.
+As a Sherpa team owner/admin I want to assign a contact to a member of my team they understand who they have to communicate with to try generate a sale.
 
 #### View Assigned Contacts
 
 *User Story ID:  12*
 
-As a Sherpa user I want to view the contacts that have been assigned to me.
+As a Sherpa user I want to view the contacts that have been assigned to me so I can see what data they have to help me generate a sale.
 
 #### View Unassigned Contacts
 
 *User Story ID:  13*
 
-As a Sherpa user I want to view the contacts that have yet to be assigned to a member of my team.
+As a Sherpa user I want to view the contacts that have yet to be assigned to a member of my team so they dont get left unattend.
 
 #### Search For Contacts
 
 *User Story ID:  14*
 
-As a Sherpa user I want to search for a specific contact(s) using a search bar.
+As a Sherpa user I want to search for a specific contact(s) using a search bar to speed up the time it takes to find a contact.
 
 #### Sort Contacts
 
@@ -241,111 +243,105 @@ As a Sherpa user I want to sort my team's contacts by email, phone number, etc.
 
 *User Story ID:  16*
 
-As a Sherpa user I want to view all team activity for a contact e.g. notes, emails, meetings etc.
+As a Sherpa user I want to view all team activity for a contact e.g. notes, emails, meetings etc so I understand to a greater extend to what way a deals heading.
 
 #### Post Notes
 
 *User Story ID:  17*
 
-As a Sherpa user, I want to add a note to a contact's page.
+As a Sherpa user, I want to add a note to a contact's page to notify my colleges of anything significant thats happening to that specific contact.
 
 #### Remove notes
 
 *User Story ID:  18*
 
-As a Sherpa user, I want to remove a note on a contact's page.
+As a Sherpa user, I want to remove a note on a contact's page if it isnt applicable to that contact anymore.
 
 #### Send Email 
 
 *User Story ID: 19*
 
-As a Sherpa user, I want to send an email to a contact.
+As a Sherpa user, I want to send an email to a contact so I can communicate with them.
 
 #### View Emails 
 
 *User Story ID: 20*
 
-As a Sherpa user, I want to view my emails sent and received to/from a contact.
+As a Sherpa user, I want to view my emails sent and received to/from a contact to keep track of our conversations.
 
 #### Reply to Email 
 
 *User Story ID: 21*
 
-As a Sherpa user, I want to reply to an email from a contact.
+As a Sherpa user, I want to reply to an email from a contact to allow for me to exchange information with them.
 
 #### Set a Task
 
 *User Story ID: 22*
 
-As a Sherpa user, I want to create a task in relation to a contact.
+As a Sherpa user, I want to create a task in relation to a contact to remind myself of anything that needs to be done in relation to that customer.
 
 #### View Tasks
 *User Story ID: 23*
 
-As a Sherpa user, I want to view all tasks in relation to a contact.
+As a Sherpa user, I want to view all tasks in relation to a contact so I can understand the jobs that need to be done as a whole.
 
 #### Complete Task
 *User Story ID: 24*
 
-As a Sherpa user, I want to mark a task as complete.
+As a Sherpa user, I want to mark a task as complete to notify myself that it has been completed.
 
 #### Schedule Meeting
 *User Story ID: 25*
 
-As a Sherpa user, I want to schedule a meeting with a contact which is integrated with my Google calendar.
+As a Sherpa user, I want to schedule a meeting with a contact which is integrated with my Google calendar so I can notify the contact when we are scheduled to talk.
 
 #### View Meetings
 *User Story ID: 26*
 
-As a Sherpa user, I want to view my scheduled meetings with a contact.
+As a Sherpa user, I want to view my scheduled meetings with a contact so I can join the meetings.
 
 #### Create Deal
 *User Story ID: 27*
 
-As a Sherpa user, I want to create a deal .
+As a Sherpa user, I want to create a deal to allow for a new sales contract to be made.
 
 #### View Deals
 *User Story ID: 28*
 
-As a Sherpa user, I want to view my team's deals.
+As a Sherpa user, I want to view my team's deals to help me understand what direction my teams deals are going.
 
 #### Edit Deal
 *User Story ID: 29*
 
-As a Sherpa user, I want to edit a deal.
+As a Sherpa user, I want to edit a deal to match the deals current situation.
 
 #### Close Deal
 *User Story ID: 30*
 
-As a Sherpa user, I want to close a deal.
+As a Sherpa user, I want to close a deal to update the status of a deal to reflect the fact that the sale has be finalized.
 
 #### Search Deals
 *User Story ID: 31*
 
-As a Sherpa user, I want to search my team's deals.
+As a Sherpa user, I want to search my team's deals to check my team's activity.
 
 #### Sort Deals
 *User Story ID: 32*
 
-As a Sherpa user, I want to sort my team's deals.
+As a Sherpa user, I want to sort my team's deals to make it quicker for me to find a deal.
 
 #### Assign Deal
 
 *User Story ID:  33*
 
-As a Sherpa team owner/admin I want to assign a deal to a member of my team.
+As a Sherpa team owner/admin I want to assign a deal to a member of my team to let them know what contacts they have to persue.
 
 #### View Assigned Deals
 
 *User Story ID:  34*
 
-As a Sherpa user I want to view the deals that have been assigned to me.
-
-#### Close Deal
-
-*User Story ID:  35*
-
-As a Sherpa user I want to set a deal's status to "closed".
+As a Sherpa user I want to view the deals that have been assigned to me so I know what I must do to do my job.
 
 #### Closed Vs Goal
 
@@ -357,13 +353,13 @@ As a Sherpa user I want to view a graph illustrating how my team is performing i
 
 *User Story ID:  37*
 
-As a Sherpa user I want to view a graph illustrating my team's forecasted deal  earnings for the month.
+As a Sherpa user I want to view a graph illustrating my team's forecasted deal  earnings for the month to help me get a greater understanding of where my deals are heading.
 
 #### Deal Stage Funnel
 
 *User Story ID:  38*
 
-As a Sherpa user I want to view a graph illustrating the how successful my team is at progressing deals from stage to stage.
+As a Sherpa user I want to view a graph illustrating the how successful my team is at progressing deals from stage to stage to help me make data driven decisions.
 
 #### Activity Statistics
 
@@ -374,6 +370,8 @@ As a Sherpa user I want to view a graph illustrating the breakdown of customer i
 ### Requirements
 
 TODO: an intro to the requirements.
+
+The success of any software project is dependent on the ability to understand, document, and implement the requirements of the system. In this section, we will outline the requirements for the Sherpa web application, a CRM tool for managing contacts and deals. These requirements have been defined through the use cases of the system, and they serve as a roadmap for our team to ensure that the final product meets the needs and expectations of its users. The requirements are organized into functional areas, such as user registration and authentication, team creation and management, database CRUD operations, and user profile management, among others. By following these requirements, the Sherpa development team was able to deliver a reliable and user-friendly application that fulfills its intended purpose.
 
 #### User Registration
 
@@ -942,6 +940,20 @@ TODO
 
 *Implementation of requirement: 9*
 
+When the user visits the webpage, the server-side code retrieves all records from the database using a SQL query. The records are then stored in a list.
+
+Next, the code determines which page the user is currently viewing. By tracking the current page number in a session variable.
+
+Once the current page is determined, the code calculates the starting and ending indexes of the records to display on that page. For example, if each page displays 25 records and the user is on page 3, the starting index would be 50 (2 * 25) and the ending index would be 74 (50 + 24).
+
+The code then selects the records between the starting and ending indexes and formats them into HTML table rows. These rows are concatenated together to form the HTML table body.
+
+Additionally, the code generates HTML links for each page number. These links allow the user to navigate between pages. The links are displayed as arrows on the webpage.
+
+Finally, the code combines the HTML table and paging links into a single HTML page and sends it to the user's browser for display.
+
+Overall, this approach is relatively efficient because it only retrieves the records needed for the current page, rather than retrieving all records at once. It also allows for easy paging and navigation between pages
+
 TODO (FLOW)
 
 ### Showing the User the Records they Own
@@ -954,12 +966,31 @@ TODO
 
 *Implementation of requirement: 11*
 
+The search bar allows the user to search through the database based on certain criteria. The user can search for deals by entering a search term in the search bar and selecting a filter. The search bar is defined using a Flask form such as DealsSearchForm. When the user enters a search term and submits the form, the search term is extracted from the form and used to search for relevant deals in the database.
+
+First, the search term is optimized for searching by calling a function like optimize_deals_search depending on the page. This function checks whether the search term looks like an email address or not, and returns "email" if it does and "name/company/email" otherwise.
+
+Next, the .query object is filtered based on the user's search criteria. The variable for this example we'll say 'deals' is set to the Deals.query object at the start of the function. Then, the results of this query are filtered based on the user's search term. If the search term is an email, then only the associated_contact column is searched. If the search term is not an email, then all relevant columns are searched.
+
+Finally, the results of the search are returned to the user in the deals variable. The deals variable is a query object, which means that it represents a set of results from the database. The results are not actually fetched from the database until the query is executed (in this case, by calling .limit() and .offset()).
+
+
 TODO (FLOW)
 
 
 ### Sorting a Database
 
 *Implementation of requirement: 12*
+
+Our code allows the user to sort a list of contacts/deals in a database based on different columns such as name, email, or phone number. The sorting is handled by a function such as order_contacts(), which takes three parameters: sort, order, and contacts.
+
+The sort parameter indicates the column to sort by, and it can have values such as "name", "email", or "phone_number". The order parameter indicates whether to sort in ascending or descending order and can have values of "ASC" or "DESC". Finally a parameter, for this we'll say contacts, is the query object returned by the database that contains the contacts to sort.
+
+The function first checks which column the user wants to sort by and then sorts the contacts accordingly using the order_by() method. If the order parameter is "ASC", the contacts/deals are sorted in ascending order. If it is "DESC", they are sorted in descending order.
+
+The sorting is triggered by the contacts()/deals() function, which sets the values of sort and order parameters based on the user's selection. The sort parameter is changed if the user is sorting a different column than the previous sort, and the order parameter is changed if the user is toggling the sort of the same column.
+
+Overall, this code allows users to sort a list of contacts/deals in a database based on different columns and in ascending or descending order.
 
 TODO (FLOW)
 
