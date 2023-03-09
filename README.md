@@ -13,8 +13,6 @@ Aria Shahi, 119522223
 
 ## Table of Contents
 
-TODO: TABLE OF CONTENTS AT END (PLUS NEED TO CHECK).
-
 - [Table of Contents](#table-of-contents)
 - [Introduction](#introduction)
 - [Some CRM Terms](#some-crm-terms)
@@ -56,8 +54,6 @@ TODO: TABLE OF CONTENTS AT END (PLUS NEED TO CHECK).
     - [Sort Deals](#sort-deals)
     - [Assign Deal](#assign-deal)
     - [View Assigned Deals](#view-assigned-deals)
-    - [View Assigned Deals](#view-assigned-deals)
-    - [Close Deal](#close-deal)
     - [Closed Vs Goal](#closed-vs-goal)
     - [Forecast](#forecast)
     - [Deal Stage Funnel](#deal-stage-funnel)
@@ -70,38 +66,66 @@ TODO: TABLE OF CONTENTS AT END (PLUS NEED TO CHECK).
     - [Accepting Team Invitation](#accepting-team-invitation)
     - [Database Create Read Update and Delete CRUD](#database-create-read-update-and-delete-crud)
     - [User Profile and Logout](#user-profile-and-logout)
-    - [Database Viewing](#database-viewing)
+    - [View and Leave Teams](#view-and-leave-teams)
+    - [Database Viewing in Pages](#database-viewing-in-pages)
     - [Database Filtering](#database-filtering)
     - [Database Searching](#database-searching)
     - [Database Sorting](#database-sorting)
-- [Data Models](#data-models)
-  - [Users](#users)
-  - [Teams](#teams)
-  - [Invites](#invites)
-  - [Contacts](#contacts)
-  - [Notes](#notes)
+    - [Activity Logging and Viewing](#activity-logging-and-viewing)
+    - [Note Management](#note-management)
+    - [Google OAuth (Open Authorisation)](#google-oauth-open-authorisation)
+    - [Email Management](#email-management)
+    - [Task Management](#task-management)
+    - [Meeting Management](#meeting-management)
+    - [Closing Deals](#closing-deals)
+    - [Closed Vs Goal Plot Generation](#closed-vs-goal-plot-generation)
+    - [Deal Forecast Plot Generation](#deal-forecast-plot-generation)
+    - [Deal Conversion Tracking](#deal-conversion-tracking)
+    - [Deal Stage Funnel Plot Generation](#deal-stage-funnel-plot-generation)
+    - [Activity Plot Generation](#activity-plot-generation)
+    - [Serving Plots](#serving-plots) 
+ - [Data Models](#data-models)
+    - [Users](#users)
+    - [Teams](#teams)
+    - [Invites](#invites)
+    - [Contacts](#contacts)
+    - [Notes](#notes)
+    - [Deals](#deals)
+    - [Activity Log](#activity-log)
+    - [Deal Stage Conversion](#deal-stage-conversion)
 - [Implementation](#implementation)
   - [Underlying Technologies](#underlying-technologies)
   - [App Structure](#app-structure)
   - [User Registration and Authentication](#user-registration-and-authentication)
   - [Creating Teams](#creating-teams)
   - [Sending and Accepting Team Invites](#sending-and-accepting-team-invites)
+  - [Basic Database Operations (CRUD)](#basic-database-operations-(CRUD))
+  - [Reseting a User's Authentication Session](#reseting-a-user's-authentication-session)
+  - [Viewing teams And Leaving Team](#viewing-teams-and-leaving-team)
+  - [Viewing Database in Pages](#viewing-database-in-pages)
+  - [Showing the User the Records they Own](#showing-the-user-the-records-they-own)
   - [Contact Information Management](#contact-information-management)
-  - [Google Account Integration](#google-account-integration)
-  - [Contact Relationship Management](#contact-relationship-management)
-  - [Deal Management](#deal-management)
-  - [Viewing Teams And Leaving Them](#viewing-teams-and-leaving-them)
-  - [Viewing Databases in Pages](#viewing-datbases-in-pages)
-  - []
+  - [Searching a Database](#searching-a-database)
+  - [Sorting a Database](#sorting-a-database)
+  - [Activity Feature](#activity-feature)
+  - [Notes Feature](#notes-feature)
+  - [Integrating Google Accounts](#integrating-google-accounts)
+  - [Parsing API Responses](#parsing-api-responses)
+  - [Sending and Receiving Emails](#sending-and-recieving-emails)
+  - [Creating, Viewing, and Completing Tasks](#creating,-viewing,-and-completing-tasks)
+  - [Scheduling and Joining Meetings](#scheduling-and-joining-meetings)
+  - [Closing Deals](#closing-deals)
+  - [Tracking Deal Conversions](#tracking-deal-conversions)
+  - [Creating Data Analytics Plots](#creating-data-analytics-plots)
+  - [Serving Plots](#serving-plots)
 - [Testing](#testing)
-  - [Test Landing Page](#test-landing-page)
-  - [Test User](#test-user)
-  - [Test Invites](#test-invites)
-  - [Test Contacts](#test-contacts)
-  - [Test Teams](#test-teams)
-- [Project Reflection](#project-reflection)
-  - [Diffculties](#difficulties)
-  - [Engineering Tradeoffs](#engineering-tradeoffs)
+  - [Test Client Set Up](#test-client-set-up)
+  - [Dealing With User Sessions](#dealing-with-user-sessions)
+  - [Simulating API Responses](#simulating-api-responses)
+ - [Project Reflection](#project-reflection)
+	 - [Process](#process)
+	 - [Challenges and Trade-Offs](#challenges-and-trade-offs)
+     - [Lessons Learned](#lessons-learned)
 
 ## Introduction
 
@@ -380,12 +404,7 @@ As a Sherpa user I want to view a graph illustrating the breakdown of customer i
 
 ### Requirements
 
-
-The success of any software project is dependent on the ability to understand, document, and implement the requirements of the system. In this section, we will outline the requirements for the Sherpa web application, a CRM tool for managing contacts and deals. These requirements have been defined through the use cases of the system, and they serve as a roadmap for our team to ensure that the final product meets the needs and expectations of its users. The requirements are organized into functional areas, such as user registration and authentication, team creation and management, database CRUD operations, and user profile management, among others. By following these requirements, the Sherpa development team was able to deliver a reliable and user-friendly application that fulfills its intended purpose.
-
-
-In this section, we will outline the requirements for Sherpa. Each requirement satisfies one or more use cases.
-
+In this section, we will outline the requirements for Sherpa. Each requirement satisfies one or more user stories.
 
 #### User Registration
 
@@ -1033,12 +1052,11 @@ Sherpa integrates several Google products, each with their own API, namely: Gmai
 The following is a flow chart detailing the process flow in Sherpa of dealing with an API response from request to return.
 
 ![sss](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/Parsing.png)
-
- - First a GET request is send to the relevant Google API endpoint. This request is accompanied by a "query" which is a parameter that specifies to the server which data exactly it return to us. For example the query for the GET request for emails is "from: {contact_email} OR to: {contact_email}" - meaning we want to fetch any email the user sent to the contact AND any email the user received from the contact.
- - The server will then return the data we requested as a JSON dump. This can then be interacted with as a collection of python data structures, mainly lists and dictionaries.
- - Sherpa initialises an empty list to which all the parsed objects will be appended e.g. an empty list for all the parsed task objects. It then iterates over the JSON dump. Each loop, it initialises an empty dictionary with relevant keys e.g. for an email "timestamp", "subject", etc and maps these keys to the relevant data. This parsed version of the object is then appended to the list of objects.
- - Imporantly for the above, often timestamps won't be in a very human readable format so this required working with functions like "strftime" to convert the timestamps to a more readable format.
- - Finally, the parsed list is returned to the endpoint that called the given parsing function and is templated into the HTTP response using Jinja2. As an example, this is how this templating works for meetings:
+ - First a GET request is sent to the relevant Google API endpoint. This request includes a "query" which specifies which data the request is concerned with. For example, the query for getting emails is "from: {contact_email} OR to: {contact_email}" i.e. fetch any email sent to the contact AND any email received from the contact.
+ - The server then returns the data as a JSON dump which can be interacted with as a collection of python data structures.
+ - Sherpa initialises an empty list to which all the parsed objects will be appended. It then iterates over the JSON dump. Each loop, it initialises an empty dictionary with relevant keys e.g. for an email "subject", etc and maps these keys to the relevant data. This parsed object is then appended to the parsed list.
+ - Often timestamps aren't in human readable format so this required working with functions like "strftime" for timestamp conversion.
+ - The list is returned to the endpoint that called the given parsing function and is templated as HTML using Jinja2. This is how this templating works for meetings:
 
 ```
 {% if meetings is not none %}
@@ -1160,99 +1178,43 @@ The following chart details the process of creating the data analytics plots for
 
 ## Testing
 
-Sherpa's test suite achieves extensive testing code coverage using the Pytest testing framework. Rather than going through each test case (pytest uses asserts just like most testing frameworks), this section instead deals with the more interesting parts of Sherpa's test suite i.e. how it overcomes the challenges unique to testing a complex web application i.e. simulating requests, dealing with user sessions, and simulating third party API responses.
+## Testing
+
+Rather than going through each test case, this section deals with the more interesting aspects of Sherpa's test suite i.e. how it overcomes the challenges unique to testing a web application.
 
 ### Test Client Set Up
 
-Flask already has a "test_client()" method which simulates HTTP requests for tests without needing to run a web server. However, this test client needs access to the application context.
+Flask has a "test_client()" method which simulates requests without needing to run a web server. However, this test client needs access to the "application context" which is a container that holds database connections etc. Before we create a test client, we need to pass the application context to it.
 
-In Flask, the "application context" is a container that holds information related to the current application: configuration settings, database connections etc. So, before we create a test client, we need to be able to pass the application context to it.
-
-This is achieved with an "application factory" or the "create_app()" function in Sherpa's case which creates an application instance, loads the application's configuration (database credentials etc) and returns the instance.
-
-Sherpa's application factory and test_client are both called as part of Pytest fixtures. Fixtures in Pytest are just reusable setup and tear-down code that can be passed as arguments in test functions i.e. the above set up is run before each test is carried out.
-
-With all this in place, Sherpa's test suite is set up and configured.
-
-### Dealing With User Sessions
-
-Sherpa makes extensive use of user sessions and cookies e.g. to authenticate users, so this had to be emulated in the test suite. Flask's test client provides a useful session_transaction() method which allows one to make updates to the test client's session. For example, to set the user's email and team_id in their session:
-
-```
-with client.session_transaction() as session:
-        session["email"] = "matt@sherpa.com"
-        session["team_id"] = 10 
-```
+This is achieved with Sherpa's "application factory" which creates an application instance, loads the application's configuration and returns the instance. Sherpa's application factory and test client are both ran as Pytest fixtures. Fixtures are just reusable code that can be passed to test functions and run before each test.
 
 ### Simulating API Responses
 
-Since Sherpa has several third party API integrations, this proved problematic for the test suite. It would be infeasible (and likely against Google's terms of service) to send the many "junk" requests to the API servers that testing requires. The use of pytest's "monkeypatch" fixture was necessary.  Monkeypatch allows one to "patch" the response from a third party API by forcing it to return a predefined test response (in reality no real request is sent over the Internet, this is all happening in the test environment). For example, Sherpa patches the "get" response for google oAuth authentication (when we try to fetch the user's google account information) as follows:
+Third party API integrations are problematic for testing. It is infeasible to send the many "junk" requests to API servers that testing requires. The use of "monkeypatch" proved necessary.  Monkeypatch allows one to force an API endpoint to return a predefined test response. Sherpa patches the "get" response for google oAuth authenticationas follows:
 
 ```
-user = MockResponse({"email": "test@test.com"})
+user = MockResponse({"google_email": "sherpalecturer@gmail.com"})
 monkeypatch.setattr("flask_oauthlib.client.OAuthRemoteApp.get", lambda  self, userinfo: user)
 ```
 
 ## Project Reflection
 
-This chapter will serve as a reflection on the 12 weeks we as a team spent working on our project, highlighting how we worked together and the challenges we faced while developing Sherpa.
+This chapter will serve as a reflection on how we worked as a team, the challenges we faced, and the lessons we learned.
 
-### The Team's Process
+### Process
+- We did all our work together for 3 hours each week day.
+- Each week we wrote user stories on a whiteboard, assigned them to members of the team to implement, and took pictures at the end of each session.
+- Each second week was “polishing” week. Normally three of us would do back-end work, and one front-end, but during polish week each of us would have a different job: report writing, testing, front-end, or back-end.
+- Each polishing week one would have a different role to ensure more even contributions across the project.
 
-Our team's process for completing tasks was highly organized and effective. Daily three-hour work sessions ensured that we were all working together and making progress on the project at hand. This approach helped our team stay on track and remain focused on important tasks.
+### Challenges and Trade-Offs
 
-In addition, our team had a weekly whiteboarding session where we planned user stories. This collaborative approach to task management ensures that everyone was aligned on the project's goals and objectives. By breaking down tasks into user stories, our team prioritized work and ensured that we were working on the most critical tasks.
+-   **Turbo**:  Turbo is a JavaScript framework for serving page updates over a web-socket rather than a HTTP request. We wanted to implement this to have native-app-like performance. However Flask-Turbo was poorly documented, so due to time constraints we made the trade-off to only implement it for some pages to deal with other priorities.
+-   **Google Integration**: Google integration was challenging as OAuth is a very complicated protocol none of us had experience with. Furthermore, Flask-OAuthlib did not support Gmail out of the box which required us to write code for the module to add support for it.
+-   **Testing**: As described in the testing section, testing web applications poses unique challenges and we only had software testing experience with closed systems. A trade-off we had to make here was whether to use unittest or pytest for our testing framework, we all only had experience with unittest but opted for pytest as the documentation for using it with Flask was far more extensive. Despite the greater initial learning curve, this made debugging testing issues far easier.
 
-Our team's approach also included a "polishing" week every second week. This was an excellent practice as it allowed our team to review completed work and make necessary improvements. This approach helped to ensure that the final product was of a high quality.
+### Lessons Learned
 
-Overall, our team's process was highly effective, and our approach to task management was highly structured, ensuring that everyone was working together towards a common goal. This collaborative approach allowed our team to remain focused and prioritize work, resulting in high-quality work that was completed efficiently.
-
-### What Went Well
-
-#### Collaborative approach:
-
-Our team's approach to task management was collaborative, with daily work sessions and weekly whiteboarding sessions. This allowed everyone to work together towards a common goal and ensured that everyone was aligned on the project's goals and objectives.
-  
-#### Prioritization:
-
-By breaking down tasks into user stories, Our team was able to prioritize work and ensure that we were working on the most critical tasks. This helped us stay focused and make progress on important parts of the project.
-
-#### Quality control:
-
-Our team's approach included a "polishing" week every second week, which allowed us to review completed work and make necessary improvements. This ensured that the final product was of a high quality.
-
-#### Efficiency:
-
-Our team was able to complete high-quality work efficiently because of our structure and collaborative approach to task management. This allowed us to make progress on the project and meet our goals.
-
-### Mistakes To Learn From
-
-During the course of our project, we made mistakes and learned valuable lessons. One mistake we made was not standardizing our HTML, ledding to some inconsistencies in our code. For the future, we learned to standardize our HTML and use best practices to ensure consistency throughout our project.
-
-Another mistake we made was not using Flask blueprints, which made it more difficult to manage our code as the project grew. We realized the importance of using blueprints to organize our code and make it easier to maintain and update.
-
-Additionally, we initially did not use Bootstrap for our CSS, which resulted in some inconsistencies in the visual design of our project. To address this, we learned the importance of using a CSS framework like Bootstrap, which helped us to ensure consistency and improve the overall visual design of our project.
-
-Overall, we learned that standardizing our code, using frameworks and best practices, and prioritizing consistency were essential to the success of our project. These lessons helped us to improve our processes and achieve better results in future projects.
-
-### What Went Well
-
-### Mistakes To Learn From
-
-### What Was Technically Challenging
-
-This section outlines the difficulties and challenges we individually and as a team encountered in the process of developing Sherpa.
-
-+ __Turbo__
-  + Implementing Turbo in our application proved to be difficult. Our goal was to have our whole application using Turbo to increase the performance of our web application and to ensure a smooth user experience while using Sherpa. Due to a lack of documentation online regarding Turbo, we had to go through a lot of trial and error when implementing Turbo. This was time consuming and frustrating at times when encountering unexpected behaviours. Once completed the benefit of Turbo was evident with the smooth performance of our web application.
-+ __Modularization__
-  + Modularizing the code presented a technical challenge as we had never used blueprints before to implement an application. We had to break up the monolithic appliction.py code into segments and initialize it with an __init__.py file.
-  + Initially we had some issues getting the application to run. Once we had corrected all the broken links within our pages it worked with blueprints. It ran smoothly and allowed a maintainable code base that made testing and updating the application easier.
-+ __Google Integration__
-  + Google integration was challenging as the open authorization protocol was challenging in numerous ways over its complexity and security requirements. The flask oAuth library did not support emails from our application so it was necessary for us to edit the library to facilitate our needs.
-+ __Testing__
-  + Writing the test cases for our code was challenging initially because we had little experience with testing web application. Also, the structure of our code caused problems with writing test cases. Once modularization was implemented within our code then test cases were much easier to write.
-+ __Security__  Security was something that was of utmost importance for our application in order to ensure the security of user data and preventing any potential threats. 
-	+ _Hashing_ -  We managed to implement security features where user data is stored securely by hashing is before storing it in the database.
-	+ _Cross-Site Scripting_ - Our use of Flask SQL Alchemy as an ORM made sure to prevent any potential XSS attacks
-	+ _Session Cookies_ - Our implementation of session cookies within our application ensured that users are authenticated when making requests and prevent unauthorized users accessing forbidden data.
+* We should have wrote more standardised and semantic HTML. This led to consistency issues and made CSS work more difficult, in the future we'd definitely place an emphasis on best-practice, semantic HTML.
+* Our application should have been modular from the beginning, the project inevitably grew to large in scope for a single file and it wasted time having to do this mid-development.
+* A CSS framework, e.g. Bootstrap, would have made front-end development much faster, having to write all our styles from scratch added an unnecessary technical overhead - one we would avoid if we were to do things over.
