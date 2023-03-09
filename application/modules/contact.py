@@ -468,7 +468,7 @@ def log_activity(activity_type, actor, timestamp, contact_id):
     activity = ActivityLog()
     activity.activity_type = activity_type
     activity.actor = actor
-    activity.timestamp = timestamp
+    activity.timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
     activity.contact_id = contact_id
     activity.team_id = user.team_id
 
@@ -491,18 +491,16 @@ def view_activity(contact_id, google_token, contact):
 
     # Convert the timestamp strings to datetime objects
     log = log.all()
+    sorted_log=[]
     for entry in log:
-        try:
-            entry.timestamp = datetime.strptime(entry.timestamp, "%d/%m/%Y %H:%M")
-        except:
-            pass
+        if isinstance(entry.timestamp, datetime):
+            sorted_log.append(entry)
 
     # Sort the log by the datetime objects
-    log = sorted(log, key=lambda x: x.timestamp, reverse=True)
-
+    sorted_log = sorted(sorted_log, key=lambda x: x.timestamp, reverse=True)
 
     # If we can, just update the part of the page that's changed i.e. the activity box.
     if turbo.can_stream():
-        return turbo.stream(turbo.update(render_template("contact_interactions.html", google_token=google_token, contact=contact, activity="activity", log=log), 'activity_box'))
+        return turbo.stream(turbo.update(render_template("contact_interactions.html", google_token=google_token, contact=contact, activity="activity", log=sorted_log), 'activity_box'))
     else:
-        return render_template("contact.html", contact=contact, google_token=google_token, activity="activity", log=log)
+        return render_template("contact.html", contact=contact, google_token=google_token, activity="activity", log=sorted_log)

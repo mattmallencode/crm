@@ -117,7 +117,7 @@ This document outlines the design and implementation of Sherpa, a free and open-
 
 This implementation can be used by multiple businesses i.e. users create "teams" and invite other users to join their team. However, it could easily be modified to be used by a single business by removing the team creation endpoint.
 
-TODO: GITHUB LINK
+Sherpa's GitHub repository is available [here](https://github.com/mattmallencode/crm).
 
 ## Some CRM Terms
 
@@ -157,6 +157,8 @@ To put it simply, it would be very painful to set up a cohesive flow in terms of
 ### User Stories
 
 TODO: bit of an intro to the user stories. Also need do add the "in order" part to every user story.
+
+The following user stories describe various tasks that a user might want to accomplish while using a CRM system. User stories are short descriptions of a user's goals or desires, which are used to guide the development of software applications. In this case, the user stories are focused on the functions of a CRM (Customer Relationship Management) system called Sherpa. The stories cover tasks such as inviting team members, adding and editing customer contacts, creating and viewing deals, scheduling meetings, and more. Each story is identified by a unique ID number, which can be used to track its progress during development. By focusing on the user's needs and objectives, these stories help ensure that the CRM system is designed to be efficient, effective, and easy to use.
 
 #### Team Invitation Creation
 
@@ -222,25 +224,25 @@ As a Sherpa user, I want to leave my team so that I no longer have access to the
 
 *User Story ID:  11
 
-As a Sherpa team owner/admin I want to assign a contact to a member of my team.
+As a Sherpa team owner/admin I want to assign a contact to a member of my team they understand who they have to communicate with to try generate a sale.
 
 #### View Assigned Contacts
 
 *User Story ID:  12*
 
-As a Sherpa user I want to view the contacts that have been assigned to me.
+As a Sherpa user I want to view the contacts that have been assigned to me so I can see what data they have to help me generate a sale.
 
 #### View Unassigned Contacts
 
 *User Story ID:  13*
 
-As a Sherpa user I want to view the contacts that have yet to be assigned to a member of my team.
+As a Sherpa user I want to view the contacts that have yet to be assigned to a member of my team so they dont get left unattend.
 
 #### Search For Contacts
 
 *User Story ID:  14*
 
-As a Sherpa user I want to search for a specific contact(s) using a search bar.
+As a Sherpa user I want to search for a specific contact(s) using a search bar to speed up the time it takes to find a contact.
 
 #### Sort Contacts
 
@@ -252,121 +254,115 @@ As a Sherpa user I want to sort my team's contacts by email, phone number, etc.
 
 *User Story ID:  16*
 
-As a Sherpa user I want to view all team activity for a contact e.g. notes, emails, meetings etc.
+As a Sherpa user I want to view all team activity for a contact e.g. notes, emails, meetings etc so I understand to a greater extend to what way a deals heading.
 
 #### Post Notes
 
 *User Story ID:  17*
 
-As a Sherpa user, I want to add a note to a contact's page.
+As a Sherpa user, I want to add a note to a contact's page to notify my colleges of anything significant thats happening to that specific contact.
 
 #### Remove notes
 
 *User Story ID:  18*
 
-As a Sherpa user, I want to remove a note on a contact's page.
+As a Sherpa user, I want to remove a note on a contact's page if it isnt applicable to that contact anymore.
 
 #### Send Email
 
 *User Story ID: 19*
 
-As a Sherpa user, I want to send an email to a contact.
+As a Sherpa user, I want to send an email to a contact so I can communicate with them.
 
 #### View Emails
 
 *User Story ID: 20*
 
-As a Sherpa user, I want to view my emails sent and received to/from a contact.
+As a Sherpa user, I want to view my emails sent and received to/from a contact to keep track of our conversations.
 
 #### Reply to Email
 
 *User Story ID: 21*
 
-As a Sherpa user, I want to reply to an email from a contact.
+As a Sherpa user, I want to reply to an email from a contact to allow for me to exchange information with them.
 
 #### Set a Task
 
 *User Story ID: 22*
 
-As a Sherpa user, I want to create a task in relation to a contact.
+As a Sherpa user, I want to create a task in relation to a contact to remind myself of anything that needs to be done in relation to that customer.
 
 #### View Tasks
 
 *User Story ID: 23*
 
-As a Sherpa user, I want to view all tasks in relation to a contact.
+As a Sherpa user, I want to view all tasks in relation to a contact so I can understand the jobs that need to be done as a whole.
 
 #### Complete Task
 
 *User Story ID: 24*
 
-As a Sherpa user, I want to mark a task as complete.
+As a Sherpa user, I want to mark a task as complete to notify myself that it has been completed.
 
 #### Schedule Meeting
 
 *User Story ID: 25*
 
-As a Sherpa user, I want to schedule a meeting with a contact which is integrated with my Google calendar.
+As a Sherpa user, I want to schedule a meeting with a contact which is integrated with my Google calendar so I can notify the contact when we are scheduled to talk.
 
 #### View Meetings
 
 *User Story ID: 26*
 
-As a Sherpa user, I want to view my scheduled meetings with a contact.
+As a Sherpa user, I want to view my scheduled meetings with a contact so I can join the meetings.
 
 #### Create Deal
 
 *User Story ID: 27*
 
-As a Sherpa user, I want to create a deal .
+As a Sherpa user, I want to create a deal to allow for a new sales contract to be made.
 
 #### View Deals
 
 *User Story ID: 28*
 
-As a Sherpa user, I want to view my team's deals.
+As a Sherpa user, I want to view my team's deals to help me understand what direction my teams deals are going.
 
 #### Edit Deal
 
 *User Story ID: 29*
 
-As a Sherpa user, I want to edit a deal.
+As a Sherpa user, I want to edit a deal to match the deals current situation.
 
 #### Close Deal
 
 *User Story ID: 30*
 
-As a Sherpa user, I want to close a deal.
+As a Sherpa user, I want to close a deal to update the status of a deal to reflect the fact that the sale has be finalized.
 
 #### Search Deals
 
 *User Story ID: 31*
 
-As a Sherpa user, I want to search my team's deals.
+As a Sherpa user, I want to search my team's deals to check my team's activity.
 
 #### Sort Deals
 
 *User Story ID: 32*
 
-As a Sherpa user, I want to sort my team's deals.
+As a Sherpa user, I want to sort my team's deals to make it quicker for me to find a deal.
 
 #### Assign Deal
 
 *User Story ID:  33*
 
-As a Sherpa team owner/admin I want to assign a deal to a member of my team.
+As a Sherpa team owner/admin I want to assign a deal to a member of my team to let them know what contacts they have to persue.
 
 #### View Assigned Deals
 
 *User Story ID:  34*
 
-As a Sherpa user I want to view the deals that have been assigned to me.
-
-#### Close Deal
-
-*User Story ID:  35*
-
-As a Sherpa user I want to set a deal's status to "closed".
+As a Sherpa user I want to view the deals that have been assigned to me so I know what I must do to do my job.
 
 #### Closed Vs Goal
 
@@ -378,13 +374,13 @@ As a Sherpa user I want to view a graph illustrating how my team is performing i
 
 *User Story ID:  37*
 
-As a Sherpa user I want to view a graph illustrating my team's forecasted deal  earnings for the month.
+As a Sherpa user I want to view a graph illustrating my team's forecasted deal  earnings for the month to help me get a greater understanding of where my deals are heading.
 
 #### Deal Stage Funnel
 
 *User Story ID:  38*
 
-As a Sherpa user I want to view a graph illustrating the how successful my team is at progressing deals from stage to stage.
+As a Sherpa user I want to view a graph illustrating the how successful my team is at progressing deals from stage to stage to help me make data driven decisions.
 
 #### Activity Statistics
 
@@ -395,6 +391,8 @@ As a Sherpa user I want to view a graph illustrating the breakdown of customer i
 ### Requirements
 
 TODO: an intro to the requirements.
+
+The success of any software project is dependent on the ability to understand, document, and implement the requirements of the system. In this section, we will outline the requirements for the Sherpa web application, a CRM tool for managing contacts and deals. These requirements have been defined through the use cases of the system, and they serve as a roadmap for our team to ensure that the final product meets the needs and expectations of its users. The requirements are organized into functional areas, such as user registration and authentication, team creation and management, database CRUD operations, and user profile management, among others. By following these requirements, the Sherpa development team was able to deliver a reliable and user-friendly application that fulfills its intended purpose.
 
 #### User Registration
 
@@ -574,7 +572,15 @@ A user when presented with the forms for adding/editing deals must have the opti
 
 *Satisfies User Story: 37*
 
-TODO
+A plot must be generated illustrating how a specific team is performing in terms of their "goals" for deals versus the actual "close amount" with each being a separate subplot respectively. The team to which the user belongs must have existing closed deals in the range of the last 12 months in order for there to be data to generate the Closed vs Goal Plot. 
+
+The plot that is generated must abide by the following constraints;
++ x-axis : 
+	+  Subplot 1: Amount the deal was closed at
+	+ Subplot 2: Initial goal for the deal
++ y-axis : Close Date of the deal
++ Range: Last 365 days
++ Frequency: Monthly
 
 #### Deal Forecast Plot Generation
 
@@ -582,7 +588,14 @@ TODO
 
 *Satisfies User Story: 38*
 
-TODO
+A chart must be generated illustrating a team's forecasted deal earnings for the current month. The team to which the user belongs must have existing deals for the current month in order for there to be date to generate the Deals Forecast chart. 
+
+The chart that is generated must be in the form of a pie chart and must abide by the following constraints;
+
++ Data:  a list of the sum of the deal amounts for the following deal stages; Closed Won, Appointment Scheduled, Contract Sent, Qualified To Buy. Each pie slice is a stage
++ Range: This current month
+
+The monthly forecast must be displayed with the forecasted revenue figure being the sum of all stages/slices in the pie chart.
 
 #### Deal Conversion Tracking
 
@@ -590,7 +603,9 @@ TODO
 
 *Satisfies User Story: 39*
 
-TODO
+In order for deal conversion metrics to be calculated for the Deal Stage Funnel graph, all occurrences of a deal moving to a different stage must be tracked.
+
+There must be a table to log any deal stage activity which would for every row specify a specific deal, the deal stage, and a timestamp for when that deal transitioned to that stage. If a new deal is created, its stage must be logged. Also, if an existing deal moves to a different stage this must also be logged
 
 #### Deal Stage Funnel Plot Generation
 
@@ -598,7 +613,20 @@ TODO
 
 *Satisfies User Story: 39*
 
-TODO
+A graph must be generated to illustrate the progression of a team's deals moving from stage to stage. The team to which the user belongs must have existing deals within the last month. 
+
+The graph that is generated must be in the form of a bar chart and must abide by the following constraints;
+
++ x-axis: Number of deals per deal stage
++ y-axis: the following deal stages; Closed Won, Appointment Scheduled, Contract Sent, Qualified To Buy, Created.
++ Range: Last Month
+
+Every bar in the bar chart other than the final stage, "Closed Won" stage, must also have conversion data for Next Step Conversion and Cumulative Conversion 
+ 
+ + Next Step Conversion - percentage of deals that move from the current stage to the next stage
+ + Cumulative Conversion - percentage of deals that move from the first stage to the next stage
+
+The stages follow a hierarchy, therefore moving from the "current" stage to the “next” stage means going to the next stage in the hierarchy. The hierarchy is laid out as follows; Created -> Qualified To Buy -> Contract Sent -> Appointment Scheduled -> Closed Won. This means that deals can move from the Created stage to Qualified To Buy and so on. Deals can skip stages and do not have to move step-by-step in the hierarchy but they must follow the hierarchical structure e.g. a deal cannot be "Closed Won" and then "Created"
 
 #### Activity Plot Generation
 
@@ -606,7 +634,12 @@ TODO
 
 *Satisfies User Story: 40*
 
-TODO: EIMANTAS
+A graph must be generated to illustrate the performance a team with activities regarding contact such as emails, tasks and meetings, detailing how many of each activities occurred within the last month. To simplify the view, only the top 5 performing team members are displayed which is determined by the top 5 sums of all activities performed per team member. For every bar in the bar chart which defines one team member, the bar must be stacked with data for the count of every activity.
+
+The generated graph must be in the form of a stacked bar chart with every bar detailing the count of emails, tasks and meetings per team member. The graph must abide by the following constraints;
++ x-axis: names of top 5 team members
++ y-axis: count of activities
++ Range: last Month
 
 #### Serving Plots
 
@@ -614,7 +647,7 @@ TODO: EIMANTAS
 
 *Satisfies User Story: 37-40*
 
-TODO: EIMANTAS
+In order to serve plots to Flask, the plots must be formatted appropriately. The plots must first be stored in a buffer as a PNG, decoded from ASCII, encoded in base64 and then a reference to the image passed to the HTML
 
 ## Data Models
 
@@ -745,7 +778,18 @@ The following table describes the data model used for "activity log" objects i.e
 
 #### Deal Stage Conversion
 
-TODO: EIMANTAS
+The following table describes the data model which is used for calculating deal stage conversion. It is used as a log table where every time a deal transitions to a different stage it is is logged.
+
+*Table 8: Deal Stage Conversion Data Model*
+
+| stage_id | team_id | date | stage |
+| :-: | :-: | :-: | :-: |
+|Primary Key, Integer | Integer | String | String |
+
++ stage_id - auto-incremented integer which is used as the primary key to uniquely identify an activity
++ team_id - secondary key which is used to link the deal this stage is associated with to its team 
++ date - the date the deal transitioned to this stage
++ stage - the stage that the deal transitioned to
 
 ## Implementation
 
@@ -926,6 +970,20 @@ Each form represents a record and each form comprises a row in a larger table re
 
 *Implementation of requirement: 9*
 
+When the user visits the webpage, the server-side code retrieves all records from the database using a SQL query. The records are then stored in a list.
+
+Next, the code determines which page the user is currently viewing. By tracking the current page number in a session variable.
+
+Once the current page is determined, the code calculates the starting and ending indexes of the records to display on that page. For example, if each page displays 25 records and the user is on page 3, the starting index would be 50 (2 * 25) and the ending index would be 74 (50 + 24).
+
+The code then selects the records between the starting and ending indexes and formats them into HTML table rows. These rows are concatenated together to form the HTML table body.
+
+Additionally, the code generates HTML links for each page number. These links allow the user to navigate between pages. The links are displayed as arrows on the webpage.
+
+Finally, the code combines the HTML table and paging links into a single HTML page and sends it to the user's browser for display.
+
+Overall, this approach is relatively efficient because it only retrieves the records needed for the current page, rather than retrieving all records at once. It also allows for easy paging and navigation between pages
+
 TODO (FLOW)
 
 ### Showing the User the Records they Own
@@ -945,11 +1003,30 @@ TODO*
 
 *Implementation of requirement: 11*
 
+The search bar allows the user to search through the database based on certain criteria. The user can search for deals by entering a search term in the search bar and selecting a filter. The search bar is defined using a Flask form such as DealsSearchForm. When the user enters a search term and submits the form, the search term is extracted from the form and used to search for relevant deals in the database.
+
+First, the search term is optimized for searching by calling a function like optimize_deals_search depending on the page. This function checks whether the search term looks like an email address or not, and returns "email" if it does and "name/company/email" otherwise.
+
+Next, the .query object is filtered based on the user's search criteria. The variable for this example we'll say 'deals' is set to the Deals.query object at the start of the function. Then, the results of this query are filtered based on the user's search term. If the search term is an email, then only the associated_contact column is searched. If the search term is not an email, then all relevant columns are searched.
+
+Finally, the results of the search are returned to the user in the deals variable. The deals variable is a query object, which means that it represents a set of results from the database. The results are not actually fetched from the database until the query is executed (in this case, by calling .limit() and .offset()).
+
+
 TODO (FLOW)
 
 ### Sorting a Database
 
 *Implementation of requirement: 12*
+
+Our code allows the user to sort a list of contacts/deals in a database based on different columns such as name, email, or phone number. The sorting is handled by a function such as order_contacts(), which takes three parameters: sort, order, and contacts.
+
+The sort parameter indicates the column to sort by, and it can have values such as "name", "email", or "phone_number". The order parameter indicates whether to sort in ascending or descending order and can have values of "ASC" or "DESC". Finally a parameter, for this we'll say contacts, is the query object returned by the database that contains the contacts to sort.
+
+The function first checks which column the user wants to sort by and then sorts the contacts accordingly using the order_by() method. If the order parameter is "ASC", the contacts/deals are sorted in ascending order. If it is "DESC", they are sorted in descending order.
+
+The sorting is triggered by the contacts()/deals() function, which sets the values of sort and order parameters based on the user's selection. The sort parameter is changed if the user is sorting a different column than the previous sort, and the order parameter is changed if the user is toggling the sort of the same column.
+
+Overall, this code allows users to sort a list of contacts/deals in a database based on different columns and in ascending or descending order.
 
 TODO (FLOW)
 
@@ -975,6 +1052,8 @@ TODO
 
 *Implementation of requirement: 15*
 
+*endpoint: /authorize_email*
+
 Users must integrate their Google accounts with Sherpa to obtain a Google session token in order to avail of Sherpa's Google services such as Emails, Tasks and Meetings.
 
 The following diagram details the process of integrating Google with a Sherpa account.
@@ -988,43 +1067,126 @@ Google accounts are authenticated using OAuth 2.0. For brevity, we won't go into
 
 *Implementation of requirements: 16-18*
 
-TODO (FLOW)
+Sherpa integrates several Google products, each with their own API, namely: Gmail, Google Tasks, and Google Calendar. These APIs had their own nuances (for example dealing with threads with Gmail) and this could have justified having a parsing implementation section for each product. However, we found it prudent instead to discuss our general overall approach to parsing these responses.
+
+The following is a flow chart detailing the process flow in Sherpa of dealing with an API response from request to return.
+
+![sss](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/Parsing.png)
+
+ - First a GET request is send to the relevant Google API endpoint. This request is accompanied by a "query" which is a parameter that specifies to the server which data exactly it return to us. For example the query for the GET request for emails is "from: {contact_email} OR to: {contact_email}" - meaning we want to fetch any email the user sent to the contact AND any email the user received from the contact.
+ - The server will then return the data we requested as a JSON dump. This can then be interacted with as a collection of python data structures, mainly lists and dictionaries.
+ - Sherpa initialises an empty list to which all the parsed objects will be appended e.g. an empty list for all the parsed task objects. It then iterates over the JSON dump. Each loop, it initialises an empty dictionary with relevant keys e.g. for an email "timestamp", "subject", etc and maps these keys to the relevant data. This parsed version of the object is then appended to the list of objects.
+ - Imporantly for the above, often timestamps won't be in a very human readable format so this required working with functions like "strftime" to convert the timestamps to a more readable format.
+ - Finally, the parsed list is returned to the endpoint that called the given parsing function and is templated into the HTTP response using Jinja2. As an example, this is how this templating works for meetings:
+
+```
+{% if meetings is not none %}
+        {% for meeting in meetings %}
+            <section class="meeting">
+                <p><b>Summary:</b> {{ meeting["summary"] }}</p>
+                <p><b>Description:</b> {{ meeting["description"] }}</p>
+                <p><b>Starts:</b> {{ meeting["starts"] }}</p>
+                <p><b>Ends:</b> {{ meeting["ends"] }}</p>
+                <a href="{{meeting['link']}}">Join google meet</a>
+            </section>
+{% endfor %}
+{% endif %}
+``` 
 
 ### Sending and Receiving Emails
 
 *Implementation of requirement: 16*
 
-TODO
+*endpoint: /contact/<contact_id>/emails*
+
+
+#### Sending Emails
+
+* Sherpa initialises a MIMEText object (object representing an email as part of python's email package), called "message". 
+* The message's subject and body are fetched from the email form. 
+* The sender is set to the user's google account email (that they OAuth'd). The recipient is set to the contact's email.
+* Sherpa then sends a POST request to the Gmail API with the message encoded as JSON (the user's OAuth token is included in the request, see the google account integration implementation section).
+* The email will then be send from the user's Google account.
+
+#### Receiving Emails
+
+* Sherpa sends a GET request to the Gmail API to fetch the IDs of all the user's email threads (the threads fetched are limited to those between the user and the contact).
+* Sherpa then loops through each thread ID, sending a separate GET request to actually fetch the emails specific to each thread.
+* These emails are then parsed (see parsing API responses) and included in the HTTP response.
 
 ### Creating, Viewing, and Completing Tasks
 
 *Implementation of requirement: 17*
 
-TODO
+*endpoint: /contact/<contact_id>/tasks*
+
+#### Creating Tasks
+
+* Each task in Google Calendar must be part of a "task list". If its the user's first time creating a task associated with a particular contact then Sherpa sends a POST request to the Google Calendar API to create a task list with the following title "Sherpa CRM: {contact.email}".
+* Sherpa sends a POST request to the Google Calendar API with the due date and title fetched from the task form to create a new task to the task list Sherpa created for this user.
+* The task will then appear in the user's Google Calendar on the "due" date.
+
+#### Viewing Tasks
+
+* Sherpa sends a GET request to the Google Calendar API to fetch all of the user's task lists. It then iterates over these task lists until it finds one with the correct title i.e. "Sherpa CRM: {contact.email}".
+* It then parses each of the tasks in this list (see parsing API responses).
+* Before serving the parsed tasks as part of the HTTP response, they are split up into "past due", "due", and "completed" tasks. Any tasks in the "past due" and "due" lists are templated with a "complete" button, this complete button has a href button that targets the /contact/<contact_id>/tasks/<complete> endpoint with "complete" set to the id of the task.
+
+#### Completing Tasks
+
+* If a user sends a request to the endpoint /contact/<contact_id>/tasks/<complete> then a PUT request is sent to the Google Calendar API to mark the task in the user's task list for the contact with that task_id as completed.
+* The task will then appear as "completed" on the "due" date in the user's Google Calendar.
 
 ### Scheduling and Joining Meetings
 
 *Implementation of requirement: 18*
 
-TODO
+*Implementation of requirement: 18*
+
+*endpoint: /contact/<contact_id>/meetings*
+
+* To schedule a meeting, Sherpa fetches the title, description, start date-time, and end date-time from the meeting form data and sends a POST request including the data to the Google Calendar API. The contact's email is included as an "attendee" for the conference, they'll receive an email invite and it will appear in their Google Calendar (as well as that of the Sherpa user).
+* To have Google Calendar automatically create a Google Meet Conference and return the link to it as part of the request response, the following must be included in the body of the request (uuid is used to generate a unique requestId):
+	```
+	"conferenceDataVersion": 1,
+	"conferenceData": = {
+        "createRequest": {
+            "conferenceSolutionKey": {
+                "type": "hangoutsMeet"
+            },
+            "requestId": str(uuid.uuid4())
+        }
+    }
+	```
+* To join meetings, Sherpa fetches all events from the user's calendar that has the contact's email as an "attendee" using a GET request to the Google Calendar API. These events are parsed (see parsing API responses) and returned as part of the HTTP response - each meeting is accompanied by a "join meeting" button with the href set to the google meet link returned in the API response for that specific event.
 
 ### Closing Deals
 
 *Implementation of requirement: 19*
 
-TODO
+When a user sets the stage of a deal to "closed won" (not "closed lost"), they must specify the closed amount, this is done by validating the form data submitted with the POST request on the */edit_contact* endpoint. 
+
+If no closed amount is included, the user will be informed of their mistake with an error message. After marking a deal as "closed" successfully, the user is no longer be able to edit it.
 
 ### Tracking Deal Conversions
 
 *Implementation of requirement: 22*
 
-TODO
+The Deal Stage Conversion table which logs the transition of deals from stage to stage is used to retrieve all deal stage data from the previous month. This is then used to count the number of deals that were in every stage and stored as a dictionary with the stage as the key and the number of occurrences of the stage in the retrieved data as the value of the dictionary. 
+
+Then for every stage, the conversion values are calculated as follows;
+ 
+ + Next Step Conversion = Number of deals in next stage / Number of Deals in current stage
+ + Cumulative Conversion = Number of deals in next stage / Number of Deals in first stage
 
 ### Creating Data Analytics Plots
 
 *Implementation of requirement: 20, 21, 23, 24*
 
-TODO (FLOW)
+
+The following chart details the process of creating the data analytics plots for the analytics dashboard
+
+![Diagram the process of create a plot diagram](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/plots.png)
 
 ### Serving Plots
 
@@ -1037,7 +1199,38 @@ TODO (FLOW)
 
 ## Testing
 
-TODO
+Sherpa's test suite achieves extensive testing code coverage using the Pytest testing framework. Rather than going through each test case (pytest uses asserts just like most testing frameworks), this section instead deals with the more interesting parts of Sherpa's test suite i.e. how it overcomes the challenges unique to testing a complex web application i.e. simulating requests, dealing with user sessions, and simulating third party API responses.
+
+### Test Client Set Up
+
+Flask already has a "test_client()" method which simulates HTTP requests for tests without needing to run a web server. However, this test client needs access to the application context.
+
+In Flask, the "application context" is a container that holds information related to the current application: configuration settings, database connections etc. So, before we create a test client, we need to be able to pass the application context to it.
+
+This is achieved with an "application factory" or the "create_app()" function in Sherpa's case which creates an application instance, loads the application's configuration (database credentials etc) and returns the instance.
+
+Sherpa's application factory and test_client are both called as part of Pytest fixtures. Fixtures in Pytest are just reusable setup and tear-down code that can be passed as arguments in test functions i.e. the above set up is run before each test is carried out.
+
+With all this in place, Sherpa's test suite is set up and configured.
+
+### Dealing With User Sessions
+
+Sherpa makes extensive use of user sessions and cookies e.g. to authenticate users, so this had to be emulated in the test suite. Flask's test client provides a useful session_transaction() method which allows one to make updates to the test client's session. For example, to set the user's email and team_id in their session:
+
+```
+with client.session_transaction() as session:
+        session["email"] = "matt@sherpa.com"
+        session["team_id"] = 10 
+```
+
+### Simulating API Responses
+
+Since Sherpa has several third party API integrations, this proved problematic for the test suite. It would be infeasible (and likely against Google's terms of service) to send the many "junk" requests to the API servers that testing requires. The use of pytest's "monkeypatch" fixture was necessary.  Monkeypatch allows one to "patch" the response from a third party API by forcing it to return a predefined test response (in reality no real request is sent over the Internet, this is all happening in the test environment). For example, Sherpa patches the "get" response for google oAuth authentication (when we try to fetch the user's google account information) as follows:
+
+```
+user = MockResponse({"email": "test@test.com"})
+monkeypatch.setattr("flask_oauthlib.client.OAuthRemoteApp.get", lambda  self, userinfo: user)
+```
 
 ## Project Reflection
 
@@ -1058,7 +1251,7 @@ Overall, our team's process was highly effective, and our approach to task manag
 #### Collaborative approach:
 
 Our team's approach to task management was highly collaborative, with daily work sessions and weekly whiteboarding sessions. This allowed everyone to work together towards a common goal and ensured that everyone was aligned on the project's goals and objectives.
-
+  
 #### Prioritization:
 
 By breaking down tasks into user stories, Our team was able to prioritize work and ensure that we were working on the most critical tasks. This helped us stay focused and make progress on the most important parts of the project.
@@ -1097,8 +1290,7 @@ This section outlines the difficulties and challenges we individually and as a t
   + TODO
 + __Testing__
   + Writing the test cases for our code was challenging initially due to having little experience with testing web application. Also, the structure of our code caused problems with writing test cases. But once modularization was implemented within our code then test cases were much easier to write.
-+ __Security__
-  Security was something that was of utmost importance for our application in order to ensure the security of user data and preventing any potential threats.
-  + _Hashing_ -  We managed to implement security features where user data is stored securely by hashing is before storing it in the database.
-  + _Cross-Site Scripting_ - Our use of Flask SQL Alchemy as an ORM made sure to prevent any potential XSS attacks
-  + _Session Cookies_ - Our implementation of session cookies within our application ensured that users are authenticated when making requests and prevent unauthorized users accessing forbidden data.
++ __Security__  Security was something that was of utmost importance for our application in order to ensure the security of user data and preventing any potential threats. 
+	+ _Hashing_ -  We managed to implement security features where user data is stored securely by hashing is before storing it in the database.
+	+ _Cross-Site Scripting_ - Our use of Flask SQL Alchemy as an ORM made sure to prevent any potential XSS attacks
+	+ _Session Cookies_ - Our implementation of session cookies within our application ensured that users are authenticated when making requests and prevent unauthorized users accessing forbidden data.
