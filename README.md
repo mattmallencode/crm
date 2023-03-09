@@ -382,9 +382,8 @@ As a Sherpa user I want to view a graph illustrating the breakdown of customer i
 
 ### Requirements
 
-TODO: an intro to the requirements.
 
-The success of any software project is dependent on the ability to understand, document, and implement the requirements of the system. In this section, we will outline the requirements for the Sherpa web application, a CRM tool for managing contacts and deals. These requirements have been defined through the use cases of the system, and they serve as a roadmap for our team to ensure that the final product meets the needs and expectations of its users. The requirements are organized into functional areas, such as user registration and authentication, team creation and management, database CRUD operations, and user profile management, among others. By following these requirements, the Sherpa development team was able to deliver a reliable and user-friendly application that fulfills its intended purpose.
+In this section, we will outline the requirements for Sherpa. Each requirement satisfies one or more use cases.
 
 #### User Registration
 
@@ -392,7 +391,7 @@ The success of any software project is dependent on the ability to understand, d
 
 *Satisfies User Stories: 1, 2, 7
 
-A user must be able to register an account with Sherpa's database by providing a valid email and password combination. This will then enable them to authenticate themselves.
+A user must be able to register an account with Sherpa's database by providing a valid email and password combination, enabling their authentication.
 
 #### User Authentication
 
@@ -400,7 +399,7 @@ A user must be able to register an account with Sherpa's database by providing a
 
 *Satisfies User Stories: 1, 2*
 
-Before accessing Sherpa services, a user must prove who they are. They can do this by providing the email and password they previously used to register. This will then be compared to Sherpa's database, if they provide matching credentials they will be considered authenticated for all subsequent requests for their session.
+Before accessing Sherpa a user must be authenticated. They do this by providing the email and password they used to register. This will then be compared to Sherpa's database, if they provide matching credentials they are authenticated for all subsequent requests.
 
 #### Team Creation
 
@@ -408,7 +407,7 @@ Before accessing Sherpa services, a user must prove who they are. They can do th
 
 *Satisfies User Stories: 1, 2*
 
-In order to do anything meaningful with Sherpa (beyond creating an account and proving their identity) a user must be a member of a team. In order for there to be teams to join, users must be able to create them. If a user is not already a member of a team they can register one with Sherpa's database by providing the name of their organization.
+In order to do anything meaningful with Sherpa a user must be a member of a team. Users must be able to create teams. If a user is not already a member of a team they can register one with Sherpa's database.
 
 #### Team Invitation Generation and Delivery
 
@@ -416,7 +415,7 @@ In order to do anything meaningful with Sherpa (beyond creating an account and p
 
 *Satisfies User Stories: 1, 2*
 
-An owner or administrator of a team must be able to invite another user to join their team. This can be achieved by providing the email of the person they wish to invite and Sherpa will send them an invitation link on their behalf via email.
+A team administrator must be able to invite another user to join their team. This can be achieved by providing the email of the person they wish to invite and Sherpa will send them an invite link.
 
 #### Accepting Team Invitation
 
@@ -424,7 +423,7 @@ An owner or administrator of a team must be able to invite another user to join 
 
 *Satisfies User Story: 2*
 
-A user must be able to accept an invitation to a team. They can achieve this by clicking the invitation link they received in their email and then logging in. A user may only accept the invitation if they're not already a member of a team and log in using the same email the invitation was sent to.
+A user must be able to accept a team invitation. They can achieve this by clicking the invitation link they received in their email and then logging in.
 
 #### Database Create, Read, Update, and Delete (CRUD)
 
@@ -434,15 +433,7 @@ A user must be able to accept an invitation to a team. They can achieve this by 
 
 "Database" in this context refers to the set of records belong to a team, either its contacts or deals.
 
-A user must be able to interface with their team's databases and achieve all of the basic CRUD operations with their team's records by interacting with the web app i.e. forms and buttons, not SQL.
-
-**For Contacts**
-
-For create operations users must provide at least an email for the new contact (all other data is optional). For create and update operations user must provide a unique email address i.e. they can not update the email of an existing contact to match the email of another contact.
-
-**For Deals**
-
-For create operations users must provide at least a name and goal for the new deal (all other data is optional). For update operations, a user can not update a goal of a deal. If the user changes the deal stage to "closed" they must provide a closed amount, thereafter the deal stage and closed amount will not be able to be updated for that record.
+A user must be able to interface with their team's databases and achieve all of the basic CRUD operations with their team's records by interacting with the web app i.e. forms and buttons.
 
 #### User Profile and Logout
 
@@ -450,7 +441,7 @@ For create operations users must provide at least a name and goal for the new de
 
 *Satisfies User Story: 7, 8*
 
-A user must be able to view a profile page with their account information. Furthermore, they must be able to logout of their account, meaning their session (authentication cookies etc) will be cleared and they will have to use their username and password again if they wish to resume using the application.
+A user must be able to view a profile page with their account information. Furthermore, they must be able to logout of their account, meaning their session will be cleared and they will have to login to be authenticated again.
 
 #### View and Leave Teams
 
@@ -458,7 +449,7 @@ A user must be able to view a profile page with their account information. Furth
 
 *Satisfies User Story: 9, 10*
 
-A user must be able to view a page that lists all of the members of their team. On this page, they will be given the option to leave their team (this will also feature a "are you sure?" (or similar) checkbox.
+A user must be able to view a page that lists all of their teammates. On this page, they have the option to leave their team - validated with an "are you sure?" checkbox.
 
 #### Database Viewing in Pages
 
@@ -468,7 +459,7 @@ A user must be able to view a page that lists all of the members of their team. 
 
 "Database" in this context refers to the set of records belong to a team, either its contacts or deals.
 
-Users must be able to view their team's contacts or deals. Since a business may have an enumerable number of customers and sales contracts, Sherpa can not serve all records on one page without hindering the user experience therefore records must be "chunked up" into "pages" (each page being a group of 25 records), with the user able to navigate records using the "next page" and #### Closing Deals"previous page" buttons.
+Users must be able to view their team's contacts or deals. Since a business may have an enumerable number of customers and records must be split into pages (each page has 25 records), with the user able to navigate pages using the "next" and "previous" page buttons.
 
 #### Database Filtering
 
@@ -490,7 +481,7 @@ Users must then be able to filter for "my contacts", "my deals" etc, i.e. just d
 
 "Database" in this context refers to the set of records belong to a team, either its contacts or deals.
 
-Users must be able to search their team's contacts or deals. Users should be able to search for a specific name, email, phone number etc and be served the records that match their search term.
+Users must be able to search their team's contacts or deals. Users should be able to search for a specific name, email etc and be served records matching their search.
 
 #### Database Sorting
 
@@ -500,7 +491,7 @@ Users must be able to search their team's contacts or deals. Users should be abl
 
 "Database" in this context refers to the set of records belong to a team, either its contacts or deals.
 
-User must be able to sort their team's contacts or deals by email, phone number, etc. The app must support both ascending and descending sorting and for improved user experience this should behave as a "toggle" feature i.e. click a column header once and it'll be sorted in ascending order, click that same column header again and the order will be flipped.
+User must be able to sort their team's contacts or deals by email, phone number, etc. The app must support both ascending and descending sorting and be able to switch between orders using toggle buttons.
 
 #### Activity Logging and Viewing
 
@@ -508,7 +499,7 @@ User must be able to sort their team's contacts or deals by email, phone number,
 
 *Satisfies User Story:  16*
 
-Users must be able to view a log of all contact activity for all emails, tasks, meetings and notes related to the contact. Every time an activity occurs, this event must be logged detailing the activity type and the datetime it occurred. If activities have been logged then the user must be able to view this log.
+An "activity" is a customer interaction e.g. creating a note, sending an email. Every time an activity occurs, this event must be logged detailing the activity type and the date time it occurred. The user must also be able to view these logs.
 
 #### Note Management
 
@@ -516,7 +507,7 @@ Users must be able to view a log of all contact activity for all emails, tasks, 
 
 *Satisfies User Story:  17, 18*
 
-A user must be able to manage their notes on a contact by being able to view notes, add new notes and remove notes. A form must be presented for every contact where users are able to create a note. A table must also be presented where users can view every note for a contact with the option to remove the note
+A form must be presented for every contact where users are able to create a note. A table must also be presented where users can view every note for a contact with the option to remove the note Users must also be able to remove notes.
 
 #### Google OAuth (Open Authorisation)
 
@@ -532,7 +523,7 @@ A user must be able to authenticate their Google Account with OAuth in order to 
 
 *Satisfies User Story: 20 - 22*
 
-A user must be able to manage their emails with a contact. A user must be presented with a form for sending an email to a contact containing fields for the email subject and the email body. The user must also be able to view all email threads with the contact and be able to reply to the most recent email in a thread.
+A user must be presented with a form for sending an email to a contact containing fields for the email subject and the email body. The user must also be able to view all email threads with the contact and be able to reply to the most recent email in a thread.
 
 #### Task Management
 
@@ -540,7 +531,7 @@ A user must be able to manage their emails with a contact. A user must be presen
 
 *Satisfies User Story: 23 - 25*
 
-A user must be able to manage their tasks for a customer. A form must be presented where users can set a task in relation to a customer. A table must also be presented displaying all tasks for a given customer.
+A form must be presented where users can set a task in relation to a customer. A table must be displayed with the tasks for a given customer.
 
 #### Meeting Management
 
@@ -548,7 +539,7 @@ A user must be able to manage their tasks for a customer. A form must be present
 
 *Satisfies User Story: 25 26*
 
-A user must be able to manage their meetings with a customer. A form must be presented where users can schedule a meeting with a customer. A table must also be displayed where users can view all their scheduled meetings with a customer.
+A form must be presented where users can schedule a meeting with a customer. A table must be displayed where users can view and join meetings with a customer.
 
 #### Closing Deals
 
@@ -556,7 +547,7 @@ A user must be able to manage their meetings with a customer. A form must be pre
 
 *Satisfies User Story: 30*
 
-A user when presented with the forms for adding/editing deals must have the option to alter the deal "stage" to Closed. When closing a deal the user must provide the "closed amount".
+A user when presented with the forms for adding/editing deals must have the option to alter the deal "stage" to Closed. When closing a deal, the user must provide the "closed amount".
 
 #### Closed Vs Goal Plot Generation
 
@@ -564,12 +555,12 @@ A user when presented with the forms for adding/editing deals must have the opti
 
 *Satisfies User Story: 37*
 
-A plot must be generated illustrating how a specific team is performing in terms of their "goals" for deals versus the actual "close amount" with each being a separate subplot respectively. The team to which the user belongs must have existing closed deals in the range of the last 12 months in order for there to be data to generate the Closed vs Goal Plot. 
+A plot must be generated illustrating how a specific team is performing in terms of their "goals" for deals versus the actual "closed amount".
 
-The plot that is generated must abide by the following constraints;
+The plot that is generated has these properties;
 + x-axis : 
-	+  Subplot 1: Amount the deal was closed at
-	+ Subplot 2: Initial goal for the deal
+	+  Subplot 1: Closed Amount of deal
+	+ Subplot 2: Goal of deal
 + y-axis : Close Date of the deal
 + Range: Last 365 days
 + Frequency: Monthly
@@ -580,14 +571,12 @@ The plot that is generated must abide by the following constraints;
 
 *Satisfies User Story: 38*
 
-A chart must be generated illustrating a team's forecasted deal earnings for the current month. The team to which the user belongs must have existing deals for the current month in order for there to be date to generate the Deals Forecast chart. 
+A  pie chart must be generated illustrating a team's forecasted deal earnings for the current month - it has the these properties:
 
-The chart that is generated must be in the form of a pie chart and must abide by the following constraints;
++ Data:  list of sums of the amounts for the deal stages e.g. Closed Won, Appointment Scheduled etc. Each pie slice is a stage.
++ Range: current month.
 
-+ Data:  a list of the sum of the deal amounts for the following deal stages; Closed Won, Appointment Scheduled, Contract Sent, Qualified To Buy. Each pie slice is a stage
-+ Range: This current month
-
-The monthly forecast must be displayed with the forecasted revenue figure being the sum of all stages/slices in the pie chart.
+The forecasted revenue is the sum of all slices in the pie chart.
 
 #### Deal Conversion Tracking
 
@@ -595,9 +584,9 @@ The monthly forecast must be displayed with the forecasted revenue figure being 
 
 *Satisfies User Story: 39*
 
-In order for deal conversion metrics to be calculated for the Deal Stage Funnel graph, all occurrences of a deal moving to a different stage must be tracked.
+In order to generate the Deal Stage Funnel plot, all changes in deal stage must be tracked.
 
-There must be a table to log any deal stage activity which would for every row specify a specific deal, the deal stage, and a timestamp for when that deal transitioned to that stage. If a new deal is created, its stage must be logged. Also, if an existing deal moves to a different stage this must also be logged
+There must be a table to log deal stage changes which would for every row specify the new deal stage and a timestamp. For a new deal, its stage is logged. If an existing deal changes stage, its logged
 
 #### Deal Stage Funnel Plot Generation
 
@@ -605,20 +594,24 @@ There must be a table to log any deal stage activity which would for every row s
 
 *Satisfies User Story: 39*
 
-A graph must be generated to illustrate the progression of a team's deals moving from stage to stage. The team to which the user belongs must have existing deals within the last month. 
+A bar chart must be generated to illustrate the progression of a team's deals from stage to stage.
 
-The graph that is generated must be in the form of a bar chart and must abide by the following constraints;
+The plot has these properties:
 
 + x-axis: Number of deals per deal stage
-+ y-axis: the following deal stages; Closed Won, Appointment Scheduled, Contract Sent, Qualified To Buy, Created.
++ y-axis: A bar for each possible deal stage
 + Range: Last Month
 
-Every bar in the bar chart other than the final stage, "Closed Won" stage, must also have conversion data for Next Step Conversion and Cumulative Conversion 
+Every bar in the chart other than "Closed Won" stage, includes conversion data for Next Step Conversion and Cumulative Conversion. 
  
  + Next Step Conversion - percentage of deals that move from the current stage to the next stage
  + Cumulative Conversion - percentage of deals that move from the first stage to the next stage
 
-The stages follow a hierarchy, therefore moving from the "current" stage to the “next” stage means going to the next stage in the hierarchy. The hierarchy is laid out as follows; Created -> Qualified To Buy -> Contract Sent -> Appointment Scheduled -> Closed Won. This means that deals can move from the Created stage to Qualified To Buy and so on. Deals can skip stages and do not have to move step-by-step in the hierarchy but they must follow the hierarchical structure e.g. a deal cannot be "Closed Won" and then "Created"
+The stages follow a hierarchy. 
+
+The hierarchy is laid out as follows; Created -> Qualified To Buy -> Contract Sent -> Appointment Scheduled -> Closed Won. 
+
+This means that deals can move from the Created stage to Qualified To Buy and so on. Deals can skip stages but this must follow the hierarchy e.g. a deal move from "Closed Won" to "Created"
 
 #### Activity Plot Generation
 
@@ -626,12 +619,12 @@ The stages follow a hierarchy, therefore moving from the "current" stage to the 
 
 *Satisfies User Story: 40*
 
-A graph must be generated to illustrate the performance a team with activities regarding contact such as emails, tasks and meetings, detailing how many of each activities occurred within the last month. To simplify the view, only the top 5 performing team members are displayed which is determined by the top 5 sums of all activities performed per team member. For every bar in the bar chart which defines one team member, the bar must be stacked with data for the count of every activity.
+A bar chart must be generated to show team performance in relation to "activities" e.g. emails, meetings etc. The top 5 team members are displayed (top being team members with the highest sum of activities each). Each bar represents a team member.
 
-The generated graph must be in the form of a stacked bar chart with every bar detailing the count of emails, tasks and meetings per team member. The graph must abide by the following constraints;
-+ x-axis: names of top 5 team members
-+ y-axis: count of activities
-+ Range: last Month
+The generated graph must be in the form of a stacked bar chart with every bar detailing the count of an activity type e.g. emails. The chart has these properties:
++ x-axis: names of top 5 members
++ y-axis: activity count
++ Range: last month
 
 #### Serving Plots
 
@@ -639,7 +632,7 @@ The generated graph must be in the form of a stacked bar chart with every bar de
 
 *Satisfies User Story: 37-40*
 
-In order to serve plots to Flask, the plots must be formatted appropriately. The plots must first be stored in a buffer as a PNG, decoded from ASCII, encoded in base64 and then a reference to the image passed to the HTML
+In order to serve plots, they must first be encoded correctly to be included in the HTTP response.
 
 ## Data Models
 
@@ -674,7 +667,7 @@ The following table describes the data model used for "team" entities i.e. group
 | :-: | :-: |
 | Primary Key, Integer | String |
 
-+ team_id - auto-incremented integer which is used as the primary key to uniquely identify a team
++ team_id - auto-incremented integer, used as the primary key
 + name - name of the team
 
 #### Invites
@@ -688,8 +681,8 @@ The following table describes the data model used for "invite" entities i.e. inv
 | :-: | :-: |
 | Primary Key, String | Integer |
 
-+ invite_id - "{invitee_email}\_{team_id}\_{secure_token}", used to uniquely identify invite.
-+ team_id - the team to which the invitation applies for
++ invite_id - "{invitee_email}\_{team_id}\_{secure_token}", used as the primary key
++ team_id - the team the invitation is for
 
 #### Contacts
 
@@ -702,14 +695,14 @@ The following table describes the data model used for "contact" entities i.e. a 
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
 | Primary Key, String | Integer | String | String | Integer | String | String | String |
 
-+ contact_id - "{email}_{team_id}", used to uniquely identify contact
-+ team_id - secondary key used to associate a contact with a team
++ contact_id - "{email}_{team_id}", used as primary key
++ team_id - the team the contact belongs to
 + name - name of the contact
 + email - email address of the contact
 + phone_number - phone number of the contact
-+ contact_owner - owner (team member) assigned to the contact
-+ company - the company associated with the contact
-+ status - the status of the relationship with the contact e.g. "New"
++ contact_owner - team member assigned to the contact
++ company - company associated with the contact
++ status - the status of the contact relationship e.g. "New"
 
 #### Notes
 
@@ -722,9 +715,9 @@ The following table describes the data model used for "note" objects i.e. notes 
 | :-: | :-: | :-: | :-: | :-: |
 | Primary Key, Integer | String | String | String | String |
 
-+ note_id - auto-incremented integer which is used as the primary key to uniquely identify a note
-+ contact_id - secondary key which is used to correlate a note with a specific contact
-+ note - the actual content of the note
++ note_id - auto-incremented integer, used as primary key
++ contact_id - the contact the note is about
++ note - the content of the note
 + author - author of the note
 + date - the date the note was written
 
@@ -739,12 +732,12 @@ The following table describes the data model used for "deal" objects i.e. a deal
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
 | Primary Key, Integer | Integer | String | String | Datetime | String | Integer | String | String |
 
-+ deal_id - auto-incremented integer which is used as the primary key to uniquely identify a deal
-+ team_id - secondary key which is used to correlate a deal with a specific team
-+ name - the name given to the deal
-+ stage - the deal stage, used to track the progression of the deal
-+ close_date - the date the deal was closed, if it was closed
-+ owner - the owner of the deal
++ deal_id - auto-incremented integer, used as primary key
++ team_id - the team the deal belongs to
++ name - the name of the deal
++ stage - the deal stage
++ close_date - the date the deal was closed (optional)
++ owner - the deal owner
 + amount - value of the deal
 + associated_contact - contact associated with this deal
 + associated_company - company associated with this deal
@@ -760,13 +753,13 @@ The following table describes the data model used for "activity log" objects i.e
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
 | Primary Key, Integer | String | String | Datetime | String | Integer | String |
 
-+ activity_id - auto-incremented integer which is used as the primary key to uniquely identify an activity
-+ activity_type - the type of activity, can be "note", "email", "task", "complete_task", and "meeting
-+ actor - the "doer" of the activity i.e. the team member who created the note, sent the email etc
-+ timestamp - the date and time at which this activity was logged
-+ contact_id - the id of the contact associated with this activity e.g. the recipient of the email, the subject of the note, etc.
-+ team_id - secondary key which is used to correlate an activity with a specific team.
-+ description - a short string describing the activity e.g. "{actor} created a note on {timestamp}.
++ activity_id - auto-incremented integer, used as primary key
++ activity_type - the activity type e.g. "note"
++ actor - the team member who caused the activity
++ timestamp - the date-time the activity was logged
++ contact_id - the contact associated with the activity
++ team_id - the team the activity belongs to
++ description - a short string describing the activity
 
 #### Deal Stage Conversion
 
@@ -778,8 +771,8 @@ The following table describes the data model which is used for calculating deal 
 | :-: | :-: | :-: | :-: |
 |Primary Key, Integer | Integer | String | String |
 
-+ stage_id - auto-incremented integer which is used as the primary key to uniquely identify an activity
-+ team_id - secondary key which is used to link the deal this stage is associated with to its team 
++ stage_id - auto-incremented integer, used as primary key
++ team_id - the team this data belongs to
 + date - the date the deal transitioned to this stage
 + stage - the stage that the deal transitioned to
 
@@ -979,8 +972,6 @@ Overall, this approach is relatively efficient because it only retrieves the rec
 TODO (FLOW)
 
 ### Showing the User the Records they Own
-
-TODO*
 
 *Implementation of requirement: 10*
 *endpoint: /contacts and /deals*
