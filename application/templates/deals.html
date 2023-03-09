@@ -125,5 +125,24 @@
             <p>{{error}}</p>
         {% endif %}
     </section>
+
+    <section>
+        {% set next_page = page + 1 %}
+        {% set previous_page = page - 1 %}
+        
+        <br>
+        {% if page > 1 %}
+            <div class="page">
+                <a href="{{url_for('deals_bp.deals',error=error, filter=filter, order=order, prev_sort=prev_sort, sort=sort, page=previous_page)}}" id="previous_page">&laquo;</a>
+            </div>
+        {% endif %}
+    
+        {% if page < num_pages %}
+            <div class="page">
+                <a href="{{url_for('deals_bp.deals', error=error, filter=filter, order=order, prev_sort=prev_sort, sort=sort, page=next_page)}}" id="next_page"> &raquo;</a>
+            </div>
+        {% endif %}
+        
+    </section>
 </body>
 {% endblock %}

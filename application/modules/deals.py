@@ -15,8 +15,6 @@ def deals(filter, page, error, prev_sort, sort, order):
 
     # Search bar.
     search_form = DealsSearchForm()
-    # deals = None
-    deals = Deals.query
 
     # Gets all contacts of user that is logged in and passes it to html template
     user = Users.query.filter_by(email=g.email).first()
@@ -72,13 +70,14 @@ def deals(filter, page, error, prev_sort, sort, order):
     if sort != "None":
         deals = order_deals(sort, order, deals)
 
-    # Pageing functionality.
-    deals = deals.limit(1000).offset(page_offset)
-    num_pages = deals.count() // 25
 
+    num_pages = deals.count() // 25
     # Count the number of pages.
     if (deals.count() % 25) > 0:
         num_pages += 1
+
+    # Pageing functionality.
+    deals = deals.limit(25).offset(page_offset)
 
     # Create an editable form for each deal. Will only ever 25 at a time.
     forms = []
