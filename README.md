@@ -1198,64 +1198,22 @@ monkeypatch.setattr("flask_oauthlib.client.OAuthRemoteApp.get", lambda  self, us
 
 ## Project Reflection
 
-This chapter will serve as a reflection on the 12 weeks we as a team spent working on our project, highlighting how we worked together and the challenges we faced while developing Sherpa.
+This chapter will serve as a reflection on how we worked as a team, the challenges we faced, and the lessons we learned.
 
-### The Team's Process
+### Process
+- We did all our work together for 3 hours each week day.
+- Each week we wrote user stories on a whiteboard, assigned them to members of the team to implement, and took pictures at the end of each session.
+- Each second week was “polishing” week. Normally three of us would do back-end work, and one front-end, but during polish week each of us would have a different job: report writing, testing, front-end, or back-end.
+- Each polishing week one would have a different role to ensure more even contributions across the project.
 
-Our team's process for completing tasks was highly organized and effective, despite being a small team. With daily three-hour work sessions, we ensured that we were all working together and making progress on the project at hand. This approach helped our team stay on track and remain focused on important tasks.
+### Challenges and Trade-Offs
 
-In addition, our team had a weekly whiteboarding session where we planned user stories. This collaborative approach to task management ensures that everyone was aligned on the project's goals and objectives. By breaking down tasks into user stories, our team prioritized work and ensured that we were working on the most critical tasks.
+-   **Turbo**:  Turbo is a JavaScript framework for serving page updates over a web-socket rather than a HTTP request. We wanted to implement this to have native-app-like performance. However Flask-Turbo was poorly documented, so due to time constraints we made the trade-off to only implement it for some pages to deal with other priorities.
+-   **Google Integration**: Google integration was challenging as OAuth is a very complicated protocol none of us had experience with. Furthermore, Flask-OAuthlib did not support Gmail out of the box which required us to write code for the module to add support for it.
+-   **Testing**: As described in the testing section, testing web applications poses unique challenges and we only had software testing experience with closed systems. A trade-off we had to make here was whether to use unittest or pytest for our testing framework, we all only had experience with unittest but opted for pytest as the documentation for using it with Flask was far more extensive. Despite the greater initial learning curve, this made debugging testing issues far easier.
 
-Our team's approach also included a "polishing" week every second week. This was an excellent practice as it allowed our team to review completed work and make necessary improvements. This approach helped to ensure that the final product was of a high quality.
+### Lessons Learned
 
-Overall, our team's process was highly effective, and our approach to task management was highly structured, ensuring that everyone was working together towards a common goal. This collaborative approach allowed our team to remain focused and prioritize work, resulting in high-quality work that was completed efficiently.
-
-### What Went Well
-
-#### Collaborative approach:
-
-Our team's approach to task management was highly collaborative, with daily work sessions and weekly whiteboarding sessions. This allowed everyone to work together towards a common goal and ensured that everyone was aligned on the project's goals and objectives.
-  
-#### Prioritization:
-
-By breaking down tasks into user stories, Our team was able to prioritize work and ensure that we were working on the most critical tasks. This helped us stay focused and make progress on the most important parts of the project.
-
-#### Quality control:
-
-Our team's approach included a "polishing" week every second week, which allowed us to review completed work and make necessary improvements. This helped ensure that the final product was of a high quality.
-
-#### Efficiency:
-
-Our team was able to complete high-quality work efficiently, thanks to our structured and collaborative approach to task management. This allowed us to make progress on the project and meet our goals within our timeframe.
-
-### Mistakes To Learn From
-
-During the course of our project, we made mistakes and learned valuable lessons. One mistake we made was not standardizing our HTML, ledding to some inconsistencies in our code. For the future, we learned to standardize our HTML and use best practices to ensure consistency throughout our project.
-
-Another mistake we made was not using Flask blueprints, which made it more difficult to manage our code as the project grew. We realized the importance of using blueprints to organize our code and make it easier to maintain and update.
-
-Additionally, we initially did not use Bootstrap for our CSS, which resulted in some inconsistencies in the visual design of our project. To address this, we learned the importance of using a CSS framework like Bootstrap, which helped us to ensure consistency and improve the overall visual design of our project.
-
-Overall, we learned that standardizing our code, using frameworks and best practices, and prioritizing consistency were essential to the success of our project. These lessons helped us to improve our processes and achieve better results in future projects.
-
-### What Went Well
-
-### Mistakes To Learn From
-
-### What Was Technically Challenging
-
-This section outlines the difficulties and challenges we individually and as a team encountered in the process of developing Sherpa.
-
-+ __Turbo__
-  + Implementing Turbo in our application proved to be difficult. Our goal was to have our whole application using Turbo to increase the performance of our web application and to ensure a smooth user experience while using Sherpa. Due to a lack of documentation online regarding Turbo, we had to go through a lot of trial and error when implementing Turbo. This was time consuming and frustrating at times when encountering unexpected behaviours. Once completed the benefit of Turbo was evident with the smooth performance of our web application.
-+ __Modularization__
-  + Modularizing the code presented a technical challenge as we had never used blueprints before to implement an application. We had to break up the monolithic appliction.py code into segments and initialize it with an __init__.py file.
-  + Initially we had some issues getting the application to run. Once we had corrected all the broken links within our pages it worked with blueprints. It ran smoothly and allowed a maintainable code base that made testing and updating the application easier.
-+ __Google Integration__
-  + Google integration was challenging as the open authorization protocol was challenging in numerous ways due to its complexity and security requirements. The flask oath library did not support emails from our application so it was necessary for us to edit the library itself to facilitate our needs.
-+ __Testing__
-  + Writing the test cases for our code was challenging initially due to having little experience with testing web application. Also, the structure of our code caused problems with writing test cases. But once modularization was implemented within our code then test cases were much easier to write.
-+ __Security__  Security was something that was of utmost importance for our application in order to ensure the security of user data and preventing any potential threats. 
-	+ _Hashing_ -  We managed to implement security features where user data is stored securely by hashing is before storing it in the database.
-	+ _Cross-Site Scripting_ - Our use of Flask SQL Alchemy as an ORM made sure to prevent any potential XSS attacks
-	+ _Session Cookies_ - Our implementation of session cookies within our application ensured that users are authenticated when making requests and prevent unauthorized users accessing forbidden data.
+* We should have wrote more standardised and semantic HTML. This led to consistency issues and made CSS work more difficult, in the future we'd definitely place an emphasis on best-practice, semantic HTML.
+* Our application should have been modular from the beginning, the project inevitably grew to large in scope for a single file and it wasted time having to do this mid-development.
+* A CSS framework, e.g. Bootstrap, would have made front-end development much faster, having to write all our styles from scratch added an unnecessary technical overhead - one we would avoid if we were to do things over.
