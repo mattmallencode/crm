@@ -960,10 +960,6 @@ input#submit:hover{
   margin-top: 1%;
   margin-bottom: 2%;
 }
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 1059ad859f21a0c56c36461899db49af0ad20d1b
 
 /*profile*/
 section#logout p{
@@ -975,8 +971,39 @@ section#logout p{
   padding: 3%;
   margin-bottom: 2;
 }
-<<<<<<< HEAD
-=======
->>>>>>> main
-=======
->>>>>>> 1059ad859f21a0c56c36461899db49af0ad20d1b
+
+/* email activity */
+section.message-box input#message{
+  width: 50%;
+  height: 60px;
+}
+
+#emails article {
+  background-color: white;
+}
+
+#reply p a.reply  {
+  text-decoration: none;
+  background-color: #E95420;
+  color: white;
+  padding: 4px;
+}
+/*tasks*/
+
+.create-button input#create{
+  color: white;
+  padding: 1%;
+  text-indent: 0%;
+  background-color:#E95420;
+  border-radius: 0%;
+  text-decoration: none;
+}
+#complete_task{
+  text-decoration: none;
+  background-color: #E95420;
+  color: black;
+  padding: 4px;
+}
+input#title{
+  margin-bottom: 1%;
+}
