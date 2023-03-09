@@ -204,21 +204,24 @@ def add_deal(filter, page, error, prev_sort, sort, order):
 
 
 @deals_bp.route("/edit_deal", defaults={"deal_id": "None", "filter": "all", "page": 1, "prev_sort": "None", "sort": "None", "order": "DESC", "error": "None"}, methods=["GET", "POST"])
-@deals_bp.route("/edit_deal/<deal_id>/<page>/<error>", methods=["GET", "POST"])
+@deals_bp.route("/edit_deal/<deal_id>/<filter>/<prev_sort>/<sort>/<page>/<order>/<error>", methods=["GET", "POST"])
 @login_required
 @team_required
-def edit_deal(deal_id, page, error):
+def edit_deal(deal_id, filter, page, error, prev_sort, sort, order):
+    error="None"
     form = DealForm()
     deal = Deals.query.filter_by(deal_id=deal_id).first()
     if deal is not None:
         user = Users.query.filter_by(email=g.email).first()
     if "Closed" in form.stage.data:
-        if form.amount.data == "":
-            error = "Close Amount must be inputted when closing an amount"
-        elif int(form.amount.data) == 0:
+        print(type(int(form.amount.data)))
+        if int(form.amount.data) == 0:
             error = "Close Amount must be inputted when closing an amount"
         elif form.date.data == None:
             error = "Close Date must be inputted when closing a deal"
+    if (form.owner.data != "") and (Users.query.filter_by(email=form.owner.data, team_id=user.team_id).first() is None):
+            error = "Invalid deal owner"
+    
     if error == "None":
         if deal.stage != dict(form.stage.choices).get(form.stage.data):
             stage = DealStageConversion()
@@ -227,6 +230,7 @@ def edit_deal(deal_id, page, error):
             stage.stage = dict(form.stage.choices).get(form.stage.data)
             db.session.add(stage)
 
+    if "Closed" not in deal.stage:
         deal.team_id = user.team_id
         deal.name = form.name.data
         deal.stage = dict(form.stage.choices).get(form.stage.data)
@@ -236,7 +240,22 @@ def edit_deal(deal_id, page, error):
         deal.goal = form.goal.data
         deal.associated_contact = form.associated_contact.data
         deal.associated_company = form.associated_company.data
+        db.session.flush()
         db.session.commit()
-    if form.owner.data != "" and Users.query.filter_by(email=form.owner.data, team_id=user.team_id).first() is None:
-        error = "Invalid deal owner"
-    return redirect(url_for("deals_bp.deals", page=page, filter="all", prev_sort="None", sort="None", order="DESC", error=error))
+    else:
+        error="You cannot modify a closed deal"
+    
+    return redirect(url_for("deals_bp.deals", page=page, filter=filter, prev_sort=prev_sort, sort=sort, order=order, error=error))
+
+
+@deals_bp.route("/remove_deal", defaults={"deal_id": "None", "filter": "all", "page": 1, "prev_sort": "None", "sort": "None", "order": "DESC", "error": "None"}, methods=["GET", "POST"])
+@deals_bp.route("/remove_deal/<deal_id>/<filter>/<prev_sort>/<sort>/<page>/<order>/<error>", methods=["GET", "POST"])
+@login_required
+@team_required
+def remove_deal(deal_id, filter, page, error, prev_sort, sort, order):
+    deal = Deals.query.filter_by(deal_id=deal_id).first()
+    if deal is not None:
+        db.session.delete(deal)
+        db.session.commit()
+    return redirect(url_for("deals_bp.deals", page=page, filter=filter, prev_sort=prev_sort, sort=sort, order=order, error=error))
+    

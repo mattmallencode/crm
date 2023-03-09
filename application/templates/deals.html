@@ -8,7 +8,7 @@
           <li><a href="{{ url_for('contacts_bp.contacts') }}">Contacts</a></li>
           <li><a href ="{{url_for('deals_bp.deals')}}">Deals</a></li>
           <li><a href="{{ url_for('teams.team') }}">Team</a></li>
-          <li><a href="{{ url_for('auth.profile') }}">Logout</a></li>
+          <li><a href="{{ url_for('auth.profile') }}">Profile</a></li>
         </ul>
     </nav>
         <svg viewBox="0 0 960 300">
@@ -38,6 +38,7 @@
         </section>
         </div>
         </div>
+
         <table id="deals_table">
             <tr>
                 <form action = "" method = "POST" novalidate>
@@ -57,7 +58,7 @@
                 <th><a href="{{url_for('deals_bp.deals', prev_sort=prev_sort, order=order, sort='associated_contact', page=page, filter=filter, error='None')}}">Associated Contacts</a></th>
                 <th><a href="{{url_for('deals_bp.deals', prev_sort=prev_sort, order=order, sort='associated_company', page=page, filter=filter, error='None')}}">Associated Company</a></th>
                 <th>Edit Deal</th>
-                <th></th>
+                <th>Remove Deal</th>
            </tr>
             
             {% for form in forms %}
@@ -85,6 +86,8 @@
                         <td>{{form.associated_company()}}</td>
                         <td>{{form.submit(value = "Edit Deal")}}</td>
                     </form>
+
+                    <td><a href = "{{url_for('deals_bp.remove_deal', deal_id=form.deal_id.data, prev_sort=prev_sort, order=order, sort=sort, filter=filter, page=page, error=error)}}">Remove</a></td>
                 </tr>
             {% endfor %}
 

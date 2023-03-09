@@ -1076,6 +1076,10 @@ Additionally, we initially did not use Bootstrap for our CSS, which resulted in 
 
 Overall, we learned that standardizing our code, using frameworks and best practices, and prioritizing consistency were essential to the success of our project. These lessons helped us to improve our processes and achieve better results in future projects.
 
+### What Went Well
+
+### Mistakes To Learn From
+
 ### What Was Technically Challenging
 
 This section outlines the difficulties and challenges we individually and as a team encountered in the process of developing Sherpa.  

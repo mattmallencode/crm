@@ -8,7 +8,7 @@
         <li><a href="{{ url_for('contacts_bp.contacts') }}">Contacts</a></li>
         <li><a href ="{{url_for('deals_bp.deals')}}">Deals</a></li>
         <li><a href="{{ url_for('teams.team') }}">Team</a></li>
-        <li><a href="{{ url_for('auth.profile') }}">Logout</a></li>
+        <li><a href="{{ url_for('auth.profile') }}">Profile</a></li>
       </ul>
   </nav>
   {% endif %}
@@ -16,26 +16,26 @@
     <section id="dashboard">
         <section>
           <h2>Deals Closed vs Goal</h2>
-          <section>
+          <section class="board-1">
             {{goal_closed_diagram|safe}}
           </section>
         </section>
 
         <section>
           <h2>Deals Forecast</h2>
-          <section>
+          <section class="board-2">
             {{deals_forecast_diagram|safe}}
           </section>
         </section>
 
-        <section>
+        <section class="board-3">
           <h2>Deal Stage Funnel</h2>
           {{deal_stage_diagram|safe}}</td>                 
         </section>
 
         <section>
           <h2>Monthly Activity</h2>
-          <section>
+          <section class="board-4">
             {{activity_diagram|safe}}
           </section>
         </section>
