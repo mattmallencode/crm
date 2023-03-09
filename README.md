@@ -382,9 +382,8 @@ As a Sherpa user I want to view a graph illustrating the breakdown of customer i
 
 ### Requirements
 
-TODO: an intro to the requirements.
 
-The success of any software project is dependent on the ability to understand, document, and implement the requirements of the system. In this section, we will outline the requirements for the Sherpa web application, a CRM tool for managing contacts and deals. These requirements have been defined through the use cases of the system, and they serve as a roadmap for our team to ensure that the final product meets the needs and expectations of its users. The requirements are organized into functional areas, such as user registration and authentication, team creation and management, database CRUD operations, and user profile management, among others. By following these requirements, the Sherpa development team was able to deliver a reliable and user-friendly application that fulfills its intended purpose.
+In this section, we will outline the requirements for Sherpa. Each requirement satisfies one or more use cases.
 
 #### User Registration
 
@@ -392,7 +391,7 @@ The success of any software project is dependent on the ability to understand, d
 
 *Satisfies User Stories: 1, 2, 7
 
-A user must be able to register an account with Sherpa's database by providing a valid email and password combination. This will then enable them to authenticate themselves.
+A user must be able to register an account with Sherpa's database by providing a valid email and password combination, enabling their authentication.
 
 #### User Authentication
 
@@ -400,7 +399,7 @@ A user must be able to register an account with Sherpa's database by providing a
 
 *Satisfies User Stories: 1, 2*
 
-Before accessing Sherpa services, a user must prove who they are. They can do this by providing the email and password they previously used to register. This will then be compared to Sherpa's database, if they provide matching credentials they will be considered authenticated for all subsequent requests for their session.
+Before accessing Sherpa a user must be authenticated. They do this by providing the email and password they used to register. This will then be compared to Sherpa's database, if they provide matching credentials they are authenticated for all subsequent requests.
 
 #### Team Creation
 
@@ -408,7 +407,7 @@ Before accessing Sherpa services, a user must prove who they are. They can do th
 
 *Satisfies User Stories: 1, 2*
 
-In order to do anything meaningful with Sherpa (beyond creating an account and proving their identity) a user must be a member of a team. In order for there to be teams to join, users must be able to create them. If a user is not already a member of a team they can register one with Sherpa's database by providing the name of their organization.
+In order to do anything meaningful with Sherpa a user must be a member of a team. Users must be able to create teams. If a user is not already a member of a team they can register one with Sherpa's database.
 
 #### Team Invitation Generation and Delivery
 
@@ -416,7 +415,7 @@ In order to do anything meaningful with Sherpa (beyond creating an account and p
 
 *Satisfies User Stories: 1, 2*
 
-An owner or administrator of a team must be able to invite another user to join their team. This can be achieved by providing the email of the person they wish to invite and Sherpa will send them an invitation link on their behalf via email.
+A team administrator must be able to invite another user to join their team. This can be achieved by providing the email of the person they wish to invite and Sherpa will send them an invite link.
 
 #### Accepting Team Invitation
 
@@ -424,7 +423,7 @@ An owner or administrator of a team must be able to invite another user to join 
 
 *Satisfies User Story: 2*
 
-A user must be able to accept an invitation to a team. They can achieve this by clicking the invitation link they received in their email and then logging in. A user may only accept the invitation if they're not already a member of a team and log in using the same email the invitation was sent to.
+A user must be able to accept a team invitation. They can achieve this by clicking the invitation link they received in their email and then logging in.
 
 #### Database Create, Read, Update, and Delete (CRUD)
 
@@ -434,15 +433,7 @@ A user must be able to accept an invitation to a team. They can achieve this by 
 
 "Database" in this context refers to the set of records belong to a team, either its contacts or deals.
 
-A user must be able to interface with their team's databases and achieve all of the basic CRUD operations with their team's records by interacting with the web app i.e. forms and buttons, not SQL.
-
-**For Contacts**
-
-For create operations users must provide at least an email for the new contact (all other data is optional). For create and update operations user must provide a unique email address i.e. they can not update the email of an existing contact to match the email of another contact.
-
-**For Deals**
-
-For create operations users must provide at least a name and goal for the new deal (all other data is optional). For update operations, a user can not update a goal of a deal. If the user changes the deal stage to "closed" they must provide a closed amount, thereafter the deal stage and closed amount will not be able to be updated for that record.
+A user must be able to interface with their team's databases and achieve all of the basic CRUD operations with their team's records by interacting with the web app i.e. forms and buttons.
 
 #### User Profile and Logout
 
@@ -450,7 +441,7 @@ For create operations users must provide at least a name and goal for the new de
 
 *Satisfies User Story: 7, 8*
 
-A user must be able to view a profile page with their account information. Furthermore, they must be able to logout of their account, meaning their session (authentication cookies etc) will be cleared and they will have to use their username and password again if they wish to resume using the application.
+A user must be able to view a profile page with their account information. Furthermore, they must be able to logout of their account, meaning their session will be cleared and they will have to login to be authenticated again.
 
 #### View and Leave Teams
 
@@ -458,7 +449,7 @@ A user must be able to view a profile page with their account information. Furth
 
 *Satisfies User Story: 9, 10*
 
-A user must be able to view a page that lists all of the members of their team. On this page, they will be given the option to leave their team (this will also feature a "are you sure?" (or similar) checkbox.
+A user must be able to view a page that lists all of their teammates. On this page, they have the option to leave their team - validated with an "are you sure?" checkbox.
 
 #### Database Viewing in Pages
 
@@ -468,7 +459,7 @@ A user must be able to view a page that lists all of the members of their team. 
 
 "Database" in this context refers to the set of records belong to a team, either its contacts or deals.
 
-Users must be able to view their team's contacts or deals. Since a business may have an enumerable number of customers and sales contracts, Sherpa can not serve all records on one page without hindering the user experience therefore records must be "chunked up" into "pages" (each page being a group of 25 records), with the user able to navigate records using the "next page" and #### Closing Deals"previous page" buttons.
+Users must be able to view their team's contacts or deals. Since a business may have an enumerable number of customers and records must be split into pages (each page has 25 records), with the user able to navigate pages using the "next" and "previous" page buttons.
 
 #### Database Filtering
 
@@ -490,7 +481,7 @@ Users must then be able to filter for "my contacts", "my deals" etc, i.e. just d
 
 "Database" in this context refers to the set of records belong to a team, either its contacts or deals.
 
-Users must be able to search their team's contacts or deals. Users should be able to search for a specific name, email, phone number etc and be served the records that match their search term.
+Users must be able to search their team's contacts or deals. Users should be able to search for a specific name, email etc and be served records matching their search.
 
 #### Database Sorting
 
@@ -500,7 +491,7 @@ Users must be able to search their team's contacts or deals. Users should be abl
 
 "Database" in this context refers to the set of records belong to a team, either its contacts or deals.
 
-User must be able to sort their team's contacts or deals by email, phone number, etc. The app must support both ascending and descending sorting and for improved user experience this should behave as a "toggle" feature i.e. click a column header once and it'll be sorted in ascending order, click that same column header again and the order will be flipped.
+User must be able to sort their team's contacts or deals by email, phone number, etc. The app must support both ascending and descending sorting and be able to switch between orders using toggle buttons.
 
 #### Activity Logging and Viewing
 
@@ -508,7 +499,7 @@ User must be able to sort their team's contacts or deals by email, phone number,
 
 *Satisfies User Story:  16*
 
-Users must be able to view a log of all contact activity for all emails, tasks, meetings and notes related to the contact. Every time an activity occurs, this event must be logged detailing the activity type and the datetime it occurred. If activities have been logged then the user must be able to view this log.
+An "activity" is a customer interaction e.g. creating a note, sending an email. Every time an activity occurs, this event must be logged detailing the activity type and the date time it occurred. The user must also be able to view these logs.
 
 #### Note Management
 
@@ -516,7 +507,7 @@ Users must be able to view a log of all contact activity for all emails, tasks, 
 
 *Satisfies User Story:  17, 18*
 
-A user must be able to manage their notes on a contact by being able to view notes, add new notes and remove notes. A form must be presented for every contact where users are able to create a note. A table must also be presented where users can view every note for a contact with the option to remove the note
+A form must be presented for every contact where users are able to create a note. A table must also be presented where users can view every note for a contact with the option to remove the note Users must also be able to remove notes.
 
 #### Google OAuth (Open Authorisation)
 
@@ -532,7 +523,7 @@ A user must be able to authenticate their Google Account with OAuth in order to 
 
 *Satisfies User Story: 20 - 22*
 
-A user must be able to manage their emails with a contact. A user must be presented with a form for sending an email to a contact containing fields for the email subject and the email body. The user must also be able to view all email threads with the contact and be able to reply to the most recent email in a thread.
+A user must be presented with a form for sending an email to a contact containing fields for the email subject and the email body. The user must also be able to view all email threads with the contact and be able to reply to the most recent email in a thread.
 
 #### Task Management
 
@@ -540,7 +531,7 @@ A user must be able to manage their emails with a contact. A user must be presen
 
 *Satisfies User Story: 23 - 25*
 
-A user must be able to manage their tasks for a customer. A form must be presented where users can set a task in relation to a customer. A table must also be presented displaying all tasks for a given customer.
+A form must be presented where users can set a task in relation to a customer. A table must be displayed with the tasks for a given customer.
 
 #### Meeting Management
 
@@ -548,7 +539,7 @@ A user must be able to manage their tasks for a customer. A form must be present
 
 *Satisfies User Story: 25 26*
 
-A user must be able to manage their meetings with a customer. A form must be presented where users can schedule a meeting with a customer. A table must also be displayed where users can view all their scheduled meetings with a customer.
+A form must be presented where users can schedule a meeting with a customer. A table must be displayed where users can view and join meetings with a customer.
 
 #### Closing Deals
 
@@ -556,7 +547,7 @@ A user must be able to manage their meetings with a customer. A form must be pre
 
 *Satisfies User Story: 30*
 
-A user when presented with the forms for adding/editing deals must have the option to alter the deal "stage" to Closed. When closing a deal the user must provide the "closed amount".
+A user when presented with the forms for adding/editing deals must have the option to alter the deal "stage" to Closed. When closing a deal, the user must provide the "closed amount".
 
 #### Closed Vs Goal Plot Generation
 
@@ -564,12 +555,12 @@ A user when presented with the forms for adding/editing deals must have the opti
 
 *Satisfies User Story: 37*
 
-A plot must be generated illustrating how a specific team is performing in terms of their "goals" for deals versus the actual "close amount" with each being a separate subplot respectively. The team to which the user belongs must have existing closed deals in the range of the last 12 months in order for there to be data to generate the Closed vs Goal Plot. 
+A plot must be generated illustrating how a specific team is performing in terms of their "goals" for deals versus the actual "closed amount".
 
-The plot that is generated must abide by the following constraints;
+The plot that is generated has these properties;
 + x-axis : 
-	+  Subplot 1: Amount the deal was closed at
-	+ Subplot 2: Initial goal for the deal
+	+  Subplot 1: Closed Amount of deal
+	+ Subplot 2: Goal of deal
 + y-axis : Close Date of the deal
 + Range: Last 365 days
 + Frequency: Monthly
@@ -580,14 +571,12 @@ The plot that is generated must abide by the following constraints;
 
 *Satisfies User Story: 38*
 
-A chart must be generated illustrating a team's forecasted deal earnings for the current month. The team to which the user belongs must have existing deals for the current month in order for there to be date to generate the Deals Forecast chart. 
+A  pie chart must be generated illustrating a team's forecasted deal earnings for the current month - it has the these properties:
 
-The chart that is generated must be in the form of a pie chart and must abide by the following constraints;
++ Data:  list of sums of the amounts for the deal stages e.g. Closed Won, Appointment Scheduled etc. Each pie slice is a stage.
++ Range: current month.
 
-+ Data:  a list of the sum of the deal amounts for the following deal stages; Closed Won, Appointment Scheduled, Contract Sent, Qualified To Buy. Each pie slice is a stage
-+ Range: This current month
-
-The monthly forecast must be displayed with the forecasted revenue figure being the sum of all stages/slices in the pie chart.
+The forecasted revenue is the sum of all slices in the pie chart.
 
 #### Deal Conversion Tracking
 
@@ -595,9 +584,9 @@ The monthly forecast must be displayed with the forecasted revenue figure being 
 
 *Satisfies User Story: 39*
 
-In order for deal conversion metrics to be calculated for the Deal Stage Funnel graph, all occurrences of a deal moving to a different stage must be tracked.
+In order to generate the Deal Stage Funnel plot, all changes in deal stage must be tracked.
 
-There must be a table to log any deal stage activity which would for every row specify a specific deal, the deal stage, and a timestamp for when that deal transitioned to that stage. If a new deal is created, its stage must be logged. Also, if an existing deal moves to a different stage this must also be logged
+There must be a table to log deal stage changes which would for every row specify the new deal stage and a timestamp. For a new deal, its stage is logged. If an existing deal changes stage, its logged
 
 #### Deal Stage Funnel Plot Generation
 
@@ -605,20 +594,24 @@ There must be a table to log any deal stage activity which would for every row s
 
 *Satisfies User Story: 39*
 
-A graph must be generated to illustrate the progression of a team's deals moving from stage to stage. The team to which the user belongs must have existing deals within the last month. 
+A bar chart must be generated to illustrate the progression of a team's deals from stage to stage.
 
-The graph that is generated must be in the form of a bar chart and must abide by the following constraints;
+The plot has these properties:
 
 + x-axis: Number of deals per deal stage
-+ y-axis: the following deal stages; Closed Won, Appointment Scheduled, Contract Sent, Qualified To Buy, Created.
++ y-axis: A bar for each possible deal stage
 + Range: Last Month
 
-Every bar in the bar chart other than the final stage, "Closed Won" stage, must also have conversion data for Next Step Conversion and Cumulative Conversion 
+Every bar in the chart other than "Closed Won" stage, includes conversion data for Next Step Conversion and Cumulative Conversion. 
  
  + Next Step Conversion - percentage of deals that move from the current stage to the next stage
  + Cumulative Conversion - percentage of deals that move from the first stage to the next stage
 
-The stages follow a hierarchy, therefore moving from the "current" stage to the “next” stage means going to the next stage in the hierarchy. The hierarchy is laid out as follows; Created -> Qualified To Buy -> Contract Sent -> Appointment Scheduled -> Closed Won. This means that deals can move from the Created stage to Qualified To Buy and so on. Deals can skip stages and do not have to move step-by-step in the hierarchy but they must follow the hierarchical structure e.g. a deal cannot be "Closed Won" and then "Created"
+The stages follow a hierarchy. 
+
+The hierarchy is laid out as follows; Created -> Qualified To Buy -> Contract Sent -> Appointment Scheduled -> Closed Won. 
+
+This means that deals can move from the Created stage to Qualified To Buy and so on. Deals can skip stages but this must follow the hierarchy e.g. a deal move from "Closed Won" to "Created"
 
 #### Activity Plot Generation
 
@@ -626,12 +619,12 @@ The stages follow a hierarchy, therefore moving from the "current" stage to the 
 
 *Satisfies User Story: 40*
 
-A graph must be generated to illustrate the performance a team with activities regarding contact such as emails, tasks and meetings, detailing how many of each activities occurred within the last month. To simplify the view, only the top 5 performing team members are displayed which is determined by the top 5 sums of all activities performed per team member. For every bar in the bar chart which defines one team member, the bar must be stacked with data for the count of every activity.
+A bar chart must be generated to show team performance in relation to "activities" e.g. emails, meetings etc. The top 5 team members are displayed (top being team members with the highest sum of activities each). Each bar represents a team member.
 
-The generated graph must be in the form of a stacked bar chart with every bar detailing the count of emails, tasks and meetings per team member. The graph must abide by the following constraints;
-+ x-axis: names of top 5 team members
-+ y-axis: count of activities
-+ Range: last Month
+The generated graph must be in the form of a stacked bar chart with every bar detailing the count of an activity type e.g. emails. The chart has these properties:
++ x-axis: names of top 5 members
++ y-axis: activity count
++ Range: last month
 
 #### Serving Plots
 
@@ -639,7 +632,7 @@ The generated graph must be in the form of a stacked bar chart with every bar de
 
 *Satisfies User Story: 37-40*
 
-In order to serve plots to Flask, the plots must be formatted appropriately. The plots must first be stored in a buffer as a PNG, decoded from ASCII, encoded in base64 and then a reference to the image passed to the HTML
+In order to serve plots, they must first be encoded correctly to be included in the HTTP response.
 
 ## Data Models
 
@@ -674,7 +667,7 @@ The following table describes the data model used for "team" entities i.e. group
 | :-: | :-: |
 | Primary Key, Integer | String |
 
-+ team_id - auto-incremented integer which is used as the primary key to uniquely identify a team
++ team_id - auto-incremented integer, used as the primary key
 + name - name of the team
 
 #### Invites
@@ -688,8 +681,8 @@ The following table describes the data model used for "invite" entities i.e. inv
 | :-: | :-: |
 | Primary Key, String | Integer |
 
-+ invite_id - "{invitee_email}\_{team_id}\_{secure_token}", used to uniquely identify invite.
-+ team_id - the team to which the invitation applies for
++ invite_id - "{invitee_email}\_{team_id}\_{secure_token}", used as the primary key
++ team_id - the team the invitation is for
 
 #### Contacts
 
@@ -702,14 +695,14 @@ The following table describes the data model used for "contact" entities i.e. a 
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
 | Primary Key, String | Integer | String | String | Integer | String | String | String |
 
-+ contact_id - "{email}_{team_id}", used to uniquely identify contact
-+ team_id - secondary key used to associate a contact with a team
++ contact_id - "{email}_{team_id}", used as primary key
++ team_id - the team the contact belongs to
 + name - name of the contact
 + email - email address of the contact
 + phone_number - phone number of the contact
-+ contact_owner - owner (team member) assigned to the contact
-+ company - the company associated with the contact
-+ status - the status of the relationship with the contact e.g. "New"
++ contact_owner - team member assigned to the contact
++ company - company associated with the contact
++ status - the status of the contact relationship e.g. "New"
 
 #### Notes
 
@@ -722,9 +715,9 @@ The following table describes the data model used for "note" objects i.e. notes 
 | :-: | :-: | :-: | :-: | :-: |
 | Primary Key, Integer | String | String | String | String |
 
-+ note_id - auto-incremented integer which is used as the primary key to uniquely identify a note
-+ contact_id - secondary key which is used to correlate a note with a specific contact
-+ note - the actual content of the note
++ note_id - auto-incremented integer, used as primary key
++ contact_id - the contact the note is about
++ note - the content of the note
 + author - author of the note
 + date - the date the note was written
 
@@ -739,12 +732,12 @@ The following table describes the data model used for "deal" objects i.e. a deal
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
 | Primary Key, Integer | Integer | String | String | Datetime | String | Integer | String | String |
 
-+ deal_id - auto-incremented integer which is used as the primary key to uniquely identify a deal
-+ team_id - secondary key which is used to correlate a deal with a specific team
-+ name - the name given to the deal
-+ stage - the deal stage, used to track the progression of the deal
-+ close_date - the date the deal was closed, if it was closed
-+ owner - the owner of the deal
++ deal_id - auto-incremented integer, used as primary key
++ team_id - the team the deal belongs to
++ name - the name of the deal
++ stage - the deal stage
++ close_date - the date the deal was closed (optional)
++ owner - the deal owner
 + amount - value of the deal
 + associated_contact - contact associated with this deal
 + associated_company - company associated with this deal
@@ -760,13 +753,13 @@ The following table describes the data model used for "activity log" objects i.e
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
 | Primary Key, Integer | String | String | Datetime | String | Integer | String |
 
-+ activity_id - auto-incremented integer which is used as the primary key to uniquely identify an activity
-+ activity_type - the type of activity, can be "note", "email", "task", "complete_task", and "meeting
-+ actor - the "doer" of the activity i.e. the team member who created the note, sent the email etc
-+ timestamp - the date and time at which this activity was logged
-+ contact_id - the id of the contact associated with this activity e.g. the recipient of the email, the subject of the note, etc.
-+ team_id - secondary key which is used to correlate an activity with a specific team.
-+ description - a short string describing the activity e.g. "{actor} created a note on {timestamp}.
++ activity_id - auto-incremented integer, used as primary key
++ activity_type - the activity type e.g. "note"
++ actor - the team member who caused the activity
++ timestamp - the date-time the activity was logged
++ contact_id - the contact associated with the activity
++ team_id - the team the activity belongs to
++ description - a short string describing the activity
 
 #### Deal Stage Conversion
 
@@ -778,43 +771,42 @@ The following table describes the data model which is used for calculating deal 
 | :-: | :-: | :-: | :-: |
 |Primary Key, Integer | Integer | String | String |
 
-+ stage_id - auto-incremented integer which is used as the primary key to uniquely identify an activity
-+ team_id - secondary key which is used to link the deal this stage is associated with to its team 
++ stage_id - auto-incremented integer, used as primary key
++ team_id - the team this data belongs to
 + date - the date the deal transitioned to this stage
 + stage - the stage that the deal transitioned to
 
 ## Implementation
 
-This chapter outlines the implementation of Sherpa. It outlines the technology stack as well as the structure of the application overall. It then details the implementation of Sherpa's requirements, some of these requirement implementations are accompanied by flow charts which are an abstraction of the underlying logic - some requirements not as we did not believe they necessitated a visual aid.
+This chapter outlines the implementation of Sherpa.
 
 ### Underlying Technologies
 
-The following details our team's technology stack and gives context to the implementation chapter i.e. please assume that all implementation details rely on the use of the relevant technologies listed here.
+The following details our team's technology stack.
 
-- **Programming Language:** Python
-- **Database Management System:** MySQL
-- **Web Framework:** Flask
-- **Virtual Environments:** Python-dotenv
-- **Object-Relational Mapper (ORM):** Flask-SQLAlchemy
-- **SMTP Library:** Flask-Mail
+- **Programming Language**: Python
+- **Database Management System**: MySQL
+- **Web Framework**: Flask
+- **Virtual Environments**: Python-dotenv
+- **Object-Relational Mapper (ORM)**: Flask-SQLAlchemy
+- **SMTP Library**: Flask-Mail
 - **JavaScript WebSocket Library**: Flask-Turbo
-- **Form Rendering & Validation:** WTForms
-- **User Authentication:** Werkzeug
-- **URL Token Generation:**  Python's Secrets module
+- **Form Rendering & Validation**: WTForms
+- **User Authentication**: Werkzeug
+- **Testing Framework**:
+- **URL Token Generation**:  Python's Secrets module
 - **Plotting Library**: Matplotlib
 - **OAuth Library**: Flask-OAuthlib
-- **Cloud Orchestration**: Amazon Web Services (AWS) Elastic Beanstalk
-- **Application Server Hosting**: AWS EC2
 - **Database Server Hosting**: AWS RDS
 
 ### App Structure
 
-- Sherpa is a Flask application and is made up of various "endpoints" / routes that users can send  requests to.
-- All Sherpa endpoints (except /login and /signup) are protected by an "@login_required" wrapper. This is just a Python decorator that calls a function to reject the user's request if they haven't been authenticated. They're redirected to the login page and once they're authenticated they're redirected back to the protected endpoint.
-- Most Sherpa endpoints (except for example / and /login) are protected by a "@team_required" wrapper. This is another decorator that calls a function to reject the user's request if they are not a member of a team. The user is redirected to the "create_team" endpoint.
-- Database and SMTP access is facilitated by environment variables specified in a .env file.
-- All database interactions occur through the use of SQLAlchemy data "models". These are outlined in the Data Models chapter and are essentially Pythonic descriptions of MySQL tables.
-- Sherpa has a monolithic database but each team has two - what we have come to call - "virtual" databases; one for contacts and one for deals. The databases are "virtual" because in reality they're part of a single structure but to prevent teams from being able to access or edit each other's records, data is segregated using team_ids i.e. anytime we issue a query for "team sensitive" data that only members of your team ought to have permissions for, we limit the query to just read, update or delete records that have a "team_id" matching that of your team.
+- Sherpa is a Flask application and is made up of various "endpoints" users send requests to.
+- All Sherpa endpoints (except /login etc) are protected by an "@login_required" wrapper which calls a function to redirect a user if they haven't been authenticated.
+- Most Sherpa endpoints (except for example / and /login) are protected by a "@team_required" wrapper which redirects a user if they are not a member of a team. 
+- Sherpa is configured with environment variables specified in a .env file.
+- All database interactions occur through the SQLAlchemy data models, essentially Pythonic descriptions of MySQL tables.
+- Sherpa has a monolithic database but each team has two "virtual" databases for contacts and deals. To prevent teams from accessing each other's records, data is segregated. Anytime we query for "team sensitive"  data, we limit the query to just the records with the correct "team_id".
 
 ### User Registration and Authentication
 
@@ -827,11 +819,11 @@ The following flow chart details the sign up process flow for a new Sherpa user.
 
 *Endpoint: /signup*
 
-- The user must submit a valid response to the signup form i.e. valid email, password confirmation etc.
+- The user must submit a valid response to the signup form.
 - The user's email must also not be already registered (SQL query for submitted email).
 - If either of the above checks fail the user is returned to the form and informed of the issue.
-- Once the user submits a valid form response with a unique email, the back-end will generate a hashed version of their plain text password. Werkzeug uses pbkdf2 to generate a SHA-256 hash along with a salt unique to each user, thus preventing the passwords from being brute forced.
-- Finally, the users details and the hashed version of their password are added to an instance of the Users data model and this is inserted into the database.
+- Once the user submits a valid request, the back-end will generate a hashed version of their plain text password. Werkzeug uses pbkdf2 to generate a SHA-256 hash along with a salt unique to each user, thus preventing the passwords from being brute forced.
+- Finally, the users details are added to an instance of the Users data model and inserted into the database.
 
 The following flow chart details the login process flow for an existing Sherpa user.
 
@@ -840,11 +832,12 @@ The following flow chart details the login process flow for an existing Sherpa u
 
 *Endpoint: /login*
 
-- The user must submit a valid response to the signup form i.e. required inputs etc.
-- The user's email must exist in the database i.e. they're registered and they must authenticate themselves. This is achieved by generating a hash using the salt specific to the user and the plain-text password they provided as form input. If it matches the password hash for that email in the database the user is then authenticated.
+- The user must submit a valid response to the signup form.
+- The user's email must exist in the database.
+- The user must authenticate themselves i.e. the password the user provides is hashed and compared to the hashed password on record.
 - If either of the above checks fail the user is returned to the form and informed of the issue.
-- So that the user does not need to use password authenticated for every request a cookie is generated that they can present in lieu of a password for the remainder of the session. This cookie is signed using a strong pseudo random secret key to prevent cookie theft and forgery.
-- Then the user is redirected to the home page or to the endpoint they had attempted to visit prior to authentication.
+- A cookie is generated that the user presents in lieu of a password for the remainder of the session which is signed using a secret.
+- The user is redirected to the home page or to the endpoint they had attempted without authentication.
 
 ### Creating Teams
 
@@ -857,12 +850,12 @@ The following flow chart details the process flow for creating a Sherpa team.
 
 *Endpoint: /create_team*
 
-- The user must submit a valid response to the signup form i.e. include a team name.
-- The user can't be a member of a team (SQL query to check that their team_id is NULL).
+- The user must submit a valid response to the signup form.
+- The user can't be a member of a team i.e. team_id is NULL.
 - If either of the above checks fail the user is returned to the form and informed of the issue.
-- If the endpoint gets a valid response, the form data is added to an instance of the Teams data model and this is inserted into the database. This team will be assigned a unique id as the team_id column is an auto incrementing primary key.
-- The user's team_id is then updated based on the team_id returned from the database commit and this update is committed to the database as well.
-- Then the user is redirected to the home page.
+- If the endpoint gets a valid response, the form data is added to an instance of the Teams data model and inserted into the database.
+- The user's team_id is then updated based on the team_id returned from the database commit and this update is committed too.
+- The user is redirected to the home page.
 
 ### Sending and Accepting Team Invites
 
@@ -874,12 +867,12 @@ The following flow chart details the process flow for inviting another user to a
 
 *Endpoint: /invite*
 
-- The user must submit a valid response to the invite form i.e. valid email, required input etc.
+- The user must submit a valid response to the invite form.
 - The user issuing the invite must be a member of a team and one of that team's admins.
 - The invitee must not be a member of that team already.
-- If the endpoint receives a valid response, an invite_id is generated. The format is as follows: *[invitee_email]_[team_id]__[secure_token]*.  The secure token consists of 16 cryptographically secure characters and is generated using the token_urlsafe method of the secrets module and is necessary to prevent fraudulent invitation generation.
-- Once the invite_id is generated it is added to an instance of the Invites data model along with the team_id the invitation is for. This is then inserted into the invites table in the database.
-- The user is then returned to the form and informed of the successful invitation.
+- If the endpoint receives a valid response, an invite_id is generated which includes 16 cryptographically secure characters to prevent fraudulent invitation generation.
+- The invite_id is added to an instance of the Invites data model and inserted into the database.
+- The user returns to the form and informed of the successful invitation.
 
 The following flow chart details the process flow for accepting a Sherpa invitation. It is a modified version of the login flow: see Figure 2.
 
@@ -888,10 +881,11 @@ The following flow chart details the process flow for accepting a Sherpa invitat
 
 *Endpoint: /invite/<invite_id>*
 
-- User must submit a valid form submission and be authenticated (as per the normal login flow).
-- If the user doesn't pass an invite_id to the endpoint, the normal login flow resumes and concludes.
-- If an invite_id is passed, it must be validated. First a lookup is done on the invites table to see if that invitation exists, if it does then the user's data is checked to see if they're in fact not a member of a team (a user can't accept an invitation until they've left their current team). Finally, the login email is compared to the email specified in the id, the user can't accept an invitation unless they authenticate themselves using the email specified.
-- If the invitation and user details are validated as above, the user's team id is set to the team_id specified in the invitation and the invitation is removed from the table. Then the normal login flow resumes and concludes.
+- User must submit a valid form submission and be authenticated (as per normal login flow).
+- If the user doesn't pass an invite_id to the endpoint, the normal login flow resumes.
+- If an invite_id is passed, it must be validated. First, the database is checked to see if the invite_id exists. The user also can't accept an invitation unless they authenticate themselves using the email specified.
+- If the request is validated, the user's team id is set to the team_id specified in the invitation and the invitation is removed from the table.
+- The normal login flow resumes.
 
 ### Basic Database Operations (CRUD)
 
@@ -899,11 +893,7 @@ The following flow chart details the process flow for accepting a Sherpa invitat
 
 "Database" in this context refers to the set of records belonging to a team, either its contacts or deals.
 
-Since the CRUD operations for both contacts and deals are very similar, their implementation is described in one section. For additional brevity some disparities in form validation etc between contacts and deals are not detailed but one should be able to gather how we interface the user with the MySQL database from what follows.
-
-Each database's "read" operation displays a series of "live" forms i.e. HTML input elements that have been prepopulated with the records from the database.
-
-Each form represents a record and each form comprises a row in a larger table representing the database. This allows the user to view and edit records using the same elements - they then can save any changes by clicking the appropriate button or remove a specific record by clicking its individual remove button.
+Each database's "read" operation displays a table of "live" forms i.e. HTML input elements that have been prepopulated with the records from the database, allowing users to view and edit records using the same elements. Each form element represents a record.
 
 #### Create
 
@@ -911,34 +901,34 @@ Each form represents a record and each form comprises a row in a larger table re
 
 * Initialise an instance of the Contacts or Deals data models.
 * Set the instance variables to the values fetched from the add record form.
-* Commit the new record to MySQL after some validation checks e.g. "does this contact already exist in this team's records?".
+* Commit the new record to MySQL after some validation checks e.g. can't create a duplicate record.
 
 #### Read
 
 *Endpoints: /contacts and /deals*
 
-* Fetch relevant records from the database i.e. all contacts or deals with the correct team_id.
-* Then iterate over the list of records, making each record into a HTML form.
-* Each form is then added to a list of forms that is iterated over when templating using Jinja2, associated each form with an "edit" button in the HTML that has its href attribute set to the appropriate edit endpoint with the relevant id (see update for more).
-* This results in all contacts or deals being rendered as an "editable" table that the user can now read.
-* Each form is also associated with its own "remove" button in the HTML that has its href attribute set to the appropriate remove endpoint with the relevant id (see delete for more).
+* Fetch relevant records from the database.
+* Iterate over list of records; make each record a HTML form.
+* Add each form to a list of forms that is iterated over when templating using Jinja2.  Associate each form with an "edit" HTML button.
+* All contacts or deals are rendered as an "editable" table.
+* Each form has a  "remove" HTML button.
 
 #### Update
 
 *Endpoints: /edit_contact/<contact_id> and /edit_deal/<deal_id>*
 
-* As described in read, each record in the contacts or deals database is rendered as an individual editable HTML form element and associated with its own edit button.
-* When a user clicks this button, the form is submitted to the relevant edit endpoint and crucially includes the relevant id for example the href attribute might be "/edit_contact/X" with X being the ID of the contact the user wishes to edit.
-* This way the back end can update the relevant record that matches that ID with the data POSTed by the form (after validation) and commit these changes to MySQL.
+* Each record is rendered as a HTML form element and associated with its own edit button.
+* When a user clicks this button, the form is submitted to the relevant edit endpoint and includes the relevant record id.
+* The record in MySQL that matches that ID is updated with the form data.
 
 #### Delete
 
 *Endpoints: /remove_contact/<contact_id> and /remove_deal/<deal_id>*
 
-* As described in read, each record in contacts or deals database is rendered as an individual row of a HTML table (inside this row is an editable form but this is more relevant to the edit section).
+* Each record is rendered as a HTML form element and associated with its own remove button.
 * Each row is associated with its own "remove" button.
-* When a user clicks this button, the form is submitted to the relevant remove endpoint and crucially includes the relevant id for example the href attribute might be "/remove_contact/X" with X being the ID of the contact the user wishes to remove.
-* This way the back end can remove the relevant record that matches that ID and commit these changes to MySQL.
+* When a user clicks this button, the form is submitted to the relevant edit endpoint and includes the relevant record id.
+* The record in MySQL that matches that ID is deleted.
 
 ### Reseting a User's Authenticated Session
 
@@ -946,63 +936,43 @@ Each form represents a record and each form comprises a row in a larger table re
 
 *endpoint: /profile*
 
-* If a user sends a GET request to this endpoint they will be served a page with basic account information, email address etc.
-* If however, they submit a POST request, their flask session will be cleared this means they will be redirected to the login page for all subsequent requests by the *@login_required* decorator since they no longer have a signed login cookie in their session.
+* If a user sends a GET request to this endpoint they are served a page with basic account information.
+* If they submit a POST request, their flask session is cleared and they are redirected to the login page for all subsequent requests.
 
 ### Viewing Team and Leaving Team
 
 *Implementation of requirement: 8*
 *endpoint: /team*
 
-* If a user sends a GET request to the team endpoint. The LeaveTeamForm() is allocated to a variable. The database is queried to retrieve the user's information, the team id, and the team members. This data is displayed in the HTML to the user. Enabling them to view see the team members and their team details.
-* If a member wishes to leave a team the user must click the checkbox and press the button for leaving a team. Upon clicking the button the user's owner status is checked. If the user is the owner of the team then a message "Can't leave a team if you own it!" will be presented to you.
-* If however, the user is not an owner, the user team id is set to none and their admin status is set to False. These changes are committed to the database, removing the user from the team.
+* If a user sends a GET request to the team endpoint. The database is queried to retrieve all User rows with the same team_id as the user. This data is displayed in the HTML to the user.
+* A form is on the page, if the user submits the form with a "positive" checkbox, their team_id is set to NULL and these changes are committed to the database.
 
 ### Viewing Databases in Pages
 
 *Implementation of requirement: 9*
 
-When the user visits the webpage, the server-side code retrieves all records from the database using a SQL query. The records are then stored in a list.
+When the user visits */contacts* or */deals* to view the given virtual database -  Sherpa determines which page the user is currently viewing which is tracked in a session variable (starts off as the first page).
 
-Next, the code determines which page the user is currently viewing. By tracking the current page number in a session variable.
+Each page displays 25 records. Once the current page is determined, the code calculates the starting and ending indexes of the records to display on that page.  For example, if the user is on page 3, the starting index would be 50 (2 * 25) and the ending index would be 74 (50 + 24).
 
-Once the current page is determined, the code calculates the starting and ending indexes of the records to display on that page. For example, if each page displays 25 records and the user is on page 3, the starting index would be 50 (2 * 25) and the ending index would be 74 (50 + 24).
-
-The code then selects the records between the starting and ending indexes and formats them into HTML table rows. These rows are concatenated together to form the HTML table body.
-
-Additionally, the code generates HTML links for each page number. These links allow the user to navigate between pages. The links are displayed as arrows on the webpage.
-
-Finally, the code combines the HTML table and paging links into a single HTML page and sends it to the user's browser for display.
-
-Overall, this approach is relatively efficient because it only retrieves the records needed for the current page, rather than retrieving all records at once. It also allows for easy paging and navigation between pages
+Sherpa then selects the records between the starting and ending indexes and serves these as HTML. The HTML also includes "next" and "previous" page buttons that are encoded with the current page number, allowing the user to navigate the pages.
 
 ![Flowchart depicting how Sherpa's paging feature works](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/viewing_database_flowchart.jpeg)
 
 ### Showing the User the Records they Own
 
-TODO*
-
 *Implementation of requirement: 10*
 *endpoint: /contacts and /deals*
 
-* To get assigned a contact you must be set as the contact owner when the contact is being added. The contact owner must be a member of your team.
-* In the contacts function there are three options "Assigned Contacts", "Unassigned Contacts" and "All Contacts".
-* In the contacts function there exists a "filter" parameter which contains the value "assigned" or "unassigned". When the "Assigned Contacts" buttonis clicked the filter variable to "assigned" which display all contacts that have a contact owner. When the "Unassigned Contacts" button is pressed, the filter button is set to "unassigned", and all contacts displayed do not have a contact owner.
-* The display of contacts is done by querying using the contacts "team_id" and "contact_id". For assigned contacts, it searches for the owner of the contact. Alternatively, if you are searching for unassigned contacts the "contact_id" will be an empty string since no owner exists.
-* Deals displays either all deals or assigned deals in a table. The user can toggle between assigned and all deals by clicking "Assigned Deals" or "All Deals". This changes the filter variable to either "assigned" or "None".  If the filter is set to "None" then all deals will be queried from the database. If it is set to "Assigned" then only deals that have an owner will be displayed.
+* Team admins can assign users as owners of contacts or deals using the HTML forms.
+* If a user clicks "My Contacts" or "My Deals", instead of issuing the normal select query - the /contacts and /deals endpoints modify this query to select for just those records with an "owner_id" equal to the "user_id" of the user making the request.
+* The user is then shown all the records they have ownership of.
 
 ### Searching a Database
 
 *Implementation of requirement: 11*
 
-The search bar allows the user to search through the database based on certain criteria. The user can search for deals by entering a search term in the search bar and selecting a filter. The search bar is defined using a Flask form such as DealsSearchForm. When the user enters a search term and submits the form, the search term is extracted from the form and used to search for relevant deals in the database.
-
-First, the search term is optimized for searching by calling a function like optimize_deals_search depending on the page. This function checks whether the search term looks like an email address or not, and returns "email" if it does and "name/company/email" otherwise.
-
-Next, the .query object is filtered based on the user's search criteria. The variable for this example we'll say 'deals' is set to the Deals.query object at the start of the function. Then, the results of this query are filtered based on the user's search term. If the search term is an email, then only the associated_contact column is searched. If the search term is not an email, then all relevant columns are searched.
-
-Finally, the results of the search are returned to the user in the deals variable. The deals variable is a query object, which means that it represents a set of results from the database. The results are not actually fetched from the database until the query is executed (in this case, by calling .limit() and .offset()).
-
+* When a user submits a POST 
 
 ![Flowchart representing how Sherpa's search feature looks through the database. ](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/searching_database_flowchart.png)
 
