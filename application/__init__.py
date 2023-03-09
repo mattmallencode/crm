@@ -73,7 +73,7 @@ def create_app(config_class=Config):
             plt.title("You have no deal data. Create some deals to populate this chart", fontsize=14)
             deals_forecast_diagram = encode_diagram(plt)
 
-        """
+        
         try:
             activity_diagram = draw_activity_diagram(user)
         except:
@@ -81,8 +81,7 @@ def create_app(config_class=Config):
             plt.title("You have no team activity data. Get your team active to populate this chart", fontsize=13)
             plt.bar("no data", 1, color="#EC6B56")
             activity_diagram = encode_diagram(plt)
-        """
-        activity_diagram = draw_activity_diagram(user)
+    
 
         try:
             deal_stage_diagram, conversions = draw_deal_stage_diagram(user)
