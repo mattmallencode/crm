@@ -13,8 +13,6 @@ Aria Shahi, 119522223
 
 ## Table of Contents
 
-TODO: TABLE OF CONTENTS AT END (PLUS NEED TO CHECK).
-
 - [Table of Contents](#table-of-contents)
 - [Introduction](#introduction)
 - [Some CRM Terms](#some-crm-terms)
@@ -75,7 +73,7 @@ TODO: TABLE OF CONTENTS AT END (PLUS NEED TO CHECK).
     - [Database Sorting](#database-sorting)
     - [Activity Logging and Viewing](#activity-logging-and-viewing)
     - [Note Management](#note-management)
-    - [Google Oath (Open Authorisation)](#google-oath-(open-authorisation)
+    - [Google OAuth (Open Authorisation)](#google-oauth-open-authorisation)
     - [Email Management](#email-management)
     - [Task Management](#task-management)
     - [Meeting Management](#meeting-management)
@@ -406,12 +404,7 @@ As a Sherpa user I want to view a graph illustrating the breakdown of customer i
 
 ### Requirements
 
-
-The success of any software project is dependent on the ability to understand, document, and implement the requirements of the system. In this section, we will outline the requirements for the Sherpa web application, a CRM tool for managing contacts and deals. These requirements have been defined through the use cases of the system, and they serve as a roadmap for our team to ensure that the final product meets the needs and expectations of its users. The requirements are organized into functional areas, such as user registration and authentication, team creation and management, database CRUD operations, and user profile management, among others. By following these requirements, the Sherpa development team was able to deliver a reliable and user-friendly application that fulfills its intended purpose.
-
-
-In this section, we will outline the requirements for Sherpa. Each requirement satisfies one or more use cases.
-
+In this section, we will outline the requirements for Sherpa. Each requirement satisfies one or more user stories.
 
 #### User Registration
 
@@ -1058,7 +1051,7 @@ Sherpa integrates several Google products, each with their own API. The followin
 
 ![sss](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/Parsing.png)
 
- - First a GET request is send to the relevant Google API endpoint. This request includes a "query" which specifies which data the request is concerned with. For example, the query for getting emails is "from: {contact_email} OR to: {contact_email}" i.e. fetch any email sent to the contact AND any email received from the contact.
+ - First a GET request is sent to the relevant Google API endpoint. This request includes a "query" which specifies which data the request is concerned with. For example, the query for getting emails is "from: {contact_email} OR to: {contact_email}" i.e. fetch any email sent to the contact AND any email received from the contact.
  - The server then returns the data as a JSON dump which can be interacted with as a collection of python data structures.
  - Sherpa initialises an empty list to which all the parsed objects will be appended. It then iterates over the JSON dump. Each loop, it initialises an empty dictionary with relevant keys e.g. for an email "subject", etc and maps these keys to the relevant data. This parsed object is then appended to the parsed list.
  - Often timestamps aren't in human readable format so this required working with functions like "strftime" for timestamp conversion.
@@ -1170,22 +1163,13 @@ The following chart details the process of creating the plots for the analytics 
 
 ## Testing
 
-Sherpa's test suite uses the Pytest testing framework. Rather than going through each test case this section deals with the more interesting parts of Sherpa's test suite i.e. how it overcomes the challenges unique to testing a complex web application.
+Rather than going through each test case, this section deals with the more interesting aspects of Sherpa's test suite i.e. how it overcomes the challenges unique to testing a web application.
 
 ### Test Client Set Up
 
-Flask has a "test_client()" method which simulates HTTP requests for tests without needing to run a web server. However, this test client needs access to the application context. The "application context" is a container that holds information such as configuration settings, database connections etc. Before we create a test client, we need to pass the application context to it.
+Flask has a "test_client()" method which simulates requests without needing to run a web server. However, this test client needs access to the "application context" which is a container that holds database connections etc. Before we create a test client, we need to pass the application context to it.
 
-This is achieved with Sherpa's "application factory" which creates an application instance, loads the application's configuration and returns the instance. Sherpa's application factory and test client are both ran as Pytest fixtures. Fixtures are just reusable code that can be passed as arguments in test functions to run the setup before each test.
-
-### Dealing With User Sessions
-
-Sherpa makes extensive use of user sessions e.g for authentication, so this must be emulated for tests. Flask's test client has a session_transaction() method which allows for access to the test client's session. For example, to set the user's email:
-
-```
-with client.session_transaction() as session:
-        session["email"] = "matt@sherpa.com"
-```
+This is achieved with Sherpa's "application factory" which creates an application instance, loads the application's configuration and returns the instance. Sherpa's application factory and test client are both ran as Pytest fixtures. Fixtures are just reusable code that can be passed to test functions and run before each test.
 
 ### Simulating API Responses
 
