@@ -148,9 +148,7 @@ It would be painful to set up a cohesive flow in terms of managing relationship 
 
 ### User Stories
 
-### User Stories
-
-The following user stories describe various tasks that a user might want to accomplish while using a CRM system,  which the our team used to guide our design and implementation.
+The following user stories describe various tasks that a user might want to accomplish while using a CRM system,  which our team used to guide our design and implementation.
 
 #### Team Invitation Creation
 
@@ -358,31 +356,29 @@ As a Sherpa user I want to view the deals that have been assigned to me so I kno
 
 #### Closed Vs Goal
 
-*User Story ID:  36*
+*User Story ID:  35*
 
 As a Sherpa user I want to view a graph illustrating how my team is performing in terms of the "goals" of our deals and how much they are actually "closed" for.
 
 #### Forecast
 
-*User Story ID:  37*
+*User Story ID:  36*
 
 As a Sherpa user I want to view a graph illustrating my team's forecasted deal  earnings for the month to help me get a greater understanding of where my deals are heading.
 
 #### Deal Stage Funnel
 
-*User Story ID:  38*
+*User Story ID:  37*
 
 As a Sherpa user I want to view a graph illustrating the how successful my team is at progressing deals from stage to stage to help me make data driven decisions.
 
 #### Activity Statistics
 
-*User Story ID:  39*
+*User Story ID:  38*
 
 As a Sherpa user I want to view a graph illustrating the breakdown of customer interaction statistics of the top 5 sales people on my team (top being the team members with the most interactions e.g. emails, meetings etc).
 
 ### Requirements
-
-TODO: an intro to the requirements.
 
 The success of any software project is dependent on the ability to understand, document, and implement the requirements of the system. In this section, we will outline the requirements for the Sherpa web application, a CRM tool for managing contacts and deals. These requirements have been defined through the use cases of the system, and they serve as a roadmap for our team to ensure that the final product meets the needs and expectations of its users. The requirements are organized into functional areas, such as user registration and authentication, team creation and management, database CRUD operations, and user profile management, among others. By following these requirements, the Sherpa development team was able to deliver a reliable and user-friendly application that fulfills its intended purpose.
 
@@ -649,12 +645,12 @@ This section describes the app's "data models". These represent the relational d
 
 The following table describes the data model used for "user" entities i.e. user accounts.
 
-*Table 1: Users Data Model*
-
 
 | email | password_hash | team_id | owner_status | admin_status | name |
 | :-: | :-: | :-: | :-: | :-: | :-: |
 | Primary Key, String | String | Integer | Boolean | Boolean | String |
+
+*Table 1: Users Data Model*
 
 + email - email address of the user
 + password_hash - the users password stored as a hash value
@@ -667,12 +663,11 @@ The following table describes the data model used for "user" entities i.e. user 
 
 The following table describes the data model used for "team" entities i.e. groups of users with access to the same CRM resources.
 
-*Table 2: Teams Data Model*
-
-
 | team_id | name |
 | :-: | :-: |
 | Primary Key, Integer | String |
+
+*Table 2: Teams Data Model*
 
 + team_id - auto-incremented integer which is used as the primary key to uniquely identify a team
 + name - name of the team
@@ -681,12 +676,11 @@ The following table describes the data model used for "team" entities i.e. group
 
 The following table describes the data model used for "invite" entities i.e. invitations to users to join a given team.
 
-*Table 3: Invites Data Model*
-
-
 | invite_id | team_id |
 | :-: | :-: |
 | Primary Key, String | Integer |
+
+*Table 3: Invites Data Model*
 
 + invite_id - "{invitee_email}\_{team_id}\_{secure_token}", used to uniquely identify invite.
 + team_id - the team to which the invitation applies for
@@ -695,12 +689,11 @@ The following table describes the data model used for "invite" entities i.e. inv
 
 The following table describes the data model used for "contact" entities i.e. a contact of a given team.
 
-*Table 4: Contacts Data Model*
-
-
 | contact_id | team_id | name | email | phone number | contact owner | company | status |
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
 | Primary Key, String | Integer | String | String | Integer | String | String | String |
+
+*Table 4: Contacts Data Model*
 
 + contact_id - "{email}_{team_id}", used to uniquely identify contact
 + team_id - secondary key used to associate a contact with a team
@@ -715,12 +708,11 @@ The following table describes the data model used for "contact" entities i.e. a 
 
 The following table describes the data model used for "note" objects i.e. notes added to a specific contact by a Sherpa user.
 
-*Table 5: Notes Data Model*
-
-
 | note_id | contact_id | note | author | date |
 | :-: | :-: | :-: | :-: | :-: |
 | Primary Key, Integer | String | String | String | String |
+
+*Table 5: Notes Data Model*
 
 + note_id - auto-incremented integer which is used as the primary key to uniquely identify a note
 + contact_id - secondary key which is used to correlate a note with a specific contact
@@ -732,12 +724,11 @@ The following table describes the data model used for "note" objects i.e. notes 
 
 The following table describes the data model used for "deal" objects i.e. a deal of a given team.
 
-*Table 6 : Deals Data Model*
-
-
 | deal_id | team_id | name | stage | close_date | owner | amount | associated_contact | associated_company |
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
 | Primary Key, Integer | Integer | String | String | Datetime | String | Integer | String | String |
+
+*Table 6 : Deals Data Model*
 
 + deal_id - auto-incremented integer which is used as the primary key to uniquely identify a deal
 + team_id - secondary key which is used to correlate a deal with a specific team
@@ -753,12 +744,11 @@ The following table describes the data model used for "deal" objects i.e. a deal
 
 The following table describes the data model used for "activity log" objects i.e. recordings of the metadata of interactions with customers i.e. emails, meetings, tasks, etc.
 
-*Table 7 : Activity Log Data Model*
-
-
 | activity_id | activity_type | actor | timestamp | contact_id | team_id | description |
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
 | Primary Key, Integer | String | String | Datetime | String | Integer | String |
+
+*Table 7 : Activity Log Data Model*
 
 + activity_id - auto-incremented integer which is used as the primary key to uniquely identify an activity
 + activity_type - the type of activity, can be "note", "email", "task", "complete_task", and "meeting
@@ -772,11 +762,11 @@ The following table describes the data model used for "activity log" objects i.e
 
 The following table describes the data model which is used for calculating deal stage conversion. It is used as a log table where every time a deal transitions to a different stage it is is logged.
 
-*Table 8: Deal Stage Conversion Data Model*
-
 | stage_id | team_id | date | stage |
 | :-: | :-: | :-: | :-: |
 |Primary Key, Integer | Integer | String | String |
+
+*Table 8: Deal Stage Conversion Data Model*
 
 + stage_id - auto-incremented integer which is used as the primary key to uniquely identify an activity
 + team_id - secondary key which is used to link the deal this stage is associated with to its team 
@@ -977,6 +967,7 @@ Finally, the code combines the HTML table and paging links into a single HTML pa
 Overall, this approach is relatively efficient because it only retrieves the records needed for the current page, rather than retrieving all records at once. It also allows for easy paging and navigation between pages
 
 ![Flowchart depicting how Sherpa's paging feature works](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/viewing_database_flowchart.jpeg)
+<br>*Figure: 6*
 
 ### Showing the User the Records they Own
 
@@ -1005,6 +996,7 @@ Finally, the results of the search are returned to the user in the deals variabl
 
 
 ![Flowchart representing how Sherpa's search feature looks through the database. ](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/searching_database_flowchart.png)
+<br>*Figure: 7*
 
 ### Sorting a Database
 
@@ -1022,6 +1014,7 @@ Overall, this code allows users to sort a list of contacts/deals in a database b
 
 
 ![Flowchart representing how Sherpa's sorting feature sorts the database.](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/sorting_flowchart.png)
+<br>*Figure: 8*
 
 ### Activity Feature
 
@@ -1053,7 +1046,7 @@ Users must integrate their Google accounts with Sherpa to obtain a Google sessio
 The following diagram details the process of integrating Google with a Sherpa account.
 
 ![Diagram detailing the retrieval of a Google session token. Image is sourced from  "https://developers.google.com/identity/protocols/oauth2"](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/google_auth.png)
-<br>*TODO: FIGURE*
+<br>*Figure: 9*
 
 Google accounts are authenticated using OAuth 2.0. For brevity, we won't go into more detail than this over concerns over word count. If you'd like to learn more about OAuth 2.0 please click [here](https://developers.google.com/identity/protocols/oauth2).
 
@@ -1181,7 +1174,7 @@ Then for every stage, the conversion values are calculated as follows;
 The following chart details the process of creating the data analytics plots for the analytics dashboard
 
 ![Diagram the process of create a plot diagram](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/plots.png)
-
+<br>*Figure: 10*
 ### Serving Plots
 
 *Implementation of requirement: 25*
