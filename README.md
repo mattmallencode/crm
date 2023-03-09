@@ -105,7 +105,7 @@ TODO: TABLE OF CONTENTS AT END (PLUS NEED TO CHECK).
 
 ## Introduction
 
-This document outlines the design and implementation of Sherpa, a free and open-source Customer Relationship Management (CRM) System. A CRM helps businesses drive sales, track customer interactions, and provide quality service. This is achieved by storing the data of existing and potential customers in a central database that can be accessed and managed by anyone within the organisation with appropriate permissions.
+This document outlines the design and implementation of Sherpa, a free and open-source Customer Relationship Management (CRM) System. A CRM helps businesses drive sales, track customer interactions and provide quality service. This is achieved by storing the data of existing and potential customers in a central database that can be accessed and managed by anyone within the organisation with appropriate permissions.
 
 Sherpa can be used by multiple businesses i.e. users create "teams" and invite other users to join their team.
 
@@ -140,7 +140,7 @@ Firstly, with Sherpa, **your sales team always has a cohesive view**. For exampl
 
 Secondly, Sherpa **makes management easier**. A manager can assign a member of their sales team to chase down a specific customer, and that sales person knows immediately after logging into the application which contacts they are supposed to be handling.
 
-Lastly, **everything is traceable** with Sherpa. Not just in terms of analytics but also in terms of customer interactions. Everyone on a team can see which customers have been “left on the back burner” so to speak based on when the last time they were emailed for example.
+Lastly, **everything is traceable** with Sherpa. Not just in terms of analytics but also in terms of customer interactions. Everyone on a team can see which customers have been “left on the back burner” so to speak based on the last time they were emailed for example.
 
 It would be painful to set up a cohesive flow in terms of managing relationship with customers if a business bootstrapped it with several unconnected applications. Sherpa makes it easy.
 
@@ -154,7 +154,7 @@ The following user stories describe various tasks that a user might want to acco
 
 *User Story ID: 1*
 
-As a manager, I want to invite other users to join my Sherpa team so they can access to our CRM resources.
+As a manager, I want to invite other users to join my Sherpa team so they can have access to our CRM resources.
 
 #### Team Invitation Acceptance
 
