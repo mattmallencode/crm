@@ -21,7 +21,7 @@ svg {
   height: 30%;
 }
 
-.text-copy {
+.copy-text {
   animation: stroke-displacement  5.7s infinite linear;
   position: fixed;
   top: 0;
@@ -33,27 +33,27 @@ svg {
   stroke-dashoffset: 0%;
 }
 
-.text-copy:nth-child(1){
+.copy-text:nth-child(1){
 stroke: #EEEDEB;
 animation-delay: -1;
 }
 
-.text-copy:nth-child(2){
+.copy-text:nth-child(2){
 stroke: #BFB2BB;
 animation-delay: -2s;
 }
 
-.text-copy:nth-child(3){
+.copy-text:nth-child(3){
 stroke: #DAD7D3;
 animation-delay: -3s;
 }
 
-.text-copy:nth-child(4){
+.copy-text:nth-child(4){
 stroke: #BEB8B2;
 animation-delay: -4s;
 }
 
-.text-copy:nth-child(5){
+.copy-text:nth-child(5){
 stroke: #EB6536;
 animation-delay: -5s;
 }
