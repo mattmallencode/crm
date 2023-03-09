@@ -16,8 +16,10 @@
             <h2>Send Email to {{contact.name}}</h2>
             <form action = "" method = "POST">
                 {{form.hidden_tag()}}
-                <section>
+                <section class="subject-box">
                     {{form.subject(placeholder="Subject")}}
+                </section>
+                <section class="message-box">
                     {{form.message(placeholder="Message")}}
                 </section>
                 
@@ -34,7 +36,7 @@
             <h2>Emails with {{contact.name}}</h2>
             {% if threads is not none %}
             {% for thread in threads %}
-            <article>
+            <article class="arcticle">
                 <h3>{{ thread[0]["subject"] }}</h3>
                 {% for email in thread %}
                 <section id = "email">
@@ -45,7 +47,7 @@
                 </section>
                 {% endfor %} 
                 <section id="reply">
-                    <a href="{{url_for('contact_bp.reply_email', message_id=thread[-1]['id'], subject=thread[0]['subject'], thread_id=thread[-1]['threadId'], contact_id=contact.contact_id)}}">Reply</a>
+                    <p><a class="reply" href="{{url_for('contact_bp.reply_email', message_id=thread[-1]['id'], subject=thread[0]['subject'], thread_id=thread[-1]['threadId'], contact_id=contact.contact_id)}}">Reply</a></p>
                 </section>
             </article>
             {% endfor %}
@@ -71,9 +73,7 @@
                 <section class="notes_submit_button">
                     {{noteForm.submit()}}
                 </section>
-                
             </form>
-
         </section>
         <section id="view-notes">
             <h2>View Notes</h2>
@@ -151,7 +151,7 @@
                 {{form.due.label}}
                 {{form.due(placeholder="Date & Time")}}
             </section>
-            <section>
+            <section class="create-button">
                 {{form.create()}}
             </section>
         </form>
@@ -162,10 +162,10 @@
         <h3>Upcoming Tasks</h3>
         {% for task in upcoming_tasks %}
             <section class="task">
-                <p><b>Title:</b> {{ task["title"] }}</p>
+                <p class="task-title"><b>Title:</b> {{ task["title"] }}</p>
                 <p><b>Due:</b> {{ task["due"] }}</p>    
                 <br>
-                <a id="complete_task", href = "{{url_for('contact_bp.contact', contact_id=contact.contact_id, activity='tasks', complete=task['id'])}}">Complete</a></td>
+                <p><a id="complete_task", href = "{{url_for('contact_bp.contact', contact_id=contact.contact_id, activity='tasks', complete=task['id'])}}">Complete</a></p></td>
                 <br>
                 <br>
                 <br>
