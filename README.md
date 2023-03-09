@@ -1142,36 +1142,31 @@ The following chart details the process of creating the plots for the analytics 
 
 ## Testing
 
-Sherpa's test suite achieves extensive testing code coverage using the Pytest testing framework. Rather than going through each test case (pytest uses asserts just like most testing frameworks), this section instead deals with the more interesting parts of Sherpa's test suite i.e. how it overcomes the challenges unique to testing a complex web application i.e. simulating requests, dealing with user sessions, and simulating third party API responses.
+## Testing
+
+Sherpa's test suite uses the Pytest testing framework. Rather than going through each test case this section deals with the more interesting parts of Sherpa's test suite i.e. how it overcomes the challenges unique to testing a complex web application.
 
 ### Test Client Set Up
 
-Flask already has a "test_client()" method which simulates HTTP requests for tests without needing to run a web server. However, this test client needs access to the application context.
+Flask has a "test_client()" method which simulates HTTP requests for tests without needing to run a web server. However, this test client needs access to the application context. The "application context" is a container that holds information such as configuration settings, database connections etc. Before we create a test client, we need to pass the application context to it.
 
-In Flask, the "application context" is a container that holds information related to the current application: configuration settings, database connections etc. So, before we create a test client, we need to be able to pass the application context to it.
-
-This is achieved with an "application factory" or the "create_app()" function in Sherpa's case which creates an application instance, loads the application's configuration (database credentials etc) and returns the instance.
-
-Sherpa's application factory and test_client are both called as part of Pytest fixtures. Fixtures in Pytest are just reusable setup and tear-down code that can be passed as arguments in test functions i.e. the above set up is run before each test is carried out.
-
-With all this in place, Sherpa's test suite is set up and configured.
+This is achieved with Sherpa's "application factory" which creates an application instance, loads the application's configuration and returns the instance. Sherpa's application factory and test client are both ran as Pytest fixtures. Fixtures are just reusable code that can be passed as arguments in test functions to run the setup before each test.
 
 ### Dealing With User Sessions
 
-Sherpa makes extensive use of user sessions and cookies e.g. to authenticate users, so this had to be emulated in the test suite. Flask's test client provides a useful session_transaction() method which allows one to make updates to the test client's session. For example, to set the user's email and team_id in their session:
+Sherpa makes extensive use of user sessions e.g for authentication, so this must be emulated for tests. Flask's test client has a session_transaction() method which allows for access to the test client's session. For example, to set the user's email:
 
 ```
 with client.session_transaction() as session:
         session["email"] = "matt@sherpa.com"
-        session["team_id"] = 10 
 ```
 
 ### Simulating API Responses
 
-Since Sherpa has several third party API integrations, this proved problematic for the test suite. It would be infeasible (and likely against Google's terms of service) to send the many "junk" requests to the API servers that testing requires. The use of pytest's "monkeypatch" fixture was necessary.  Monkeypatch allows one to "patch" the response from a third party API by forcing it to return a predefined test response (in reality no real request is sent over the Internet, this is all happening in the test environment). For example, Sherpa patches the "get" response for google oAuth authentication (when we try to fetch the user's google account information) as follows:
+Third party API integrations are problematic for testing. It is infeasible to send the many "junk" requests to API servers that testing requires. The use of "monkeypatch" proved necessary.  Monkeypatch allows one to force an API endpoint to return a predefined test response. Sherpa patches the "get" response for google oAuth authenticationas follows:
 
 ```
-user = MockResponse({"email": "test@test.com"})
+user = MockResponse({"google_email": "sherpalecturer@gmail.com"})
 monkeypatch.setattr("flask_oauthlib.client.OAuthRemoteApp.get", lambda  self, userinfo: user)
 ```
 
