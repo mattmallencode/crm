@@ -481,16 +481,35 @@ color: white;
   position: relative;
 }
 /* Sign up page*/
+#signup_body{
+  text-align: center;
+}
 
+#signup_heading{
+  color:black;
+}
+
+.signup_p{
+  color: black;
+}
+
+.signup_icon i{
+  color: #772953;
+  transform: scale(1.5);
+  margin-right: 30%;
+  /*position: relative;*/
+}
 
 #signup_form{
   size: 100%;
   position: relative;
   top: 0;
   left: 0%;
+  padding: 10px;
 }
 
 #signup_form input{
+  display: block;
   padding: 10px;
   border: None;
   size: 100%;

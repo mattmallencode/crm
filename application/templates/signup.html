@@ -5,8 +5,8 @@
     <body id="signup_body">
         <div  class="signup_box">
         <div class="signup_container">
-                <h1 class="Heading">Sign up</h1>
-                <p class="loginSubmitP">
+                <h1 id="signup_heading">Sign up</h1>
+                <p class="signup_p">
                         Welcome to Sherpa. To register please fill out all the forms below 
                         and then press the register button to continue.
                 </p>
@@ -16,15 +16,15 @@
                 <div class="signup_error">{{ error }}</div>
         {% endfor %}
         <div class="signup_icon">
-                <i class="fa-solid fa-user"></i>
+                <i id="signup_user" class="fa-solid fa-user"></i>
         </div>
         {{ form.name() }}
         <br>
         {% for error in form.email.errors %}
-                <div class="signup_error">{{ error }}</div>
+                <div id="signup_" class="signup_error">{{ error }}</div>
         {% endfor %}
         <div class="signup_icon">
-                <i class="fa-solid fa-envelope"></i>
+                <i id="signup_email_icon" class="fa-solid fa-envelope"></i>
         </div>
         {{ form.email(id="signup_email") }}
         
@@ -33,22 +33,22 @@
                 <div class="signup_error">{{ error }}</div>
         {% endfor %}
         <div class="signup_icon">
-                <i class="fa-solid fa-lock"></i>
+                <i id="signup_" class="fa-solid fa-lock"></i>
         </div>        
         {{ form.password() }}
         <br>
         {% for error in form.password2.errors %}
-               <div class="signup_error">{{ error }}</div>            
+               <div id="signup_" class="signup_error">{{ error }}</div>            
         {% endfor %}
         <div class="signup_icon">
-                <i class="fa-solid fa-lock"></i>
+                <i id="signup_" class="fa-solid fa-lock"></i>
         </div>
         {{ form.password2() }}
         <br>
         <br>
         <div class="loginRegisterSubmit">{{ form.submit(id="register") }}</div>
         <br>
-        <p>
+        <p class="signup_p">
                 If you already have an account with us please click <a class = "loginRegisterLink" href="/login">here</a> to login.
         </p>
       </form>
