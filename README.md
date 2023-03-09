@@ -969,7 +969,8 @@ TODO (FLOW)
 
 *Implementation of requirement: 14*
 
-TODO
+* The "notes_activity" function handles the implementation of the notes feature. A query is made.
+* The activity is logged and using turbo flask is used to update the section of the webpage responsible for displaying the notes. the notes. If turbo cannot update a specific part of the page then the entire page will be reloaded.
 
 ### Integrating Google Accounts
 
@@ -1092,9 +1093,10 @@ This section outlines the difficulties and challenges we individually and as a t
 + __Turbo__
   + Implementing Turbo in our application proved to be difficult. Our goal was to have our whole application using Turbo to increase the performance of our web application and to ensure a smooth user experience while using Sherpa. Due to a lack of documentation online regarding Turbo, we had to go through a lot of trial and error when implementing Turbo. Therefore, this was time consuming and proved frustrating at times when encountering unexpected behaviours. But once completed the benefit of Turbo was evident with the smooth performance of our web application.
 + __Modularization__
-  + TODO
+  + Modularizing the code presented a technical challenge as we had never used blueprints before to implement an application. We had to break up the monolithic appliction.py code into segments and initialize it with an __init__.py file.
+  + Initially we had some issues getting the application to run. Once we had corrected all the broken links within our pages it worked with blueprints. It ran smoothly and allowed a maintainable code base that made testing and updating the application far easier.
 + __Google Integration__
-  + TODO
+  + Google integration was challenging as the open authorization protocol was challenging in numerous ways due to its complexity and security requirements. The flask oath library did not support emails from our application so it was necessary for us to edit the library itself to facilitate our needs.
 + __Testing__
   + Writing the test cases for our code was challenging initially due to having little experience with testing web application. Also, the structure of our code caused problems with writing test cases. But once modularization was implemented within our code then test cases were much easier to write.
 + __Security__
