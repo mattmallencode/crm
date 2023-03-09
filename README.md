@@ -973,7 +973,10 @@ Sherpa then selects the records between the starting and ending indexes and serv
 
 *Implementation of requirement: 11*
 
-* When a user submits a POST 
+* When a user submits a POST request to */contacts* or */deals* using the search button form, their search term is fetched from the form data.
+* This search term is then passed to an optimize_search() function that uses regular expressions to determine what the user is likely to be searching for. For example, if "@" is in the search term - the user is likely searching for a particular email. The function then returns the column it recommends to search.
+* The contacts returned from the database are filtered for just those that match the user's search term using a "LIKE %{search_term}%" select query. This will be limited to a specific column if optimize_search recommended one, but will otherwise require a full row * column traversal.
+* The user is then served the records that match their search term as part of the HTTP response.
 
 ![Flowchart representing how Sherpa's search feature looks through the database. ](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/searching_database_flowchart.png)
 <br>*Figure: 7*
@@ -982,16 +985,10 @@ Sherpa then selects the records between the starting and ending indexes and serv
 
 *Implementation of requirement: 12*
 
-Our code allows the user to sort a list of contacts/deals in a database based on different columns such as name, email, or phone number. The sorting is handled by a function such as order_contacts(), which takes three parameters: sort, order, and contacts.
-
-The sort parameter indicates the column to sort by, and it can have values such as "name", "email", or "phone_number". The order parameter indicates whether to sort in ascending or descending order and can have values of "ASC" or "DESC". Finally a parameter, for this we'll say contacts, is the query object returned by the database that contains the contacts to sort.
-
-The function first checks which column the user wants to sort by and then sorts the contacts accordingly using the order_by() method. If the order parameter is "ASC", the contacts/deals are sorted in ascending order. If it is "DESC", they are sorted in descending order.
-
-The sorting is triggered by the contacts()/deals() function, which sets the values of sort and order parameters based on the user's selection. The sort parameter is changed if the user is sorting a different column than the previous sort, and the order parameter is changed if the user is toggling the sort of the same column.
-
-Overall, this code allows users to sort a list of contacts/deals in a database based on different columns and in ascending or descending order.
-
+* Sherpa code allows the user to sort a list of contacts/deals in a database based on different columns e.g. name. 
+* When a user views a contacts or deals page, each column header in the table they are served is actually a hyperlink which points to */contacts* or */deals*. When a user clicks one of these links, they send a request to the relevant endpoint specifying they wish the data to be returned to them again but sorted by that column.
+* Both ascending and descending sorting are supported. This is supported by the "prev_sort" and "sort" parameters which are passed to the hyperlinks, if the endpoint sees "prev_sort" and "sort" both equal "name", it knows the user has toggled the sort direction, and will check the "order" parameter and flip it i.e. if "order" is equal to "ASC" in this event, it will be changed to "DESC".
+* The user is then served the data as part of the HTTP response as normal except the select query now includes a "ORDER BY" clause with the appropriate column and order.
 
 ![Flowchart representing how Sherpa's sorting feature sorts the database.](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/sorting_flowchart.png)
 <br>*Figure: 8*
@@ -999,14 +996,11 @@ Overall, this code allows users to sort a list of contacts/deals in a database b
 ### Activity Feature
 
 *Implementation of requirement: 13*
-*endpoint:/contact/101010010%40mail.com_123/activity*
+*endpoint:/contact/<contact_id>/activity*
 
-* There are five activity types on this page.  Schedule a meeting, send an email, make a note, make a task, and mark tasks as complete. All these are logged on the activity page.
-* Once a meeting has been scheduled and the google token exists a time stamp is made using "dateTime.now()" of that event. The log activity function is called which takes four parameters, "activity_type", "actor", "timestamp", and  "contact_id". For meetings, the "activity_type" is set to "meeting",  "actor" is set to our users email, "timestamp" is the time at which the meeting was made, and "contact_id" is the contact id of our user. The inputs are formatted in the log activity function and inserted into the table in the activity section of the page
-* Once an email has been sent to a contact the activity is logged. This is done by the "email_activity" function. The google token must exist and the form must validate on submission. A timestamp of the email is created using the same method as above and the same four parameters are passed to the log activity function however the activity has changed to "email" which formats the activity message differently. All other parameters are handled in the same way as the previous bullet point.
-* Making a note is also logged as an activity. the "notes_activity" function handles the recording of the activity. Once the form validates it creates a timestamp and passes off the same parameters as the previous bullet points to the log activity function. The only difference is that "activity_type" is now "note".
-* The "tasks_activity" function handles activity in the same way as the above bullet points all that changes is the "activity_type" parameter is assigned a new value "complete task". This causes the log activity function to create a different message in the activity table for a completed task.
-* Missing create task
+* There are several "activity types" in Sherpa e.g. sending an email, marking a task as complete etc. 
+* Whenever such a contact interaction occurs a log_activity() function occurs which records the metadata of the activity e.g. the team member responsible, a description, the timestamp etc.
+* When a user visits the "activity" section for a particular contact, Sherpa fetches all of the activities associated with that contact and displays them to the user - in the order of most recent activity - as part of the HTML.
 
 ### Notes Feature
 
