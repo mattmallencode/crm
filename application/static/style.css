@@ -481,16 +481,35 @@ color: white;
   position: relative;
 }
 /* Sign up page*/
+#signup_body{
+  text-align: center;
+}
 
+#signup_heading{
+  color:black;
+}
+
+.signup_p{
+  color: black;
+}
+
+.signup_icon i{
+  color: #772953;
+  transform: scale(1.5);
+  margin-right: 30%;
+  /*position: relative;*/
+}
 
 #signup_form{
   size: 100%;
   position: relative;
   top: 0;
   left: 0%;
+  padding: 10px;
 }
 
 #signup_form input{
+  display: block;
   padding: 10px;
   border: None;
   size: 100%;
@@ -942,6 +961,9 @@ input#submit:hover{
   margin-bottom: 2%;
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 1059ad859f21a0c56c36461899db49af0ad20d1b
 
 /*profile*/
 section#logout p{
@@ -953,5 +975,8 @@ section#logout p{
   padding: 3%;
   margin-bottom: 2;
 }
+<<<<<<< HEAD
 =======
 >>>>>>> main
+=======
+>>>>>>> 1059ad859f21a0c56c36461899db49af0ad20d1b
