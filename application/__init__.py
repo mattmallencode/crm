@@ -73,14 +73,17 @@ def create_app(config_class=Config):
             plt.title("You have no deal data. Create some deals to populate this chart", fontsize=14)
             deals_forecast_diagram = encode_diagram(plt)
 
+        """
         try:
             activity_diagram = draw_activity_diagram(user)
-        except Exception as e:
+        except:
             fig, ax = plt.subplots()
             plt.title("You have no team activity data. Get your team active to populate this chart", fontsize=13)
             plt.bar("no data", 1, color="#EC6B56")
             activity_diagram = encode_diagram(plt)
-       
+        """
+        activity_diagram = draw_activity_diagram(user)
+
         try:
             deal_stage_diagram, conversions = draw_deal_stage_diagram(user)
         except:
@@ -136,10 +139,12 @@ def create_app(config_class=Config):
             filter(Deals.team_id == user.team_id, Deals.close_date > Deals.close_date.like(f"{year_month_minus_one}%"))
         
         buckets=[]
+        current_month = datetime.now().strftime("%m")
         for i in range(12):
             buckets.append([])
         for deal in deals:
-            buckets[int(deal.close_date.strftime("%m"))].append(deal)
+            buckets[int(deal.close_date.strftime("%m")) - (int(current_month) + 1) ].append(deal)
+        
 
         closed = {"x":[], "y":[]}
         goal= {"x":[], "y":[]}
@@ -154,7 +159,7 @@ def create_app(config_class=Config):
                         closed_sum += deal.amount
                     if deal.goal is not None:
                         goal_sum += deal.goal
-                    close_date = deal.close_date.strftime("%Y-%m")
+                    close_date = deal.close_date.strftime("%b")
             
                 closed["x"].append(close_date)
                 closed["y"].append(closed_sum)
@@ -210,21 +215,24 @@ def create_app(config_class=Config):
         activity = ActivityLog.query.filter_by(team_id=user.team_id)
         member_activity_count={}
         for activity in activity:
-            if (activity.timestamp is not None) and (type(activity.timestamp) == datetime) and (activity.activity_type != "note"):
+            if (activity.timestamp is not None) and (isinstance(activity.timestamp, datetime)) and (activity.activity_type != "note"):
                 if activity.timestamp.strftime("%Y-%m") == ((datetime.now() - relativedelta(months=1)).strftime("%Y-%m")):
                     if activity.actor not in member_activity_count:
                         member_activity_count[activity.actor] = 1
                     else:
                         member_activity_count[activity.actor] += 1
-
+       
         # gets the top 5 most active team members
-        top_team_members = sorted(member_activity_count)[:5]
-
+        top_team_members = []
+        for top_member in sorted(member_activity_count, key=member_activity_count.get, reverse=True)[:5]:
+            top_team_members.append(top_member)
+       
         if len(top_team_members) >= 5:
             activity_range = 5
         else:
             activity_range = len(top_team_members)
 
+        
         activity_count={"email":[], "task":[], "meeting":[]}
         for i in range(activity_range):
             member_activity = ActivityLog.query.filter_by(actor = top_team_members[i])
@@ -232,14 +240,16 @@ def create_app(config_class=Config):
             tasks=0
             meetings=0
             for activity in member_activity:
+                #print(activity.activity_type)
                 if activity.activity_type == "email":
                     emails += 1
                 elif activity.activity_type == "task":
                     tasks += 1
                 elif activity.activity_type == "meeting":
                     meetings += 1
-            
+
             user = Users.query.filter_by(email=top_team_members[i]).first()
+            
             if user.name not in top_team_members:
                 top_team_members[i] = user.name
             else:
@@ -247,8 +257,7 @@ def create_app(config_class=Config):
             activity_count["email"].append(emails)
             activity_count["task"].append(tasks)
             activity_count["meeting"].append(meetings)
-
-
+        
         fig, ax = plt.subplots()
         plt.xlabel("Activity By", fontsize=14)
         plt.ylabel("Count Of Activities", fontsize=14)
