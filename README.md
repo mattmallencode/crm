@@ -105,7 +105,7 @@ TODO: TABLE OF CONTENTS AT END (PLUS NEED TO CHECK).
 
 ## Introduction
 
-This document outlines the design and implementation of Sherpa, a free and open-source Customer Relationship Management (CRM) System. A CRM helps businesses drive sales, track customer interactions, and provide quality service. This is achieved by storing the data of existing and potential customers in a central database that can be accessed and managed by anyone within the organisation with appropriate permissions.
+This document outlines the design and implementation of Sherpa, a free and open-source Customer Relationship Management (CRM) System. A CRM helps businesses drive sales, track customer interactions and provide quality service. This is achieved by storing the data of existing and potential customers in a central database that can be accessed and managed by anyone within the organisation with appropriate permissions.
 
 Sherpa can be used by multiple businesses i.e. users create "teams" and invite other users to join their team.
 
@@ -140,7 +140,7 @@ Firstly, with Sherpa, **your sales team always has a cohesive view**. For exampl
 
 Secondly, Sherpa **makes management easier**. A manager can assign a member of their sales team to chase down a specific customer, and that sales person knows immediately after logging into the application which contacts they are supposed to be handling.
 
-Lastly, **everything is traceable** with Sherpa. Not just in terms of analytics but also in terms of customer interactions. Everyone on a team can see which customers have been “left on the back burner” so to speak based on when the last time they were emailed for example.
+Lastly, **everything is traceable** with Sherpa. Not just in terms of analytics but also in terms of customer interactions. Everyone on a team can see which customers have been “left on the back burner” so to speak based on the last time they were emailed for example.
 
 It would be painful to set up a cohesive flow in terms of managing relationship with customers if a business bootstrapped it with several unconnected applications. Sherpa makes it easy.
 
@@ -154,7 +154,7 @@ The following user stories describe various tasks that a user might want to acco
 
 *User Story ID: 1*
 
-As a manager, I want to invite other users to join my Sherpa team so they can access to our CRM resources.
+As a manager, I want to invite other users to join my Sherpa team so they can have access to our CRM resources.
 
 #### Team Invitation Acceptance
 
@@ -1209,7 +1209,7 @@ Our team was able to complete high-quality work efficiently, thanks to our struc
 
 ### Mistakes To Learn From
 
-During the course of our project, we made some mistakes and learned some valuable lessons. One mistake we made was not standardizing our HTML, which led to some inconsistencies in our code. To avoid this in the future, we learned to standardize our HTML and use best practices to ensure consistency throughout our project.
+During the course of our project, we made mistakes and learned valuable lessons. One mistake we made was not standardizing our HTML, ledding to some inconsistencies in our code. For the future, we learned to standardize our HTML and use best practices to ensure consistency throughout our project.
 
 Another mistake we made was not using Flask blueprints, which made it more difficult to manage our code as the project grew. We realized the importance of using blueprints to organize our code and make it easier to maintain and update.
 
@@ -1226,10 +1226,10 @@ Overall, we learned that standardizing our code, using frameworks and best pract
 This section outlines the difficulties and challenges we individually and as a team encountered in the process of developing Sherpa.
 
 + __Turbo__
-  + Implementing Turbo in our application proved to be difficult. Our goal was to have our whole application using Turbo to increase the performance of our web application and to ensure a smooth user experience while using Sherpa. Due to a lack of documentation online regarding Turbo, we had to go through a lot of trial and error when implementing Turbo. Therefore, this was time consuming and proved frustrating at times when encountering unexpected behaviours. But once completed the benefit of Turbo was evident with the smooth performance of our web application.
+  + Implementing Turbo in our application proved to be difficult. Our goal was to have our whole application using Turbo to increase the performance of our web application and to ensure a smooth user experience while using Sherpa. Due to a lack of documentation online regarding Turbo, we had to go through a lot of trial and error when implementing Turbo. This was time consuming and frustrating at times when encountering unexpected behaviours. Once completed the benefit of Turbo was evident with the smooth performance of our web application.
 + __Modularization__
   + Modularizing the code presented a technical challenge as we had never used blueprints before to implement an application. We had to break up the monolithic appliction.py code into segments and initialize it with an __init__.py file.
-  + Initially we had some issues getting the application to run. Once we had corrected all the broken links within our pages it worked with blueprints. It ran smoothly and allowed a maintainable code base that made testing and updating the application far easier.
+  + Initially we had some issues getting the application to run. Once we had corrected all the broken links within our pages it worked with blueprints. It ran smoothly and allowed a maintainable code base that made testing and updating the application easier.
 + __Google Integration__
   + Google integration was challenging as the open authorization protocol was challenging in numerous ways due to its complexity and security requirements. The flask oath library did not support emails from our application so it was necessary for us to edit the library itself to facilitate our needs.
 + __Testing__
