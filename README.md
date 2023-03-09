@@ -778,36 +778,35 @@ The following table describes the data model which is used for calculating deal 
 
 ## Implementation
 
-This chapter outlines the implementation of Sherpa. It outlines the technology stack as well as the structure of the application overall. It then details the implementation of Sherpa's requirements, some of these requirement implementations are accompanied by flow charts which are an abstraction of the underlying logic - some requirements not as we did not believe they necessitated a visual aid.
+This chapter outlines the implementation of Sherpa.
 
 ### Underlying Technologies
 
-The following details our team's technology stack and gives context to the implementation chapter i.e. please assume that all implementation details rely on the use of the relevant technologies listed here.
+The following details our team's technology stack.
 
-- **Programming Language:** Python
-- **Database Management System:** MySQL
-- **Web Framework:** Flask
-- **Virtual Environments:** Python-dotenv
-- **Object-Relational Mapper (ORM):** Flask-SQLAlchemy
-- **SMTP Library:** Flask-Mail
+- **Programming Language**: Python
+- **Database Management System**: MySQL
+- **Web Framework**: Flask
+- **Virtual Environments**: Python-dotenv
+- **Object-Relational Mapper (ORM)**: Flask-SQLAlchemy
+- **SMTP Library**: Flask-Mail
 - **JavaScript WebSocket Library**: Flask-Turbo
-- **Form Rendering & Validation:** WTForms
-- **User Authentication:** Werkzeug
-- **URL Token Generation:**  Python's Secrets module
+- **Form Rendering & Validation**: WTForms
+- **User Authentication**: Werkzeug
+- **Testing Framework**:
+- **URL Token Generation**:  Python's Secrets module
 - **Plotting Library**: Matplotlib
 - **OAuth Library**: Flask-OAuthlib
-- **Cloud Orchestration**: Amazon Web Services (AWS) Elastic Beanstalk
-- **Application Server Hosting**: AWS EC2
 - **Database Server Hosting**: AWS RDS
 
 ### App Structure
 
-- Sherpa is a Flask application and is made up of various "endpoints" / routes that users can send  requests to.
-- All Sherpa endpoints (except /login and /signup) are protected by an "@login_required" wrapper. This is just a Python decorator that calls a function to reject the user's request if they haven't been authenticated. They're redirected to the login page and once they're authenticated they're redirected back to the protected endpoint.
-- Most Sherpa endpoints (except for example / and /login) are protected by a "@team_required" wrapper. This is another decorator that calls a function to reject the user's request if they are not a member of a team. The user is redirected to the "create_team" endpoint.
-- Database and SMTP access is facilitated by environment variables specified in a .env file.
-- All database interactions occur through the use of SQLAlchemy data "models". These are outlined in the Data Models chapter and are essentially Pythonic descriptions of MySQL tables.
-- Sherpa has a monolithic database but each team has two - what we have come to call - "virtual" databases; one for contacts and one for deals. The databases are "virtual" because in reality they're part of a single structure but to prevent teams from being able to access or edit each other's records, data is segregated using team_ids i.e. anytime we issue a query for "team sensitive" data that only members of your team ought to have permissions for, we limit the query to just read, update or delete records that have a "team_id" matching that of your team.
+- Sherpa is a Flask application and is made up of various "endpoints" users send requests to.
+- All Sherpa endpoints (except /login etc) are protected by an "@login_required" wrapper which calls a function to redirect a user if they haven't been authenticated.
+- Most Sherpa endpoints (except for example / and /login) are protected by a "@team_required" wrapper which redirects a user if they are not a member of a team. 
+- Sherpa is configured with environment variables specified in a .env file.
+- All database interactions occur through the SQLAlchemy data models, essentially Pythonic descriptions of MySQL tables.
+- Sherpa has a monolithic database but each team has two "virtual" databases for contacts and deals. To prevent teams from accessing each other's records, data is segregated. Anytime we query for "team sensitive"  data, we limit the query to just the records with the correct "team_id".
 
 ### User Registration and Authentication
 
@@ -820,11 +819,11 @@ The following flow chart details the sign up process flow for a new Sherpa user.
 
 *Endpoint: /signup*
 
-- The user must submit a valid response to the signup form i.e. valid email, password confirmation etc.
+- The user must submit a valid response to the signup form.
 - The user's email must also not be already registered (SQL query for submitted email).
 - If either of the above checks fail the user is returned to the form and informed of the issue.
-- Once the user submits a valid form response with a unique email, the back-end will generate a hashed version of their plain text password. Werkzeug uses pbkdf2 to generate a SHA-256 hash along with a salt unique to each user, thus preventing the passwords from being brute forced.
-- Finally, the users details and the hashed version of their password are added to an instance of the Users data model and this is inserted into the database.
+- Once the user submits a valid request, the back-end will generate a hashed version of their plain text password. Werkzeug uses pbkdf2 to generate a SHA-256 hash along with a salt unique to each user, thus preventing the passwords from being brute forced.
+- Finally, the users details are added to an instance of the Users data model and inserted into the database.
 
 The following flow chart details the login process flow for an existing Sherpa user.
 
@@ -833,11 +832,12 @@ The following flow chart details the login process flow for an existing Sherpa u
 
 *Endpoint: /login*
 
-- The user must submit a valid response to the signup form i.e. required inputs etc.
-- The user's email must exist in the database i.e. they're registered and they must authenticate themselves. This is achieved by generating a hash using the salt specific to the user and the plain-text password they provided as form input. If it matches the password hash for that email in the database the user is then authenticated.
+- The user must submit a valid response to the signup form.
+- The user's email must exist in the database.
+- The user must authenticate themselves i.e. the password the user provides is hashed and compared to the hashed password on record.
 - If either of the above checks fail the user is returned to the form and informed of the issue.
-- So that the user does not need to use password authenticated for every request a cookie is generated that they can present in lieu of a password for the remainder of the session. This cookie is signed using a strong pseudo random secret key to prevent cookie theft and forgery.
-- Then the user is redirected to the home page or to the endpoint they had attempted to visit prior to authentication.
+- A cookie is generated that the user presents in lieu of a password for the remainder of the session which is signed using a secret.
+- The user is redirected to the home page or to the endpoint they had attempted without authentication.
 
 ### Creating Teams
 
@@ -850,12 +850,12 @@ The following flow chart details the process flow for creating a Sherpa team.
 
 *Endpoint: /create_team*
 
-- The user must submit a valid response to the signup form i.e. include a team name.
-- The user can't be a member of a team (SQL query to check that their team_id is NULL).
+- The user must submit a valid response to the signup form.
+- The user can't be a member of a team i.e. team_id is NULL.
 - If either of the above checks fail the user is returned to the form and informed of the issue.
-- If the endpoint gets a valid response, the form data is added to an instance of the Teams data model and this is inserted into the database. This team will be assigned a unique id as the team_id column is an auto incrementing primary key.
-- The user's team_id is then updated based on the team_id returned from the database commit and this update is committed to the database as well.
-- Then the user is redirected to the home page.
+- If the endpoint gets a valid response, the form data is added to an instance of the Teams data model and inserted into the database.
+- The user's team_id is then updated based on the team_id returned from the database commit and this update is committed too.
+- The user is redirected to the home page.
 
 ### Sending and Accepting Team Invites
 
@@ -867,12 +867,12 @@ The following flow chart details the process flow for inviting another user to a
 
 *Endpoint: /invite*
 
-- The user must submit a valid response to the invite form i.e. valid email, required input etc.
+- The user must submit a valid response to the invite form.
 - The user issuing the invite must be a member of a team and one of that team's admins.
 - The invitee must not be a member of that team already.
-- If the endpoint receives a valid response, an invite_id is generated. The format is as follows: *[invitee_email]_[team_id]__[secure_token]*.  The secure token consists of 16 cryptographically secure characters and is generated using the token_urlsafe method of the secrets module and is necessary to prevent fraudulent invitation generation.
-- Once the invite_id is generated it is added to an instance of the Invites data model along with the team_id the invitation is for. This is then inserted into the invites table in the database.
-- The user is then returned to the form and informed of the successful invitation.
+- If the endpoint receives a valid response, an invite_id is generated which includes 16 cryptographically secure characters to prevent fraudulent invitation generation.
+- The invite_id is added to an instance of the Invites data model and inserted into the database.
+- The user returns to the form and informed of the successful invitation.
 
 The following flow chart details the process flow for accepting a Sherpa invitation. It is a modified version of the login flow: see Figure 2.
 
@@ -881,10 +881,11 @@ The following flow chart details the process flow for accepting a Sherpa invitat
 
 *Endpoint: /invite/<invite_id>*
 
-- User must submit a valid form submission and be authenticated (as per the normal login flow).
-- If the user doesn't pass an invite_id to the endpoint, the normal login flow resumes and concludes.
-- If an invite_id is passed, it must be validated. First a lookup is done on the invites table to see if that invitation exists, if it does then the user's data is checked to see if they're in fact not a member of a team (a user can't accept an invitation until they've left their current team). Finally, the login email is compared to the email specified in the id, the user can't accept an invitation unless they authenticate themselves using the email specified.
-- If the invitation and user details are validated as above, the user's team id is set to the team_id specified in the invitation and the invitation is removed from the table. Then the normal login flow resumes and concludes.
+- User must submit a valid form submission and be authenticated (as per normal login flow).
+- If the user doesn't pass an invite_id to the endpoint, the normal login flow resumes.
+- If an invite_id is passed, it must be validated. First, the database is checked to see if the invite_id exists. The user also can't accept an invitation unless they authenticate themselves using the email specified.
+- If the request is validated, the user's team id is set to the team_id specified in the invitation and the invitation is removed from the table.
+- The normal login flow resumes.
 
 ### Basic Database Operations (CRUD)
 
@@ -892,11 +893,7 @@ The following flow chart details the process flow for accepting a Sherpa invitat
 
 "Database" in this context refers to the set of records belonging to a team, either its contacts or deals.
 
-Since the CRUD operations for both contacts and deals are very similar, their implementation is described in one section. For additional brevity some disparities in form validation etc between contacts and deals are not detailed but one should be able to gather how we interface the user with the MySQL database from what follows.
-
-Each database's "read" operation displays a series of "live" forms i.e. HTML input elements that have been prepopulated with the records from the database.
-
-Each form represents a record and each form comprises a row in a larger table representing the database. This allows the user to view and edit records using the same elements - they then can save any changes by clicking the appropriate button or remove a specific record by clicking its individual remove button.
+Each database's "read" operation displays a table of "live" forms i.e. HTML input elements that have been prepopulated with the records from the database, allowing users to view and edit records using the same elements. Each form element represents a record.
 
 #### Create
 
@@ -904,34 +901,34 @@ Each form represents a record and each form comprises a row in a larger table re
 
 * Initialise an instance of the Contacts or Deals data models.
 * Set the instance variables to the values fetched from the add record form.
-* Commit the new record to MySQL after some validation checks e.g. "does this contact already exist in this team's records?".
+* Commit the new record to MySQL after some validation checks e.g. can't create a duplicate record.
 
 #### Read
 
 *Endpoints: /contacts and /deals*
 
-* Fetch relevant records from the database i.e. all contacts or deals with the correct team_id.
-* Then iterate over the list of records, making each record into a HTML form.
-* Each form is then added to a list of forms that is iterated over when templating using Jinja2, associated each form with an "edit" button in the HTML that has its href attribute set to the appropriate edit endpoint with the relevant id (see update for more).
-* This results in all contacts or deals being rendered as an "editable" table that the user can now read.
-* Each form is also associated with its own "remove" button in the HTML that has its href attribute set to the appropriate remove endpoint with the relevant id (see delete for more).
+* Fetch relevant records from the database.
+* Iterate over list of records; make each record a HTML form.
+* Add each form to a list of forms that is iterated over when templating using Jinja2.  Associate each form with an "edit" HTML button.
+* All contacts or deals are rendered as an "editable" table.
+* Each form has a  "remove" HTML button.
 
 #### Update
 
 *Endpoints: /edit_contact/<contact_id> and /edit_deal/<deal_id>*
 
-* As described in read, each record in the contacts or deals database is rendered as an individual editable HTML form element and associated with its own edit button.
-* When a user clicks this button, the form is submitted to the relevant edit endpoint and crucially includes the relevant id for example the href attribute might be "/edit_contact/X" with X being the ID of the contact the user wishes to edit.
-* This way the back end can update the relevant record that matches that ID with the data POSTed by the form (after validation) and commit these changes to MySQL.
+* Each record is rendered as a HTML form element and associated with its own edit button.
+* When a user clicks this button, the form is submitted to the relevant edit endpoint and includes the relevant record id.
+* The record in MySQL that matches that ID is updated with the form data.
 
 #### Delete
 
 *Endpoints: /remove_contact/<contact_id> and /remove_deal/<deal_id>*
 
-* As described in read, each record in contacts or deals database is rendered as an individual row of a HTML table (inside this row is an editable form but this is more relevant to the edit section).
+* Each record is rendered as a HTML form element and associated with its own remove button.
 * Each row is associated with its own "remove" button.
-* When a user clicks this button, the form is submitted to the relevant remove endpoint and crucially includes the relevant id for example the href attribute might be "/remove_contact/X" with X being the ID of the contact the user wishes to remove.
-* This way the back end can remove the relevant record that matches that ID and commit these changes to MySQL.
+* When a user clicks this button, the form is submitted to the relevant edit endpoint and includes the relevant record id.
+* The record in MySQL that matches that ID is deleted.
 
 ### Reseting a User's Authenticated Session
 
@@ -939,63 +936,41 @@ Each form represents a record and each form comprises a row in a larger table re
 
 *endpoint: /profile*
 
-* If a user sends a GET request to this endpoint they will be served a page with basic account information, email address etc.
-* If however, they submit a POST request, their flask session will be cleared this means they will be redirected to the login page for all subsequent requests by the *@login_required* decorator since they no longer have a signed login cookie in their session.
+* If a user sends a GET request to this endpoint they are served a page with basic account information.
+* If they submit a POST request, their flask session is cleared and they are redirected to the login page for all subsequent requests.
 
 ### Viewing Team and Leaving Team
 
 *Implementation of requirement: 8*
 *endpoint: /team*
 
-* If a user sends a GET request to the team endpoint. The LeaveTeamForm() is allocated to a variable. The database is queried to retrieve the user's information, the team id, and the team members. This data is displayed in the HTML to the user. Enabling them to view see the team members and their team details.
-* If a member wishes to leave a team the user must click the checkbox and press the button for leaving a team. Upon clicking the button the user's owner status is checked. If the user is the owner of the team then a message "Can't leave a team if you own it!" will be presented to you.
-* If however, the user is not an owner, the user team id is set to none and their admin status is set to False. These changes are committed to the database, removing the user from the team.
+* If a user sends a GET request to the team endpoint. The database is queried to retrieve all User rows with the same team_id as the user. This data is displayed in the HTML to the user.
+* A form is on the page, if the user submits the form with a "positive" checkbox, their team_id is set to NULL and these changes are committed to the database.
 
 ### Viewing Databases in Pages
 
 *Implementation of requirement: 9*
 
-When the user visits the webpage, the server-side code retrieves all records from the database using a SQL query. The records are then stored in a list.
+When the user visits */contacts* or */deals* to view the given virtual database -  Sherpa determines which page the user is currently viewing which is tracked in a session variable (starts off as the first page).
 
-Next, the code determines which page the user is currently viewing. By tracking the current page number in a session variable.
+Each page displays 25 records. Once the current page is determined, the code calculates the starting and ending indexes of the records to display on that page.  For example, if the user is on page 3, the starting index would be 50 (2 * 25) and the ending index would be 74 (50 + 24).
 
-Once the current page is determined, the code calculates the starting and ending indexes of the records to display on that page. For example, if each page displays 25 records and the user is on page 3, the starting index would be 50 (2 * 25) and the ending index would be 74 (50 + 24).
-
-The code then selects the records between the starting and ending indexes and formats them into HTML table rows. These rows are concatenated together to form the HTML table body.
-
-Additionally, the code generates HTML links for each page number. These links allow the user to navigate between pages. The links are displayed as arrows on the webpage.
-
-Finally, the code combines the HTML table and paging links into a single HTML page and sends it to the user's browser for display.
-
-Overall, this approach is relatively efficient because it only retrieves the records needed for the current page, rather than retrieving all records at once. It also allows for easy paging and navigation between pages
-
-TODO (FLOW)
+Sherpa then selects the records between the starting and ending indexes and serves these as HTML. The HTML also includes "next" and "previous" page buttons that are encoded with the current page number, allowing the user to navigate the pages.
 
 ### Showing the User the Records they Own
 
 *Implementation of requirement: 10*
 *endpoint: /contacts and /deals*
 
-* To get assigned a contact you must be set as the contact owner when the contact is being added. The contact owner must be a member of your team.
-* In the contacts function there are three options "Assigned Contacts", "Unassigned Contacts" and "All Contacts".
-* In the contacts function there exists a "filter" parameter which contains the value "assigned" or "unassigned". When the "Assigned Contacts" buttonis clicked the filter variable to "assigned" which display all contacts that have a contact owner. When the "Unassigned Contacts" button is pressed, the filter button is set to "unassigned", and all contacts displayed do not have a contact owner.
-* The display of contacts is done by querying using the contacts "team_id" and "contact_id". For assigned contacts, it searches for the owner of the contact. Alternatively, if you are searching for unassigned contacts the "contact_id" will be an empty string since no owner exists.
-* Deals displays either all deals or assigned deals in a table. The user can toggle between assigned and all deals by clicking "Assigned Deals" or "All Deals". This changes the filter variable to either "assigned" or "None".  If the filter is set to "None" then all deals will be queried from the database. If it is set to "Assigned" then only deals that have an owner will be displayed.
+* Team admins can assign users as owners of contacts or deals using the HTML forms.
+* If a user clicks "My Contacts" or "My Deals", instead of issuing the normal select query - the /contacts and /deals endpoints modify this query to select for just those records with an "owner_id" equal to the "user_id" of the user making the request.
+* The user is then shown all the records they have ownership of.
 
 ### Searching a Database
 
 *Implementation of requirement: 11*
 
-The search bar allows the user to search through the database based on certain criteria. The user can search for deals by entering a search term in the search bar and selecting a filter. The search bar is defined using a Flask form such as DealsSearchForm. When the user enters a search term and submits the form, the search term is extracted from the form and used to search for relevant deals in the database.
-
-First, the search term is optimized for searching by calling a function like optimize_deals_search depending on the page. This function checks whether the search term looks like an email address or not, and returns "email" if it does and "name/company/email" otherwise.
-
-Next, the .query object is filtered based on the user's search criteria. The variable for this example we'll say 'deals' is set to the Deals.query object at the start of the function. Then, the results of this query are filtered based on the user's search term. If the search term is an email, then only the associated_contact column is searched. If the search term is not an email, then all relevant columns are searched.
-
-Finally, the results of the search are returned to the user in the deals variable. The deals variable is a query object, which means that it represents a set of results from the database. The results are not actually fetched from the database until the query is executed (in this case, by calling .limit() and .offset()).
-
-
-TODO (FLOW)
+* When a user submits a POST 
 
 ### Sorting a Database
 
