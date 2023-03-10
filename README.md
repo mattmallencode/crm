@@ -1,5 +1,4 @@
 ﻿# Sherpa: A Free and Open-Source CRM
-
 ﻿
 ![Sherpa logo: a picture of a Yak beneath a mountain range with the text "Sherpa"](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/sherpa_logo.png)
 <br>
@@ -12,8 +11,6 @@ Eimantas Pusinskas, 120312336
 Aria Shahi, 119522223
 
 ## Table of Contents
-
-TODO: TABLE OF CONTENTS AT END (PLUS NEED TO CHECK).
 
 - [Table of Contents](#table-of-contents)
 - [Introduction](#introduction)
@@ -75,7 +72,7 @@ TODO: TABLE OF CONTENTS AT END (PLUS NEED TO CHECK).
     - [Database Sorting](#database-sorting)
     - [Activity Logging and Viewing](#activity-logging-and-viewing)
     - [Note Management](#note-management)
-    - [Google Oath (Open Authorisation)](#google-oath-(open-authorisation)
+    - [Google OAuth (Open Authorisation)](#google-oauth-open-authorisation)
     - [Email Management](#email-management)
     - [Task Management](#task-management)
     - [Meeting Management](#meeting-management)
@@ -131,7 +128,7 @@ TODO: TABLE OF CONTENTS AT END (PLUS NEED TO CHECK).
 
 ## Introduction
 
-This document outlines the design and implementation of Sherpa, a free and open-source Customer Relationship Management (CRM) System. A CRM helps businesses drive sales, track customer interactions, and provide quality service. This is achieved by storing the data of existing and potential customers in a central database that can be accessed and managed by anyone within the organisation with appropriate permissions.
+This document outlines the design and implementation of Sherpa, a free and open-source Customer Relationship Management (CRM) System. A CRM helps businesses drive sales, track customer interactions and provide quality service. This is achieved by storing the data of existing and potential customers in a central database that can be accessed and managed by anyone within the organisation with appropriate permissions.
 
 Sherpa can be used by multiple businesses i.e. users create "teams" and invite other users to join their team.
 
@@ -166,7 +163,7 @@ Firstly, with Sherpa, **your sales team always has a cohesive view**. For exampl
 
 Secondly, Sherpa **makes management easier**. A manager can assign a member of their sales team to chase down a specific customer, and that sales person knows immediately after logging into the application which contacts they are supposed to be handling.
 
-Lastly, **everything is traceable** with Sherpa. Not just in terms of analytics but also in terms of customer interactions. Everyone on a team can see which customers have been “left on the back burner” so to speak based on when the last time they were emailed for example.
+Lastly, **everything is traceable** with Sherpa. Not just in terms of analytics but also in terms of customer interactions. Everyone on a team can see which customers have been “left on the back burner” so to speak based on the last time they were emailed for example.
 
 It would be painful to set up a cohesive flow in terms of managing relationship with customers if a business bootstrapped it with several unconnected applications. Sherpa makes it easy.
 
@@ -180,7 +177,7 @@ The following user stories describe various tasks that a user might want to acco
 
 *User Story ID: 1*
 
-As a manager, I want to invite other users to join my Sherpa team so they can access to our CRM resources.
+As a manager, I want to invite other users to join my Sherpa team so they can have access to our CRM resources.
 
 #### Team Invitation Acceptance
 
@@ -406,12 +403,7 @@ As a Sherpa user I want to view a graph illustrating the breakdown of customer i
 
 ### Requirements
 
-
-The success of any software project is dependent on the ability to understand, document, and implement the requirements of the system. In this section, we will outline the requirements for the Sherpa web application, a CRM tool for managing contacts and deals. These requirements have been defined through the use cases of the system, and they serve as a roadmap for our team to ensure that the final product meets the needs and expectations of its users. The requirements are organized into functional areas, such as user registration and authentication, team creation and management, database CRUD operations, and user profile management, among others. By following these requirements, the Sherpa development team was able to deliver a reliable and user-friendly application that fulfills its intended purpose.
-
-
-In this section, we will outline the requirements for Sherpa. Each requirement satisfies one or more use cases.
-
+In this section, we will outline the requirements for Sherpa. Each requirement satisfies one or more user stories.
 
 #### User Registration
 
@@ -446,6 +438,7 @@ In order to do anything meaningful with Sherpa a user must be a member of a team
 A team administrator must be able to invite another user to join their team. This can be achieved by providing the email of the person they wish to invite and Sherpa will send them an invite link.
 
 #### Accepting Team Invitation
+
 
 *Requirement ID: 5*
 
@@ -802,6 +795,7 @@ The following table describes the data model which is used for calculating deal 
 + date - the date the deal transitioned to this stage
 + stage - the stage that the deal transitioned to
 
+
 ## Implementation
 
 This chapter outlines the implementation of Sherpa.
@@ -835,6 +829,9 @@ The following details our team's technology stack.
 - Sherpa has a monolithic database but each team has two "virtual" databases for contacts and deals. To prevent teams from accessing each other's records, data is segregated. Anytime we query for "team sensitive"  data, we limit the query to just the records with the correct "team_id".
 
 ### User Registration and Authentication
+
+![Picture showing Sherpa's login page](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/Sherpa_Login.png)
+<br>*Figure TODO: Sherpa's login page*
 
 *Implementation of requirements: 1, 2*
 
@@ -893,6 +890,9 @@ The following flow chart details the process flow for inviting another user to a
 
 *Endpoint: /invite*
 
+![Screenshot of the Sherpa invitation form](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/Invite_Form.png)
+<br>*Figure TODO: Sherpa Team Invitation Form Screenshot*
+
 - The user must submit a valid response to the invite form.
 - The user issuing the invite must be a member of a team and one of that team's admins.
 - The invitee must not be a member of that team already.
@@ -905,7 +905,10 @@ The following flow chart details the process flow for accepting a Sherpa invitat
 ![Flow chart detailing the team invitation acceptance process flow.](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/Invite%20Accept.png)
 <br>*Figure: 5*
 
-*Endpoint: /invite/<invite_id>*
+*Endpoint: /login/<invite_id>*
+
+![Screenshot of a Sherpa team invitation email](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/Sherpa_Invite.png)
+<br>*Figure TODO: Sherpa Team Invitation Email Screenshot*
 
 - User must submit a valid form submission and be authenticated (as per normal login flow).
 - If the user doesn't pass an invite_id to the endpoint, the normal login flow resumes.
@@ -914,12 +917,19 @@ The following flow chart details the process flow for accepting a Sherpa invitat
 - The normal login flow resumes.
 
 ### Basic Database Operations (CRUD)
+![Screenshot of Sherpa's Contacts page](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/Contacts_Screenshot.png)
+<br>*Figure TODO: Sherpa's Contacts Page*
 
 *Implementation of requirement: 6*
 
 "Database" in this context refers to the set of records belonging to a team, either its contacts or deals.
 
 Each database's "read" operation displays a table of "live" forms i.e. HTML input elements that have been prepopulated with the records from the database, allowing users to view and edit records using the same elements. Each form element represents a record.
+
+![Screenshot of Sherpa's Deals page](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/Deals_Screenshot.png)
+<br>*Figure TODO: Sherpa's Deals Page*
+
+
 
 #### Create
 
@@ -934,16 +944,16 @@ Each database's "read" operation displays a table of "live" forms i.e. HTML inpu
 *Endpoints: /contacts and /deals*
 
 * Fetch relevant records from the database.
-* Iterate over list of records; make each record a HTML form.
-* Add each form to a list of forms that is iterated over when templating using Jinja2.  Associate each form with an "edit" HTML button.
+* Iterate over list of records; make each record a form.
+* Add each form to a list of forms that is iterated over when templating using Jinja2.  Associate each form with an "edit" button.
 * All contacts or deals are rendered as an "editable" table.
-* Each form has a  "remove" HTML button.
+* Each form has a  "remove" button.
 
 #### Update
 
 *Endpoints: /edit_contact/<contact_id> and /edit_deal/<deal_id>*
 
-* Each record is rendered as a HTML form element and associated with its own edit button.
+* Each record is rendered as a form element and associated with its own edit button.
 * When a user clicks this button, the form is submitted to the relevant edit endpoint and includes the relevant record id.
 * The record in MySQL that matches that ID is updated with the form data.
 
@@ -951,7 +961,7 @@ Each database's "read" operation displays a table of "live" forms i.e. HTML inpu
 
 *Endpoints: /remove_contact/<contact_id> and /remove_deal/<deal_id>*
 
-* Each record is rendered as a HTML form element and associated with its own remove button.
+* Each record is rendered as a form element and associated with its own remove button.
 * Each row is associated with its own "remove" button.
 * When a user clicks this button, the form is submitted to the relevant edit endpoint and includes the relevant record id.
 * The record in MySQL that matches that ID is deleted.
@@ -991,7 +1001,7 @@ Sherpa then selects the records between the starting and ending indexes and serv
 *Implementation of requirement: 10*
 *endpoint: /contacts and /deals*
 
-* Team admins can assign users as owners of contacts or deals using the HTML forms.
+* Team admins can assign users as owners of contacts or deals using the forms.
 * If a user clicks "My Contacts" or "My Deals", instead of issuing the normal select query - the /contacts and /deals endpoints modify this query to select for just those records with an "owner_id" equal to the "user_id" of the user making the request.
 * The user is then shown all the records they have ownership of.
 
@@ -1024,6 +1034,9 @@ Sherpa then selects the records between the starting and ending indexes and serv
 *Implementation of requirement: 13*
 *endpoint:/contact/<contact_id>/activity*
 
+![Screenshot of Sherpa's Google Meet Integration](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/Screenshot%20from%202023-03-10%2012-21-22.png)
+<br>*Figure TODO: Sherpa's Activity Feature*
+
 * There are several "activity types" in Sherpa e.g. sending an email, marking a task as complete etc. 
 * Whenever such a contact interaction occurs a log_activity() function occurs which records the metadata of the activity e.g. the team member responsible, a description, the timestamp etc.
 * When a user visits the "activity" section for a particular contact, Sherpa fetches all of the activities associated with that contact and displays them to the user - in the order of most recent activity - as part of the HTML.
@@ -1031,9 +1044,13 @@ Sherpa then selects the records between the starting and ending indexes and serv
 ### Notes Feature
 
 *Implementation of requirement: 14*
+*endpoint:/contact/<contact_id>/notes*
 
-* The "notes_activity" function handles the implementation of the notes feature. A query is made.
-* The activity is logged and using turbo flask is used to update the section of the webpage responsible for displaying the notes. the notes. If turbo cannot update a specific part of the page then the entire page will be reloaded.
+![Screenshot of Sherpa's notes page.](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/notes_screenshot.png)
+<br>*Figure TODO: Sherpa's Notes Feature*
+
+* When a user submits a POST request to this endpoint using the notes form, Sherpa fetches the contents of the note from the form data and creates and inserts it into a new instance of the notes data model, which is then inserted into the database along with the user's id.
+* When a user sends a GET request to this endpoint, all notes associated with the contact are returned as part of the HTTP response.
 
 ### Integrating Google Accounts
 
@@ -1041,35 +1058,31 @@ Sherpa then selects the records between the starting and ending indexes and serv
 
 *endpoint: /authorize_email*
 
-Users must integrate their Google accounts with Sherpa to obtain a Google session token in order to avail of Sherpa's Google services such as Emails, Tasks and Meetings.
-
 The following diagram details the process of integrating Google with a Sherpa account.
 
 ![Diagram detailing the retrieval of a Google session token. Image is sourced from  "https://developers.google.com/identity/protocols/oauth2"](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/google_auth.png)
 <br>*Figure: 9*
 
-Google accounts are authenticated using OAuth 2.0. For brevity, we won't go into more detail than this over concerns over word count. If you'd like to learn more about OAuth 2.0 please click [here](https://developers.google.com/identity/protocols/oauth2).
+Google accounts are authenticated using OAuth 2.0. If you'd like to learn more about OAuth 2.0 please click [here](https://developers.google.com/identity/protocols/oauth2).
 
 ### Parsing API Responses
 
 *Implementation of requirements: 16-18*
 
-Sherpa integrates several Google products, each with their own API, namely: Gmail, Google Tasks, and Google Calendar. These APIs had their own nuances (for example dealing with threads with Gmail) and this could have justified having a parsing implementation section for each product. However, we found it prudent instead to discuss our general overall approach to parsing these responses.
+Sherpa integrates several Google products, each with their own API. The following is a flow chart detailing the process flow in Sherpa of dealing with an API response from request to return.
 
-The following is a flow chart detailing the process flow in Sherpa of dealing with an API response from request to return.
+![Flowing Chart depicting how Sherpa parses API responses](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/Parsing.png)
 
-![sss](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/Parsing.png)
-
- - First a GET request is send to the relevant Google API endpoint. This request is accompanied by a "query" which is a parameter that specifies to the server which data exactly it return to us. For example the query for the GET request for emails is "from: {contact_email} OR to: {contact_email}" - meaning we want to fetch any email the user sent to the contact AND any email the user received from the contact.
- - The server will then return the data we requested as a JSON dump. This can then be interacted with as a collection of python data structures, mainly lists and dictionaries.
- - Sherpa initialises an empty list to which all the parsed objects will be appended e.g. an empty list for all the parsed task objects. It then iterates over the JSON dump. Each loop, it initialises an empty dictionary with relevant keys e.g. for an email "timestamp", "subject", etc and maps these keys to the relevant data. This parsed version of the object is then appended to the list of objects.
- - Imporantly for the above, often timestamps won't be in a very human readable format so this required working with functions like "strftime" to convert the timestamps to a more readable format.
- - Finally, the parsed list is returned to the endpoint that called the given parsing function and is templated into the HTTP response using Jinja2. As an example, this is how this templating works for meetings:
+ - First a GET request is sent to the relevant Google API endpoint. This request includes a "query" which specifies which data the request is concerned with. For example, the query for getting emails is "from: {contact_email} OR to: {contact_email}" i.e. fetch any email sent to the contact AND any email received from the contact.
+ - The server then returns the data as a JSON dump which can be interacted with as a collection of python data structures.
+ - Sherpa initialises an empty list to which all the parsed objects will be appended. It then iterates over the JSON dump. Each loop, it initialises an empty dictionary with relevant keys e.g. for an email "subject", etc and maps these keys to the relevant data. This parsed object is then appended to the parsed list.
+ - Often timestamps aren't in human readable format so this required working with functions like "strftime" for timestamp conversion.
+ - The list is returned to the endpoint that called the given parsing function and is templated as HTML using Jinja2. This is how this templating works for meetings:
 
 ```
 {% if meetings is not none %}
         {% for meeting in meetings %}
-            <section class="meeting">
+            <section>
                 <p><b>Summary:</b> {{ meeting["summary"] }}</p>
                 <p><b>Description:</b> {{ meeting["description"] }}</p>
                 <p><b>Starts:</b> {{ meeting["starts"] }}</p>
@@ -1087,19 +1100,22 @@ The following is a flow chart detailing the process flow in Sherpa of dealing wi
 *endpoint: /contact/<contact_id>/emails*
 
 
+![Screenshot of Sherpa's Google Gmail Integration](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/gmail_screenshot.png)
+<br>*Figure TODO: Sherpa's Gmail Integration*
+
 #### Sending Emails
 
-* Sherpa initialises a MIMEText object (object representing an email as part of python's email package), called "message". 
+* Sherpa initialises a MIMEText object called "message". 
 * The message's subject and body are fetched from the email form. 
-* The sender is set to the user's google account email (that they OAuth'd). The recipient is set to the contact's email.
-* Sherpa then sends a POST request to the Gmail API with the message encoded as JSON (the user's OAuth token is included in the request, see the google account integration implementation section).
-* The email will then be send from the user's Google account.
+* The sender is the user's Gmail. The recipient is the contact's email.
+* Sherpa then sends a POST request to the Gmail API with the message encoded as JSON (with their OAuth token).
+* The email is then sent from the user's Gmail.
 
 #### Receiving Emails
 
-* Sherpa sends a GET request to the Gmail API to fetch the IDs of all the user's email threads (the threads fetched are limited to those between the user and the contact).
-* Sherpa then loops through each thread ID, sending a separate GET request to actually fetch the emails specific to each thread.
-* These emails are then parsed (see parsing API responses) and included in the HTTP response.
+* Sherpa sends a GET request to the Gmail API to fetch the IDs of all the user's email threads between them and the contact.
+* Sherpa then loops through each thread, sending a GET request to fetch the emails for each thread.
+* These emails are then parsed and included in the HTTP response.
 
 ### Creating, Viewing, and Completing Tasks
 
@@ -1107,178 +1123,112 @@ The following is a flow chart detailing the process flow in Sherpa of dealing wi
 
 *endpoint: /contact/<contact_id>/tasks*
 
+![Screenshot of Sherpa's Google Meet Integration](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/Task_Screenshot.png)
+<br>*Figure TODO: Sherpa's Google Tasks Integration*
+
 #### Creating Tasks
 
-* Each task in Google Calendar must be part of a "task list". If its the user's first time creating a task associated with a particular contact then Sherpa sends a POST request to the Google Calendar API to create a task list with the following title "Sherpa CRM: {contact.email}".
-* Sherpa sends a POST request to the Google Calendar API with the due date and title fetched from the task form to create a new task to the task list Sherpa created for this user.
-* The task will then appear in the user's Google Calendar on the "due" date.
+* Each task in Google Calendar must be part of a "task list". If its the user's first time creating a task for a contact, Sherpa sends a POST request to the Calendar API to create a task list for the contact.
+* Sherpa sends a POST request to the Google Calendar API to create a new task. Due date and title are fetched from the task form data.
+* The task then appears in the user's calendar on the due date.
 
 #### Viewing Tasks
 
-* Sherpa sends a GET request to the Google Calendar API to fetch all of the user's task lists. It then iterates over these task lists until it finds one with the correct title i.e. "Sherpa CRM: {contact.email}".
-* It then parses each of the tasks in this list (see parsing API responses).
-* Before serving the parsed tasks as part of the HTTP response, they are split up into "past due", "due", and "completed" tasks. Any tasks in the "past due" and "due" lists are templated with a "complete" button, this complete button has a href button that targets the /contact/<contact_id>/tasks/<complete> endpoint with "complete" set to the id of the task.
+* Sherpa sends a GET request to the Google Calendar API to fetch all of the user's task lists. It then iterates over each list until it finds the one specific to this Sherpa contact.
+* Sherpa then parses each task in this list.
+* The tasks are then split up into "past due", "due", and "completed". Each task (except completed tasks) are templated with a "complete" button.
 
 #### Completing Tasks
 
-* If a user sends a request to the endpoint /contact/<contact_id>/tasks/<complete> then a PUT request is sent to the Google Calendar API to mark the task in the user's task list for the contact with that task_id as completed.
-* The task will then appear as "completed" on the "due" date in the user's Google Calendar.
+* If a user sends a request to the endpoint /contact/<contact_id>/tasks/<complete> then a PUT request is sent to the Google Calendar API to mark the task with the given task_id as completed.
+* The task will then appear as "completed" in the user's calendar.
 
 ### Scheduling and Joining Meetings
 
 *Implementation of requirement: 18*
 
-*Implementation of requirement: 18*
-
 *endpoint: /contact/<contact_id>/meetings*
 
-* To schedule a meeting, Sherpa fetches the title, description, start date-time, and end date-time from the meeting form data and sends a POST request including the data to the Google Calendar API. The contact's email is included as an "attendee" for the conference, they'll receive an email invite and it will appear in their Google Calendar (as well as that of the Sherpa user).
-* To have Google Calendar automatically create a Google Meet Conference and return the link to it as part of the request response, the following must be included in the body of the request (uuid is used to generate a unique requestId):
-	```
-	"conferenceDataVersion": 1,
-	"conferenceData": = {
-        "createRequest": {
-            "conferenceSolutionKey": {
-                "type": "hangoutsMeet"
-            },
-            "requestId": str(uuid.uuid4())
-        }
-    }
-	```
-* To join meetings, Sherpa fetches all events from the user's calendar that has the contact's email as an "attendee" using a GET request to the Google Calendar API. These events are parsed (see parsing API responses) and returned as part of the HTTP response - each meeting is accompanied by a "join meeting" button with the href set to the google meet link returned in the API response for that specific event.
+![Screenshot of Sherpa's Google Meet Integration](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/Mail_Screenshot.png)
+<br>*Figure TODO: Sherpa's Google Meet Integration*
+
+* To schedule a meeting, Sherpa fetches the meeting details e.g. start time, from the meeting form data and sends a POST request to the Google Calendar API. The contact's email is an "attendee" for the conference; they receive an email invite and it appears in their calendar.
+* Certain parameters must be set in the body of the request to have Google Calendar automatically create a Google Meet Conference e.g. *"conferenceDataVersion": 1*.
+* To join meetings, Sherpa fetches all events from the user's calendar that has the contact's email as an "attendee" using a GET request to the Google Calendar API. These events are parsed and returned as part of the HTTP response - each meeting is accompanied by a "join meeting" button with the href set to the google meet link returned in the API response.
 
 ### Closing Deals
 
 *Implementation of requirement: 19*
 
-When a user sets the stage of a deal to "closed won" (not "closed lost"), they must specify the closed amount, this is done by validating the form data submitted with the POST request on the */edit_contact* endpoint. 
-
-If no closed amount is included, the user will be informed of their mistake with an error message. After marking a deal as "closed" successfully, the user is no longer be able to edit it.
+When a user sets the stage of a deal to "closed won", they must specify the closed amount, this is ensured by validating the form data. If no closed amount is included, the user will be informed of their mistake with an error message.
 
 ### Tracking Deal Conversions
 
 *Implementation of requirement: 22*
 
-The Deal Stage Conversion table which logs the transition of deals from stage to stage is used to retrieve all deal stage data from the previous month. This is then used to count the number of deals that were in every stage and stored as a dictionary with the stage as the key and the number of occurrences of the stage in the retrieved data as the value of the dictionary. 
-
-Then for every stage, the conversion values are calculated as follows;
- 
- + Next Step Conversion = Number of deals in next stage / Number of Deals in current stage
- + Cumulative Conversion = Number of deals in next stage / Number of Deals in first stage
+* The Deal Stage Conversion table which logs the transition of deals from stage to stage is used to retrieve all deal stage data from the previous month. 
+* This is then used to count the number of deals that were in each stage and stored as a dictionary with the stage as the key and the number of occurrences of the stage in the retrieved data as the value.
+* Then for each stage, the conversions are calculated as follows:
+	*  Next Step Conversion = Number of deals in next stage / Number of Deals in current stage
+	* Cumulative Conversion = Number of deals in next stage / Number of Deals in first stage
 
 ### Creating Data Analytics Plots
 
 *Implementation of requirement: 20, 21, 23, 24*
 
 
-The following chart details the process of creating the data analytics plots for the analytics dashboard
+The following chart details the process of creating the plots for the analytics dashboard.
 
 ![Diagram the process of create a plot diagram](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/plots.png)
 <br>*Figure: 10*
 ### Serving Plots
+![Screenshot of Sherpa's analytics dashboard](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/Analysis.png)
+<br>*Figure TODO: Sherpa's Data Analytics Dashboard*
 
 *Implementation of requirement: 25*
 
-* When a plot is ready to be served to the user as part of HTTP response, Sherpa first initialises an in-memory bytes buffer.
+* When a plot is ready, Sherpa initialises an in-memory bytes buffer.
 * Then the plot figure is saved as a PNG in this new buffer.
 * Then the data in the buffer is encoding using base64 encoding.
-* This encoded data is then included in the HTTP response as part of an "img" element.
+* This encoded data is included in the HTTP response as part of an "img" element.
 
 ## Testing
 
-Sherpa's test suite achieves extensive testing code coverage using the Pytest testing framework. Rather than going through each test case (pytest uses asserts just like most testing frameworks), this section instead deals with the more interesting parts of Sherpa's test suite i.e. how it overcomes the challenges unique to testing a complex web application i.e. simulating requests, dealing with user sessions, and simulating third party API responses.
+Rather than going through each test case, this section deals with the more interesting aspects of Sherpa's test suite i.e. how it overcomes the challenges unique to testing a web application.
 
 ### Test Client Set Up
 
-Flask already has a "test_client()" method which simulates HTTP requests for tests without needing to run a web server. However, this test client needs access to the application context.
+Flask has a "test_client()" method which simulates requests without needing to run a web server. However, this test client needs access to the "application context" which is a container that holds database connections etc. Before we create a test client, we need to pass the application context to it.
 
-In Flask, the "application context" is a container that holds information related to the current application: configuration settings, database connections etc. So, before we create a test client, we need to be able to pass the application context to it.
-
-This is achieved with an "application factory" or the "create_app()" function in Sherpa's case which creates an application instance, loads the application's configuration (database credentials etc) and returns the instance.
-
-Sherpa's application factory and test_client are both called as part of Pytest fixtures. Fixtures in Pytest are just reusable setup and tear-down code that can be passed as arguments in test functions i.e. the above set up is run before each test is carried out.
-
-With all this in place, Sherpa's test suite is set up and configured.
-
-### Dealing With User Sessions
-
-Sherpa makes extensive use of user sessions and cookies e.g. to authenticate users, so this had to be emulated in the test suite. Flask's test client provides a useful session_transaction() method which allows one to make updates to the test client's session. For example, to set the user's email and team_id in their session:
-
-```
-with client.session_transaction() as session:
-        session["email"] = "matt@sherpa.com"
-        session["team_id"] = 10 
-```
+This is achieved with Sherpa's "application factory" which creates an application instance, loads the application's configuration and returns the instance. Sherpa's application factory and test client are both ran as Pytest fixtures. Fixtures are just reusable code that can be passed to test functions and run before each test.
 
 ### Simulating API Responses
 
-Since Sherpa has several third party API integrations, this proved problematic for the test suite. It would be infeasible (and likely against Google's terms of service) to send the many "junk" requests to the API servers that testing requires. The use of pytest's "monkeypatch" fixture was necessary.  Monkeypatch allows one to "patch" the response from a third party API by forcing it to return a predefined test response (in reality no real request is sent over the Internet, this is all happening in the test environment). For example, Sherpa patches the "get" response for google oAuth authentication (when we try to fetch the user's google account information) as follows:
+Third party API integrations are problematic for testing. It is infeasible to send the many "junk" requests to API servers that testing requires. The use of "monkeypatch" proved necessary.  Monkeypatch allows one to force an API endpoint to return a predefined test response. Sherpa patches the "get" response for google oAuth authenticationas follows:
 
 ```
-user = MockResponse({"email": "test@test.com"})
+user = MockResponse({"google_email": "sherpalecturer@gmail.com"})
 monkeypatch.setattr("flask_oauthlib.client.OAuthRemoteApp.get", lambda  self, userinfo: user)
 ```
 
 ## Project Reflection
 
-This chapter will serve as a reflection on the 12 weeks we as a team spent working on our project, highlighting how we worked together and the challenges we faced while developing Sherpa.
+This chapter will serve as a reflection on how we worked as a team, the challenges we faced, and the lessons we learned.
 
-### The Team's Process
+### Process
+- We did all our work together for 3 hours each week day.
+- Each week we wrote user stories on a whiteboard, assigned them to members of the team to implement, and took pictures at the end of each session.
+- Each second week was “polishing” week. Normally three of us would do back-end work, and one front-end, but during polish week each of us would have a different job: report writing, testing, front-end, or back-end.
+- Each polishing week one would have a different role to ensure more even contributions across the project.
 
-Our team's process for completing tasks was highly organized and effective, despite being a small team. With daily three-hour work sessions, we ensured that we were all working together and making progress on the project at hand. This approach helped our team stay on track and remain focused on important tasks.
+### Challenges and Trade-Offs
 
-In addition, our team had a weekly whiteboarding session where we planned user stories. This collaborative approach to task management ensures that everyone was aligned on the project's goals and objectives. By breaking down tasks into user stories, our team prioritized work and ensured that we were working on the most critical tasks.
+-   **Turbo**:  Turbo is a JavaScript framework for serving page updates over a web-socket rather than a HTTP request. We wanted to implement this to have native-app-like performance. However Flask-Turbo was poorly documented, so due to time constraints we made the trade-off to only implement it for some pages to deal with other priorities.
+-   **Google Integration**: Google integration was challenging as OAuth is a very complicated protocol none of us had experience with. Furthermore, Flask-OAuthlib did not support Gmail out of the box which required us to write code for the module to add support for it.
+-   **Testing**: As described in the testing section, testing web applications poses unique challenges and we only had software testing experience with closed systems. A trade-off we had to make here was whether to use unittest or pytest for our testing framework, we all only had experience with unittest but opted for pytest as the documentation for using it with Flask was far more extensive. Despite the greater initial learning curve, this made debugging testing issues far easier.
 
-Our team's approach also included a "polishing" week every second week. This was an excellent practice as it allowed our team to review completed work and make necessary improvements. This approach helped to ensure that the final product was of a high quality.
+### Lessons Learned
 
-Overall, our team's process was highly effective, and our approach to task management was highly structured, ensuring that everyone was working together towards a common goal. This collaborative approach allowed our team to remain focused and prioritize work, resulting in high-quality work that was completed efficiently.
-
-### What Went Well
-
-#### Collaborative approach:
-
-Our team's approach to task management was highly collaborative, with daily work sessions and weekly whiteboarding sessions. This allowed everyone to work together towards a common goal and ensured that everyone was aligned on the project's goals and objectives.
-  
-#### Prioritization:
-
-By breaking down tasks into user stories, Our team was able to prioritize work and ensure that we were working on the most critical tasks. This helped us stay focused and make progress on the most important parts of the project.
-
-#### Quality control:
-
-Our team's approach included a "polishing" week every second week, which allowed us to review completed work and make necessary improvements. This helped ensure that the final product was of a high quality.
-
-#### Efficiency:
-
-Our team was able to complete high-quality work efficiently, thanks to our structured and collaborative approach to task management. This allowed us to make progress on the project and meet our goals within our timeframe.
-
-### Mistakes To Learn From
-
-During the course of our project, we made some mistakes and learned some valuable lessons. One mistake we made was not standardizing our HTML, which led to some inconsistencies in our code. To avoid this in the future, we learned to standardize our HTML and use best practices to ensure consistency throughout our project.
-
-Another mistake we made was not using Flask blueprints, which made it more difficult to manage our code as the project grew. We realized the importance of using blueprints to organize our code and make it easier to maintain and update.
-
-Additionally, we initially did not use Bootstrap for our CSS, which resulted in some inconsistencies in the visual design of our project. To address this, we learned the importance of using a CSS framework like Bootstrap, which helped us to ensure consistency and improve the overall visual design of our project.
-
-Overall, we learned that standardizing our code, using frameworks and best practices, and prioritizing consistency were essential to the success of our project. These lessons helped us to improve our processes and achieve better results in future projects.
-
-### What Went Well
-
-### Mistakes To Learn From
-
-### What Was Technically Challenging
-
-This section outlines the difficulties and challenges we individually and as a team encountered in the process of developing Sherpa.
-
-+ __Turbo__
-  + Implementing Turbo in our application proved to be difficult. Our goal was to have our whole application using Turbo to increase the performance of our web application and to ensure a smooth user experience while using Sherpa. Due to a lack of documentation online regarding Turbo, we had to go through a lot of trial and error when implementing Turbo. Therefore, this was time consuming and proved frustrating at times when encountering unexpected behaviours. But once completed the benefit of Turbo was evident with the smooth performance of our web application.
-+ __Modularization__
-  + Modularizing the code presented a technical challenge as we had never used blueprints before to implement an application. We had to break up the monolithic appliction.py code into segments and initialize it with an __init__.py file.
-  + Initially we had some issues getting the application to run. Once we had corrected all the broken links within our pages it worked with blueprints. It ran smoothly and allowed a maintainable code base that made testing and updating the application far easier.
-+ __Google Integration__
-  + Google integration was challenging as the open authorization protocol was challenging in numerous ways due to its complexity and security requirements. The flask oath library did not support emails from our application so it was necessary for us to edit the library itself to facilitate our needs.
-+ __Testing__
-  + Writing the test cases for our code was challenging initially due to having little experience with testing web application. Also, the structure of our code caused problems with writing test cases. But once modularization was implemented within our code then test cases were much easier to write.
-+ __Security__  Security was something that was of utmost importance for our application in order to ensure the security of user data and preventing any potential threats. 
-	+ _Hashing_ -  We managed to implement security features where user data is stored securely by hashing is before storing it in the database.
-	+ _Cross-Site Scripting_ - Our use of Flask SQL Alchemy as an ORM made sure to prevent any potential XSS attacks
-	+ _Session Cookies_ - Our implementation of session cookies within our application ensured that users are authenticated when making requests and prevent unauthorized users accessing forbidden data.
+* We should have wrote more standardised and semantic HTML. This led to consistency issues and made CSS work more difficult, in the future we'd definitely place an emphasis on best-practice, semantic HTML.
+* Our application should have been modular from the beginning, the project inevitably grew to large in scope for a single file and it wasted time having to do this mid-development.
+* A CSS framework, e.g. Bootstrap, would have made front-end development much faster, having to write all our styles from scratch added an unnecessary technical overhead - one we would avoid if we were to do things over.
