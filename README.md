@@ -831,14 +831,14 @@ The following details our team's technology stack.
 ### User Registration and Authentication
 
 ![Picture showing Sherpa's login page](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/Sherpa_Login.png)
-<br>*Figure TODO: Sherpa's login page*
+<br>*Figure 1: Sherpa's login page*
 
 *Implementation of requirements: 1, 2*
 
 The following flow chart details the sign up process flow for a new Sherpa user.
 
 ![Flow chart detailing the signup process flow for a new user.](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/Sign%20Up.png)
-<br>*Figure: 1*
+<br>*Figure: 2*
 
 *Endpoint: /signup*
 
@@ -851,7 +851,7 @@ The following flow chart details the sign up process flow for a new Sherpa user.
 The following flow chart details the login process flow for an existing Sherpa user.
 
 ![Flow chart detailing the signup process flow for a new user.](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/Log%20In.png)
-<br>*Figure: 2*
+<br>*Figure: 3*
 
 *Endpoint: /login*
 
@@ -869,7 +869,7 @@ The following flow chart details the login process flow for an existing Sherpa u
 The following flow chart details the process flow for creating a Sherpa team.
 
 ![Flow chart detailing the team creation process flow.](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/Team%20Creation.png)
-<br>*Figure: 3*
+<br>*Figure: 4*
 
 *Endpoint: /create_team*
 
@@ -886,7 +886,7 @@ The following flow chart details the process flow for creating a Sherpa team.
 
 The following flow chart details the process flow for inviting another user to a Sherpa team.
 ![Flow chart detailing the team invitation process flow.](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/Invite.png)
-<br>*Figure: 4*
+<br>*Figure: 5*
 
 *Endpoint: /invite*
 
@@ -903,7 +903,7 @@ The following flow chart details the process flow for inviting another user to a
 The following flow chart details the process flow for accepting a Sherpa invitation. It is a modified version of the login flow: see Figure 2.
 
 ![Flow chart detailing the team invitation acceptance process flow.](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/Invite%20Accept.png)
-<br>*Figure: 5*
+<br>*Figure: 6*
 
 *Endpoint: /login/<invite_id>*
 
@@ -918,7 +918,7 @@ The following flow chart details the process flow for accepting a Sherpa invitat
 
 ### Basic Database Operations (CRUD)
 ![Screenshot of Sherpa's Contacts page](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/Contacts_Screenshot.png)
-<br>*Figure TODO: Sherpa's Contacts Page*
+<br>*Figure 7: Sherpa's Contacts Page*
 
 *Implementation of requirement: 6*
 
@@ -927,7 +927,7 @@ The following flow chart details the process flow for accepting a Sherpa invitat
 Each database's "read" operation displays a table of "live" forms i.e. HTML input elements that have been prepopulated with the records from the database, allowing users to view and edit records using the same elements. Each form element represents a record.
 
 ![Screenshot of Sherpa's Deals page](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/Deals_Screenshot.png)
-<br>*Figure TODO: Sherpa's Deals Page*
+<br>*Figure 8: Sherpa's Deals Page*
 
 
 
@@ -994,7 +994,7 @@ Each page displays 25 records. Once the current page is determined, the code cal
 Sherpa then selects the records between the starting and ending indexes and serves these as HTML. The HTML also includes "next" and "previous" page buttons that are encoded with the current page number, allowing the user to navigate the pages.
 
 ![Flowchart depicting how Sherpa's paging feature works](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/viewing_database_flowchart.jpeg)
-<br>*Figure: 6*
+<br>*Figure: 9*
 
 ### Showing the User the Records they Own
 
@@ -1015,7 +1015,7 @@ Sherpa then selects the records between the starting and ending indexes and serv
 * The user is then served the records that match their search term as part of the HTTP response.
 
 ![Flowchart representing how Sherpa's search feature looks through the database. ](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/searching_database_flowchart.png)
-<br>*Figure: 7*
+<br>*Figure: 10*
 
 ### Sorting a Database
 
@@ -1027,7 +1027,7 @@ Sherpa then selects the records between the starting and ending indexes and serv
 * The user is then served the data as part of the HTTP response as normal except the select query now includes a "ORDER BY" clause with the appropriate column and order.
 
 ![Flowchart representing how Sherpa's sorting feature sorts the database.](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/sorting_flowchart.png)
-<br>*Figure: 8*
+<br>*Figure: 11*
 
 ### Activity Feature
 
@@ -1035,7 +1035,7 @@ Sherpa then selects the records between the starting and ending indexes and serv
 *endpoint:/contact/<contact_id>/activity*
 
 ![Screenshot of Sherpa's Google Meet Integration](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/Screenshot%20from%202023-03-10%2012-21-22.png)
-<br>*Figure TODO: Sherpa's Activity Feature*
+<br>*Figure 12: Sherpa's Activity Feature*
 
 * There are several "activity types" in Sherpa e.g. sending an email, marking a task as complete etc. 
 * Whenever such a contact interaction occurs a log_activity() function occurs which records the metadata of the activity e.g. the team member responsible, a description, the timestamp etc.
@@ -1047,7 +1047,7 @@ Sherpa then selects the records between the starting and ending indexes and serv
 *endpoint:/contact/<contact_id>/notes*
 
 ![Screenshot of Sherpa's notes page.](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/notes_screenshot.png)
-<br>*Figure TODO: Sherpa's Notes Feature*
+<br>*Figure 13: Sherpa's Notes Feature*
 
 * When a user submits a POST request to this endpoint using the notes form, Sherpa fetches the contents of the note from the form data and creates and inserts it into a new instance of the notes data model, which is then inserted into the database along with the user's id.
 * When a user sends a GET request to this endpoint, all notes associated with the contact are returned as part of the HTTP response.
@@ -1061,7 +1061,7 @@ Sherpa then selects the records between the starting and ending indexes and serv
 The following diagram details the process of integrating Google with a Sherpa account.
 
 ![Diagram detailing the retrieval of a Google session token. Image is sourced from  "https://developers.google.com/identity/protocols/oauth2"](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/google_auth.png)
-<br>*Figure: 9*
+<br>*Figure: 14: Diagram of session token retrieval*
 
 Google accounts are authenticated using OAuth 2.0. If you'd like to learn more about OAuth 2.0 please click [here](https://developers.google.com/identity/protocols/oauth2).
 
@@ -1072,7 +1072,7 @@ Google accounts are authenticated using OAuth 2.0. If you'd like to learn more a
 Sherpa integrates several Google products, each with their own API. The following is a flow chart detailing the process flow in Sherpa of dealing with an API response from request to return.
 
 ![Flowing Chart depicting how Sherpa parses API responses](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/Parsing.png)
-
+<br>*Figure: 15:*
  - First a GET request is sent to the relevant Google API endpoint. This request includes a "query" which specifies which data the request is concerned with. For example, the query for getting emails is "from: {contact_email} OR to: {contact_email}" i.e. fetch any email sent to the contact AND any email received from the contact.
  - The server then returns the data as a JSON dump which can be interacted with as a collection of python data structures.
  - Sherpa initialises an empty list to which all the parsed objects will be appended. It then iterates over the JSON dump. Each loop, it initialises an empty dictionary with relevant keys e.g. for an email "subject", etc and maps these keys to the relevant data. This parsed object is then appended to the parsed list.
@@ -1101,7 +1101,7 @@ Sherpa integrates several Google products, each with their own API. The followin
 
 
 ![Screenshot of Sherpa's Google Gmail Integration](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/gmail_screenshot.png)
-<br>*Figure TODO: Sherpa's Gmail Integration*
+<br>*Figure 16: Sherpa's Gmail Integration*
 
 #### Sending Emails
 
@@ -1124,7 +1124,7 @@ Sherpa integrates several Google products, each with their own API. The followin
 *endpoint: /contact/<contact_id>/tasks*
 
 ![Screenshot of Sherpa's Google Meet Integration](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/Task_Screenshot.png)
-<br>*Figure TODO: Sherpa's Google Tasks Integration*
+<br>*Figure 17: Sherpa's Google Tasks Integration*
 
 #### Creating Tasks
 
@@ -1150,7 +1150,7 @@ Sherpa integrates several Google products, each with their own API. The followin
 *endpoint: /contact/<contact_id>/meetings*
 
 ![Screenshot of Sherpa's Google Meet Integration](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/Mail_Screenshot.png)
-<br>*Figure TODO: Sherpa's Google Meet Integration*
+<br>*Figure 18: Sherpa's Google Meet Integration*
 
 * To schedule a meeting, Sherpa fetches the meeting details e.g. start time, from the meeting form data and sends a POST request to the Google Calendar API. The contact's email is an "attendee" for the conference; they receive an email invite and it appears in their calendar.
 * Certain parameters must be set in the body of the request to have Google Calendar automatically create a Google Meet Conference e.g. *"conferenceDataVersion": 1*.
@@ -1180,10 +1180,10 @@ When a user sets the stage of a deal to "closed won", they must specify the clos
 The following chart details the process of creating the plots for the analytics dashboard.
 
 ![Diagram the process of create a plot diagram](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/plots.png)
-<br>*Figure: 10*
+<br>*Figure 19: Diagram detailing*
 ### Serving Plots
 ![Screenshot of Sherpa's analytics dashboard](https://raw.githubusercontent.com/mattmallencode/crm/main/report_images/Analysis.png)
-<br>*Figure TODO: Sherpa's Data Analytics Dashboard*
+<br>*Figure 20: Sherpa's Data Analytics Dashboard*
 
 *Implementation of requirement: 25*
 
